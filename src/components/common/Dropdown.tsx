@@ -39,7 +39,7 @@ export function Dropdown({
               opacity: 0,
               y: '-30%',
               transition: {
-                duration: 0.2,
+                duration: 0.07,
               },
             },
           }}
