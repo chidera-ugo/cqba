@@ -4,8 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import logo from '/public/logos/main-logo.svg';
-import { Right } from 'components/svgs/Arrows';
 import { useRouter } from 'next/router';
+import { Right } from 'components/svgs/navigation/Arrows';
 
 export const MobileMenu = () => {
   const { replace } = useRouter();

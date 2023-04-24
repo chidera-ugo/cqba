@@ -104,13 +104,21 @@
   .text-button {
     @apply text-primary-main hover:underline;
   }
-}
 
-@layer utilities {
+  .skeleton {
+    @apply smooth animate-pulse rounded-md bg-neutral-200;
+  }
+
+  .skeleton-error {
+    @apply smooth rounded-md bg-red-100;
+  }
+
   .spinner {
     @apply h-5 w-5 animate-spin;
   }
+}
 
+@layer utilities {
   .x-center {
     @apply flex justify-center align-middle;
   }
@@ -145,14 +153,6 @@
 
   .card-description {
     @apply;
-  }
-
-  .skeleton {
-    @apply smooth animate-pulse rounded-md bg-neutral-300;
-  }
-
-  .skeleton-error {
-    @apply smooth rounded-md bg-red-100;
   }
 }
 

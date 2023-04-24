@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { Field } from 'types/Common';
 import { validateField } from 'utils/helpers/validateField';
 import { formatPhoneNumber } from 'utils/helpers/formatPhoneNumber';
-import { ChevronDown } from 'components/svgs/Chevrons';
+import { ChevronDown } from 'components/svgs/navigation/Chevrons';
 
 type Props = JSX.IntrinsicElements['input'] & Field;
 

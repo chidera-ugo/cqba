@@ -1,9 +1,9 @@
 import { Spinner } from 'components/svgs/dashboard/Spinner';
 
-export const IsLoading = () => {
+export const IsLoading = ({ className }: { className?: string }) => {
   return (
     <div className='x-center py-10'>
-      <Spinner />
+      <Spinner className={className} />
     </div>
   );
 };

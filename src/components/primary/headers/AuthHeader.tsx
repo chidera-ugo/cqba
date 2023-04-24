@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import logo from '/public/logos/main-logo.svg';
 import clsx from 'clsx';
-import { Right } from 'components/svgs/Arrows';
+import { Right } from 'components/svgs/navigation/Arrows';
 
 export const AuthHeader = () => {
   return (

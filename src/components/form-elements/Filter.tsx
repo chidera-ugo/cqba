@@ -15,7 +15,7 @@ export const Filter = ({ id, options, onChange }: Props) => {
     <div id={id} className='relative'>
       <button
         onClick={() => setShowDropdown((prev) => !prev)}
-        className='flex rounded-full border border-neutral-400 py-2 px-3'
+        className='relative z-50 flex rounded-full border border-neutral-300 bg-white py-2 px-3'
       >
         <div className='my-auto mr-2'>
           <Adjusters />

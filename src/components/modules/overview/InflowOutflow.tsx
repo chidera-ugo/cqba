@@ -31,11 +31,11 @@ export const InflowOutflow = () => {
   const chartData = [
     {
       date: '2023-01-31T23:00:00.000Z',
-      value: 0,
+      value: 313,
     },
     {
-      date: '2023-02-28T23:00:00.000Z',
-      value: 1011622100,
+      date: '2023-02-05T23:00:00.000Z',
+      value: 122100,
     },
     {
       date: '2023-03-11T23:00:00.000Z',
@@ -96,7 +96,7 @@ export const InflowOutflow = () => {
         {formatAmount({ value: data?.balance, decimalPlaces: 2 })}
       </div>
 
-      <div className='h-[300px]'>
+      <div className='mt-8 h-[300px]'>
         <InflowOutflowChart {...{ chartData }} />
       </div>
     </div>
@@ -104,5 +104,38 @@ export const InflowOutflow = () => {
 };
 
 const IsLoadingIsError = ({ type }: { type: 'loading' | 'error' }) => {
-  return <div></div>;
+  return (
+    <div className='card'>
+      <div className='flex gap-2'>
+        <div
+          className={clsx(
+            'h-11 w-[100px] rounded-full',
+            type === 'loading' ? 'skeleton' : 'skeleton-error'
+          )}
+        ></div>
+        <div
+          className={clsx(
+            'h-11 w-[100px] rounded-full',
+            type === 'loading' ? 'skeleton' : 'skeleton-error'
+          )}
+        ></div>
+      </div>
+
+      <div className='flex'>
+        <div
+          className={clsx(
+            'mr-1 mt-4 h-12 w-[400px] rounded-lg',
+            type === 'loading' ? 'skeleton' : 'skeleton-error'
+          )}
+        ></div>
+      </div>
+
+      <div
+        className={clsx(
+          'mt-8 h-[300px] rounded-lg',
+          type === 'loading' ? 'skeleton' : 'skeleton-error'
+        )}
+      ></div>
+    </div>
+  );
 };
