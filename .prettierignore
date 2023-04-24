@@ -1,0 +1,4 @@
+.next
+*.d.ts
+*.lock
+node_modules

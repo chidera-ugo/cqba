@@ -1,0 +1,8 @@
+{
+  "name": "ChequeBase",
+  "short_name": "ChequeBase",
+  "background_color": "#0076FF",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": "/"
+}

@@ -1,0 +1,176 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth !important;
+  }
+
+  body {
+    @apply overflow-hidden font-primary;
+  }
+
+  body:has(.no-scroll) {
+    overflow: hidden !important;
+  }
+
+  h1 {
+    @apply font-bold;
+  }
+
+  h3 {
+    @apply text-[44px] font-bold leading-[47px] 640:text-[47px] 640:leading-[52px] 1180:text-[55px] 1180:leading-[58px];
+  }
+
+  h4 {
+    @apply text-[28px] font-semibold leading-[36px] 640:text-[41px] 640:leading-[45px];
+  }
+
+  label {
+    @apply mb-2 text-left text-sm font-medium text-neutral-700;
+  }
+
+  input,
+  select,
+  textarea {
+    @apply smooth block h-11 rounded-lg border border-neutral-100 bg-neutral-100 text-neutral-1000 placeholder-neutral-400 transition-colors focus:border-primary-main focus:outline-none focus:ring-0 !important;
+    @apply px-3.5;
+    box-shadow: 0px 2px 5px rgba(103, 110, 118, 0.08),
+      0px 0px 0px 1px rgba(103, 110, 118, 0.16), 0px 1px 1px rgba(0, 0, 0, 0.12);
+  }
+
+  input[type='checkbox'] {
+    @apply h-5 w-5 cursor-pointer appearance-none rounded-[6px] border-2 border-neutral-300 text-primary-main ring-0 checked:border-primary-main checked:bg-primary-main focus:ring-0 focus:ring-offset-0 !important;
+    border: 2px solid rgba(111, 118, 126, 0.4);
+  }
+
+  button,
+  input {
+    @apply disabled:opacity-30;
+  }
+
+  button,
+  a,
+  .no-highlight {
+    @apply focus:outline-none;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  .white-text {
+    @apply text-sm leading-6 text-white text-opacity-70;
+  }
+
+  p {
+    @apply text-base font-light leading-[26px] text-neutral-600;
+  }
+}
+
+@layer components {
+  .container {
+    @apply mx-auto max-w-[1340px] px-3 640:px-12;
+  }
+
+  .auth-container {
+    @apply mx-auto max-w-[540px] px-5 640:px-8;
+  }
+
+  .primary-button {
+    @apply smooth h-14 rounded-full bg-primary-main px-16 text-center text-white transition-colors hover:bg-primary-hmain;
+  }
+
+  .light-button {
+    @apply smooth h-14 rounded-full border border-primary-main bg-white px-16 text-center text-primary-main transition-colors hover:bg-gray-100;
+  }
+
+  .dark-button {
+    @apply smooth h-14 rounded-full border border-black bg-black px-8 text-center text-white transition-colors hover:bg-gray-900;
+  }
+
+  .outline-button {
+    @apply smooth h-[60px] rounded-full border border-primary-700 bg-transparent px-8 text-center text-primary-700 transition-colors;
+  }
+
+  .text-button {
+    @apply text-primary-main hover:underline;
+  }
+}
+
+@layer utilities {
+  .spinner {
+    @apply h-5 w-5 animate-spin;
+  }
+
+  .x-center {
+    @apply flex justify-center align-middle;
+  }
+
+  .x-between {
+    @apply flex justify-between align-middle;
+  }
+
+  .y-center {
+    @apply x-center flex-col;
+  }
+
+  .y-between {
+    @apply flex flex-col justify-between align-middle;
+  }
+
+  .generic-error {
+    @apply mt-1 text-left text-sm text-red-500;
+  }
+
+  .smooth {
+    @apply duration-300 ease-linear;
+  }
+
+  .card-title {
+    @apply;
+  }
+
+  .card-description {
+    @apply;
+  }
+}
+
+/* CUSTOM SCROLL BAR */
+.thin-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 10px;
+  overflow: overlay;
+}
+
+.thin-scrollbar::-webkit-scrollbar,
+.thin-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background: #cacaca;
+  border-radius: 50px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #d3d1cb;
+}
+
+@supports (font: -apple-system-body) and (-webkit-appearance: none) {
+  img[loading='lazy'] {
+    clip-path: inset(0.6px);
+  }
+}
+
+@media (min-width: 640px) {
+  .Toastify__toast-container {
+    min-width: 420px !important;
+  }
+}
+
+@media only screen and (max-width: 640px) {
+  .Toastify__toast-container {
+    padding: 16px !important;
+  }
+}
