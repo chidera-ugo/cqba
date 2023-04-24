@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import { Dropdown } from 'components/common/Dropdown';
-import { ChevronDown } from 'components/svgs/Chevrons';
-import { Exit } from 'components/svgs/Exit';
-import { PlusCircle } from 'components/svgs/Plus';
+import { ChevronDown } from 'components/svgs/navigation/Chevrons';
+import { Exit } from 'components/svgs/navigation/Exit';
+import { PlusCircle } from 'components/svgs/others/Plus';
 import { useAppContext } from 'context/AppContext';
 import { deleteFromLocalStore } from 'lib/localStore';
 import { useState } from 'react';
@@ -18,7 +18,7 @@ export const ProfileSwitcher = () => {
   }
 
   return (
-    <div className='sticky top-0 left-0 bg-neutral-100 p-8 pb-0'>
+    <div className='sticky top-0 left-0 z-50 bg-neutral-100 p-8 pb-0'>
       <div id='profile-switcher' className='relative'>
         <button
           className='x-between relative z-[30] w-full rounded-2xl bg-neutral-200 p-2.5'

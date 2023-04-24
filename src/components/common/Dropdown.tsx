@@ -11,13 +11,13 @@ type Props = {
   className?: string;
 };
 
-export function Dropdown({
+export const Dropdown = ({
   close,
   wrapperId,
   show,
   children,
   className,
-}: PropsWithChildren<Props>) {
+}: PropsWithChildren<Props>) => {
   useDismissDropdown(wrapperId, close);
 
   return (
@@ -39,12 +39,12 @@ export function Dropdown({
               opacity: 0,
               y: '-30%',
               transition: {
-                duration: 0.07,
+                duration: 0,
               },
             },
           }}
           className={clsx(
-            'card absolute top-[100%] z-20 mt-1 w-full overflow-hidden rounded-xl border border-neutral-300 bg-white p-0 shadow-lg',
+            'absolute top-[100%] z-20 mt-1 w-full overflow-hidden rounded-xl border border-neutral-300 p-0 shadow-lg',
             className
           )}
         >
@@ -53,4 +53,4 @@ export function Dropdown({
       )}
     </AnimatePresence>
   );
-}
+};

@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { Cancel } from 'components/svgs/Menu';
+import { Cancel } from 'components/svgs/navigation/Menu';
 
 export type HeaderProps = {
   title?: string;

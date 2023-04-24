@@ -17,6 +17,8 @@ interface NavigationItem {
   icon: JSX.Element;
   title: string;
   isRoot?: boolean;
+  showTooltip?: boolean;
+  showWhenUnverified?: boolean;
 }
 
 export const useNavigationItems = () => {
@@ -25,11 +27,13 @@ export const useNavigationItems = () => {
       {
         icon: <BadgeCheck />,
         title: 'Get Started',
+        showWhenUnverified: true,
       },
       {
         icon: <Home />,
         title: 'Overview',
         isRoot: true,
+        showTooltip: true,
       },
       {
         icon: <Wallet />,

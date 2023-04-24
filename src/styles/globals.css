@@ -29,6 +29,10 @@
     @apply text-[28px] font-semibold leading-[36px] 640:text-[41px] 640:leading-[45px];
   }
 
+  h5 {
+    @apply text-xl font-semibold text-neutral-1000;
+  }
+
   label {
     @apply mb-2 text-left text-sm font-medium text-neutral-700;
   }
@@ -69,12 +73,16 @@
 }
 
 @layer components {
-  .container {
-    @apply mx-auto max-w-[1340px] px-3 640:px-12;
+  .app-container {
+    @apply mx-auto px-3 640:px-8;
   }
 
   .auth-container {
     @apply mx-auto max-w-[540px] px-5 640:px-8;
+  }
+
+  .container {
+    @apply app-container max-w-[1340px];
   }
 
   .primary-button {
@@ -127,12 +135,24 @@
     @apply duration-300 ease-linear;
   }
 
+  .card {
+    @apply rounded-xl border border-neutral-200 p-5;
+  }
+
   .card-title {
     @apply;
   }
 
   .card-description {
     @apply;
+  }
+
+  .skeleton {
+    @apply smooth animate-pulse rounded-md bg-neutral-300;
+  }
+
+  .skeleton-error {
+    @apply smooth rounded-md bg-red-100;
   }
 }
 
@@ -155,6 +175,19 @@
 
 .thin-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #d3d1cb;
+}
+
+/* HIDDEN SCROLL BAR */
+.hidden-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.hidden-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  overflow: -moz-scrollbars-none;
 }
 
 @supports (font: -apple-system-body) and (-webkit-appearance: none) {
