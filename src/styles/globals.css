@@ -10,7 +10,7 @@
   }
 
   body {
-    @apply overflow-hidden font-primary;
+    @apply font-primary;
   }
 
   body:has(.no-scroll) {
@@ -36,7 +36,7 @@
   input,
   select,
   textarea {
-    @apply smooth block h-11 rounded-lg border border-neutral-100 bg-neutral-100 text-neutral-1000 placeholder-neutral-400 transition-colors focus:border-primary-main focus:outline-none focus:ring-0 !important;
+    @apply smooth block h-11 rounded-lg border border-neutral-100 bg-neutral-100 text-neutral-1000 placeholder-neutral-400 transition-colors focus:border-neutral-400 focus:outline-none focus:ring-4 focus:ring-neutral-200 !important;
     @apply px-3.5;
     box-shadow: 0px 2px 5px rgba(103, 110, 118, 0.08),
       0px 0px 0px 1px rgba(103, 110, 118, 0.16), 0px 1px 1px rgba(0, 0, 0, 0.12);

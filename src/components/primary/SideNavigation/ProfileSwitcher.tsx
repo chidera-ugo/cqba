@@ -3,18 +3,18 @@ import { Dropdown } from 'components/common/Dropdown';
 import { ChevronDown } from 'components/svgs/Chevrons';
 import { Exit } from 'components/svgs/Exit';
 import { PlusCircle } from 'components/svgs/Plus';
+import { useAppContext } from 'context/AppContext';
 import { deleteFromLocalStore } from 'lib/localStore';
-import { useAppStore } from 'lib/useAppStore';
 import { useState } from 'react';
 
 export const ProfileSwitcher = () => {
   const [showDropdown, setShowDropdown] = useState(false);
-  const user = useAppStore((state) => state.user);
-  const _logout = useAppStore((state) => state.logout);
+  const { dispatch, state } = useAppContext();
+  const { user } = state;
 
   function logout() {
     deleteFromLocalStore('tokens');
-    _logout();
+    dispatch({ type: 'logout' });
   }
 
   return (
@@ -67,7 +67,7 @@ export const ProfileSwitcher = () => {
             </span>
           </button>
 
-          <button onClick={logout} className='mt-4 flex'>
+          <button onClick={logout} className='mt-4 flex w-full'>
             <span className='my-auto mr-2'>
               <Exit />
             </span>

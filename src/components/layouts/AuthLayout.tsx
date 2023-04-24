@@ -1,17 +1,33 @@
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
 import { PageHead } from 'components/primary/PageHead';
 import { AuthHeader } from 'components/primary/headers/AuthHeader';
-import { useAuthRedirector } from 'hooks/dashboard/useAuthRedirector';
-import { PropsWithChildren } from 'react';
+import { useAppContext } from 'context/AppContext';
+import { useRouter } from 'next/router';
+import { PropsWithChildren, useEffect } from 'react';
 
 export interface Props {
   title?: string;
 }
 
 export const AuthLayout = ({ children, title }: PropsWithChildren<Props>) => {
-  const { userExists } = useAuthRedirector();
+  const { redirectUrl, user } = useAppContext().state;
 
-  if (userExists) return <FullScreenLoader asPage />;
+  const { replace } = useRouter();
+
+  useEffect(() => {
+    if (!user) return;
+
+    for (const i of authPaths) {
+      if (redirectUrl.includes(i)) {
+        replace('/');
+        return;
+      }
+    }
+
+    replace(redirectUrl ? redirectUrl : '/');
+  }, [user]);
+
+  if (user) return <FullScreenLoader id='auth-layout' asPage />;
 
   return (
     <>
@@ -21,3 +37,10 @@ export const AuthLayout = ({ children, title }: PropsWithChildren<Props>) => {
     </>
   );
 };
+
+export const authPaths = [
+  'signin',
+  'signup',
+  'forgot-password',
+  'new-password',
+];

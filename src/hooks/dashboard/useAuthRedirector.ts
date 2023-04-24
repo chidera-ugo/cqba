@@ -1,29 +1,17 @@
-import { useAppStore } from 'lib/useAppStore';
+import { useAppContext } from 'context/AppContext';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 export const useAuthRedirector = () => {
-  const user = useAppStore((state) => state.user);
-  const redirectUrl = useAppStore((state) => state.redirectUrl);
-  const setRedirectUrl = useAppStore((state) => state.setRedirectUrl);
+  const { dispatch, state } = useAppContext();
+  const { user } = state;
 
-  const { replace, pathname } = useRouter();
+  const { replace } = useRouter();
 
   useEffect(() => {
-    if (user) {
-      if (!redirectUrl) replace('/');
-      replace(redirectUrl);
-      return;
-    }
+    if (user) return;
 
     let path = window.location.href.replace(window.location.origin, '');
-
-    for (const i of authPaths) {
-      if (path.includes(i)) {
-        replace('/signin');
-        return;
-      }
-    }
 
     const query: Record<string, string> = {};
 
@@ -32,17 +20,15 @@ export const useAuthRedirector = () => {
       query['timedout'] = 'true';
     }
 
-    setRedirectUrl(path);
+    dispatch({ type: 'set-redirect-url', payload: path });
 
     replace({
       pathname: '/signin',
       query,
     });
-  }, [user, pathname]);
+  }, [user]);
 
   return {
     userExists: !!user,
   };
 };
-
-const authPaths = ['/signin', '/signup', '/forgot-password', '/new-password'];

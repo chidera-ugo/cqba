@@ -1,37 +1,77 @@
 import axios from 'axios';
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
 import { urlModifier } from 'hooks/api/useHttp';
-import { useAppStore } from 'lib/useAppStore';
-import { createContext, useContext, useEffect, useState } from 'react';
-import { getFromLocalStore } from '../lib/localStore';
+import {
+  Reducer,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+} from 'react';
+import { deleteFromLocalStore, getFromLocalStore } from 'lib/localStore';
+import { User } from 'types/User';
 
-const AppContext = createContext<{ state: any }>({
-  state: null,
+export interface State {
+  isInitializing: boolean;
+  user: null | User;
+  redirectUrl: string;
+}
+
+type Action =
+  | { type: 'set-redirect-url'; payload: string }
+  | { type: 'toggle-is-initializing'; payload: boolean }
+  | { type: 'login'; payload: User }
+  | { type: 'logout' };
+
+const initialState: State = {
+  user: null,
+  redirectUrl: '',
+  isInitializing: true,
+};
+
+type StoreApi = {
+  state: State;
+  dispatch: React.Dispatch<Action>;
+};
+
+const AppContext = createContext<StoreApi>({
+  state: initialState,
+  dispatch: () => null,
 });
 
 function AppContextProvider({
   children,
   ...props
 }: React.PropsWithChildren<any>) {
-  const [isInitializing, setIsInitializing] = useState(true);
-  const login = useAppStore((state) => state.login);
+  const [state, dispatch] = useReducer<Reducer<State, Action>>(
+    reducer,
+    initialState
+  );
+
+  const value = useMemo(
+    () => ({
+      state,
+      dispatch,
+    }),
+    [state, dispatch]
+  );
 
   async function init() {
     const user = await getCurrentUser();
-    if (!user) return setIsInitializing(false);
-
-    login(user);
-    setIsInitializing(false);
+    if (!user)
+      return dispatch({ type: 'toggle-is-initializing', payload: false });
+    return dispatch({ type: 'login', payload: user });
   }
 
   useEffect(() => {
     init();
   }, []);
 
-  if (isInitializing) return <FullScreenLoader asPage />;
+  if (state.isInitializing) return <FullScreenLoader id='app-context' asPage />;
 
   return (
-    <AppContext.Provider value={null} {...props}>
+    <AppContext.Provider value={value} {...props}>
       {children}
     </AppContext.Provider>
   );
@@ -44,6 +84,13 @@ function useAppContext() {
 }
 
 export { AppContextProvider, useAppContext };
+
+export const fakeUser = {
+  firstName: 'John',
+  lastName: 'Doe',
+  businessName: 'Gustavo Inc',
+  email: 'gustavo@inc.co',
+};
 
 async function getCurrentUser() {
   const tokens = getFromLocalStore('tokens');
@@ -70,9 +117,35 @@ async function getCurrentUser() {
   }
 }
 
-export const fakeUser = {
-  firstName: 'John',
-  lastName: 'Doe',
-  businessName: 'Gustavo Inc',
-  email: 'gustavo@inc.co',
-};
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case 'set-redirect-url': {
+      return { ...state, redirectUrl: action.payload };
+    }
+    case 'toggle-is-initializing': {
+      return { ...state, isInitializing: action.payload };
+    }
+    case 'logout': {
+      deleteFromLocalStore('tokens');
+
+      return {
+        ...state,
+        user: null,
+        isInitializing: false,
+      };
+    }
+    case 'login': {
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          ...action.payload,
+        },
+        isInitializing: false,
+      };
+    }
+
+    default:
+      return state;
+  }
+}

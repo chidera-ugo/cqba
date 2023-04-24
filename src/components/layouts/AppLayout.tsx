@@ -16,7 +16,7 @@ export const AppLayout = ({ children, title }: PropsWithChildren<Props>) => {
   return (
     <>
       <PageHead title={title} />
-      <div className='flex'>
+      <div className='no-scroll flex'>
         <div className='w-[324px]'>
           <SideNavigation />
         </div>
