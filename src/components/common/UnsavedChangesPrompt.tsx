@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
+import { Confirmation } from 'components/modals/Confirmation';
 
 interface Props {
   hasUnsavedChanges: boolean;
@@ -7,12 +8,18 @@ interface Props {
 
 const UnsavedChangesPrompt = ({ hasUnsavedChanges }: Props) => {
   const router = useRouter();
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const destinationRef = useRef('');
+  const canProceed = useRef(false);
+
+  const promptMessage =
+    'You have unsaved changes, are you sure you want to leave this page? Your changes will be lost';
 
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (hasUnsavedChanges) {
+      if (hasUnsavedChanges && !canProceed.current) {
         e.preventDefault();
-        e.returnValue = '';
+        e.returnValue = promptMessage;
       }
     };
 
@@ -24,15 +31,12 @@ const UnsavedChangesPrompt = ({ hasUnsavedChanges }: Props) => {
   }, [hasUnsavedChanges]);
 
   useEffect(() => {
-    const handleRouteChangeStart = () => {
-      if (hasUnsavedChanges) {
-        const confirmNavigation = confirm(
-          'You have unsaved changes, are you sure you want to leave this page?'
-        );
-        if (!confirmNavigation) {
-          router.events.emit('routeChangeError');
-          throw 'routeChange aborted.';
-        }
+    const handleRouteChangeStart = (destination: string) => {
+      if (hasUnsavedChanges && !canProceed.current) {
+        setShowConfirmation(true);
+        destinationRef.current = destination;
+        router.events.emit('routeChangeError');
+        throw 'routeChanges aborted.';
       }
     };
 
@@ -43,7 +47,22 @@ const UnsavedChangesPrompt = ({ hasUnsavedChanges }: Props) => {
     };
   }, [hasUnsavedChanges, router.events]);
 
-  return null;
+  return (
+    <Confirmation
+      show={showConfirmation}
+      buttonTexts={['Cancel', 'Continue']}
+      title='Discard Changes'
+      subTitle={promptMessage}
+      positive={() => {
+        canProceed.current = true;
+        setShowConfirmation(false);
+        router.push(destinationRef.current);
+      }}
+      negative={() => {
+        setShowConfirmation(false);
+      }}
+    />
+  );
 };
 
 export default UnsavedChangesPrompt;

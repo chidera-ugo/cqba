@@ -31,7 +31,7 @@ export const Header = ({ title, close }: HeaderProps) => {
 
 type Props = JSX.IntrinsicElements['div'] & {
   modalTitle: string | JSX.Element;
-  subTitle: string | JSX.Element;
+  subTitle?: string | JSX.Element;
   noPadding?: boolean;
   icon?: 'success' | 'error' | 'lock' | 'processing' | JSX.Element;
 };
