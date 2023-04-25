@@ -16,7 +16,7 @@ export type ModalWrapperProps = ModalProps &
   };
 
 export type ModalProps = {
-  type?: 'right' | 'center' | 'center-top' | 'zoom' | 'fade';
+  type?: 'right' | 'left' | 'center' | 'center-top' | 'zoom' | 'fade';
   show: boolean;
   closeOnClickOutside?: boolean;
   className?: string;
@@ -45,14 +45,14 @@ export const MobileMenuWrapper = ({
       show={show}
       closeOnClickOutside
       className={clsx(
-        'relative z-[1000] mx-auto mb-0 h-full w-full 560:my-auto 640:w-auto'
+        'relative z-[1000] mr-auto h-full w-full max-w-[324px] 560:my-auto 640:w-auto'
       )}
       {...rest}
-      type='center-top'
+      type='left'
     >
       <div
         className={clsx(
-          `hidden-scrollbar relative h-auto w-full min-w-full overflow-clip overflow-y-auto overflow-x-hidden 640:my-4 640:min-h-min 640:w-auto 640:min-w-[450px]`,
+          `hidden-scrollbar relative h-full w-full min-w-full overflow-clip overflow-y-auto overflow-x-hidden 640:w-auto 640:min-w-[450px]`,
           className ? className : 'bg-white px-6 560:min-w-[466px]'
         )}
       >

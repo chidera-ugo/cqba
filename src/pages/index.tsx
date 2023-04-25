@@ -11,15 +11,16 @@ export default function Home() {
 
   return (
     <AppLayout title='Overview'>
-      <div className='x-between'>
-        <h5 className='my-auto'>Hi {user?.firstName}, Welcome to ChequeBase</h5>
+      <div className='x-between block 640:flex'>
+        <h5>Hi {user?.firstName}, Welcome to ChequeBase</h5>
 
-        <div className='flex'>
+        <div className='mt-4 flex 640:mt-0'>
           <Filter
             id='overview-filter'
             onChange={(option) => {
               setFilter(option.name);
             }}
+            dropdownClassName='640:right-0 640:left-auto left-0'
             options={[
               { value: 7, name: 'Last 7 Days' },
               { value: 30, name: 'Last 30 Days' },
@@ -28,7 +29,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className='mt-8'>
+      <div className='mt-4 640:mt-8'>
         <Overview />
       </div>
       <div className='mt-5'>

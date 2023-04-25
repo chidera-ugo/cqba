@@ -3,21 +3,23 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { convertToUrlString } from 'utils/helpers/convertToUrlString';
 import clsx from 'clsx';
-import { Tooltip } from 'components/common/Tooltip';
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 import { generatePlaceholderArray } from 'utils/helpers/generatePlaceholderArray';
+import { TooltipWrapper } from 'components/common/Tooltip';
+import { useDismiss } from 'hooks/common/useDismiss';
 
 export const SideNavigationItems = () => {
   const { pathname } = useRouter();
   const { navigationItems } = useNavigationItems();
-  const [currentTooltipItem, setCurrentTooltipItem] = useState('');
 
   function checkIsActive(query: string, isRoot?: boolean) {
     if (isRoot && pathname === '/') return true;
     if (pathname.includes(convertToUrlString(query))) return true;
     return false;
   }
+
+  const [dismiss, isDismissed] = useDismiss('side_nav_tooltip');
 
   const { isLoading, isError, data } = useMakeDummyHttpRequest({
     method: 'get',
@@ -41,57 +43,54 @@ export const SideNavigationItems = () => {
             <div>
               {navigationItems[item]?.map(
                 ({ icon, title, showTooltip, showWhenUnverified, isRoot }) => {
+                  const titleAsUrl = convertToUrlString(title);
+
                   if (showWhenUnverified && data?.verified)
                     return <Fragment key={title}></Fragment>;
 
                   const isActive = checkIsActive(title, isRoot);
+                  const tooltipId = `side_nav_tooltip_id_${titleAsUrl}`;
 
                   return (
-                    <Link
-                      href={isRoot ? '/' : convertToUrlString(title)}
-                      key={title}
-                      className={clsx(
-                        'x-between relative w-full py-1.5',
-                        isActive
-                          ? 'text-primary-main'
-                          : 'smooth text-neutral-400 transition-colors hover:text-neutral-600'
-                      )}
-                    >
-                      <div className='flex flex-shrink-0'>
-                        <span className='mr-2'>{icon}</span>
-                        <span className='text-base font-semibold'>{title}</span>
-                      </div>
-
-                      {isActive && (
-                        <div
-                          onMouseEnter={() => {
-                            setCurrentTooltipItem(title);
-                          }}
-                          onMouseLeave={() => {
-                            setCurrentTooltipItem('');
-                          }}
-                          className='y-center relative my-auto p-3'
-                        >
-                          <div className='x-center absolute left-[9px] my-auto overflow-visible'>
-                            <div className='relative my-auto h-1.5 w-1.5 rounded-full bg-primary-main'></div>
-
-                            {showTooltip && (
-                              <Tooltip
-                                show={
-                                  showTooltip && currentTooltipItem === title
-                                }
-                                className='z-20 w-full'
-                                title='Complete your registration'
-                              >
-                                Here is some helpful explainer text to assist or
-                                guide the user in understanding how a certain
-                                feature works.
-                              </Tooltip>
-                            )}
-                          </div>
+                    <div key={title}>
+                      <Link
+                        href={isRoot ? '/' : titleAsUrl}
+                        className={clsx(
+                          'x-between relative w-full py-1.5',
+                          isActive
+                            ? 'text-primary-main'
+                            : 'smooth text-neutral-400 transition-colors hover:text-neutral-600'
+                        )}
+                      >
+                        <div className='flex flex-shrink-0'>
+                          <span className='mr-2'>{icon}</span>
+                          <span className='text-base font-medium'>{title}</span>
                         </div>
+
+                        {isActive && (
+                          <div
+                            id={tooltipId}
+                            className='y-center relative my-auto p-2'
+                          >
+                            <div className='relative my-auto h-1.5 w-1.5 rounded-full bg-primary-main'></div>
+                          </div>
+                        )}
+                      </Link>
+
+                      {showTooltip && (
+                        <TooltipWrapper
+                          anchorId={tooltipId}
+                          show={showTooltip && !isDismissed}
+                          close={() => {
+                            dismiss(tooltipId);
+                          }}
+                          title='Complete your registration'
+                        >
+                          Here is some helpful explainer text to assist or guide
+                          the user in understanding how a certain feature works.
+                        </TooltipWrapper>
                       )}
-                    </Link>
+                    </div>
                   );
                 }
               )}

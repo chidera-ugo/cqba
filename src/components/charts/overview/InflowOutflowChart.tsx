@@ -15,15 +15,18 @@ type Series = {
 };
 
 interface Props {
-  chartData: any[];
+  chartData: {
+    label: string;
+    data: any[];
+  };
 }
 
 export const InflowOutflowChart = ({ chartData }: Props) => {
   const data: Series[] = useMemo(
     () => [
       {
-        label: 'Deposits',
-        data: chartData,
+        label: chartData.label,
+        data: chartData.data,
       },
     ],
     [chartData]

@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { Dropdown } from 'components/common/Dropdown';
 import { Adjusters } from 'components/svgs/forms/Adjusters';
 import { useState } from 'react';
@@ -6,9 +7,10 @@ interface Props {
   id: string;
   options: { name: string; value: any }[];
   onChange: (selection: Props['options'][0]) => void;
+  dropdownClassName?: string;
 }
 
-export const Filter = ({ id, options, onChange }: Props) => {
+export const Filter = ({ id, options, dropdownClassName, onChange }: Props) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   return (
@@ -25,7 +27,10 @@ export const Filter = ({ id, options, onChange }: Props) => {
 
       <Dropdown
         show={showDropdown}
-        className='right-0 min-w-[200px] bg-white p-2'
+        className={clsx(
+          'min-w-[200px] bg-white p-2',
+          dropdownClassName ?? 'right-0 '
+        )}
         close={() => setShowDropdown(false)}
         wrapperId={id}
       >
@@ -34,7 +39,10 @@ export const Filter = ({ id, options, onChange }: Props) => {
             return (
               <button
                 key={option.name}
-                onClick={() => onChange(option)}
+                onClick={() => {
+                  onChange(option);
+                  setShowDropdown(false);
+                }}
                 className='smooth w-full rounded-lg px-2 py-1.5 text-left text-sm font-medium text-neutral-500 transition-colors hover:bg-gray-100'
               >
                 {option.name}

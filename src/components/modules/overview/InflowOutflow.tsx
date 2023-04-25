@@ -30,8 +30,8 @@ export const InflowOutflow = () => {
 
   const chartData = [
     {
-      date: '2023-01-31T23:00:00.000Z',
-      value: 313,
+      date: '2023-01-12T23:00:00.000Z',
+      value: 3130144,
     },
     {
       date: '2023-02-05T23:00:00.000Z',
@@ -39,65 +39,76 @@ export const InflowOutflow = () => {
     },
     {
       date: '2023-03-11T23:00:00.000Z',
-      value: 1003541700,
+      value: 444700,
     },
     {
       date: '2023-04-13T23:00:00.000Z',
-      value: 11700,
+      value: 341700,
     },
     {
       date: '2023-05-29T23:00:00.000Z',
-      value: 141700,
+      value: 2431700,
     },
     {
       date: '2023-06-12T23:00:00.000Z',
-      value: 1700,
+      value: 170044,
     },
     {
       date: '2023-07-30T23:00:00.000Z',
-      value: 54700,
+      value: 547100,
     },
     {
       date: '2023-08-12T23:00:00.000Z',
-      value: 100354700,
+      value: 1002420,
     },
   ];
 
   return (
-    <div className='card'>
-      <div className='flex gap-2'>
-        <button
-          onClick={() => setFilter('inflow')}
-          className={clsx(
-            'h-11  px-5 text-sm',
-            filter === 'inflow'
-              ? 'primary-button'
-              : 'light-button border-neutral-400 text-neutral-500'
-          )}
-        >
-          Total Inflow
-        </button>
+    <div className='card p-0'>
+      <div className='border-b border-neutral-100 p-5'>
+        <div className='flex gap-2'>
+          <button
+            onClick={() => setFilter('inflow')}
+            className={clsx(
+              'h-11  px-5 text-sm',
+              filter === 'inflow'
+                ? 'primary-button'
+                : 'light-button border-neutral-400 text-neutral-500'
+            )}
+          >
+            Total Inflow
+          </button>
 
-        <button
-          onClick={() => setFilter('outflow')}
-          className={clsx(
-            'h-11 px-5 text-sm',
-            filter === 'outflow'
-              ? 'primary-button'
-              : 'light-button border-neutral-400 text-neutral-500'
-          )}
-        >
-          Total Outflow
-        </button>
+          <button
+            onClick={() => setFilter('outflow')}
+            className={clsx(
+              'h-11 px-5 text-sm',
+              filter === 'outflow'
+                ? 'primary-button'
+                : 'light-button border-neutral-400 text-neutral-500'
+            )}
+          >
+            Total Outflow
+          </button>
+        </div>
+
+        <div className={clsx('mt-3 text-3xl font-semibold')}>
+          <span className='mr-1'>NGN</span>
+          {formatAmount({ value: data?.balance, decimalPlaces: 2 })}
+        </div>
       </div>
 
-      <div className={clsx('mt-3 text-3xl font-semibold')}>
-        <span className='mr-1'>NGN</span>
-        {formatAmount({ value: data?.balance, decimalPlaces: 2 })}
-      </div>
-
-      <div className='mt-8 h-[300px]'>
-        <InflowOutflowChart {...{ chartData }} />
+      <div className='h-[300px] overflow-x-auto pb-3'>
+        <div className='thin-scrollbar h-full min-w-[900px]'>
+          <InflowOutflowChart
+            {...{
+              chartData: {
+                label: filter == 'inflow' ? 'Inflow' : 'Outflow',
+                data: chartData,
+              },
+            }}
+          />
+        </div>
       </div>
     </div>
   );

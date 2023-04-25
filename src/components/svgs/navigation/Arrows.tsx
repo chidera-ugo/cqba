@@ -19,3 +19,25 @@ export const Right = ({ className }: { className?: string }) => {
     </svg>
   );
 };
+
+export const PointerLeft = () => {
+  return (
+    <svg
+      width='12'
+      height='20'
+      viewBox='0 0 12 20'
+      fill='none'
+      xmlns='http://www.w3.org/2000/svg'
+      className='absolute'
+      style={{
+        top: 'calc(50% - 10px)',
+        left: -8,
+      }}
+    >
+      <path
+        d='M0.374422 9.63971C0.170005 9.83641 0.170005 10.1636 0.374421 10.3603L8.15331 17.8455C8.47096 18.1512 9 17.9261 9 17.4852L9 2.51476C9 2.07393 8.47096 1.84881 8.15331 2.15447L0.374422 9.63971Z'
+        fill='#0076FF'
+      />
+    </svg>
+  );
+};

@@ -10,7 +10,7 @@ export const TextArea = ({ label, className, ...props }: Props) => {
   const id = props.id ?? props.name;
 
   return (
-    <div className={clsx(className, 'mt-4 w-full')}>
+    <div className={clsx(className, 'mt-5 w-full')}>
       <div className='flex'>
         <label htmlFor={id} className='text-left'>
           {label}

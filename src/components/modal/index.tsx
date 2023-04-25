@@ -34,7 +34,7 @@ export const Modal = ({
           <div
             className={clsx(
               `no-scroll fixed inset-0 z-[1200] w-screen`,
-              type !== 'right' ? 'y-center' : ''
+              type !== 'right' && type !== 'left' ? 'y-center' : ''
             )}
           >
             <motion.div
@@ -78,7 +78,7 @@ export const Modal = ({
                       : type === 'center-top'
                       ? '-100%'
                       : 0,
-                  x: type === 'right' ? '100%' : 0,
+                  x: type === 'right' ? '100%' : type === 'left' ? '-100%' : 0,
                   scale: type === 'zoom' ? 0 : 1,
                   opacity: type === 'fade' ? 0 : 1,
                 },

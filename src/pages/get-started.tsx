@@ -1,10 +1,12 @@
 import { AppLayout } from 'components/layouts/AppLayout';
 import { GetStartedSteps } from 'components/modules/get-started/GetStartedSteps';
-import { UpdateBusinessInformation } from 'components/modules/get-started/UpdateBusinessInformation';
+import { UpdateCompanyInformation } from 'components/modules/get-started/UpdateCompanyInformation';
 import { useAppContext } from 'context/AppContext';
+import { useGetCurrentTab } from 'hooks/dashboard/get-started/useGetCurrentTab';
 
 export default function GetStarted() {
   const { user } = useAppContext().state;
+  const { currentTab } = useGetCurrentTab();
 
   return (
     <AppLayout title='Get Started'>
@@ -26,7 +28,9 @@ export default function GetStarted() {
 
         <div className='thin-scrollbar col-span-8 overflow-y-auto'>
           <div className='p-5'>
-            <UpdateBusinessInformation />
+            {currentTab === 'company-information' && (
+              <UpdateCompanyInformation />
+            )}
           </div>
         </div>
       </div>

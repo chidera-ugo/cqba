@@ -27,13 +27,13 @@ export const useNavigationItems = () => {
       {
         icon: <BadgeCheck />,
         title: 'Get Started',
+        showTooltip: true,
         showWhenUnverified: true,
       },
       {
         icon: <Home />,
         title: 'Overview',
         isRoot: true,
-        showTooltip: true,
       },
       {
         icon: <Wallet />,

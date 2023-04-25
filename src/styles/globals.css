@@ -40,8 +40,8 @@
   input,
   select,
   textarea {
-    @apply smooth block h-11 rounded-lg border border-neutral-100 bg-neutral-100 text-neutral-1000 placeholder-neutral-400 transition-colors focus:border-neutral-400 focus:outline-none focus:ring-4 focus:ring-neutral-200 !important;
-    @apply px-3.5;
+    @apply smooth block h-11 rounded-lg border border-neutral-100 text-neutral-1000 placeholder-neutral-400 transition-colors focus:border-neutral-400 focus:outline-none focus:ring-4 focus:ring-neutral-200 !important;
+    @apply bg-neutral-100 px-3.5;
     box-shadow: 0px 2px 5px rgba(103, 110, 118, 0.08),
       0px 0px 0px 1px rgba(103, 110, 118, 0.16), 0px 1px 1px rgba(0, 0, 0, 0.12);
   }
@@ -75,6 +75,10 @@
 @layer components {
   .app-container {
     @apply mx-auto px-3 640:px-8;
+  }
+
+  .app-layout-desktop-width {
+    width: calc(100% - 324px);
   }
 
   .auth-container {
@@ -116,35 +120,35 @@
   .spinner {
     @apply h-5 w-5 animate-spin;
   }
-}
 
-@layer utilities {
-  .x-center {
-    @apply flex justify-center align-middle;
+  .card {
+    @apply rounded-xl border border-neutral-200 p-5;
   }
 
   .x-between {
     @apply flex justify-between align-middle;
   }
 
-  .y-center {
-    @apply x-center flex-col;
-  }
-
   .y-between {
     @apply flex flex-col justify-between align-middle;
   }
 
+  .x-center {
+    @apply flex justify-center align-middle;
+  }
+
+  .y-center {
+    @apply flex flex-col justify-center align-middle;
+  }
+}
+
+@layer utilities {
   .generic-error {
     @apply mt-1 text-left text-sm text-red-500;
   }
 
   .smooth {
     @apply duration-300 ease-linear;
-  }
-
-  .card {
-    @apply rounded-xl border border-neutral-200 p-5;
   }
 
   .card-title {

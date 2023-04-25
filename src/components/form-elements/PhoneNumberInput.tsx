@@ -28,7 +28,7 @@ export const PhoneNumberInput = ({
   }, [field.value]);
 
   return (
-    <div className={clsx(className, 'mt-4 w-full')}>
+    <div className={clsx(className, 'mt-5 w-full')}>
       <div className='flex'>
         <label htmlFor={id} className='text-left'>
           {label}
@@ -59,6 +59,7 @@ export const PhoneNumberInput = ({
           className={clsx(
             'relative w-full',
             'pl-[78px]',
+            !!field.value ? 'bg-white' : 'bg-neutral-100',
             meta.touched && meta.error ? 'border-error-main' : ''
           )}
         />

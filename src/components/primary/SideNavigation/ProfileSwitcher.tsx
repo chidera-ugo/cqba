@@ -7,10 +7,11 @@ import { useAppContext } from 'context/AppContext';
 import { deleteFromLocalStore } from 'lib/localStore';
 import { useState } from 'react';
 
-export const ProfileSwitcher = () => {
+export const ProfileSwitcher = ({ mobile }: { mobile?: boolean }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const { dispatch, state } = useAppContext();
   const { user } = state;
+  const id = mobile ? 'profile-switcher-mobile' : 'profile-switcher';
 
   function logout() {
     deleteFromLocalStore('tokens');
@@ -18,10 +19,10 @@ export const ProfileSwitcher = () => {
   }
 
   return (
-    <div className='sticky top-0 left-0 z-50 bg-neutral-100 p-8 pb-0'>
-      <div id='profile-switcher' className='relative'>
+    <div className='sticky top-0 left-0 z-[100] bg-white p-8 pb-0 1024:bg-neutral-100'>
+      <div id={id} className='relative'>
         <button
-          className='x-between relative z-[30] w-full rounded-2xl bg-neutral-200 p-2.5'
+          className='x-between relative z-[25] w-full rounded-2xl bg-neutral-200 p-2.5'
           onClick={() => setShowDropdown((prev) => !prev)}
         >
           <div className='flex'>
@@ -54,7 +55,7 @@ export const ProfileSwitcher = () => {
           show={showDropdown}
           className='border-none bg-neutral-200 p-4'
           close={() => setShowDropdown(false)}
-          wrapperId='profile-switcher'
+          wrapperId={id}
         >
           <p className='text-xs font-medium text-neutral-600'>Switch Profile</p>
 

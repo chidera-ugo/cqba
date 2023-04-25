@@ -3,11 +3,13 @@ import type { AppProps } from 'next/app';
 import { Slide, ToastContainer } from 'react-toastify';
 import clsx from 'clsx';
 import { toastClasses } from 'components/primary/AppToast';
-import 'react-toastify/dist/ReactToastify.min.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AppContextProvider } from 'context/AppContext';
+
+import 'react-toastify/dist/ReactToastify.min.css';
+import 'react-tooltip/dist/react-tooltip.css';
 
 export default function App({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(

@@ -11,16 +11,19 @@ import {
 } from 'react';
 import { deleteFromLocalStore, getFromLocalStore } from 'lib/localStore';
 import { User } from 'types/User';
+import useMediaQuery from 'hooks/common/useMediaQuery';
 
 export interface State {
   isInitializing: boolean;
   user: null | User;
   redirectUrl: string;
+  screenSize: 'tablet' | 'mobile' | 'desktop' | null;
 }
 
 type Action =
   | { type: 'set-redirect-url'; payload: string }
   | { type: 'toggle-is-initializing'; payload: boolean }
+  | { type: 'set-screen-size'; payload: State['screenSize'] }
   | { type: 'login'; payload: User }
   | { type: 'logout' };
 
@@ -28,6 +31,7 @@ const initialState: State = {
   user: null,
   redirectUrl: '',
   isInitializing: true,
+  screenSize: null,
 };
 
 type StoreApi = {
@@ -49,6 +53,9 @@ function AppContextProvider({
     initialState
   );
 
+  const tablet = useMediaQuery('(max-width: 1024px)');
+  const mobile = useMediaQuery('(max-width: 640px)');
+
   const value = useMemo(
     () => ({
       state,
@@ -67,6 +74,13 @@ function AppContextProvider({
   useEffect(() => {
     init();
   }, []);
+
+  useEffect(() => {
+    dispatch({
+      type: 'set-screen-size',
+      payload: mobile ? 'mobile' : tablet ? 'tablet' : 'desktop',
+    });
+  }, [mobile, tablet]);
 
   if (state.isInitializing) return <FullScreenLoader id='app-context' asPage />;
 
@@ -124,6 +138,9 @@ function reducer(state: State, action: Action): State {
     }
     case 'toggle-is-initializing': {
       return { ...state, isInitializing: action.payload };
+    }
+    case 'set-screen-size': {
+      return { ...state, screenSize: action.payload };
     }
     case 'logout': {
       deleteFromLocalStore('tokens');

@@ -12,7 +12,7 @@ export const PasswordInput = ({ label, className, ...props }: Props) => {
   const id = props.id ?? props.name;
 
   return (
-    <div className={clsx(className, 'mt-4 w-full')}>
+    <div className={clsx(className, 'mt-5 w-full')}>
       <div className='flex'>
         <label htmlFor={id} className='text-left'>
           {label}
@@ -27,7 +27,8 @@ export const PasswordInput = ({ label, className, ...props }: Props) => {
           type={showPassword ? 'password' : 'text'}
           className={clsx(
             meta.touched && meta.error ? 'border-error-main' : '',
-            'w-full pr-14'
+            'w-full pr-14',
+            !!field.value ? 'bg-white' : 'bg-neutral-100'
           )}
         />
 

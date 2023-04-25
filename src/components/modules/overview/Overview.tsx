@@ -8,7 +8,7 @@ export const Overview = () => {
   const { isLoading, isError, data } = useMakeDummyHttpRequest({
     method: 'get',
     res: {
-      subAccountsBalance: 852482.31,
+      subAccountsBalance: 824482.31,
       budgetBalance: 48104,
       subAccountsCount: 13,
       requestsCount: 5,
@@ -53,9 +53,15 @@ export const Overview = () => {
 
   return (
     <div className='grid grid-cols-12 gap-5'>
-      {payload.map(({ name, value, moreInfo, isAmount }) => {
+      {payload.map(({ name, value, moreInfo, isAmount }, i) => {
         return (
-          <div className='card y-center col-span-4 h-[140px]' key={name}>
+          <div
+            className={clsx(
+              'card y-center col-span-12 h-[140px] 640:col-span-6 1280:col-span-4',
+              i > 2 && 'hidden 640:block'
+            )}
+            key={name}
+          >
             <div className='my-auto'>
               <div className='flex text-neutral-500'>
                 <div>{name}</div>
@@ -64,7 +70,11 @@ export const Overview = () => {
 
               <div className={clsx('mt-3 text-3xl font-semibold')}>
                 {isAmount && <span className='mr-1.5'>NGN</span>}
-                {formatAmount({ value, decimalPlaces: isAmount ? 2 : 0 })}
+                {formatAmount({
+                  value,
+                  decimalPlaces: isAmount ? 2 : 0,
+                  kFormatter: value > 999999,
+                })}
               </div>
             </div>
           </div>
@@ -79,7 +89,10 @@ const IsLoadingIsError = ({ type }: { type: 'loading' | 'error' }) => {
     <div className='grid grid-cols-12 gap-5'>
       {generatePlaceholderArray(6).map((i) => {
         return (
-          <div className='card y-center col-span-4 h-[140px]' key={i}>
+          <div
+            className='card y-center col-span-12 h-[140px] 640:col-span-6 1280:col-span-4'
+            key={i}
+          >
             <div className='my-auto'>
               <div
                 className={clsx(

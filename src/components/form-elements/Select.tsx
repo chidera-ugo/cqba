@@ -34,7 +34,7 @@ export const Select = ({
   }, [field.value]);
 
   return (
-    <div className={clsx(className, 'relative mt-4 w-full')}>
+    <div className={clsx(className, 'relative mt-5 w-full')}>
       <div className='flex'>
         <label htmlFor={id} className='text-left'>
           {label}
@@ -53,7 +53,8 @@ export const Select = ({
         }}
         className={clsx(
           meta.touched && meta.error ? 'border-error-main' : '',
-          'w-full'
+          'w-full',
+          !!field.value ? 'bg-white' : 'bg-neutral-100'
         )}
       >
         <option disabled hidden value=''></option>
