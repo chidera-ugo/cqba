@@ -17,7 +17,7 @@ export interface State {
   isInitializing: boolean;
   user: null | User;
   redirectUrl: string;
-  screenSize: 'tablet' | 'mobile' | 'desktop' | null;
+  screenSize: 'tablet' | 'mini-tablet' | 'mobile' | 'desktop' | null;
 }
 
 type Action =
@@ -54,6 +54,7 @@ function AppContextProvider({
   );
 
   const tablet = useMediaQuery('(max-width: 1024px)');
+  const miniTablet = useMediaQuery('(max-width: 768px)');
   const mobile = useMediaQuery('(max-width: 640px)');
 
   const value = useMemo(
@@ -78,9 +79,15 @@ function AppContextProvider({
   useEffect(() => {
     dispatch({
       type: 'set-screen-size',
-      payload: mobile ? 'mobile' : tablet ? 'tablet' : 'desktop',
+      payload: mobile
+        ? 'mobile'
+        : miniTablet
+        ? 'mini-tablet'
+        : tablet
+        ? 'tablet'
+        : 'desktop',
     });
-  }, [mobile, tablet]);
+  }, [mobile, tablet, miniTablet]);
 
   if (state.isInitializing) return <FullScreenLoader id='app-context' asPage />;
 

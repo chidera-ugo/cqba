@@ -58,7 +58,7 @@ export const Overview = () => {
           <div
             className={clsx(
               'card y-center col-span-12 h-[140px] 640:col-span-6 1280:col-span-4',
-              i > 2 && 'hidden 640:block'
+              i > 2 && 'hidden 640:flex'
             )}
             key={name}
           >

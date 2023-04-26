@@ -7,7 +7,7 @@ export const useDismiss = (key: string, durationInMinutes?: number) => {
   const [isDismissed, setIsDismissed] = useState(false);
 
   function checkIsDismissed(id?: string) {
-    setIsDismissed(getCookie(_key)?.[id ?? 'value'] === true);
+    return getCookie(_key)?.[id ?? 'value'] === true;
   }
 
   function dismiss(id?: string) {
@@ -21,7 +21,7 @@ export const useDismiss = (key: string, durationInMinutes?: number) => {
         : undefined
     );
 
-    checkIsDismissed(id);
+    setIsDismissed(checkIsDismissed(id));
   }
 
   return [dismiss, isDismissed, checkIsDismissed] as const;

@@ -1,6 +1,6 @@
+import { UpdateCompanyInformationForm } from 'components/forms/get-started/UpdateCompanyInformationForm';
 import { AppLayout } from 'components/layouts/AppLayout';
 import { GetStartedSteps } from 'components/modules/get-started/GetStartedSteps';
-import { UpdateCompanyInformation } from 'components/modules/get-started/UpdateCompanyInformation';
 import { useAppContext } from 'context/AppContext';
 import { useGetCurrentTab } from 'hooks/dashboard/get-started/useGetCurrentTab';
 
@@ -16,20 +16,20 @@ export default function GetStarted() {
       </p>
 
       <div
-        className='mt-7 grid grid-cols-12 rounded-xl border border-neutral-200'
+        className='mt-7 grid-cols-12 rounded-xl border border-neutral-200 768:grid'
         style={{
           height: 'calc(100vh - 224px)',
         }}
       >
-        <div className='col-span-4 m-5 border-r border-neutral-200'>
+        <div className='col-span-5 m-5 border-neutral-200 768:border-r 1200:col-span-4'>
           <h5>Setup Guide</h5>
           <GetStartedSteps />
         </div>
 
-        <div className='thin-scrollbar col-span-8 overflow-y-auto'>
-          <div className='p-5'>
+        <div className='thin-scrollbar col-span-7 overflow-y-auto 1200:col-span-8'>
+          <div className='auth-container p-5'>
             {currentTab === 'company-information' && (
-              <UpdateCompanyInformation />
+              <UpdateCompanyInformationForm />
             )}
           </div>
         </div>

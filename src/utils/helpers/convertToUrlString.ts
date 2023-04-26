@@ -1,3 +1,4 @@
 export function convertToUrlString(val: string) {
-  return val.split(' ').join('-').toLowerCase();
+  if (typeof val !== 'string') return '';
+  return val?.split(' ').join('-').toLowerCase();
 }

@@ -19,7 +19,8 @@ export const SideNavigationItems = () => {
     return false;
   }
 
-  const [dismiss, isDismissed] = useDismiss('side_nav_tooltip');
+  const [dismiss, isDismissed, checkIsSideNavItemToolTipDismissed] =
+    useDismiss('side_nav_tooltip');
 
   const { isLoading, isError, data } = useMakeDummyHttpRequest({
     method: 'get',
@@ -80,7 +81,11 @@ export const SideNavigationItems = () => {
                       {showTooltip && (
                         <TooltipWrapper
                           anchorId={tooltipId}
-                          show={showTooltip && !isDismissed}
+                          show={
+                            showTooltip &&
+                            !checkIsSideNavItemToolTipDismissed(tooltipId) &&
+                            !isDismissed
+                          }
                           close={() => {
                             dismiss(tooltipId);
                           }}

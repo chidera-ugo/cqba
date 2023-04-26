@@ -4,7 +4,7 @@ import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { Select } from 'components/form-elements/Select';
 import { useAppContext } from 'context/AppContext';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useStatesAndLgas } from 'hooks/dashboard/get-started/useStatesAndLgas';
 import { TooltipWrapper } from 'components/common/Tooltip';
 import { useDismiss } from 'hooks/common/useDismiss';
@@ -15,21 +15,31 @@ import { IdNavigator } from 'components/common/IdNavigator';
 interface Props {
   formikProps: FormikProps<typeof initialValues>;
   processing: boolean;
+  hasUnsavedChanges: boolean;
+  setHasUnsavedChanges: Dispatch<SetStateAction<boolean>>;
 }
 
-export const Form = ({ processing, formikProps }: Props) => {
+export const Form = ({
+  processing,
+  formikProps,
+  hasUnsavedChanges,
+  setHasUnsavedChanges,
+}: Props) => {
   const { handleSubmit, setFieldValue, values } = formikProps;
+  const submitButtonId = 'update-company-information-submit-button';
 
   const { user } = useAppContext().state;
   const { states, lgas } = useStatesAndLgas({ state: values.state });
+  const [dismiss, isDismissed, checkIsDismissed] =
+    useDismiss('save_and_continue');
 
-  const [dismiss, isDismissed] = useDismiss('save_and_continue');
-  const submitButtonId = 'update-company-information-submit-button';
   const [isSaveAndContinueButtonVisible, setIsSaveAndContinueButtonVisible] =
     useState(false);
 
   const canShowSaveAndContinueTooltip =
-    !isDismissed && isSaveAndContinueButtonVisible;
+    !checkIsDismissed(submitButtonId) &&
+    !isDismissed &&
+    isSaveAndContinueButtonVisible;
 
   const { ref } = useInView({
     rootMargin: '-54px',
@@ -44,9 +54,19 @@ export const Form = ({ processing, formikProps }: Props) => {
     }
   }, [user]);
 
+  function dismissSaveAndContinueTooltip() {
+    dismiss(submitButtonId);
+  }
+
   return (
-    <FormikForm onSubmit={handleSubmit} className='mt-7'>
-      <UnsavedChangesPrompt hasUnsavedChanges />
+    <FormikForm
+      onChange={() => {
+        setHasUnsavedChanges(true);
+      }}
+      onSubmit={handleSubmit}
+      className='mt-7'
+    >
+      <UnsavedChangesPrompt {...{ hasUnsavedChanges }} />
 
       <h5>Company Information</h5>
       <p className='mt-1 font-normal text-neutral-400'>
@@ -104,9 +124,7 @@ export const Form = ({ processing, formikProps }: Props) => {
         <TooltipWrapper
           anchorId={submitButtonId}
           show={canShowSaveAndContinueTooltip}
-          close={() => {
-            dismiss(submitButtonId);
-          }}
+          close={dismissSaveAndContinueTooltip}
         >
           Remember to save the changes you make on each section. Remember to
           save the changes you make on each section.
