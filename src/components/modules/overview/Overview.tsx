@@ -65,7 +65,9 @@ export const Overview = () => {
             <div className='my-auto'>
               <div className='flex text-neutral-500'>
                 <div>{name}</div>
-                {moreInfo && <MoreInfo>{moreInfo}</MoreInfo>}
+                {moreInfo && (
+                  <MoreInfo id={`overview_card_${name}`}>{moreInfo}</MoreInfo>
+                )}
               </div>
 
               <div className={clsx('mt-3 text-3xl font-semibold')}>

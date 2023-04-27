@@ -22,6 +22,7 @@ export type TSelect = {
   ) => JSX.Element;
   convertOptionsToObjectArray?: boolean;
   disableSorting?: boolean;
+  dropdownInMobileView?: boolean;
 };
 
 export type TOptions = {
@@ -52,6 +53,7 @@ export const Select = ({
   convertOptionsToObjectArray,
   minimalist,
   noSearch,
+  dropdownInMobileView,
   renderer,
   isLoading,
 }: Props) => {
@@ -95,7 +97,7 @@ export const Select = ({
 
   return (
     <div className='hidden-scrollbar relative h-full overflow-hidden rounded-xl'>
-      <div className='sticky left-0 top-0 z-[1000] overflow-hidden rounded-xl bg-white'>
+      <div className='sticky left-0 top-0 z-[1000] overflow-hidden bg-white'>
         {!minimalist && (
           <div
             className={clsx('grid grid-cols-12 bg-white px-5 py-2 640:hidden')}
@@ -110,9 +112,9 @@ export const Select = ({
             </div>
 
             <div className='x-center col-span-8 mx-auto my-auto'>
-              <h3 className='font-semibold capitalize'>
+              <h5 className='font-semibold capitalize'>
                 Select {entity ? entity : 'provider'}
-              </h3>
+              </h5>
             </div>
 
             <div className='col-span-2 my-auto'></div>
@@ -149,15 +151,20 @@ export const Select = ({
 
       <div
         className={clsx(
-          '640:max-h-[400px] 640:pb-3',
-          !noSearch || options.length > 6 ? 'pb-44' : '',
-          noSearch && 'pt-3'
+          'h-min 640:max-h-[400px] 640:pb-1',
+          !noSearch || options.length > 6
+            ? dropdownInMobileView
+              ? 'max-h-[400px]'
+              : 'pb-44'
+            : '',
+          noSearch && 'pt-1'
         )}
         style={{
           height:
-            options.length > 6 || (!minimalist && mobile)
+            !dropdownInMobileView &&
+            (options.length > 6 || (!minimalist && mobile))
               ? '100vh'
-              : Number(options.length * 60) + 24,
+              : Number(options.length * 48) + 12,
         }}
       >
         {!filteredOptions?.length ? (
@@ -183,7 +190,7 @@ export const Select = ({
                       },
                     },
                     itemCount: filteredOptions.length,
-                    itemSize: 60,
+                    itemSize: 48,
                   }}
                 >
                   {({ index, style, data: _ }) => {
@@ -193,9 +200,9 @@ export const Select = ({
                       <div
                         style={style}
                         key={data[displayValue as any]}
-                        id={`${entity}${index}`}
+                        id={`${entity}-${index}`}
                         className={clsx(
-                          'my-auto flex w-full gap-3 px-3 align-middle transition-colors ease-linear'
+                          'my-auto flex w-full gap-3 px-1 align-middle transition-colors ease-linear'
                         )}
                       >
                         <button

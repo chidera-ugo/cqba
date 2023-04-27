@@ -17,16 +17,19 @@ export const GetStartedSteps = () => {
     if (url === 'create-account') return true;
   }
 
-  if (screenSize === 'mini-tablet') {
+  if (screenSize?.['miniTablet']) {
     return (
-      <div className='mt-4 block 768:hidden'>
+      <div className='mt-3 block 768:hidden'>
         <AgnosticCustomSelect
           noSearch
           disableSorting
-          dropdownClassname='mt-2 bg-green-500'
+          entity='get-started-steps'
+          minimalist
+          dropdownClassname='mt-2 bg-white'
           trueValue='id'
           displayValue='name'
           convertOptionsToObjectArray
+          dropdownInMobileView
           id='get-started-steps'
           options={getStartedSteps}
           className='w-full'
@@ -46,7 +49,7 @@ export const GetStartedSteps = () => {
             return (
               <div
                 className={clsx(
-                  'smooth flex py-1.5 text-left font-medium transition-colors',
+                  'smooth my-auto flex text-left font-medium transition-colors',
                   plainStyling
                     ? 'text-neutral-500'
                     : isActive
@@ -90,14 +93,15 @@ export const GetStartedSteps = () => {
   return (
     <div className='mt-5 hidden 768:block'>
       {getStartedSteps.map((step, i) => {
-        const isActive = currentTab === convertToUrlString(step);
+        const url = convertToUrlString(step);
+        const isActive = currentTab === url;
         const isCompleted = checkIsStepCompleted(step);
 
         return (
           <button
             onClick={() => {
-              if (isCompleted) return;
-              push(`/get-started?tab=${convertToUrlString(step)}`);
+              if (url === currentTab) return;
+              push(`/get-started?tab=${url}`);
             }}
             key={step}
             className={clsx(
@@ -106,7 +110,7 @@ export const GetStartedSteps = () => {
                 ? 'text-primary-main'
                 : isCompleted
                 ? 'text-neutral-1000'
-                : 'text-neutral-400 hover:text-neutral-500'
+                : 'text-neutral-400 hover:text-neutral-1000'
             )}
           >
             {isCompleted ? (
@@ -135,7 +139,7 @@ export const GetStartedSteps = () => {
   );
 };
 
-const getStartedSteps = [
+export const getStartedSteps = [
   'Create account',
   'Company information',
   'Owner information',

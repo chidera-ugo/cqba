@@ -1,8 +1,7 @@
 import clsx from 'clsx';
-import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { ForgotPasswordForm } from 'components/forms/auth/ForgotPasswordForm';
-import { ChatBubbles } from 'components/illustrations/ChatBubbles';
 import { AuthLayout } from 'components/layouts/AuthLayout';
+import { SuccessInformation } from 'components/modules/common/SuccessInformation';
 import { useState } from 'react';
 
 export default function ForgotPassword() {
@@ -17,22 +16,17 @@ export default function ForgotPassword() {
         )}
       >
         {isSuccess ? (
-          <div className='y-center text-center'>
-            <div className='mx-auto'>
-              <ChatBubbles />
-            </div>
-            <h4 className='mt-4'>We sent you a reset link.</h4>
-            <p className='mt-4'>
-              We sent a reset password link to the email address you provided.
-              If you didn’t get the email, check your spam folder or try again.
-            </p>
-
-            <div className='x-center mt-8'>
-              <SubmitButton type='button' className='dark-button'>
-                Resend Reset Link
-              </SubmitButton>
-            </div>
-          </div>
+          <SuccessInformation
+            title='We sent you a reset link.'
+            description='We sent a reset password link to the email address you provided. If you didn’t get the email, check your spam folder or try again.'
+            icon='chat'
+            actionButton={{
+              action() {
+                null;
+              },
+              text: 'Resend Reset Link',
+            }}
+          />
         ) : (
           <>
             <h4>Forgot your password?</h4>

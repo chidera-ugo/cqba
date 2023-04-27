@@ -43,7 +43,7 @@ export const SideNavigationItems = () => {
 
             <div>
               {navigationItems[item]?.map(
-                ({ icon, title, showTooltip, showWhenUnverified, isRoot }) => {
+                ({ icon, title, showWhenUnverified, isRoot }) => {
                   const titleAsUrl = convertToUrlString(title);
 
                   if (showWhenUnverified && data?.verified)
@@ -78,18 +78,18 @@ export const SideNavigationItems = () => {
                         )}
                       </Link>
 
-                      {showTooltip && (
+                      {isActive && (
                         <TooltipWrapper
                           anchorId={tooltipId}
                           show={
-                            showTooltip &&
-                            !checkIsSideNavItemToolTipDismissed(tooltipId) &&
+                            isActive &&
+                            !checkIsSideNavItemToolTipDismissed(titleAsUrl) &&
                             !isDismissed
                           }
                           close={() => {
-                            dismiss(tooltipId);
+                            dismiss(titleAsUrl);
                           }}
-                          title='Complete your registration'
+                          title={title}
                         >
                           Here is some helpful explainer text to assist or guide
                           the user in understanding how a certain feature works.

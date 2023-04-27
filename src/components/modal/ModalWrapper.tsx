@@ -123,12 +123,12 @@ export const CentredModalWrapper = ({
 }: PropsWithChildren<CenteredModalWrapperProps>) => {
   const mobile = useMediaQuery('(max-width: 640px)');
   const controls = useDragControls();
-  const [duration, setDuration] = useState(0.3);
+  const [duration, setDuration] = useState(0.2);
 
   return (
     <Modal
       className={clsx(
-        'relative z-[1000] mx-auto mb-0 mt-auto flex h-full w-full flex-col justify-between p-0 align-middle 560:my-auto 640:mt-10 640:w-auto',
+        'y-between 640:y-center relative z-[1000] mx-auto mb-0 mt-auto h-full w-full p-0 560:my-auto 640:w-auto',
         withGutter && 'p-3'
       )}
       {...{ duration, show }}
@@ -185,23 +185,27 @@ export const CentredModalWrapper = ({
           </div>
         )}
 
-        <div className='x-between sticky top-0 right-0 p-4 pb-0'>
-          <div></div>
-          <button onClick={props.close} className='text-gray-400'>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              viewBox='0 0 24 24'
-              fill='currentColor'
-              className='h-7 w-7'
-            >
-              <path
-                fillRule='evenodd'
-                d='M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z'
-                clipRule='evenodd'
-              />
-            </svg>
-          </button>
-        </div>
+        {props.close && (
+          <>
+            <div className='x-between sticky top-0 right-0 p-4 pb-0'>
+              <div></div>
+              <button onClick={props.close} className='text-gray-400'>
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  viewBox='0 0 24 24'
+                  fill='currentColor'
+                  className='h-7 w-7'
+                >
+                  <path
+                    fillRule='evenodd'
+                    d='M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z'
+                    clipRule='evenodd'
+                  />
+                </svg>
+              </button>
+            </div>
+          </>
+        )}
 
         <div
           className={clsx('560:min-w-[400px]', className ?? 'px-4 640:px-8')}

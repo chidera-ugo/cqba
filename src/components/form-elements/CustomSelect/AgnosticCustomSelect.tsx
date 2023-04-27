@@ -20,8 +20,6 @@ export const AgnosticCustomSelect = ({
 
   const value = selectedOption?.[props.displayValue];
 
-  console.log({ showList });
-
   return (
     <div id={id} className='relative z-50 w-full'>
       <button

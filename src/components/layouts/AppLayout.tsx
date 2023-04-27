@@ -25,7 +25,7 @@ export const AppLayout = ({
     <>
       <PageHead title={title} />
       <div className='no-scroll 1024:flex'>
-        {!screenSize || screenSize === 'desktop' ? (
+        {!screenSize || screenSize?.['desktop'] ? (
           <div className='hidden w-[324px] 1024:block'>
             <SideNavigation />
           </div>

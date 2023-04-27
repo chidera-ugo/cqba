@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { useAppContext } from 'context/AppContext';
 import { PropsWithChildren } from 'react';
 import { Tooltip } from 'react-tooltip';
 
@@ -48,12 +49,14 @@ export const TooltipWrapper = ({
 }: PropsWithChildren<
   { anchorId: string; close: () => void; show: boolean } & Props
 >) => {
+  const { screenSize } = useAppContext().state;
+
   return (
     <Tooltip
       isOpen={show}
-      place='right'
+      place={screenSize?.['miniTablet'] ? 'top' : 'right'}
       anchorSelect={`#${anchorId}`}
-      className='z-[40] h-fit max-w-[320px] cursor-pointer'
+      className='z-[1004] h-fit max-w-[240px] cursor-pointer 640:max-w-[320px]'
       style={{
         backgroundColor: '#0076FF',
         borderRadius: '8px',

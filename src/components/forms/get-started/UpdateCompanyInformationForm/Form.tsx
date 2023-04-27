@@ -64,7 +64,6 @@ export const Form = ({
         setHasUnsavedChanges(true);
       }}
       onSubmit={handleSubmit}
-      className='mt-7'
     >
       <UnsavedChangesPrompt {...{ hasUnsavedChanges }} />
 

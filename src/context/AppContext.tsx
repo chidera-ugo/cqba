@@ -17,7 +17,12 @@ export interface State {
   isInitializing: boolean;
   user: null | User;
   redirectUrl: string;
-  screenSize: 'tablet' | 'mini-tablet' | 'mobile' | 'desktop' | null;
+  screenSize: {
+    tablet: boolean;
+    miniTablet: boolean;
+    mobile: boolean;
+    desktop: boolean;
+  } | null;
 }
 
 type Action =
@@ -79,13 +84,12 @@ function AppContextProvider({
   useEffect(() => {
     dispatch({
       type: 'set-screen-size',
-      payload: mobile
-        ? 'mobile'
-        : miniTablet
-        ? 'mini-tablet'
-        : tablet
-        ? 'tablet'
-        : 'desktop',
+      payload: {
+        mobile,
+        tablet,
+        miniTablet,
+        desktop: !mobile && !tablet && !miniTablet,
+      },
     });
   }, [mobile, tablet, miniTablet]);
 

@@ -37,6 +37,7 @@ export const SelectContent = ({
           close() {
             setShowList(false);
           },
+          minimalist,
           ...props,
           dropdownClassname,
           selectedOption,

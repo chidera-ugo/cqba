@@ -30,7 +30,7 @@
   }
 
   h5 {
-    @apply text-xl font-semibold text-neutral-1000;
+    @apply text-lg font-semibold text-neutral-1000 640:text-xl;
   }
 
   label {
@@ -158,6 +158,14 @@
 
   .card-description {
     @apply;
+  }
+
+  .autosizer > div {
+    @apply thin-scrollbar;
+  }
+
+  .get-started-layout-height {
+    height: calc(100vh - 224px);
   }
 }
 

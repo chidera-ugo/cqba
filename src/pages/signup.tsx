@@ -1,8 +1,7 @@
 import clsx from 'clsx';
-import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { SignUpForm } from 'components/forms/auth/SignUpForm';
-import { ChatBubbles } from 'components/illustrations/ChatBubbles';
 import { AuthLayout } from 'components/layouts/AuthLayout';
+import { SuccessInformation } from 'components/modules/common/SuccessInformation';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -18,23 +17,17 @@ export default function Signup() {
         )}
       >
         {isSuccess ? (
-          <div className='y-center text-center'>
-            <div className='mx-auto'>
-              <ChatBubbles />
-            </div>
-            <h4 className='mt-4'>Almost done. Confirm your email.</h4>
-            <p className='mt-4'>
-              We’ve sent a verification link to your email address. Click on the
-              link to verify your email address. If you didn’t get the email,
-              check your spam folder or resend the link.
-            </p>
-
-            <div className='x-center mt-8'>
-              <SubmitButton type='button' className='dark-button'>
-                Resend Verification Link
-              </SubmitButton>
-            </div>
-          </div>
+          <SuccessInformation
+            title='Almost done. Confirm your email.'
+            description='We’ve sent a verification link to your email address. Click on the link to verify your email address. If you didn’t get the email, check your spam folder or resend the link.'
+            icon='chat'
+            actionButton={{
+              action() {
+                null;
+              },
+              text: 'Resend Verification Link',
+            }}
+          />
         ) : (
           <>
             <h4>Create a free account</h4>

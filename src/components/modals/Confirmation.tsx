@@ -27,11 +27,10 @@ export const Confirmation = ({
       hideHeader
       {...{
         show,
-        closeModal: close,
       }}
       className='bg-white p-0'
     >
-      <div className='mx-auto pb-10'>
+      <div className='mx-auto pt-6 pb-10'>
         <SimpleModalHead
           className='max-w-[400px]'
           modalTitle={title!}

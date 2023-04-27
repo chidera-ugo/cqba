@@ -7,14 +7,25 @@ export const useDismiss = (key: string, durationInMinutes?: number) => {
   const [isDismissed, setIsDismissed] = useState(false);
 
   function checkIsDismissed(id?: string) {
-    return getCookie(_key)?.[id ?? 'value'] === true;
+    return getCookie(_key)?.[id ?? 'dismissed'] === true;
+  }
+
+  function getExistingValue() {
+    try {
+      const existingString = getCookie(_key);
+      if (!existingString) return {};
+      return existingString;
+    } catch (error) {
+      return {};
+    }
   }
 
   function dismiss(id?: string) {
     saveCookie(
       _key,
       {
-        [id ?? 'value']: true,
+        ...getExistingValue(),
+        [id ?? 'dismissed']: true,
       },
       durationInMinutes
         ? dayjs().add(durationInMinutes, 'minutes').toDate()
