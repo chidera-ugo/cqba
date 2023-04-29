@@ -3,12 +3,8 @@ import { Form as FormikForm, FormikProps } from 'formik';
 import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { Select } from 'components/form-elements/Select';
-import { useAppContext } from 'context/AppContext';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { TooltipWrapper } from 'components/common/Tooltip';
-import { useDismiss } from 'hooks/common/useDismiss';
+import { Dispatch, SetStateAction, useState } from 'react';
 import UnsavedChangesPrompt from 'components/common/UnsavedChangesPrompt';
-import { useInView } from 'react-intersection-observer';
 import { IdNavigator } from 'components/common/IdNavigator';
 import { PhoneNumberInput } from 'components/form-elements/PhoneNumberInput';
 import { DatePicker } from 'components/form-elements/DatePicker';
@@ -35,35 +31,7 @@ export const Form = ({
   files,
 }: Props) => {
   const { handleSubmit, setFieldValue } = formikProps;
-  const submitButtonId = 'update-owner-information-submit-button';
   const [calendarValue, setCalendarValue] = useState<Date | null>(null);
-
-  const { user } = useAppContext().state;
-  const [dismiss, isDismissed, checkIsDismissed] =
-    useDismiss('save_and_continue');
-
-  const [isSaveAndContinueButtonVisible, setIsSaveAndContinueButtonVisible] =
-    useState(false);
-
-  const canShowSaveAndContinueTooltip =
-    !checkIsDismissed() && !isDismissed && isSaveAndContinueButtonVisible;
-
-  const { ref } = useInView({
-    rootMargin: '-54px',
-    onChange(inView) {
-      setIsSaveAndContinueButtonVisible(inView);
-    },
-  });
-
-  useEffect(() => {
-    if (user?.businessName) {
-      setFieldValue('businessName', user.businessName);
-    }
-  }, [user]);
-
-  function dismissSaveAndContinueTooltip() {
-    dismiss();
-  }
 
   return (
     <FormikForm
@@ -157,28 +125,13 @@ export const Form = ({
         name='politicalAffiliation'
       />
 
-      <div className='relative mt-10 flex'>
-        <div id={submitButtonId} data-tooltip-delay-show={1000}>
-          <SubmitButton
-            submitting={processing}
-            className='outline-button w-full min-w-[200px] 640:w-auto'
-          >
-            Save and Continue
-          </SubmitButton>
-        </div>
-
-        <TooltipWrapper
-          anchorId={submitButtonId}
-          show={canShowSaveAndContinueTooltip}
-          close={dismissSaveAndContinueTooltip}
+      <div className='relative mt-10 flex pb-8'>
+        <SubmitButton
+          submitting={processing}
+          className='outline-button w-full min-w-[200px] 640:w-auto'
         >
-          Remember to save the changes you make on each section. Remember to
-          save the changes you make on each section.
-        </TooltipWrapper>
-      </div>
-
-      <div ref={ref} className='h-8'>
-        <IdNavigator id='bottom-anchor' />
+          Save and Continue
+        </SubmitButton>
       </div>
     </FormikForm>
   );

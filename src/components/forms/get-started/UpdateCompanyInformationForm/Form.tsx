@@ -109,6 +109,7 @@ export const Form = ({
         <div id={submitButtonId} data-tooltip-delay-show={1000}>
           <SubmitButton
             submitting={processing}
+            onClick={dismissSaveAndContinueTooltip}
             className='outline-button w-full min-w-[200px] 640:w-auto'
           >
             Save and Continue

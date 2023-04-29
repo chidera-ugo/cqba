@@ -1,3 +1,4 @@
+import { UpdateBusinessDocumentionForm } from 'components/forms/get-started/UpdateBusinessDocumentionForm';
 import { UpdateCompanyInformationForm } from 'components/forms/get-started/UpdateCompanyInformationForm';
 import { UpdateOwnerInformationForm } from 'components/forms/get-started/UpdateOwnerInformationForm';
 import { AppLayout } from 'components/layouts/AppLayout';
@@ -29,7 +30,11 @@ export default function GetStarted() {
 
         <div className='thin-scrollbar col-span-7 mt-5 overflow-y-auto 768:mt-0 1200:col-span-8'>
           <div className='mx-auto h-full max-w-[540px] py-5 px-1 768:px-8'>
-            {currentTab === 'owner-information' ? (
+            {currentTab === 'review-and-submit' ? (
+              <>Review</>
+            ) : currentTab === 'business-documentation' ? (
+              <UpdateBusinessDocumentionForm />
+            ) : currentTab === 'owner-information' ? (
               <UpdateOwnerInformationForm />
             ) : currentTab === 'company-information' ? (
               <UpdateCompanyInformationForm />
