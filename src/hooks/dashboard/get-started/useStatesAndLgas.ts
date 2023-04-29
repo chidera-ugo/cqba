@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { statesAndLgas } from 'utils/constants/states-and-lgas';
-import { handleSort } from 'utils/helpers/handleSort';
+import { handleSort } from 'utils/helpers/handlers/handleSort';
 
 export const useStatesAndLgas = ({ state = 'Lagos' }: { state: string }) => {
   const [lgas, setLgas] = useState<string[]>([]);

@@ -4,7 +4,7 @@ import { SolidCheck } from 'components/svgs/others/Check';
 import { useAppContext } from 'context/AppContext';
 import { useGetCurrentTab } from 'hooks/dashboard/get-started/useGetCurrentTab';
 import { useRouter } from 'next/router';
-import { convertToUrlString } from 'utils/helpers/convertToUrlString';
+import { convertToUrlString } from 'utils/helpers/converters/convertToUrlString';
 
 export const GetStartedSteps = () => {
   const { currentTab } = useGetCurrentTab();

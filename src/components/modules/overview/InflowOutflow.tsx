@@ -3,7 +3,7 @@ import { InflowOutflowChart } from 'components/charts/overview/InflowOutflowChar
 import { useGetChartDataByMonth } from 'hooks/charts/useGetChartDataByMonth';
 import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 import { useState } from 'react';
-import { formatAmount } from 'utils/helpers/formatAmount';
+import { formatAmount } from 'utils/helpers/formatters/formatAmount';
 
 export const InflowOutflow = () => {
   const [filter, setFilter] = useState<'inflow' | 'outflow'>('inflow');

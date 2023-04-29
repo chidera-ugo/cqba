@@ -1,7 +1,7 @@
 import { useField } from 'formik';
 import clsx from 'clsx';
 import { Field } from 'types/Common';
-import { validateField } from 'utils/helpers/validateField';
+import { validateField } from 'utils/helpers/validators/validateField';
 import { useEffect } from 'react';
 
 type Props = JSX.IntrinsicElements['input'] & Field;
@@ -54,7 +54,7 @@ export const Input = ({
         }
         className={clsx(
           meta.touched && meta.error ? 'border-error-main' : '',
-          'w-full',
+          'input w-full',
           !!field.value ? 'bg-white' : 'bg-neutral-100'
         )}
       />

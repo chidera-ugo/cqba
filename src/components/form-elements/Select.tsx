@@ -17,13 +17,16 @@ type Props = JSX.IntrinsicElements['select'] &
 
 export const Select = ({
   label,
-  options,
+  options: _options,
   className,
   displayKey,
   next,
   trueValue = 'id',
   ...props
 }: Props) => {
+  const options = !_options.length
+    ? ['']
+    : [typeof _options[0] === 'string' ? '' : {}, ..._options];
   const [field, meta] = useField(props.name as string);
   const id = props.id ?? props.name;
 

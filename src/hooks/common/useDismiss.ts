@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { useState } from 'react';
-import { getCookie, saveCookie } from 'utils/helpers/handleCookies';
+import { getCookie, saveCookie } from 'utils/helpers/handlers/handleCookies';
 
 export const useDismiss = (key: string, durationInMinutes?: number) => {
   const _key = `dismissed_${key}`;

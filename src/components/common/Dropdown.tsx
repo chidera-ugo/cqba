@@ -37,7 +37,7 @@ export const Dropdown = ({
         },
         hide: {
           opacity: 0,
-          y: '-30%',
+          y: '-20px',
           transition: {
             duration: 0,
           },

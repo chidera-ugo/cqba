@@ -1,9 +1,18 @@
 import clsx from 'clsx';
-type Props = JSX.IntrinsicElements['div'] & {
+import { useEffect } from 'react';
+
+type Props = {
   id: string;
+  className?: string;
+  autoFocus?: boolean;
 };
 
-export const IdNavigator = ({ id, className }: Props) => {
+export const IdNavigator = ({ id, autoFocus, className }: Props) => {
+  useEffect(() => {
+    if (!autoFocus) return;
+    document.getElementById('owner-information')?.scrollIntoView();
+  }, []);
+
   return (
     <div className={clsx(`relative h-0`)}>
       <div

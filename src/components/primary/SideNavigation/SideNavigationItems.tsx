@@ -1,13 +1,13 @@
 import { useNavigationItems } from 'hooks/dashboard/useNavigationItems';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { convertToUrlString } from 'utils/helpers/convertToUrlString';
+import { convertToUrlString } from 'utils/helpers/converters/convertToUrlString';
 import clsx from 'clsx';
 import { Fragment } from 'react';
 import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
-import { generatePlaceholderArray } from 'utils/helpers/generatePlaceholderArray';
 import { TooltipWrapper } from 'components/common/Tooltip';
 import { useDismiss } from 'hooks/common/useDismiss';
+import { generatePlaceholderArray } from 'utils/helpers/generators/generatePlaceholderArray';
 
 export const SideNavigationItems = () => {
   const { pathname } = useRouter();

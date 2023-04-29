@@ -6,7 +6,7 @@ import {
 import useHttp, { Service, Method, urlModifier } from 'hooks/api/useHttp';
 import { useHandleError } from 'hooks/api/useHandleError';
 import { AxiosRequestConfig } from 'axios';
-import { generateUrlParamsFromObject } from 'utils/helpers/generateUrlParamsFromObject';
+import { generateUrlParamsFromObject } from 'utils/helpers/generators/generateUrlParamsFromObject';
 
 type Args = {
   url: string;

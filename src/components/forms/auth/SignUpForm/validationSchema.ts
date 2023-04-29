@@ -1,4 +1,4 @@
-import { phoneNumberTest } from 'utils/helpers/validateField';
+import { phoneNumberTest } from 'utils/helpers/validators/validateField';
 import { object, boolean, string } from 'yup';
 
 export const validationSchema = object({

@@ -7,6 +7,7 @@ import {
   phoneNumberRegex11,
 } from 'utils/regexes';
 import { Field } from 'types/Common';
+import { formatDateOfBirth } from 'utils/helpers/formatters/formatDateOfBirth';
 
 export const validateField = (
   e: ChangeEvent<HTMLInputElement>,
@@ -42,6 +43,15 @@ export const validateField = (
       } else {
         setFieldValue(fieldName, val);
       }
+      return;
+    }
+
+    if (fieldType === 'dateOfBirth') {
+      const _val = val.split('/').join('');
+      if (number.test(_val) || _val === '')
+        if (limit && _val?.length <= limit) {
+          setFieldValue(fieldName, formatDateOfBirth(val));
+        }
       return;
     }
 

@@ -5,18 +5,25 @@ import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { Select } from 'components/form-elements/Select';
 import { useAppContext } from 'context/AppContext';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { useStatesAndLgas } from 'hooks/dashboard/get-started/useStatesAndLgas';
 import { TooltipWrapper } from 'components/common/Tooltip';
 import { useDismiss } from 'hooks/common/useDismiss';
 import UnsavedChangesPrompt from 'components/common/UnsavedChangesPrompt';
 import { useInView } from 'react-intersection-observer';
 import { IdNavigator } from 'components/common/IdNavigator';
+import { PhoneNumberInput } from 'components/form-elements/PhoneNumberInput';
+import { DatePicker } from 'components/form-elements/DatePicker';
+import dayjs from 'dayjs';
+import { FileInput } from 'components/form-elements/FileInput';
+import { IFile } from 'types/Common';
+import { RadioInput } from 'components/form-elements/RadioInput';
 
 interface Props {
   formikProps: FormikProps<typeof initialValues>;
   processing: boolean;
   hasUnsavedChanges: boolean;
   setHasUnsavedChanges: Dispatch<SetStateAction<boolean>>;
+  setFiles: Dispatch<SetStateAction<Record<string, IFile> | null>>;
+  files: Record<string, IFile> | null;
 }
 
 export const Form = ({
@@ -24,12 +31,14 @@ export const Form = ({
   formikProps,
   hasUnsavedChanges,
   setHasUnsavedChanges,
+  setFiles,
+  files,
 }: Props) => {
-  const { handleSubmit, setFieldValue, values } = formikProps;
-  const submitButtonId = 'update-company-information-submit-button';
+  const { handleSubmit, setFieldValue } = formikProps;
+  const submitButtonId = 'update-owner-information-submit-button';
+  const [calendarValue, setCalendarValue] = useState<Date | null>(null);
 
   const { user } = useAppContext().state;
-  const { states, lgas } = useStatesAndLgas({ state: values.state });
   const [dismiss, isDismissed, checkIsDismissed] =
     useDismiss('save_and_continue');
 
@@ -63,47 +72,90 @@ export const Form = ({
       }}
       onSubmit={handleSubmit}
     >
-      <IdNavigator id='company-information' autoFocus />
+      <IdNavigator id='owner-information' autoFocus />
       <UnsavedChangesPrompt {...{ hasUnsavedChanges }} />
 
-      <h5>Company Information</h5>
+      <h5>Owner Information</h5>
       <p className='mt-1 font-normal text-neutral-400'>
         Provide your company information
       </p>
 
-      <Select
-        label={`What kind of company is ${user?.businessName}`}
-        name='companyType'
-        options={industries}
+      <div className='gap-4 880:flex'>
+        <Input label='First Name' name='firstName' />
+        <Input label='Last Name' name='lastName' />
+      </div>
+
+      <PhoneNumberInput
+        label='Phone Number'
+        name='phoneNumber'
+        setFieldValue={setFieldValue}
+        inputMode='tel'
+        shouldValidate
       />
 
-      <Input label='Business Name' name='businessName' />
+      <div className='gap-4 880:flex'>
+        <Select
+          label='Gender'
+          name='gender'
+          options={['Male', 'Female', 'Prefer not to say']}
+        />
 
-      <Select
-        label='Number of employees'
-        name='employees'
-        options={['Less than 10', 'Between 11 and 50', 'More than 50']}
-      />
+        <DatePicker
+          label='Date of Birth'
+          name='dateOfBirth'
+          {...{
+            calendarValue,
+            setCalendarValue,
+            setFieldValue,
+          }}
+          limit={8}
+          shouldValidate
+          fieldType='dateOfBirth'
+          maxDate={dayjs()
+            .year(dayjs().year() - 18)
+            .toDate()}
+          setDate={(value) => setFieldValue('dateOfBirth', value)}
+        />
+      </div>
 
-      <Select
-        label='Average monthly expenses'
-        name='expenses'
-        options={[
-          'Less than USD 5,000',
-          'Between USD 5,000 and USD 50,000',
-          'More than USD 50,000',
-        ]}
-      />
-
-      <h5 className='mt-10'>Verify your business location</h5>
+      <h5 className='mt-10'>Identification</h5>
       <p className='mt-1 font-normal text-neutral-400'>
-        You will need to upload a copy of utility bill associated to this
-        address in the documentation part of the onboarding.
+        Verify business owner identity
       </p>
 
-      <Input label='Address' name='address' />
-      <Select label='State' name='state' options={states} />
-      <Select label='City' name='city' next='address' options={lgas} />
+      <div className='gap-4 880:flex'>
+        <Select label='Form of ID' name='idType' options={[]} />
+        <Input label='ID Number' name='idNumber' />
+      </div>
+
+      <FileInput
+        label='Copy of ID'
+        name='idFile'
+        fileType='all'
+        maximumFileSizeInMB={2}
+        setFile={(file) => {
+          setFieldValue('idFile', true);
+          setFiles((prev) => {
+            return {
+              ...prev,
+              [file.id]: file,
+            };
+          });
+        }}
+        file={files?.idFile ?? null}
+      />
+
+      <p className='mt-8 font-normal text-neutral-400'>
+        Have you or anyone associated with you ever held a political office in
+        any country?
+      </p>
+
+      <RadioInput
+        options={['Yes', 'No']}
+        className='mt-5'
+        setValue={(val) => setFieldValue('politicalAffiliation', val)}
+        name='politicalAffiliation'
+      />
 
       <div className='relative mt-10 flex'>
         <div id={submitButtonId} data-tooltip-delay-show={1000}>
@@ -131,32 +183,3 @@ export const Form = ({
     </FormikForm>
   );
 };
-
-const industries = [
-  'Agriculture',
-  'Auto Parts',
-  'Construction',
-  'Digital Services',
-  'E-Commerce',
-  'Electronics',
-  'Fashion & Beauty',
-  'Financial Services',
-  'Food & Beverage',
-  'Furniture',
-  'General Services',
-  'Haulage',
-  'Hospitals & Health',
-  'Household items',
-  'Leisure & Entertainment',
-  'Logistics',
-  'Membership Groups',
-  'NGOs',
-  'Others',
-  'Press & Media',
-  'Religious Organizations',
-  'Restaurant and Food',
-  'Schools',
-  'Technology',
-  'Travel & Hospitality',
-  'Utilities',
-];

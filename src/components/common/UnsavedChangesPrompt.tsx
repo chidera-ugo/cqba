@@ -16,6 +16,7 @@ const UnsavedChangesPrompt = ({ hasUnsavedChanges }: Props) => {
     'You have unsaved changes, are you sure you want to leave this page? Your changes will be lost';
 
   useEffect(() => {
+    if (process.env.NODE_ENV === 'development') return;
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (hasUnsavedChanges && !canProceed.current) {
         e.preventDefault();
@@ -31,6 +32,7 @@ const UnsavedChangesPrompt = ({ hasUnsavedChanges }: Props) => {
   }, [hasUnsavedChanges]);
 
   useEffect(() => {
+    if (process.env.NODE_ENV === 'development') return;
     const handleRouteChangeStart = (destination: string) => {
       if (hasUnsavedChanges && !canProceed.current) {
         setShowConfirmation(true);

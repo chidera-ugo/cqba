@@ -2,9 +2,9 @@ import { useField } from 'formik';
 import { useEffect } from 'react';
 import clsx from 'clsx';
 import { Field } from 'types/Common';
-import { validateField } from 'utils/helpers/validateField';
-import { formatPhoneNumber } from 'utils/helpers/formatPhoneNumber';
+import { validateField } from 'utils/helpers/validators/validateField';
 import { ChevronDown } from 'components/svgs/navigation/Chevrons';
+import { formatPhoneNumber } from 'utils/helpers/formatters/formatPhoneNumber';
 
 type Props = JSX.IntrinsicElements['input'] & Field;
 
@@ -57,7 +57,7 @@ export const PhoneNumberInput = ({
               : field.onChange
           }
           className={clsx(
-            'relative w-full',
+            'input relative w-full',
             'pl-[78px]',
             !!field.value ? 'bg-white' : 'bg-neutral-100',
             meta.touched && meta.error ? 'border-error-main' : ''

@@ -8,7 +8,7 @@ import { SearchInput } from 'components/form-elements/SearchInput';
 import useMediaQuery from 'hooks/common/useMediaQuery';
 import { BackLine } from 'components/svgs/navigation/Arrows';
 import { SolidCheck } from 'components/svgs/others/Check';
-import { convertToUrlString } from 'utils/helpers/convertToUrlString';
+import { convertToUrlString } from 'utils/helpers/converters/convertToUrlString';
 
 export type TSelect = {
   options: any[];

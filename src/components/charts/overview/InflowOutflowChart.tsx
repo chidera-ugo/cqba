@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { AxisOptions, Chart } from 'react-charts';
 import dayjs from 'dayjs';
 import { months } from 'utils/constants/months';
-import { formatAmount } from 'utils/helpers/formatAmount';
+import { formatAmount } from 'utils/helpers/formatters/formatAmount';
 
 type Data = {
   date: Date;

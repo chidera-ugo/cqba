@@ -15,6 +15,7 @@ export interface Field {
     | 'idNumber'
     | 'idNumberWithSlashes'
     | 'name'
+    | 'dateOfBirth'
     | 'fullName'
     | 'age'
     | 'text'

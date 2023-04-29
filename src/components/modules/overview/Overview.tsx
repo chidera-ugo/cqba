@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import { MoreInfo } from 'components/common/MoreInfo';
 import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
-import { formatAmount } from 'utils/helpers/formatAmount';
-import { generatePlaceholderArray } from 'utils/helpers/generatePlaceholderArray';
+import { formatAmount } from 'utils/helpers/formatters/formatAmount';
+import { generatePlaceholderArray } from 'utils/helpers/generators/generatePlaceholderArray';
 
 export const Overview = () => {
   const { isLoading, isError, data } = useMakeDummyHttpRequest({

@@ -1,4 +1,4 @@
-import { generateUUID } from 'utils/helpers/generateUUID';
+import { generateUUID } from 'utils/helpers/generators/generateUUID';
 
 export const generatePlaceholderArray = (count: number) => {
   const arr = [];
