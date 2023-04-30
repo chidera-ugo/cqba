@@ -3,6 +3,7 @@ import { Modal } from 'components/modal';
 import { PageHead } from 'components/primary/PageHead';
 import Image from 'next/image';
 import icon from '/public/logos/icon.svg';
+import icon_white from '/public/logos/icon-white.svg';
 
 interface Props {
   white?: boolean;
@@ -33,7 +34,7 @@ export const FullScreenLoader = ({ white, asPage, id, show = true }: Props) => {
           <Image
             priority
             className='mx-auto h-16 w-16 animate-spin'
-            src={icon}
+            src={white ? icon : icon_white}
             alt='icon'
           />
         </div>

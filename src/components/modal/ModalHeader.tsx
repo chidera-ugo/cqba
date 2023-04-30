@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { Cancel } from 'components/svgs/navigation/Menu';
+import { CrossOutline } from 'components/svgs/navigation/Exit';
 
 export type HeaderProps = {
   title?: string;
@@ -9,20 +9,14 @@ export type HeaderProps = {
 
 export const Header = ({ title, close }: HeaderProps) => {
   return (
-    <div className='x-between sticky top-0 z-[910] h-[85px] border-b border-gray-300 bg-white px-8'>
-      <div className='my-auto text-[20px] font-semibold capitalize'>
+    <div className='x-between sticky top-0 z-[910] h-14 border-b border-neutral-200 bg-white px-4 640:h-16 640:px-8'>
+      <div className='my-auto text-lg font-semibold capitalize 640:text-xl'>
         {title}
       </div>
 
       {close && (
-        <button
-          onClick={() => close()}
-          className='secondary-button x-center my-auto h-10 rounded-lg px-2 font-medium text-primary-main'
-        >
-          <span className='my-auto mr-2'>Close</span>
-          <span className='my-auto'>
-            <Cancel />
-          </span>
+        <button onClick={() => close()} className='x-center my-auto -mr-2 p-2'>
+          <CrossOutline />
         </button>
       )}
     </div>

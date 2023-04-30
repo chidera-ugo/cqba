@@ -42,6 +42,10 @@ export const MoreInfo = ({
           borderRadius: '8px',
           padding: '10px 10px',
           opacity: 100,
+          backgroundColor: 'white',
+          color: '#0076FF',
+          filter:
+            'drop-shadow(0px 5px 15px rgba(0, 0, 0, 0.12)) drop-shadow(0px 15px 35px rgba(103, 110, 118, 0.08))',
         }}
       >
         {children}

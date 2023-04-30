@@ -5,6 +5,7 @@ import { PropsWithChildren } from 'react';
 import { SideNavigation } from 'components/primary/SideNavigation';
 import { AppHeader } from 'components/primary/headers/AppHeader';
 import { useAppContext } from 'context/AppContext';
+import { CreatePin } from 'components/modules/app/CreatePin';
 
 export interface Props {
   title?: string;
@@ -24,6 +25,7 @@ export const AppLayout = ({
   return (
     <>
       <PageHead title={title} />
+      <CreatePin />
       <div className='no-scroll 1024:flex'>
         {!screenSize || screenSize?.['desktop'] ? (
           <div className='hidden w-[324px] 1024:block'>

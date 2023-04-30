@@ -56,7 +56,7 @@ export const Modal = ({
               className={clsx(
                 `no-highlight absolute inset-0 h-full w-full`,
                 closeOnClickOutside && 'cursor-pointer',
-                white ? 'bg-white' : 'bg-black bg-opacity-50'
+                white ? 'bg-white' : 'bg-black bg-opacity-60'
               )}
             />
 

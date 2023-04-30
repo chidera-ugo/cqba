@@ -67,7 +67,6 @@ export const RightModalWrapper = ({
   show,
   hideHeader,
   className,
-  simpleHeader,
   ...props
 }: PropsWithChildren<ModalWrapperProps>) => {
   return (
@@ -76,36 +75,12 @@ export const RightModalWrapper = ({
       {...props}
       type='right'
       className={clsx(
-        'relative z-[1000] ml-auto mt-auto h-full w-full overflow-y-auto bg-white dark:bg-black',
+        'relative z-[1000] ml-auto mt-auto h-full w-full overflow-y-auto bg-white',
         className ? className : 'max-w-[598px]'
       )}
     >
       {!hideHeader && <Header {...props} />}
-      {simpleHeader && (
-        <>
-          <button
-            onClick={() => props.close && props.close()}
-            type='button'
-            className='smooth y-center text-neutral-750 absolute right-4 top-4 h-10 w-10 rounded-full bg-neutral-300 hover:text-red-500'
-          >
-            <svg
-              width='20'
-              height='20'
-              viewBox='0 0 20 20'
-              className='mx-auto h-4 w-4'
-              fill='none'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <path
-                d='M5.58934 4.41083C5.2639 4.08539 4.73626 4.08539 4.41083 4.41083C4.08539 4.73626 4.08539 5.2639 4.41083 5.58934L8.82158 10.0001L4.41085 14.4108C4.08541 14.7363 4.08541 15.2639 4.41085 15.5893C4.73629 15.9148 5.26392 15.9148 5.58936 15.5893L10.0001 11.1786L14.4108 15.5893C14.7363 15.9148 15.2639 15.9148 15.5893 15.5893C15.9148 15.2639 15.9148 14.7363 15.5893 14.4108L11.1786 10.0001L15.5894 5.58934C15.9148 5.2639 15.9148 4.73626 15.5894 4.41083C15.2639 4.08539 14.7363 4.08539 14.4109 4.41083L10.0001 8.82158L5.58934 4.41083Z'
-                fill='currentColor'
-              />
-            </svg>
-          </button>
-        </>
-      )}
-
-      <div className={`px-[52px] pt-3 pb-8`}>{children}</div>
+      <div className='px-4 py-8 640:px-8'>{children}</div>
     </Modal>
   );
 };
