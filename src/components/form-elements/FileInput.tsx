@@ -62,7 +62,7 @@ export const FileInput = ({
       <label htmlFor={id} id={`drop-${id}`} className='group'>
         <div
           className={clsx(
-            'input y-center min-h-[100px] px-8 py-5',
+            'input y-center min-h-[100px] px-4 py-3 640:px-8 640:py-5',
             'group-focus:ring-4 group-focus:ring-neutral-200',
             file?.file && 'bg-white',
             !props.disabled
@@ -72,21 +72,21 @@ export const FileInput = ({
           )}
         >
           <div className='x-center my-auto text-left'>
-            <span
+            <div
               className={clsx(
                 'my-auto mr-4 inline-block text-neutral-500',
                 !!file?.file ? 'text-green-500' : ''
               )}
             >
               <FileUpload />
-            </span>
-            <span className='font-normal text-neutral-400'>
+            </div>
+            <div className='font-normal text-neutral-400'>
               {file?.file && (
-                <span className='mx-auto mb-3 block'>
-                  <span className='rounded-lg border border-green-500 py-1 px-2 text-center text-green-600'>
+                <div className='mx-auto mb-3 flex'>
+                  <span className='rounded-lg border border-green-500 py-1 px-2 text-left text-green-600 line-clamp-1'>
                     {file?.file.name}
                   </span>
-                </span>
+                </div>
               )}
 
               <>
@@ -96,7 +96,7 @@ export const FileInput = ({
                 </span>
                 {`. Max file size: ${maximumFileSizeInMB}MB`}
               </>
-            </span>
+            </div>
           </div>
         </div>
 

@@ -90,7 +90,7 @@ export const Form = ({
       <div className='relative mt-10 flex pb-8'>
         <SubmitButton
           submitting={processing}
-          className='outline-button w-full min-w-[200px] 640:w-auto'
+          className='outline-button min-w-[200px]'
         >
           Save and Continue
         </SubmitButton>

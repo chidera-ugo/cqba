@@ -110,7 +110,7 @@ export const Form = ({
           <SubmitButton
             submitting={processing}
             onClick={dismissSaveAndContinueTooltip}
-            className='outline-button w-full min-w-[200px] 640:w-auto'
+            className='outline-button min-w-[200px]'
           >
             Save and Continue
           </SubmitButton>

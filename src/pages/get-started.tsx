@@ -4,6 +4,7 @@ import { UpdateOwnerInformationForm } from 'components/forms/get-started/UpdateO
 import { AppLayout } from 'components/layouts/AppLayout';
 import { SuccessInformation } from 'components/modules/common/SuccessInformation';
 import { GetStartedSteps } from 'components/modules/get-started/GetStartedSteps';
+import { ReviewAndSubmit } from 'components/modules/get-started/ReviewAndSubmit';
 import { useAppContext } from 'context/AppContext';
 import { useGetCurrentTab } from 'hooks/dashboard/get-started/useGetCurrentTab';
 
@@ -31,7 +32,7 @@ export default function GetStarted() {
         <div className='thin-scrollbar col-span-7 mt-5 overflow-y-auto 768:mt-0 1200:col-span-8'>
           <div className='mx-auto h-full max-w-[540px] py-5 px-1 768:px-8'>
             {currentTab === 'review-and-submit' ? (
-              <>Review</>
+              <ReviewAndSubmit />
             ) : currentTab === 'business-documentation' ? (
               <UpdateBusinessDocumentionForm />
             ) : currentTab === 'owner-information' ? (

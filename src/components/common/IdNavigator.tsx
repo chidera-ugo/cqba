@@ -20,7 +20,7 @@ export const IdNavigator = ({ id, autoFocus, className }: Props) => {
           'absolute z-0 h-1 w-full bg-transparent',
           className ?? '-top-[85px]'
         )}
-        id={id}
+        id={`id_nav_${id}`}
       ></div>
     </div>
   );

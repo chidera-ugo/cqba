@@ -120,7 +120,7 @@ export const DatePicker = ({
         <Dropdown
           show={showCalendar}
           className={clsx(
-            'right-0 h-fit w-min bg-white p-2',
+            'right-0 h-fit w-full bg-white p-2 640:w-min',
             dropdownClassname
           )}
           close={() => setShowCalendar(false)}
