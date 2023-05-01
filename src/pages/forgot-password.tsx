@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { ForgotPasswordForm } from 'components/forms/auth/ForgotPasswordForm';
 import { AuthLayout } from 'components/layouts/AuthLayout';
-import { SuccessInformation } from 'components/modules/common/SuccessInformation';
+import { SimpleInformation } from 'components/modules/common/SimpleInformation';
 import { useState } from 'react';
 
 export default function ForgotPassword() {
@@ -16,9 +16,15 @@ export default function ForgotPassword() {
         )}
       >
         {isSuccess ? (
-          <SuccessInformation
-            title='We sent you a reset link.'
-            description='We sent a reset password link to the email address you provided. If you didn’t get the email, check your spam folder or try again.'
+          <SimpleInformation
+            title={<span>We sent you a reset link.</span>}
+            description={
+              <span className='mt-3 block'>
+                We sent a reset password link to the email address you provided.
+                If you didn’t get the email, check your spam folder or try
+                again.
+              </span>
+            }
             icon='chat'
             actionButton={{
               action() {

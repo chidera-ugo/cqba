@@ -70,10 +70,10 @@ export const InflowOutflow = () => {
           <button
             onClick={() => setFilter('inflow')}
             className={clsx(
-              'h-11  px-5 text-sm',
+              'h-11 px-5 text-sm duration-[0ms]',
               filter === 'inflow'
-                ? 'primary-button'
-                : 'light-button border-neutral-400 text-neutral-500'
+                ? 'primary-button hover:bg-primary-main'
+                : 'light-button border-neutral-400 text-neutral-500 hover:border-primary-main hover:bg-white'
             )}
           >
             Total Inflow
@@ -82,10 +82,10 @@ export const InflowOutflow = () => {
           <button
             onClick={() => setFilter('outflow')}
             className={clsx(
-              'h-11 px-5 text-sm',
+              'h-11 px-5 text-sm duration-[0ms]',
               filter === 'outflow'
-                ? 'primary-button'
-                : 'light-button border-neutral-400 text-neutral-500'
+                ? 'primary-button hover:bg-primary-main'
+                : 'light-button border-neutral-400 text-neutral-500 hover:border-primary-main hover:bg-white'
             )}
           >
             Total Outflow

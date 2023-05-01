@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { SignUpForm } from 'components/forms/auth/SignUpForm';
 import { AuthLayout } from 'components/layouts/AuthLayout';
-import { SuccessInformation } from 'components/modules/common/SuccessInformation';
+import { SimpleInformation } from 'components/modules/common/SimpleInformation';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -17,9 +17,15 @@ export default function Signup() {
         )}
       >
         {isSuccess ? (
-          <SuccessInformation
-            title='Almost done. Confirm your email.'
-            description='We’ve sent a verification link to your email address. Click on the link to verify your email address. If you didn’t get the email, check your spam folder or resend the link.'
+          <SimpleInformation
+            title={<span>Almost done. Confirm your email.</span>}
+            description={
+              <span className='mt-3 block'>
+                We’ve sent a verification link to your email address. Click on
+                the link to verify your email address. If you didn’t get the
+                email, check your spam folder or resend the link.
+              </span>
+            }
             icon='chat'
             actionButton={{
               action() {

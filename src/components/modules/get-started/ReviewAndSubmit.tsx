@@ -1,5 +1,5 @@
 import { IdNavigator } from 'components/common/IdNavigator';
-import { Check } from 'components/form-elements/Check';
+import { CheckInput } from 'components/form-elements/CheckInput';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 import { useRouter } from 'next/router';
@@ -20,7 +20,7 @@ export const ReviewAndSubmit = () => {
         registration requirements
       </p>
 
-      <Check
+      <CheckInput
         label='Company Information'
         withBorders
         {...{
@@ -35,7 +35,7 @@ export const ReviewAndSubmit = () => {
         className='mt-10'
       />
 
-      <Check
+      <CheckInput
         label='Owner Information'
         withBorders
         {...{
@@ -50,7 +50,7 @@ export const ReviewAndSubmit = () => {
         className='mt-3'
       />
 
-      <Check
+      <CheckInput
         label='Business documentation'
         withBorders
         {...{
@@ -65,7 +65,7 @@ export const ReviewAndSubmit = () => {
         className='mt-3'
       />
 
-      <Check
+      <CheckInput
         id='isAccurate'
         label={`I/We confirm that the information provided are accurate and truthful.`}
         {...{

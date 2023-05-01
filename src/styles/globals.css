@@ -46,6 +46,10 @@
       0px 0px 0px 1px rgba(103, 110, 118, 0.16), 0px 1px 1px rgba(0, 0, 0, 0.12);
   }
 
+  .pagination-button {
+    @apply smooth block appearance-none rounded-lg border border-neutral-300 bg-white px-3.5 text-neutral-1000 placeholder-neutral-400 shadow-sm transition-colors focus:border-neutral-400 focus:outline-none 640:border-none 640:shadow-none;
+  }
+
   input[type='checkbox'] {
     @apply h-5 w-5 cursor-pointer appearance-none rounded-[6px] border-2 border-neutral-300 text-primary-main ring-0 checked:border-primary-main checked:bg-primary-main focus:ring-0 focus:ring-offset-0;
     border: 2px solid rgba(111, 118, 126, 0.4);
@@ -148,7 +152,7 @@
   }
 
   .smooth {
-    @apply duration-300 ease-linear;
+    @apply duration-200 ease-linear;
   }
 
   .card-title {
@@ -165,6 +169,14 @@
 
   .get-started-layout-height {
     height: calc(100vh - 224px);
+  }
+
+  .green-pill {
+    @apply pill bg-success-600 text-white;
+  }
+
+  .pill {
+    @apply y-center h-[26px] rounded-full px-2 py-1 text-sm font-normal capitalize;
   }
 }
 

@@ -27,13 +27,19 @@ export const useMakeDummyHttpRequest = <T>({
       queryTimeout.current = setTimeout(() => {
         setData(res);
 
+        function handleSuccess() {
+          onSuccess && onSuccess(res);
+        }
+
         if (onError) {
           if (!hasErrored) {
             setHasErrored(true);
             onError();
           } else {
-            onSuccess && onSuccess(res);
+            handleSuccess();
           }
+        } else {
+          handleSuccess();
         }
 
         setIsLoading(false);
@@ -59,17 +65,23 @@ export const useMakeDummyHttpRequest = <T>({
         };
         resolve(res);
 
+        function handleSuccess() {
+          if (options?.onSuccess) {
+            options.onSuccess(res);
+          } else {
+            onSuccess && onSuccess(res);
+          }
+        }
+
         if (onError) {
           if (!hasErrored) {
             setHasErrored(true);
             onError();
           } else {
-            if (options?.onSuccess) {
-              options.onSuccess(res);
-            } else {
-              onSuccess && onSuccess(res);
-            }
+            handleSuccess();
           }
+        } else {
+          handleSuccess();
         }
 
         setIsLoading(false);

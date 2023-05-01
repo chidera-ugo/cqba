@@ -2,7 +2,7 @@ import { UpdateBusinessDocumentionForm } from 'components/forms/get-started/Upda
 import { UpdateCompanyInformationForm } from 'components/forms/get-started/UpdateCompanyInformationForm';
 import { UpdateOwnerInformationForm } from 'components/forms/get-started/UpdateOwnerInformationForm';
 import { AppLayout } from 'components/layouts/AppLayout';
-import { SuccessInformation } from 'components/modules/common/SuccessInformation';
+import { SimpleInformation } from 'components/modules/common/SimpleInformation';
 import { GetStartedSteps } from 'components/modules/get-started/GetStartedSteps';
 import { ReviewAndSubmit } from 'components/modules/get-started/ReviewAndSubmit';
 import { useAppContext } from 'context/AppContext';
@@ -41,9 +41,13 @@ export default function GetStarted() {
               <UpdateCompanyInformationForm />
             ) : (
               <div className='y-center h-full'>
-                <SuccessInformation
-                  title='Done'
-                  description={`You've completed this step already`}
+                <SimpleInformation
+                  title={<span>Done</span>}
+                  description={
+                    <span className='mt-2 block'>
+                      {`You've completed this step already`}
+                    </span>
+                  }
                   icon='chat'
                   actionButton={{
                     action: next,

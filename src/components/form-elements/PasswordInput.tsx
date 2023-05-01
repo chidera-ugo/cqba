@@ -27,7 +27,7 @@ export const PasswordInput = ({ label, className, ...props }: Props) => {
           type={showPassword ? 'password' : 'text'}
           className={clsx(
             meta.touched && meta.error ? 'border-error-main' : '',
-            'w-full pr-14',
+            'input w-full pr-14',
             !!field.value ? 'bg-white' : 'bg-neutral-100'
           )}
         />

@@ -15,8 +15,6 @@ export const useGetCurrentTab = () => {
       getStartedSteps[indexOfCurrentStep + 1] ?? ''
     );
 
-    console.log(nextTab);
-
     if (!nextTab) return;
     replace(`/get-started?tab=${nextTab}`);
   }

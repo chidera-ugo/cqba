@@ -91,7 +91,6 @@ export const Form = ({ processing, formikProps }: Props) => {
 };
 
 const industries = [
-  '',
   'Agriculture',
   'Auto Parts',
   'Construction',

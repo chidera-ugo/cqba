@@ -9,7 +9,7 @@ type Props = JSX.IntrinsicElements['input'] & {
   handleClick: (id: string) => void;
 };
 
-export const Check = ({
+export const CheckInput = ({
   label,
   id: _id,
   className,
@@ -24,9 +24,9 @@ export const Check = ({
   return (
     <label
       className={clsx(
-        `no-highlight relative block cursor-pointer overflow-hidden rounded-lg`,
+        `no-highlight relative block cursor-pointer overflow-hidden`,
         className,
-        withBorders && 'border p-6',
+        withBorders && 'rounded-lg border p-6',
         checked ? 'border-primary-main' : 'border-neutral-200'
       )}
       htmlFor={id}

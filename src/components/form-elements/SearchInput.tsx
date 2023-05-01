@@ -7,14 +7,11 @@ type Props = JSX.IntrinsicElements['input'] & {
   showShortcut?: boolean;
   clear?: () => void;
   lazyFocus?: boolean;
-  whiteBg?: boolean;
 };
 
 export const SearchInput = ({
   className,
-  whiteBg,
   clear,
-  showShortcut,
   lazyFocus,
   ...props
 }: Props) => {
@@ -33,18 +30,19 @@ export const SearchInput = ({
   return (
     <div
       className={clsx(
-        'group relative my-auto w-full rounded-xl',
+        'group relative my-auto h-11 w-full rounded-xl',
         className,
         props.disabled ? 'opacity-50' : ''
       )}
     >
       <input
         className={clsx(
-          'h-full w-full pl-10 text-sm font-medium focus:border-primary-main',
-          showShortcut ? 'pr-[72px]' : '',
-          className,
-          whiteBg ? 'bg-white' : 'border border-gray-300 bg-neutral-100'
+          'input h-full rounded-full border-neutral-300 bg-white pl-10 text-sm font-medium focus:border-primary-main',
+          className
         )}
+        style={{
+          boxShadow: 'none',
+        }}
         placeholder={props.placeholder ?? 'Search or type a command'}
         {...props}
         value={props.value ?? ''}
