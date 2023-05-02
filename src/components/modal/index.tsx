@@ -10,7 +10,7 @@ export const Modal = ({
   show,
   close,
   className,
-  duration = 0.3,
+  duration = 0.2,
   closeOnClickOutside,
   white,
 }: PropsWithChildren<ModalProps>) => {

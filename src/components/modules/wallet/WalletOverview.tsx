@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { MoreInfo } from 'components/common/MoreInfo';
-import { FundAccount } from 'components/modules/wallet/FundAccount';
+import { FundWallet } from 'components/modules/wallet/FundWallet';
 import { MakeTransfer } from 'components/modules/wallet/MakeTransfer';
 import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 import { formatAmount } from 'utils/helpers/formatters/formatAmount';
@@ -39,7 +39,7 @@ export const WalletOverview = () => {
       </div>
 
       <div className='mt-5 gap-3 425:flex 768:mt-auto'>
-        <FundAccount />
+        <FundWallet />
         <MakeTransfer />
       </div>
     </div>

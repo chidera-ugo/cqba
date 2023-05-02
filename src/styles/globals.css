@@ -98,7 +98,7 @@
   }
 
   .secondary-button {
-    @apply smooth border border-neutral-300 bg-white px-8 text-sm font-semibold text-neutral-1000 hover:bg-gray-100;
+    @apply smooth h-[60px] rounded-full border border-neutral-300 bg-white px-8 text-sm font-semibold text-neutral-1000 hover:bg-gray-100;
   }
 
   .light-button {

@@ -154,7 +154,7 @@ export function Table<T>({
   }, [pagination?.pageIndex]);
 
   const Pagination = () => {
-    if (!pagination || !setPagination) return <></>;
+    if (!pagination || !setPagination || res?.empty) return <></>;
 
     return (
       <TablePagination

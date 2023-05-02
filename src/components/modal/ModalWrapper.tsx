@@ -80,7 +80,7 @@ export const RightModalWrapper = ({
       )}
     >
       {!hideHeader && <Header {...props} />}
-      <div className='px-4 py-8 640:px-8'>{children}</div>
+      <div className='p-4 640:p-8'>{children}</div>
     </Modal>
   );
 };
