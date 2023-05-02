@@ -61,7 +61,7 @@ export const AllTransactionsTable = ({
         status: 'successful',
         createdAt: new Date().toISOString(),
       },
-      10
+      0
     ),
   });
 
@@ -107,6 +107,7 @@ export const AllTransactionsTable = ({
         mustHaveRange
         {...{
           isLoading,
+          filters,
           data,
           setColumnFilters,
           columnFilters,
@@ -120,6 +121,7 @@ export const AllTransactionsTable = ({
           isError,
         }}
         reset={() => {
+          setFilters && setFilters({});
           setPagination({
             pageIndex: 0,
             pageSize: 10,

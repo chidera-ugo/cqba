@@ -30,7 +30,7 @@ export const SearchInput = ({
   return (
     <div
       className={clsx(
-        'group relative my-auto h-11 w-full rounded-xl',
+        'group relative my-auto h-11 w-full',
         className,
         props.disabled ? 'opacity-50' : ''
       )}

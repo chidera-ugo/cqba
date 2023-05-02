@@ -26,7 +26,6 @@ export default function Signup() {
                 email, check your spam folder or resend the link.
               </span>
             }
-            icon='chat'
             actionButton={{
               action() {
                 null;

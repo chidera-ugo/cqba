@@ -48,7 +48,6 @@ export default function GetStarted() {
                       {`You've completed this step already`}
                     </span>
                   }
-                  icon='chat'
                   actionButton={{
                     action: next,
                     text: 'Proceed',

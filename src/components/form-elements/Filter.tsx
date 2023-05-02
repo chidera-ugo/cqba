@@ -1,28 +1,61 @@
 import clsx from 'clsx';
 import { Dropdown } from 'components/common/Dropdown';
 import { Adjusters } from 'components/svgs/forms/Adjusters';
-import { useState } from 'react';
+import { MiniChevronDown } from 'components/svgs/navigation/Chevrons';
+import { SolidCheck } from 'components/svgs/others/Check';
+import { Dispatch, SetStateAction, useState } from 'react';
+
+type Option = { name: string; value: any } | string;
 
 interface Props {
   id: string;
-  options: { name: string; value: any }[];
-  onChange: (selection: Props['options'][0]) => void;
+  className?: string;
+  filters: Record<string, any>;
+  setFilters: Dispatch<SetStateAction<Record<string, any>>>;
+  options: Option[];
   dropdownClassName?: string;
+  withChevron?: boolean;
+  title?: string;
 }
 
-export const Filter = ({ id, options, dropdownClassName, onChange }: Props) => {
+export const Filter = ({
+  id,
+  title,
+  className,
+  withChevron,
+  options,
+  filters,
+  dropdownClassName,
+  setFilters,
+}: Props) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   return (
-    <div id={id} className='relative'>
+    <div id={id} className={clsx('relative', className)}>
       <button
         onClick={() => setShowDropdown((prev) => !prev)}
-        className='relative z-50 flex h-11 rounded-full border border-neutral-300 bg-white py-2 px-3'
+        className='x-between z-50 h-11 w-full rounded-full border border-neutral-300 bg-white py-2 px-3'
       >
-        <div className='my-auto mr-2'>
-          <Adjusters />
-        </div>
-        <div className='my-auto text-sm font-semibold'>Filter</div>
+        {!withChevron && (
+          <div className='my-auto mr-2'>
+            <Adjusters />
+          </div>
+        )}
+
+        <div className='my-auto text-sm font-semibold'>{title ?? 'Filter'}</div>
+
+        {withChevron && (
+          <span className='my-auto ml-1'>
+            <div
+              className={clsx(
+                'duration-100',
+                showDropdown ? 'rotate-180' : 'rotate-0'
+              )}
+            >
+              <MiniChevronDown />
+            </div>
+          </span>
+        )}
       </button>
 
       <Dropdown
@@ -36,16 +69,30 @@ export const Filter = ({ id, options, dropdownClassName, onChange }: Props) => {
       >
         <div>
           {options.map((option) => {
+            const isString = typeof option === 'string';
+            const displayValue = isString ? option : option.name;
+
             return (
               <button
-                key={option.name}
+                key={displayValue}
                 onClick={() => {
-                  onChange(option);
+                  setFilters((prev) => ({
+                    ...prev,
+                    [title ?? 'filter']: option,
+                  }));
                   setShowDropdown(false);
                 }}
-                className='smooth w-full rounded-lg px-2 py-1.5 text-left text-sm font-medium text-neutral-500 transition-colors hover:bg-gray-100'
+                className='smooth x-between w-full rounded-lg px-2 py-1.5 text-left text-sm font-medium text-neutral-500 transition-colors hover:bg-gray-100'
               >
-                {option.name}
+                {displayValue}
+
+                {filters[title ?? 'filter'] === displayValue && (
+                  <div className='my-auto text-primary-main'>
+                    <div className='h-4 w-4'>
+                      <SolidCheck />
+                    </div>
+                  </div>
+                )}
               </button>
             );
           })}

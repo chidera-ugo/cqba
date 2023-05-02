@@ -75,8 +75,8 @@ export const RightModalWrapper = ({
       {...props}
       type='right'
       className={clsx(
-        'relative z-[1000] ml-auto mt-auto h-full w-full overflow-y-auto bg-white',
-        className ? className : 'max-w-[598px]'
+        'relative z-[1000] ml-auto mt-auto h-full w-full max-w-[598px] overflow-y-auto bg-white',
+        className
       )}
     >
       {!hideHeader && <Header {...props} />}

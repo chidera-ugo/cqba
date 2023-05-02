@@ -175,31 +175,31 @@ export function Table<T>({
         className
       )}
     >
-      {filters && !!Object.values(filters!).filter((val) => !!val).length && (
-        <div className='y-center my-auto min-h-[60px] w-full px-6'>
-          <div className='x-between w-full'>
-            <AppliedFilters
-              reset={() => {
-                reset && reset();
-                setColumnVisibility({
-                  ...initialColumns,
-                });
-              }}
-              className='my-auto'
-              {...{
-                mustHaveRange,
-                filters,
-                onFilterClick,
-                ...res,
-              }}
-            />
-
-            {headerSlot}
-          </div>
-        </div>
-      )}
-
       <div className='w-full overflow-x-auto'>
+        {filters && !!Object.values(filters!).filter((val) => !!val).length && (
+          <div className='y-center my-auto min-h-[60px] w-full px-6'>
+            <div className='x-between w-full'>
+              <AppliedFilters
+                reset={() => {
+                  reset && reset();
+                  setColumnVisibility({
+                    ...initialColumns,
+                  });
+                }}
+                className='my-auto'
+                {...{
+                  mustHaveRange,
+                  filters,
+                  onFilterClick,
+                  ...res,
+                }}
+              />
+
+              {headerSlot}
+            </div>
+          </div>
+        )}
+
         <table className='w-full min-w-[800px] table-auto'>
           <thead className='border-b border-gray-100 pb-12 text-left'>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -327,7 +327,7 @@ export function Table<T>({
                 description={
                   <span className='mt-1 block'>{emptyTableText}</span>
                 }
-                icon='calendar'
+                icon='empty'
               />
             )}
           </div>

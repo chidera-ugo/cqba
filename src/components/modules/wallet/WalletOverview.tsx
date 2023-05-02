@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { MoreInfo } from 'components/common/MoreInfo';
-import { Inbound, Outbound } from 'components/svgs/navigation/Arrows';
+import { FundAccount } from 'components/modules/wallet/FundAccount';
+import { MakeTransfer } from 'components/modules/wallet/MakeTransfer';
 import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 import { formatAmount } from 'utils/helpers/formatters/formatAmount';
 
@@ -38,19 +39,8 @@ export const WalletOverview = () => {
       </div>
 
       <div className='mt-5 gap-3 425:flex 768:mt-auto'>
-        <button className='dark-button x-center h-11 w-full px-4 text-sm font-semibold 768:w-auto'>
-          <span className='my-auto mr-2'>Fund account</span>
-          <span className='my-auto'>
-            <Inbound />
-          </span>
-        </button>
-
-        <button className='primary-button x-center mt-3 h-11 w-full px-4 text-sm font-semibold 425:mt-0 768:w-auto'>
-          <span className='my-auto mr-2'>Make a transfer</span>
-          <span className='my-auto'>
-            <Outbound />
-          </span>
-        </button>
+        <FundAccount />
+        <MakeTransfer />
       </div>
     </div>
   );

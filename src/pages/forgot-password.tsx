@@ -25,7 +25,6 @@ export default function ForgotPassword() {
                 again.
               </span>
             }
-            icon='chat'
             actionButton={{
               action() {
                 null;

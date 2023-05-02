@@ -4,27 +4,33 @@ import { AllTransactionsTable } from 'components/tables/wallet/AllTransactionsTa
 import { useState } from 'react';
 
 export const WalletTransactions = () => {
-  const [_filter, setFilter] = useState('');
+  const [filters, setFilters] = useState<Record<string, any>>({});
 
   return (
     <>
-      <div className='my-5 gap-2 640:my-7 640:flex'>
+      <div className='my-5 flex justify-between gap-2 640:my-7'>
         <Filter
-          id='transactions-filter'
-          onChange={(option) => {
-            setFilter(option.name);
+          id='wallet-transactions-filter'
+          title='Duration'
+          {...{
+            filters,
+            setFilters,
           }}
-          dropdownClassName='640:right-0 640:left-auto left-0'
+          withChevron
+          dropdownClassName='left-0'
           options={[
             { value: 7, name: 'Last 7 Days' },
             { value: 30, name: 'Last 30 Days' },
           ]}
         />
 
-        <SearchInput className='mt-3 w-full 640:mt-0 640:w-[300px]' />
+        <SearchInput
+          placeholder='Search transactions'
+          className='w-full 640:w-[300px]'
+        />
       </div>
 
-      <AllTransactionsTable />
+      <AllTransactionsTable {...{ filters, setFilters }} />
     </>
   );
 };

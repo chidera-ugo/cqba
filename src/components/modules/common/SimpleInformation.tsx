@@ -1,10 +1,11 @@
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { Calendar } from 'components/illustrations/Calendar';
 import { ChatBubbles } from 'components/illustrations/ChatBubbles';
+import { NothingHere } from 'components/illustrations/NothingHere';
 
 interface Props {
   processing?: boolean;
-  icon: string;
+  icon?: 'calendar' | 'empty' | 'message';
   title?: JSX.Element;
   description?: JSX.Element;
   actionButton?: {
@@ -17,13 +18,14 @@ export const SimpleInformation = ({
   title,
   actionButton,
   description,
-  icon,
+  icon = 'message',
 }: Props) => {
   return (
     <div className='y-center text-center'>
       <div className='mx-auto'>
-        {icon === 'chat' && <ChatBubbles />}
+        {icon === 'message' && <ChatBubbles />}
         {icon === 'calendar' && <Calendar />}
+        {icon === 'empty' && <NothingHere />}
       </div>
       <h4 className='mt-4'>{title}</h4>
       <p>{description}</p>

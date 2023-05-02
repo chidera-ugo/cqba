@@ -97,6 +97,10 @@
     @apply smooth h-14 rounded-full bg-primary-main px-16 text-center text-white transition-colors hover:bg-primary-hmain;
   }
 
+  .secondary-button {
+    @apply smooth border border-neutral-300 bg-white px-8 text-sm font-semibold text-neutral-1000 hover:bg-gray-100;
+  }
+
   .light-button {
     @apply smooth h-14 rounded-full border border-primary-main bg-white px-16 text-center text-primary-main transition-colors hover:bg-gray-100;
   }
@@ -106,7 +110,7 @@
   }
 
   .outline-button {
-    @apply smooth h-[60px] rounded-full border border-primary-700 bg-transparent px-8 text-center text-primary-700 transition-colors;
+    @apply smooth h-[60px] rounded-full border border-primary-700 bg-transparent px-8 text-center text-primary-700 transition-colors hover:bg-gray-100;
   }
 
   .text-button {
@@ -152,7 +156,7 @@
   }
 
   .smooth {
-    @apply duration-200 ease-linear;
+    @apply duration-[150ms] ease-linear;
   }
 
   .card-title {
@@ -175,8 +179,16 @@
     @apply pill bg-success-600 text-white;
   }
 
+  .blue-pill {
+    @apply pill bg-primary-main bg-opacity-20 text-[10px] font-semibold uppercase text-primary-main !important;
+  }
+
+  .red-pill {
+    @apply pill bg-red-500 bg-opacity-20 text-[10px] font-semibold uppercase text-red-500 !important;
+  }
+
   .pill {
-    @apply y-center h-[26px] rounded-full px-2 py-1 text-sm font-normal capitalize;
+    @apply y-center smooth h-[26px] rounded-full px-2 py-1 text-sm font-normal capitalize transition-colors;
   }
 }
 
