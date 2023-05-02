@@ -32,7 +32,7 @@ export const FundWalletMethodSelector = ({
               setCurrentMethod(method);
             }}
             className={clsx(
-              'flex w-full rounded-xl border border-neutral-200 p-3 text-left 640:p-5',
+              'smooth flex w-full rounded-2xl border border-neutral-200 p-3 text-left transition-colors hover:border-primary-main disabled:hover:border-neutral-200 640:p-5',
               i > 0 && 'mt-4 '
             )}
           >

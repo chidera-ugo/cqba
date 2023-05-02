@@ -1,4 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table';
+import { Pill } from 'components/common/Pill';
 import { TableCell } from 'components/core/Table/TableCell';
 import { useMemo } from 'react';
 import { TransactionHistoryEntry } from 'types/Transaction';
@@ -41,19 +42,14 @@ export const useColumns = () => {
         enableColumnFilter: false,
         cell: ({ getValue }) => {
           const val = getValue() as string;
-
-          const getPillColor = () => {
-            if (val === 'successful') {
-              return 'green-pill';
-            } else if (val === 'pending') {
-              return 'yellow-pill';
-            } else return 'gray-pill';
-          };
-
           return (
-            <div className='flex align-middle'>
-              <span className={getPillColor()}>{val}</span>
-            </div>
+            <Pill
+              config={{
+                success: 'successful',
+                pending: 'pending',
+              }}
+              value={val}
+            />
           );
         },
       },

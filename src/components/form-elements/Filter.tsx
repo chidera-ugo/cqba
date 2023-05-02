@@ -5,14 +5,14 @@ import { MiniChevronDown } from 'components/svgs/navigation/Chevrons';
 import { SolidCheck } from 'components/svgs/others/Check';
 import { Dispatch, SetStateAction, useState } from 'react';
 
-type Option = { name: string; value: any } | string;
+export type SelectOption = { name: string; value: any } | string;
 
 interface Props {
   id: string;
   className?: string;
   filters: Record<string, any>;
   setFilters: Dispatch<SetStateAction<Record<string, any>>>;
-  options: Option[];
+  options: SelectOption[];
   dropdownClassName?: string;
   withChevron?: boolean;
   title?: string;

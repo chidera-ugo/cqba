@@ -56,6 +56,7 @@ export const SelectContent = ({
               setShowList(false);
             },
           }}
+          id='custom-select'
           closeOnClickOutside
           hideHeader
           className={clsx('bg-white p-0', asModal ? '' : 'h-[94%]')}

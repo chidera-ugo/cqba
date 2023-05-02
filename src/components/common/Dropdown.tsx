@@ -44,7 +44,7 @@ export const Dropdown = ({
         },
       }}
       className={clsx(
-        'absolute top-[100%] z-20 mt-1 w-full overflow-hidden rounded-xl border border-neutral-300 p-0 shadow-lg',
+        'absolute top-[100%] z-[100] mt-2 w-full overflow-hidden rounded-xl border border-neutral-300 p-0 shadow-lg',
         className
       )}
     >

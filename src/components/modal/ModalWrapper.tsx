@@ -13,6 +13,8 @@ export type ModalWrapperProps = ModalProps &
     simpleHeader?: boolean;
     altHeader?: boolean;
     className?: string;
+    id?: string;
+    childrenClassname?: string;
   };
 
 export type ModalProps = {
@@ -67,6 +69,7 @@ export const RightModalWrapper = ({
   show,
   hideHeader,
   className,
+  childrenClassname,
   ...props
 }: PropsWithChildren<ModalWrapperProps>) => {
   return (
@@ -75,12 +78,16 @@ export const RightModalWrapper = ({
       {...props}
       type='right'
       className={clsx(
-        'relative z-[1000] ml-auto mt-auto h-full w-full max-w-[598px] overflow-y-auto bg-white',
+        'thin-scrollbar relative z-[1000] ml-auto h-full w-full max-w-[598px] overflow-y-auto bg-white',
         className
       )}
     >
-      {!hideHeader && <Header {...props} />}
-      <div className='p-4 640:p-8'>{children}</div>
+      <div className='h-full'>
+        {!hideHeader && <Header {...props} />}
+        <div className={clsx(childrenClassname ?? 'p-4 640:p-8')}>
+          {children}
+        </div>
+      </div>
     </Modal>
   );
 };

@@ -12,7 +12,8 @@ import { generateTableEntries } from 'utils/helpers/generators/generateTableEntr
 import { TransactionHistoryEntry } from 'types/Transaction';
 import { PaginatedResponse } from 'types/Table';
 import { Table } from 'components/core/Table';
-import { LargeRightModalWrapper } from 'components/modal/ModalWrapper';
+import { RightModalWrapper } from 'components/modal/ModalWrapper';
+import { TransactionDetails } from 'components/modules/transactions/TransactionDetails';
 
 interface Props {
   reset?: () => void;
@@ -27,11 +28,10 @@ export const AllTransactionsTable = ({
   filters,
   setFilters,
 }: Props) => {
-  const { push, query } = useRouter();
+  const { push } = useRouter();
 
-  const [currentTransaction, setCurrentTransaction] = useState<any | null>(
-    !!query?.id ? query : null
-  );
+  const [currentTransaction, setCurrentTransaction] =
+    useState<TransactionHistoryEntry | null>(null);
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -61,7 +61,7 @@ export const AllTransactionsTable = ({
         status: 'successful',
         createdAt: new Date().toISOString(),
       },
-      0
+      10
     ),
   });
 
@@ -84,11 +84,17 @@ export const AllTransactionsTable = ({
 
   return (
     <>
-      <LargeRightModalWrapper
+      <RightModalWrapper
         title='Transaction details'
         show={!!currentTransaction}
         {...{ close }}
-      ></LargeRightModalWrapper>
+        closeOnClickOutside
+        childrenClassname='p-0'
+      >
+        {currentTransaction && (
+          <TransactionDetails transaction={currentTransaction} />
+        )}
+      </RightModalWrapper>
 
       <Table<TransactionHistoryEntry>
         title='transactions'

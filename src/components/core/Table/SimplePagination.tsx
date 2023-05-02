@@ -106,7 +106,14 @@ export const SimplePagination = ({
         <div className='x-center my-auto'>
           {getPageNumbers().map((pageNumber) => {
             if (!pageNumber)
-              return <button className='mx-3 text-neutral-600'>...</button>;
+              return (
+                <button
+                  key={'pagination-separator'}
+                  className='mx-3 text-neutral-600'
+                >
+                  ...
+                </button>
+              );
 
             return (
               <button

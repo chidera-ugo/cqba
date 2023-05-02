@@ -66,7 +66,7 @@ const IsLoadingIsError = ({ isLoading }: { isLoading?: boolean }) => {
         </div>
       </div>
 
-      <div className='mt-5 flex gap-3'>
+      <div className='mt-5 gap-3 425:flex 768:mt-auto'>
         <div
           className={clsx(
             'h-10 w-full rounded-full 768:w-[120px]',
@@ -76,7 +76,7 @@ const IsLoadingIsError = ({ isLoading }: { isLoading?: boolean }) => {
 
         <div
           className={clsx(
-            'h-10 w-full rounded-full 768:w-[120px]',
+            'mt-3 h-10 w-full rounded-full 425:mt-0 768:w-[120px]',
             isLoading ? 'skeleton' : 'skeleton-error'
           )}
         ></div>

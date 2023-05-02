@@ -28,7 +28,6 @@ export const FundWallet = () => {
             }
           },
         }}
-        closeOnClickOutside
         title={currentMethod?.title ?? 'Fund wallet'}
       >
         {currentMethod ? (

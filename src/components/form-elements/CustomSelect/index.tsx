@@ -32,69 +32,65 @@ export const CustomSelect = (props: Props) => {
   }, [field.value]);
 
   return (
-    <div id={id} className='relative w-full'>
-      <div
-        className={clsx(
-          'no-highlight relative h-full w-full cursor-pointer rounded-xl bg-neutral-100',
-          className
-        )}
-        onClick={() => {
-          setShowList((prev) => !prev);
-        }}
-      >
-        <label
-          htmlFor={id}
-          className={`label cursor-pointer capitalize ${
-            selectedOption ? 'top-[12px] text-xs' : 'top-[24px] text-base'
-          }`}
-        >
+    <div className={clsx(className, 'relative mt-5 w-full')}>
+      <div className='flex'>
+        <label htmlFor={id} className='text-left'>
           {label}
         </label>
+      </div>
 
-        <input
-          {...field}
-          type='button'
-          placeholder='Button'
-          value={selectedOption ? selectedOption[props.displayValue] : ''}
-          className={clsx(
-            `input block cursor-pointer pb-2 pr-11 pt-6 text-left caret-transparent`,
-            submitCount > 0 && meta.error && !showList
-              ? 'border-error-main'
-              : ''
-          )}
-        />
-
-        <div className='smooth y-center absolute right-0 top-0 inline-block h-full w-11 text-neutral-500 hover:text-primary-700'>
-          <span
+      <div id={id} className='relative'>
+        <div
+          className={clsx('relative h-full w-full cursor-pointer', className)}
+          onClick={() => {
+            setShowList((prev) => !prev);
+          }}
+        >
+          <input
+            {...field}
+            type='button'
+            placeholder='Button'
+            value={selectedOption ? selectedOption[props.displayValue] : ''}
             className={clsx(
-              'x-center y-center mx-auto h-full w-full transform duration-200',
-              showList ? 'rotate-180' : 'rotate-0'
+              `input block w-full cursor-pointer pr-11 text-left caret-transparent`,
+              submitCount > 0 && meta.error && !showList && 'border-error-main',
+              !!field.value ? 'bg-white' : 'bg-neutral-100'
             )}
-          >
-            <div className='x-center w-full'>
-              <ChevronDown />
-            </div>
-          </span>
+          />
+
+          <div className='smooth y-center absolute right-0 top-0 inline-block h-full w-11 text-neutral-500 hover:text-primary-700'>
+            <span
+              className={clsx(
+                'x-center y-center mx-auto h-full w-full transform duration-200',
+                showList ? 'rotate-180' : 'rotate-0'
+              )}
+            >
+              <div className='x-center w-full'>
+                <ChevronDown />
+              </div>
+            </span>
+          </div>
         </div>
+
+        <SelectContent
+          {...props}
+          {...{
+            setShowList,
+            showList,
+            selectedOption,
+            setSelectedOption,
+            onChooseAction(option) {
+              setFieldValue &&
+                setFieldValue(field.name, option[props.trueValue]);
+              next && document.getElementById(next)?.focus();
+            },
+          }}
+        />
       </div>
 
       {submitCount > 0 && meta.error ? (
         <div className='error'>{meta.error}</div>
       ) : null}
-
-      <SelectContent
-        {...props}
-        {...{
-          setShowList,
-          showList,
-          selectedOption,
-          setSelectedOption,
-          onChooseAction(option) {
-            setFieldValue && setFieldValue(field.name, option[props.trueValue]);
-            next && document.getElementById(next)?.focus();
-          },
-        }}
-      />
     </div>
   );
 };

@@ -86,7 +86,7 @@ export function CodeInput({
 
   return (
     <div>
-      <div className='flex'>
+      <div className='mb-1 flex'>
         <label className='text-left'>{label}</label>
       </div>
 

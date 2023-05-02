@@ -29,7 +29,7 @@ export const Form = ({ processing, formikProps }: Props) => {
       />
 
       <SubmitButton
-        id='signup-submit-button'
+        id='new-password-submit-button'
         submitting={processing}
         className='dark-button mt-12 w-full min-w-[200px] 640:w-auto'
       >

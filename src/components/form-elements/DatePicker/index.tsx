@@ -70,7 +70,12 @@ export const DatePicker = ({
       </div>
 
       <div className='relative' id={id ?? 'date-picker-wrapper'}>
-        <div className={clsx('relative w-full cursor-pointer rounded-xl')}>
+        <div
+          className={clsx(
+            'relative w-full rounded-xl',
+            props.disabled ? 'cursor-not-allowed' : 'cursor-pointer'
+          )}
+        >
           <input
             {...props}
             {...field}
@@ -100,6 +105,8 @@ export const DatePicker = ({
 
           <button
             onClick={() => {
+              if (props.disabled) return;
+
               if (!showCalendar) {
                 const date = dayjs(getValue());
                 if (date.isValid() && !date.isAfter(maxDate))
@@ -108,6 +115,7 @@ export const DatePicker = ({
 
               setShowCalendar((prev) => !prev);
             }}
+            disabled={props.disabled}
             type='button'
             className='smooth y-center absolute top-0 right-0 h-full w-11 text-neutral-500 transition-colors hover:text-primary-700'
           >

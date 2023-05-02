@@ -23,7 +23,7 @@ export const Form = ({ processing, formikProps }: Props) => {
 
       <div className='mt-12 gap-5 640:flex'>
         <SubmitButton
-          id='signup-submit-button'
+          id='reset-password-submit-button'
           submitting={processing}
           className='dark-button w-full min-w-[200px] 640:w-auto'
         >

@@ -12,7 +12,7 @@ export const SubmitButton = ({
   ...props
 }: PropsWithChildren<Props>) => {
   return (
-    <button {...{ type }} disabled={props.disabled || submitting} {...props}>
+    <button {...{ type }} {...props} disabled={submitting || props.disabled}>
       {submitting ? (
         <div className='x-center'>
           <Spinner />

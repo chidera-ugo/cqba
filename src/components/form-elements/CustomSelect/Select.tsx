@@ -95,6 +95,8 @@ export const Select = ({
     return selectedOption ? selectedOption[trueValue] === val : false;
   }
 
+  const itemsLength = options.length ? options.length : 6;
+
   return (
     <div className='hidden-scrollbar relative h-full overflow-hidden rounded-xl'>
       <div className='sticky left-0 top-0 z-[1000] overflow-hidden bg-white'>
@@ -122,10 +124,10 @@ export const Select = ({
         )}
 
         {!noSearch ? (
-          <div className='border-b border-neutral-300 p-6 pt-0 640:pt-6'>
+          <div className='w-full border-b border-neutral-300 p-3'>
             <SearchInput
               id='select-search'
-              className='h-12'
+              className='w-full'
               autoFocus
               {...{
                 placeholder: `Search`,
@@ -151,7 +153,7 @@ export const Select = ({
 
       <div
         className={clsx(
-          'h-min 640:max-h-[400px] 640:pb-1',
+          'h-min bg-white 640:max-h-[400px] 640:pb-1',
           !noSearch || options.length > 6
             ? dropdownInMobileView
               ? 'max-h-[400px]'
@@ -164,13 +166,17 @@ export const Select = ({
             !dropdownInMobileView &&
             (options.length > 6 || (!minimalist && mobile))
               ? '100vh'
-              : Number(options.length * 48) + 12,
+              : Number(itemsLength * 48) + 12,
         }}
       >
         {!filteredOptions?.length ? (
-          <p>No {entity ?? 'item'} matched your search</p>
+          <div className='y-center h-full'>
+            <p className='text-center'>
+              No {entity ?? 'item'} matched your search
+            </p>
+          </div>
         ) : (
-          <AutoSizer className='autosizer thin-scrollbar'>
+          <AutoSizer className='autosizer thin-scrollbar pb-10 pt-1.5'>
             {({ height, width }) => {
               return (
                 <List
