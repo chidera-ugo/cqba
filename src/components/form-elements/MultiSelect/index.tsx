@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import { useField, useFormikContext } from 'formik';
 import clsx from 'clsx';
-import { TSelect, TOptions } from './Select';
+import { TMultiSelect, TOptions } from './Select';
 import { Field } from 'types/Common';
 import { ChevronDown } from 'components/svgs/navigation/Chevrons';
 import { SelectContent } from './SelectContent';
 
 export type Props = JSX.IntrinsicElements['input'] &
   Field &
-  TSelect &
+  TMultiSelect &
   TOptions & {
     id: string;
     label?: string;
@@ -18,7 +18,7 @@ export type Props = JSX.IntrinsicElements['input'] &
     asModal?: boolean;
   };
 
-export const CustomSelect = (props: Props) => {
+export const MultiSelect = (props: PropsWithChildren<Props>) => {
   const { className, label, name, setFieldValue, next } = props;
 
   const [field, meta] = useField(name as string);

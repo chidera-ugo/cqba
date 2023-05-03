@@ -101,6 +101,7 @@ export const CentredModalWrapper = ({
   withGutter,
   mustShowIsDraggable,
   backgroundClassname,
+  hideHeader,
   ...props
 }: PropsWithChildren<CenteredModalWrapperProps>) => {
   const mobile = useMediaQuery('(max-width: 640px)');
@@ -140,11 +141,11 @@ export const CentredModalWrapper = ({
           if (info.offset.y > 150) {
             props.close && props.close();
           } else {
-            setDuration(0.4);
+            setDuration(0.2);
           }
         }}
         onDragTransitionEnd={() => {
-          setDuration(0.4);
+          setDuration(0.2);
         }}
         className={clsx(
           `relative mt-auto h-auto w-full min-w-full overflow-clip overflow-y-auto overflow-x-hidden 640:my-4 640:min-h-min 640:w-auto 640:min-w-[450px] 640:rounded-b-2xl`,
@@ -167,7 +168,7 @@ export const CentredModalWrapper = ({
           </div>
         )}
 
-        {props.close && (
+        {!hideHeader && props.close && (
           <>
             <div className='x-between sticky top-0 right-0 p-4 pb-0'>
               <div></div>

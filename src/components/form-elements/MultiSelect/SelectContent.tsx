@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { Dropdown } from 'components/common/Dropdown';
 import { CentredModalWrapper } from 'components/modal/ModalWrapper';
 import useMediaQuery from 'hooks/common/useMediaQuery';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, PropsWithChildren, SetStateAction } from 'react';
 import { Select } from './Select';
 import { Props } from '.';
 
@@ -16,8 +16,9 @@ export const SelectContent = ({
   showList,
   setSelectedOption,
   onChooseAction,
+  children,
   ...props
-}: Props & {
+}: PropsWithChildren<Props> & {
   setShowList: Dispatch<SetStateAction<boolean>>;
   showList: boolean;
   setSelectedOption: Dispatch<SetStateAction<any>>;
@@ -42,7 +43,9 @@ export const SelectContent = ({
           dropdownClassname,
           selectedOption,
         }}
-      />
+      >
+        {children}
+      </Select>
     );
   };
 
@@ -59,7 +62,10 @@ export const SelectContent = ({
           id='custom-select'
           closeOnClickOutside
           hideHeader
-          className={clsx('bg-white p-0', asModal ? '' : 'h-[94%]')}
+          className={clsx(
+            'overflow-hidden bg-white p-0',
+            asModal ? '' : 'h-[94%]'
+          )}
         >
           <MainSelect />
         </CentredModalWrapper>

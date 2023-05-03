@@ -59,8 +59,8 @@ export const ProfileSwitcher = ({ mobile }: { mobile?: boolean }) => {
         >
           <p className='text-xs font-medium text-neutral-600'>Switch Profile</p>
 
-          <button className='x-between mt-5 w-full'>
-            <span className='my-auto text-sm font-semibold text-neutral-1000'>
+          <button className='x-between group mt-5 w-full'>
+            <span className='my-auto text-sm font-semibold text-neutral-1000 group-hover:underline'>
               Add business
             </span>
             <span className='my-auto'>

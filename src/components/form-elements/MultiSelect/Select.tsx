@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import { useEffect, useState } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import { FixedSizeList as List } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { IdNavigator } from 'components/common/IdNavigator';
@@ -10,7 +10,7 @@ import { BackLine } from 'components/svgs/navigation/Arrows';
 import { SolidCheck } from 'components/svgs/others/Check';
 import { convertToUrlString } from 'utils/helpers/converters/convertToUrlString';
 
-export type TSelect = {
+export type TMultiSelect = {
   options: any[];
   displayValue: string;
   trueValue: string;
@@ -32,7 +32,7 @@ export type TOptions = {
   entity?: string;
 };
 
-type Props = TSelect &
+type Props = TMultiSelect &
   TOptions & {
     onChoose: (option: any) => void;
     selectedOption: any;
@@ -56,7 +56,8 @@ export const Select = ({
   dropdownInMobileView,
   renderer,
   isLoading,
-}: Props) => {
+  children,
+}: PropsWithChildren<Props>) => {
   const options = !convertOptionsToObjectArray
     ? _options
     : _options.map((option) => {
@@ -100,7 +101,7 @@ export const Select = ({
 
   return (
     <>
-      <div className='sticky left-0 top-[29px] z-[1000] -mt-1 overflow-hidden bg-white 640:top-0'>
+      <div className='tops-[29px] sticky left-0 top-0 z-[1000] -mt-1 overflow-hidden bg-white 640:top-0'>
         {!minimalist && (
           <div
             className={clsx('grid grid-cols-12 bg-white px-5 py-2 640:hidden')}
@@ -152,10 +153,14 @@ export const Select = ({
         )}
       </div>
 
-      <div className='hidden-scrollbar relative mb-2 overflow-hidden bg-white'>
+      <div
+        className={clsx(
+          'hidden-scrollbar relative overflow-hidden bg-white pb-0'
+        )}
+      >
         <div
           className={clsx(
-            'h-min bg-white 640:max-h-[400px] 640:pb-1',
+            'h-min bg-white 640:max-h-[400px]',
             !noSearch || options.length > 6
               ? dropdownInMobileView
                 ? 'max-h-[400px]'
@@ -168,7 +173,7 @@ export const Select = ({
               !dropdownInMobileView &&
               (options.length > 6 || (!minimalist && mobile))
                 ? '80vh'
-                : Number(itemsLength * 48) + 12,
+                : Number(itemsLength * 48) + 24,
           }}
         >
           {!filteredOptions?.length ? (
@@ -178,7 +183,7 @@ export const Select = ({
               </p>
             </div>
           ) : (
-            <AutoSizer className='autosizer thin-scrollbar pb-10 pt-2'>
+            <AutoSizer className='autosizer thin-scrollbar pb-20 pt-2'>
               {({ height, width }) => {
                 return (
                   <List
@@ -257,6 +262,8 @@ export const Select = ({
           )}
         </div>
       </div>
+
+      <div className='sticky bottom-0 left-0 h-12 bg-red-500'>{children}</div>
     </>
   );
 };

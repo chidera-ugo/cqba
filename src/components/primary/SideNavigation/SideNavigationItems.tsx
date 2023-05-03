@@ -110,25 +110,29 @@ export const SideNavigationItems = () => {
 const IsLoadingIsError = ({ type }: { type: 'loading' | 'error' }) => {
   return (
     <div className='mt-8'>
-      {generatePlaceholderArray(3).map((p, i) => {
+      {['Home', 'Organisation', 'Others'].map((p, i) => {
         return (
           <div key={p} className={clsx(i > 0 && 'mt-12')}>
-            <div
-              className={clsx(
-                type === 'loading' ? 'skeleton' : 'skeleton-error',
-                'mb-3 h-4 w-20'
-              )}
-            ></div>
+            <div className='mb-3 text-sm font-semibold text-neutral-1000'>
+              {p}
+            </div>
 
             {generatePlaceholderArray(3).map((p) => {
               return (
-                <div
-                  key={p}
-                  className={clsx(
-                    type === 'loading' ? 'skeleton' : 'skeleton-error',
-                    'my-5 h-5 w-full'
-                  )}
-                ></div>
+                <div key={p} className='my-5 flex gap-2'>
+                  <div
+                    className={clsx(
+                      type === 'loading' ? 'skeleton' : 'skeleton-error',
+                      'h-4 w-7 rounded-md'
+                    )}
+                  ></div>
+                  <div
+                    className={clsx(
+                      type === 'loading' ? 'skeleton' : 'skeleton-error',
+                      'h-4 w-full rounded-md'
+                    )}
+                  ></div>
+                </div>
               );
             })}
           </div>

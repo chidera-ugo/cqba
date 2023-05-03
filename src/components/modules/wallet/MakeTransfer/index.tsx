@@ -1,6 +1,7 @@
 import { TabOption, Tabs } from 'components/common/Tabs';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { OtherBanks } from 'components/modules/wallet/MakeTransfer/OtherBanks';
+import { SubAccounts } from 'components/modules/wallet/MakeTransfer/SubAccounts';
 import { Outbound } from 'components/svgs/navigation/Arrows';
 import { useEffect, useState } from 'react';
 
@@ -39,6 +40,15 @@ export const MakeTransfer = () => {
       >
         {currentTab.value === 'other-banks' && (
           <OtherBanks
+            close={() => setShowModal(false)}
+            {...{
+              setModalTitle,
+            }}
+            hideMethodSwitchTabs={() => setShowMethodSwitchTabs(false)}
+          />
+        )}
+        {currentTab.value === 'sub-account' && (
+          <SubAccounts
             close={() => setShowModal(false)}
             {...{
               setModalTitle,

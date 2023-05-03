@@ -59,7 +59,7 @@ const IsLoadingIsError = ({ isLoading }: { isLoading?: boolean }) => {
           ></div>
           <div
             className={clsx(
-              'mt-7 h-8 w-full',
+              'mt-5 h-8 w-full',
               isLoading ? 'skeleton' : 'skeleton-error'
             )}
           ></div>

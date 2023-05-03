@@ -101,7 +101,7 @@ export const TransactionDetails = ({ transaction }: Props) => {
             <div className='mt-2 font-normal text-neutral-500'>
               You sent {accountName}
             </div>
-            <div className='text-2xl font-semibold text-neutral-980 640:mt-1 640:text-3xl'>
+            <div className='text-2xl font-semibold text-neutral-980 640:text-3xl'>
               NGN {formatAmount({ value: amount, decimalPlaces: 2 })}
             </div>
           </div>

@@ -2,67 +2,55 @@ import { Input } from 'components/form-elements/Input';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
-import { CustomSelect } from 'components/form-elements/CustomSelect';
 import { AmountInput } from 'components/form-elements/AmountInput';
-import { Institution } from 'types/wallet/FundWallet';
-import { ResolveAccountNumber } from 'components/forms/wallet/common/ResolveAccountNumber';
+import { SubAccount } from 'types/wallet/FundWallet';
 import { GetTransactionFee } from 'components/forms/wallet/common/GetTransactionFee';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { MultiSelect } from 'components/form-elements/MultiSelect';
+import { SolidCirclePlus } from 'components/svgs/forms/Plus';
 
 interface Props {
   formikProps: FormikProps<typeof initialValues>;
   processing: boolean;
-  institutions: Institution[];
+  subAccounts: SubAccount[];
 }
 
-export const Form = ({ processing, formikProps, institutions }: Props) => {
+export const Form = ({ processing, formikProps, subAccounts }: Props) => {
   const { handleSubmit, setFieldValue, values } = formikProps;
   const [isProcessing, setIsProcessing] = useState({
     fee: false,
     accountName: false,
   });
 
+  const { push } = useRouter();
+
   return (
     <FormikForm onSubmit={handleSubmit}>
-      <CustomSelect
-        id='recipients-bank'
-        label="Recipient's Bank"
-        name='bank'
-        entity='Bank'
-        next='accountNumber'
-        displayValue='name'
-        trueValue='code'
+      <MultiSelect
+        id='sub-accounts'
+        label='Sub Account(s)'
+        name='accounts'
+        entity='Account(s)'
+        next='amount'
+        displayValue='accountName'
+        trueValue='accountNumber'
         className='mt-0'
         {...{
           setFieldValue,
-          options: institutions,
+          options: subAccounts,
         }}
-      />
-
-      <Input
-        label='Account Number'
-        name='accountNumber'
-        next='amount'
-        className='w-full'
-        setFieldValue={setFieldValue}
-        type='text'
-        inputMode='tel'
-        autoComplete='off'
-        fieldType='idNumber'
-        limit={10}
-        shouldValidate
-      />
-      <ResolveAccountNumber
-        accountNumber={values.accountNumber}
-        bankCode={values.bank}
-        getValue={(val) => setFieldValue('accountName', val)}
-        emitIsProcessing={(val) =>
-          setIsProcessing((prev) => ({
-            ...prev,
-            accountName: val,
-          }))
-        }
-      />
+      >
+        <button
+          onClick={() => push('/sub-accounts?_a=new')}
+          className='x-between py-4 text-primary-main'
+        >
+          <span className='my-auto font-semibold'>Add sub account</span>
+          <span className='my-auto'>
+            <SolidCirclePlus />
+          </span>
+        </button>
+      </MultiSelect>
 
       <AmountInput
         label='Amount'
@@ -83,6 +71,8 @@ export const Form = ({ processing, formikProps, institutions }: Props) => {
           }))
         }
       />
+
+      <Input label='Narration (Optional)' name='narration' className='w-full' />
 
       <div className='flex justify-end'>
         <SubmitButton

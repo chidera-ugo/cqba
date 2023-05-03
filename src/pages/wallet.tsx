@@ -8,6 +8,7 @@ export default function Wallet() {
       <div className='flex'>
         <WalletOverview />
       </div>
+
       <WalletTransactions />
     </AppLayout>
   );
