@@ -100,7 +100,7 @@ export const Modal = ({
                 className,
                 grow
                   ? type === 'right'
-                    ? 'animate-slide_right'
+                    ? '640:animate-slide_right'
                     : 'animate-slide_down 640:animate-grow_sm'
                   : ''
               )}

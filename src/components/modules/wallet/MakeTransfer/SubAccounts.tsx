@@ -57,112 +57,8 @@ export const SubAccounts = ({
 
 const subAccounts = [
   {
-    accountName: 'John Doe',
-    accountNumber: '0184982188',
-  },
-  {
-    accountName: 'Jane Doe',
-    accountNumber: '0481038818',
-  },
-  {
-    accountName: 'Janet Doe',
-    accountNumber: '4810348184',
-  },
-  {
-    accountName: 'John Doe',
-    accountNumber: '0184982188',
-  },
-  {
-    accountName: 'Jane Doe',
-    accountNumber: '0481038818',
-  },
-  {
-    accountName: 'Janet Doe',
-    accountNumber: '4810348184',
-  },
-  {
-    accountName: 'John Doe',
-    accountNumber: '0184982188',
-  },
-  {
-    accountName: 'Jane Doe',
-    accountNumber: '0481038818',
-  },
-  {
-    accountName: 'Janet Doe',
-    accountNumber: '4810348184',
-  },
-  {
-    accountName: 'John Doe',
-    accountNumber: '0184982188',
-  },
-  {
-    accountName: 'Jane Doe',
-    accountNumber: '0481038818',
-  },
-  {
-    accountName: 'Janet Doe',
-    accountNumber: '4810348184',
-  },
-  {
-    accountName: 'John Doe',
-    accountNumber: '0184982188',
-  },
-  {
-    accountName: 'Jane Doe',
-    accountNumber: '0481038818',
-  },
-  {
-    accountName: 'Janet Doe',
-    accountNumber: '4810348184',
-  },
-  {
-    accountName: 'John Doe',
-    accountNumber: '0184982188',
-  },
-  {
-    accountName: 'Jane Doe',
-    accountNumber: '0481038818',
-  },
-  {
-    accountName: 'Janet Doe',
-    accountNumber: '4810348184',
-  },
-  {
-    accountName: 'John Doe',
-    accountNumber: '0184982188',
-  },
-  {
-    accountName: 'Jane Doe',
-    accountNumber: '0481038818',
-  },
-  {
-    accountName: 'Janet Doe',
-    accountNumber: '4810348184',
-  },
-  {
-    accountName: 'John Doe',
-    accountNumber: '0184982188',
-  },
-  {
-    accountName: 'Jane Doe',
-    accountNumber: '0481038818',
-  },
-  {
-    accountName: 'Janet Doe',
-    accountNumber: '4810348184',
-  },
-  {
-    accountName: 'John Doe',
-    accountNumber: '0184982188',
-  },
-  {
-    accountName: 'Jane Doe',
-    accountNumber: '0481038818',
-  },
-  {
-    accountName: 'Janet Doe',
-    accountNumber: '4810348184',
+    accountName: 'Azej Hodm',
+    accountNumber: '0185882885',
   },
   {
     accountName: 'John Doe',
@@ -178,6 +74,6 @@ const subAccounts = [
   },
   {
     accountName: 'Zinaad Ahemd',
-    accountNumber: '4810348184',
+    accountNumber: '4811348184',
   },
 ];

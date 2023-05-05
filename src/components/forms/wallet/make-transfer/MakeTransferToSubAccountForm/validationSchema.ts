@@ -10,8 +10,12 @@ export const validationSchema = object({
         limit: 10,
       })
     ),
-  bank: string().required('Please select a bank'),
-  accountNumber: string()
-    .required('Please provide account number')
-    .length(10, 'Account number should be 10 digits'),
+  subAccounts: object().test(
+    'min',
+    'Selected at least one account',
+    (value) => {
+      const selectedAtLeastOneAccount = Object.values(value).find((val) => val);
+      return !!selectedAtLeastOneAccount;
+    }
+  ),
 });

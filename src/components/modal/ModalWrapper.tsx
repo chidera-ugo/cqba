@@ -99,7 +99,7 @@ export const CentredModalWrapper = ({
   fullscreen,
   undraggable,
   withGutter,
-  mustShowIsDraggable,
+  mustShowIsDraggable: _,
   backgroundClassname,
   hideHeader,
   ...props
@@ -153,24 +153,24 @@ export const CentredModalWrapper = ({
           '560:min-w-[466px]',
           backgroundClassname ?? defaultBackgroundClassname,
           fullscreen &&
-            'h-max min-h-screen rounded-t-none 640:max-h-[80%] 640:rounded-t-2xl'
+            'h-max min-h-screen overflow-hidden rounded-t-none 640:max-h-[80%] 640:rounded-t-2xl'
         )}
       >
-        {mobile && (props.closeOnClickOutside || mustShowIsDraggable) && (
-          <div
-            onPointerDown={(e) => controls.start(e)}
-            className={clsx(
-              'x-center sticky left-0 top-0 z-[1200] w-full rounded-t-2xl py-3',
-              backgroundClassname ?? defaultBackgroundClassname
-            )}
-          >
-            <div className='h-1.5 w-12 rounded-full bg-neutral-300 bg-opacity-50'></div>
-          </div>
-        )}
+        <div className='sticky top-0 left-0 z-[1200] rounded-t-2xl'>
+          {/* {mobile && (props.closeOnClickOutside || mustShowIsDraggable) && (
+            <div
+              onPointerDown={(e) => controls.start(e)}
+              className={clsx(
+                'x-center w-full py-3',
+                backgroundClassname ?? defaultBackgroundClassname
+              )}
+            >
+              <div className='h-1.5 w-12 rounded-full bg-neutral-300 bg-opacity-50'></div>
+            </div>
+          )} */}
 
-        {!hideHeader && props.close && (
-          <>
-            <div className='x-between sticky top-0 right-0 p-4 pb-0'>
+          {!hideHeader && props.close && (
+            <div className='x-between p-4 pb-0'>
               <div></div>
               <button onClick={props.close} className='text-gray-400'>
                 <svg
@@ -187,11 +187,14 @@ export const CentredModalWrapper = ({
                 </svg>
               </button>
             </div>
-          </>
-        )}
+          )}
+        </div>
 
         <div
-          className={clsx('560:min-w-[400px]', className ?? 'px-4 640:px-8')}
+          className={clsx(
+            'h-full 560:min-w-[400px]',
+            className ?? 'px-4 640:px-8'
+          )}
         >
           {children}
         </div>

@@ -1,48 +1,38 @@
 import clsx from 'clsx';
 import { Dropdown } from 'components/common/Dropdown';
 import { CentredModalWrapper } from 'components/modal/ModalWrapper';
-import useMediaQuery from 'hooks/common/useMediaQuery';
 import { Dispatch, PropsWithChildren, SetStateAction } from 'react';
-import { Select } from './Select';
+import { Select, MultiCheckHandleChanges } from './Select';
 import { Props } from '.';
+import { useAppContext } from 'context/AppContext';
 
 export const SelectContent = ({
   dropdownClassname,
-  selectedOption,
   minimalist,
   asModal,
   id,
   setShowList,
   showList,
-  setSelectedOption,
-  onChooseAction,
   children,
   ...props
-}: PropsWithChildren<Props> & {
-  setShowList: Dispatch<SetStateAction<boolean>>;
-  showList: boolean;
-  setSelectedOption: Dispatch<SetStateAction<any>>;
-  onChooseAction: (option: any) => void;
-}) => {
-  const mobile = useMediaQuery('(max-width: 640px)');
+}: PropsWithChildren<Props> &
+  MultiCheckHandleChanges & {
+    setShowList: Dispatch<SetStateAction<boolean>>;
+    showList: boolean;
+  }) => {
+  const { screenSize } = useAppContext().state;
 
   const MainSelect = () => {
     return (
       <Select
         {...{
-          onChoose(option: any) {
-            setShowList(false);
-            setSelectedOption(option);
-            onChooseAction(option);
-          },
           close() {
             setShowList(false);
           },
           minimalist,
-          ...props,
           dropdownClassname,
-          selectedOption,
         }}
+        {...props}
       >
         {children}
       </Select>
@@ -51,7 +41,7 @@ export const SelectContent = ({
 
   return (
     <>
-      {(mobile && !minimalist) || asModal ? (
+      {(screenSize?.mobile && !minimalist) || asModal ? (
         <CentredModalWrapper
           {...{
             show: showList,
@@ -62,10 +52,7 @@ export const SelectContent = ({
           id='custom-select'
           closeOnClickOutside
           hideHeader
-          className={clsx(
-            'overflow-hidden bg-white p-0',
-            asModal ? '' : 'h-[94%]'
-          )}
+          className={clsx('max-h-[95vh] overflow-hidden bg-white p-0')}
         >
           <MainSelect />
         </CentredModalWrapper>
@@ -75,6 +62,7 @@ export const SelectContent = ({
           show={showList}
           close={() => setShowList(false)}
           wrapperId={id}
+          exceptedId='multicheck'
         >
           <MainSelect />
         </Dropdown>

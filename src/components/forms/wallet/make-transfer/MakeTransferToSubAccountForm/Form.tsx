@@ -20,7 +20,6 @@ export const Form = ({ processing, formikProps, subAccounts }: Props) => {
   const { handleSubmit, setFieldValue, values } = formikProps;
   const [isProcessing, setIsProcessing] = useState({
     fee: false,
-    accountName: false,
   });
 
   const { push } = useRouter();
@@ -30,22 +29,26 @@ export const Form = ({ processing, formikProps, subAccounts }: Props) => {
       <MultiSelect
         id='sub-accounts'
         label='Sub Account(s)'
-        name='accounts'
+        name='subAccounts'
         entity='Account(s)'
         next='amount'
-        displayValue='accountName'
-        trueValue='accountNumber'
+        displayValueKey='accountName'
+        otherInfoKey='accountNumber'
+        trueValueKey='accountNumber'
         className='mt-0'
         {...{
           setFieldValue,
           options: subAccounts,
         }}
+        itemCountAdjustment={1}
       >
         <button
           onClick={() => push('/sub-accounts?_a=new')}
-          className='x-between py-4 text-primary-main'
+          className='x-between group w-full py-4 px-4 text-primary-main hover:text-black'
         >
-          <span className='my-auto font-semibold'>Add sub account</span>
+          <span className='my-auto font-semibold group-hover:underline'>
+            Add sub account
+          </span>
           <span className='my-auto'>
             <SolidCirclePlus />
           </span>
@@ -56,7 +59,6 @@ export const Form = ({ processing, formikProps, subAccounts }: Props) => {
         label='Amount'
         name='amount'
         currency='NGN'
-        className='640:bg-neutral-325 mt-6 w-full bg-white'
         setFieldValue={setFieldValue}
       />
       <GetTransactionFee
@@ -78,12 +80,7 @@ export const Form = ({ processing, formikProps, subAccounts }: Props) => {
         <SubmitButton
           id='transfer-to-bank-submit-button'
           submitting={processing}
-          disabled={
-            !values.accountName ||
-            !values.fee ||
-            isProcessing['fee'] ||
-            isProcessing['accountName']
-          }
+          disabled={!values.fee || isProcessing['fee']}
           className='dark-button ml-auto mt-8 w-full min-w-[120px] 640:w-auto'
         >
           Continue

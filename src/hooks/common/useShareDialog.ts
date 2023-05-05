@@ -1,5 +1,7 @@
 export const useShareDialog = () => {
   const openShareDialog = async (data: any, errorCb: () => void) => {
+    let caughtError = false;
+
     if (!navigator.canShare || !navigator.canShare(data)) {
       return errorCb();
     }
@@ -7,7 +9,10 @@ export const useShareDialog = () => {
     try {
       await navigator.share(data);
     } catch (e) {
-      console.log(e);
+      if (caughtError) return;
+      caughtError = true;
+      errorCb();
+      // $sentry
     }
   };
 

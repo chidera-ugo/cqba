@@ -18,7 +18,7 @@ export const AgnosticCustomSelect = ({
     defaultOption ?? null
   );
 
-  const value = selectedOption?.[props.displayValue];
+  const value = selectedOption?.[props.displayValueKey];
 
   return (
     <div id={id} className='relative z-50 w-full'>
@@ -71,7 +71,7 @@ export const AgnosticCustomSelect = ({
           selectedOption,
           setSelectedOption,
           onChooseAction(option) {
-            onSelect(option[props.trueValue]);
+            onSelect(option[props.trueValueKey]);
           },
         }}
       />

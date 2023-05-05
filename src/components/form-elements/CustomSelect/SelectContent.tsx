@@ -59,7 +59,7 @@ export const SelectContent = ({
           id='custom-select'
           closeOnClickOutside
           hideHeader
-          className={clsx('bg-white p-0', asModal ? '' : 'h-[94%]')}
+          className={clsx('h-full max-h-[95vh] overflow-hidden p-0')}
         >
           <MainSelect />
         </CentredModalWrapper>

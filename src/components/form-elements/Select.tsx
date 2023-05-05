@@ -9,9 +9,9 @@ type Props = JSX.IntrinsicElements['select'] &
     options: any;
     note?: string;
     isRequired?: boolean;
-    displayKey?: string; // If the options passed is an array of objects then this is the key of the value that will be displayed
+    displayValueKey?: string; // If the options passed is an array of objects then this is the key of the value that will be displayed
     secondaryButton?: JSX.Element;
-    trueValue?: string;
+    trueValueKey?: string;
     isLoading?: boolean;
   };
 
@@ -19,9 +19,9 @@ export const Select = ({
   label,
   options: _options,
   className,
-  displayKey,
+  displayValueKey,
   next,
-  trueValue = 'id',
+  trueValueKey = 'id',
   ...props
 }: Props) => {
   const options = !_options.length
@@ -63,14 +63,14 @@ export const Select = ({
         <option disabled hidden value=''></option>
 
         {options.map((value: any) => {
-          const isObject = displayKey && typeof value === 'object';
+          const isObject = displayValueKey && typeof value === 'object';
 
           return (
             <option
-              key={isObject ? value[trueValue] : (value as string)}
-              value={isObject ? value[trueValue] : (value as string)}
+              key={isObject ? value[trueValueKey] : (value as string)}
+              value={isObject ? value[trueValueKey] : (value as string)}
             >
-              {isObject ? value[displayKey] : (value as string)}
+              {isObject ? value[displayValueKey] : (value as string)}
             </option>
           );
         })}

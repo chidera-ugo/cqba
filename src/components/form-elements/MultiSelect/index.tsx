@@ -1,7 +1,7 @@
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { PropsWithChildren, useState } from 'react';
 import { useField, useFormikContext } from 'formik';
 import clsx from 'clsx';
-import { TMultiSelect, TOptions } from './Select';
+import { TMultiSelect, TMultiOptions } from './Select';
 import { Field } from 'types/Common';
 import { ChevronDown } from 'components/svgs/navigation/Chevrons';
 import { SelectContent } from './SelectContent';
@@ -9,7 +9,7 @@ import { SelectContent } from './SelectContent';
 export type Props = JSX.IntrinsicElements['input'] &
   Field &
   TMultiSelect &
-  TOptions & {
+  TMultiOptions & {
     id: string;
     label?: string;
     entity?: string;
@@ -19,17 +19,23 @@ export type Props = JSX.IntrinsicElements['input'] &
   };
 
 export const MultiSelect = (props: PropsWithChildren<Props>) => {
-  const { className, label, name, setFieldValue, next } = props;
+  const { className, label, name, setFieldValue } = props;
 
   const [field, meta] = useField(name as string);
   const { submitCount } = useFormikContext();
   const [showList, setShowList] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<any>(null);
+
   const id = props.id ?? name;
 
-  useEffect(() => {
-    if (!field.value) setSelectedOption(null);
-  }, [field.value]);
+  const selection = getOriginalSelectionOfMultiCheck(
+    field.value,
+    props.options,
+    props.trueValueKey
+  );
+
+  const value = selection
+    .map((option) => option[props.displayValueKey])
+    .join(', ');
 
   return (
     <div className={clsx(className, 'relative mt-5 w-full')}>
@@ -48,27 +54,38 @@ export const MultiSelect = (props: PropsWithChildren<Props>) => {
         >
           <input
             {...field}
+            {...{ value }}
             type='button'
             placeholder='Button'
-            value={selectedOption ? selectedOption[props.displayValue] : ''}
             className={clsx(
-              `input block w-full cursor-pointer pr-11 text-left caret-transparent`,
+              `input block w-full cursor-pointer text-left caret-transparent line-clamp-1`,
               submitCount > 0 && meta.error && !showList && 'border-error-main',
-              !!field.value ? 'bg-white' : 'bg-neutral-100'
+              selection.length ? 'bg-white' : 'bg-neutral-100'
             )}
           />
 
-          <div className='smooth y-center absolute right-0 top-0 inline-block h-full w-11 text-neutral-500 hover:text-primary-700'>
-            <span
-              className={clsx(
-                'x-center y-center mx-auto h-full w-full transform duration-200',
-                showList ? 'rotate-180' : 'rotate-0'
-              )}
-            >
-              <div className='x-center w-full'>
-                <ChevronDown />
-              </div>
-            </span>
+          <div
+            className={clsx(
+              'smooth y-center absolute right-0 top-0 inline-block h-full w-11 rounded-r-xl text-neutral-500 hover:text-primary-700'
+            )}
+          >
+            <div className='y-center my-auto h-full w-full'>
+              <span
+                className={clsx(
+                  'x-center y-center mx-auto my-auto h-7 w-full rounded-full',
+                  selection.length ? 'bg-white' : 'bg-neutral-100'
+                )}
+              >
+                <div
+                  className={clsx(
+                    'x-center w-full transform duration-200',
+                    showList ? 'rotate-180' : 'rotate-0'
+                  )}
+                >
+                  <ChevronDown />
+                </div>
+              </span>
+            </div>
           </div>
         </div>
 
@@ -77,20 +94,37 @@ export const MultiSelect = (props: PropsWithChildren<Props>) => {
           {...{
             setShowList,
             showList,
-            selectedOption,
-            setSelectedOption,
-            onChooseAction(option) {
-              setFieldValue &&
-                setFieldValue(field.name, option[props.trueValue]);
-              next && document.getElementById(next)?.focus();
+            selectedOptions: field.value,
+            handleChange(value) {
+              if (!setFieldValue) return;
+
+              setFieldValue(name!, {
+                ...field.value,
+                ...value,
+              });
             },
           }}
         />
       </div>
 
       {submitCount > 0 && meta.error ? (
-        <div className='error'>{meta.error}</div>
+        <div className='generic-error'>{meta.error}</div>
       ) : null}
     </div>
   );
 };
+
+export function getOriginalSelectionOfMultiCheck(
+  selectedOptionsMap: Record<string, boolean>,
+  originalOptionsList: any[],
+  trueValueKey: string
+) {
+  const arr: any[] = [];
+
+  originalOptionsList.forEach((option) => {
+    if (selectedOptionsMap[option[trueValueKey]]) {
+      arr.push(option);
+    }
+  });
+  return arr;
+}

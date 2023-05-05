@@ -26,8 +26,8 @@ export const GetStartedSteps = () => {
           entity='get-started-steps'
           minimalist
           dropdownClassname='mt-2 bg-white'
-          trueValue='id'
-          displayValue='name'
+          trueValueKey='id'
+          displayValueKey='name'
           convertOptionsToObjectArray
           dropdownInMobileView
           id='get-started-steps'

@@ -9,16 +9,18 @@ type Props = {
   show: boolean;
   wrapperId: string;
   className?: string;
+  exceptedId?: string;
 };
 
 export const Dropdown = ({
   close,
   wrapperId,
+  exceptedId,
   show,
   children,
   className,
 }: PropsWithChildren<Props>) => {
-  useDismissDropdown(wrapperId, close);
+  useDismissDropdown(wrapperId, close, exceptedId);
 
   if (!show) return <></>;
 

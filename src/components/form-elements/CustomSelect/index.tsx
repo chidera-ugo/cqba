@@ -50,7 +50,7 @@ export const CustomSelect = (props: Props) => {
             {...field}
             type='button'
             placeholder='Button'
-            value={selectedOption ? selectedOption[props.displayValue] : ''}
+            value={selectedOption ? selectedOption[props.displayValueKey] : ''}
             className={clsx(
               `input block w-full cursor-pointer pr-11 text-left caret-transparent`,
               submitCount > 0 && meta.error && !showList && 'border-error-main',
@@ -81,7 +81,7 @@ export const CustomSelect = (props: Props) => {
             setSelectedOption,
             onChooseAction(option) {
               setFieldValue &&
-                setFieldValue(field.name, option[props.trueValue]);
+                setFieldValue(field.name, option[props.trueValueKey]);
               next && document.getElementById(next)?.focus();
             },
           }}
@@ -89,7 +89,7 @@ export const CustomSelect = (props: Props) => {
       </div>
 
       {submitCount > 0 && meta.error ? (
-        <div className='error'>{meta.error}</div>
+        <div className='generic-error'>{meta.error}</div>
       ) : null}
     </div>
   );

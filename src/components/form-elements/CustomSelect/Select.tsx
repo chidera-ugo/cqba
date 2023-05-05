@@ -12,8 +12,8 @@ import { convertToUrlString } from 'utils/helpers/converters/convertToUrlString'
 
 export type TSelect = {
   options: any[];
-  displayValue: string;
-  trueValue: string;
+  displayValueKey: string;
+  trueValueKey: string;
   imageKey?: string;
   renderer?: (
     option: string,
@@ -44,8 +44,8 @@ export const Select = ({
   onChoose,
   options: _options,
   close,
-  trueValue,
-  displayValue,
+  trueValueKey,
+  displayValueKey,
   imageKey,
   selectedOption,
   entity,
@@ -61,8 +61,8 @@ export const Select = ({
     ? _options
     : _options.map((option) => {
         return {
-          [displayValue]: option,
-          [trueValue]: option ? convertToUrlString(option) : '',
+          [displayValueKey]: option,
+          [trueValueKey]: option ? convertToUrlString(option) : '',
         };
       });
 
@@ -86,21 +86,21 @@ export const Select = ({
 
   function onChange(val: string) {
     const newVals = options?.filter((option: any) => {
-      return formatValue(option[displayValue]).includes(formatValue(val));
+      return formatValue(option[displayValueKey]).includes(formatValue(val));
     });
 
     setFilteredOptions(newVals);
   }
 
   function isActive(val: string) {
-    return selectedOption ? selectedOption[trueValue] === val : false;
+    return selectedOption ? selectedOption[trueValueKey] === val : false;
   }
 
   const itemsLength = options.length ? options.length : 6;
 
   return (
     <>
-      <div className='sticky left-0 top-[29px] z-[1000] -mt-1 overflow-hidden bg-white 640:top-0'>
+      <div className='sticky left-0 top-0 z-[1000] -mt-1 overflow-hidden bg-white'>
         {!minimalist && (
           <div
             className={clsx('grid grid-cols-12 bg-white px-5 py-2 640:hidden')}
@@ -125,7 +125,7 @@ export const Select = ({
         )}
 
         {!noSearch ? (
-          <div className='w-full border-b border-neutral-300 p-3 pt-0 640:pt-3'>
+          <div className='w-full p-3 pt-0 640:pt-3'>
             <SearchInput
               id='select-search'
               className='w-full'
@@ -152,7 +152,7 @@ export const Select = ({
         )}
       </div>
 
-      <div className='hidden-scrollbar relative mb-2 overflow-hidden bg-white'>
+      <div className='hidden-scrollbar relative mb-2 h-full overflow-hidden bg-white'>
         <div
           className={clsx(
             'h-min bg-white 640:max-h-[400px] 640:pb-1',
@@ -189,8 +189,10 @@ export const Select = ({
                         options: disableSorting
                           ? filteredOptions
                           : filteredOptions.sort((a, b) => {
-                              if (a[displayValue] > b[displayValue]) return 1;
-                              if (a[displayValue] < b[displayValue]) return -1;
+                              if (a[displayValueKey] > b[displayValueKey])
+                                return 1;
+                              if (a[displayValueKey] < b[displayValueKey])
+                                return -1;
                               return 0;
                             }),
                         handleClick(data: any) {
@@ -207,7 +209,7 @@ export const Select = ({
                       return (
                         <div
                           style={style}
-                          key={data[displayValue as any]}
+                          key={data[displayValueKey as any]}
                           id={`${entity}-${index}`}
                           className={clsx(
                             'my-auto flex w-full gap-3 px-1 align-middle transition-colors ease-linear'
@@ -221,7 +223,7 @@ export const Select = ({
                             )}
                           >
                             {renderer ? (
-                              <>{renderer(data[displayValue], index)}</>
+                              <>{renderer(data[displayValueKey], index)}</>
                             ) : (
                               <div className='my-auto flex align-middle'>
                                 {imageKey && data[imageKey] && (
@@ -231,17 +233,17 @@ export const Select = ({
                                       height={32}
                                       width={32}
                                       className='my-auto flex-shrink-0 rounded-full object-cover'
-                                      alt={data[displayValue]}
+                                      alt={data[displayValueKey]}
                                     />
                                   </div>
                                 )}
-                                <div className='my-auto text-left text-base font-medium'>
-                                  {data[displayValue]}
+                                <div className='my-auto text-left text-base'>
+                                  {data[displayValueKey]}
                                 </div>
                               </div>
                             )}
 
-                            {isActive(data[trueValue]) && (
+                            {isActive(data[trueValueKey]) && (
                               <div className='my-auto text-primary-main'>
                                 <SolidCheck />
                               </div>

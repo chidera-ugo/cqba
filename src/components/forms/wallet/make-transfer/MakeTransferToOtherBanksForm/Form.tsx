@@ -30,8 +30,8 @@ export const Form = ({ processing, formikProps, institutions }: Props) => {
         name='bank'
         entity='Bank'
         next='accountNumber'
-        displayValue='name'
-        trueValue='code'
+        displayValueKey='name'
+        trueValueKey='code'
         className='mt-0'
         {...{
           setFieldValue,
@@ -68,7 +68,6 @@ export const Form = ({ processing, formikProps, institutions }: Props) => {
         label='Amount'
         name='amount'
         currency='NGN'
-        className='640:bg-neutral-325 mt-6 w-full bg-white'
         setFieldValue={setFieldValue}
       />
       <GetTransactionFee
