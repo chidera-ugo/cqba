@@ -109,6 +109,10 @@
     @apply smooth h-14 rounded-full border border-black bg-black px-8 text-center font-medium text-white transition-colors hover:bg-gray-900;
   }
 
+  .action-button {
+    @apply flex w-full rounded-lg p-2 transition-colors hover:bg-neutral-200;
+  }
+
   .outline-button {
     @apply smooth h-[60px] rounded-full border border-primary-700 bg-transparent px-8 text-center font-medium text-primary-700 transition-colors hover:bg-gray-100;
   }

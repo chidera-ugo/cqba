@@ -1,4 +1,4 @@
-export interface TransactionHistoryEntry {
+export interface ITransactionHistoryEntry {
   id: string;
   accountName: string;
   amount: number;

@@ -4,7 +4,7 @@ import { FileField } from 'types/Common';
 
 export const useDropFile = ({
   id,
-  setFile,
+  setFieldValue,
   extensions,
   maximumFileSizeInMB,
 }: FileField & { id: string }) => {
@@ -25,7 +25,7 @@ export const useDropFile = ({
         handleFile({
           id,
           maximumFileSizeInMB: maximumFileSizeInMB ?? 10,
-          successCb: (val) => setFile(val),
+          successCb: (val) => setFieldValue(id, val),
           errorCb,
           files,
           extensions,

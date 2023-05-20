@@ -2,11 +2,11 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Pill } from 'components/common/Pill';
 import { TableCell } from 'components/core/Table/TableCell';
 import { useMemo } from 'react';
-import { ITransactionHistoryEntry } from 'types/transactions/Transaction';
+import { IBudget } from 'types/budgeting/Budget';
 import { formatDate } from 'utils/helpers/formatters/formatDate';
 
 export const useColumns = () => {
-  const columns = useMemo<ColumnDef<ITransactionHistoryEntry>[]>(
+  const columns = useMemo<ColumnDef<IBudget>[]>(
     () => [
       {
         header: 'Transaction ID',

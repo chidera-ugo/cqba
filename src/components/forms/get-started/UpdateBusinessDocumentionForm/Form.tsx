@@ -7,15 +7,12 @@ import { Dispatch, SetStateAction } from 'react';
 import UnsavedChangesPrompt from 'components/common/UnsavedChangesPrompt';
 import { IdNavigator } from 'components/common/IdNavigator';
 import { FileInput } from 'components/form-elements/FileInput';
-import { IFile } from 'types/Common';
 
 interface Props {
   formikProps: FormikProps<typeof initialValues>;
   processing: boolean;
   hasUnsavedChanges: boolean;
   setHasUnsavedChanges: Dispatch<SetStateAction<boolean>>;
-  setFiles: Dispatch<SetStateAction<Record<string, IFile> | null>>;
-  files: Record<string, IFile> | null;
 }
 
 export const Form = ({
@@ -23,10 +20,9 @@ export const Form = ({
   formikProps,
   hasUnsavedChanges,
   setHasUnsavedChanges,
-  setFiles,
-  files,
 }: Props) => {
-  const { handleSubmit, setFieldValue } = formikProps;
+  const { handleSubmit, setFieldValue, values } = formikProps;
+  const v = values as any;
 
   return (
     <FormikForm
@@ -58,16 +54,10 @@ export const Form = ({
         name='utilityBillFile'
         fileType='all'
         maximumFileSizeInMB={2}
-        setFile={(file) => {
-          setFieldValue('utilityBillFile', true);
-          setFiles((prev) => {
-            return {
-              ...prev,
-              [file.id]: file,
-            };
-          });
+        {...{
+          setFieldValue,
         }}
-        file={files?.utilityBillFile ?? null}
+        getFile={(id) => v[id]}
       />
 
       <FileInput
@@ -75,16 +65,10 @@ export const Form = ({
         name='bnDocumentFile'
         fileType='all'
         maximumFileSizeInMB={2}
-        setFile={(file) => {
-          setFieldValue('bnDocumentFile', true);
-          setFiles((prev) => {
-            return {
-              ...prev,
-              [file.id]: file,
-            };
-          });
+        {...{
+          setFieldValue,
         }}
-        file={files?.bnDocumentFile ?? null}
+        getFile={(id) => v[id]}
       />
 
       <div className='relative mt-10 flex pb-8'>

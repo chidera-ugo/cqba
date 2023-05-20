@@ -1,7 +1,7 @@
 import { Pill } from 'components/common/Pill';
 import { Home } from 'components/svgs/wallet/Icons_FundWallet';
 import { useRef } from 'react';
-import { TransactionHistoryEntry } from 'types/Transaction';
+import { ITransactionHistoryEntry } from 'types/transactions/Transaction';
 import { formatAmount } from 'utils/helpers/formatters/formatAmount';
 import { formatDate } from 'utils/helpers/formatters/formatDate';
 import html2canvas from 'html2canvas';
@@ -12,7 +12,7 @@ import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { useResetter } from 'hooks/common/useResetter';
 
 interface Props {
-  transaction: TransactionHistoryEntry;
+  transaction: ITransactionHistoryEntry;
 }
 
 export const TransactionDetails = ({ transaction }: Props) => {

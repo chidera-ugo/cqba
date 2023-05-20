@@ -10,7 +10,6 @@ import { PhoneNumberInput } from 'components/form-elements/PhoneNumberInput';
 import { DatePicker } from 'components/form-elements/DatePicker';
 import dayjs from 'dayjs';
 import { FileInput } from 'components/form-elements/FileInput';
-import { IFile } from 'types/Common';
 import { RadioInput } from 'components/form-elements/RadioInput';
 
 interface Props {
@@ -18,8 +17,6 @@ interface Props {
   processing: boolean;
   hasUnsavedChanges: boolean;
   setHasUnsavedChanges: Dispatch<SetStateAction<boolean>>;
-  setFiles: Dispatch<SetStateAction<Record<string, IFile> | null>>;
-  files: Record<string, IFile> | null;
 }
 
 export const Form = ({
@@ -27,12 +24,12 @@ export const Form = ({
   formikProps,
   hasUnsavedChanges,
   setHasUnsavedChanges,
-  setFiles,
-  files,
 }: Props) => {
-  const { handleSubmit, setFieldValue } = formikProps;
+  const { handleSubmit, setFieldValue, values } = formikProps;
   const [calendarValue, setCalendarValue] = useState<Date | null>(null);
+  const v = values as any;
 
+  // Todo: Scroll to invalid required field on submit
   return (
     <FormikForm
       onChange={() => {
@@ -92,7 +89,7 @@ export const Form = ({
       </p>
 
       <div className='gap-4 880:flex'>
-        <Select label='Form of ID' name='idType' options={[]} />
+        <Select label='Form of ID' name='idType' options={['NIN']} />
         <Input label='ID Number' name='idNumber' />
       </div>
 
@@ -101,16 +98,10 @@ export const Form = ({
         name='idFile'
         fileType='all'
         maximumFileSizeInMB={2}
-        setFile={(file) => {
-          setFieldValue('idFile', true);
-          setFiles((prev) => {
-            return {
-              ...prev,
-              [file.id]: file,
-            };
-          });
+        {...{
+          setFieldValue,
         }}
-        file={files?.idFile ?? null}
+        getFile={(id) => v[id]}
       />
 
       <p className='mt-8 font-normal text-neutral-400'>

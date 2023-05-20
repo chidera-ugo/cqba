@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { PaginatedResponse } from 'types/Table';
+import { PaginatedResponse } from 'types/core/Table';
 import { generateUUID } from 'utils/helpers/generators/generateUUID';
 
 export function generateTableEntries<T>(

@@ -16,6 +16,7 @@ export const CheckInput = ({
   isChecked,
   handleClick,
   withBorders,
+  value: _,
   ...props
 }: Props) => {
   const id = _id ?? convertToUrlString(label);
@@ -35,6 +36,7 @@ export const CheckInput = ({
         <input
           id={id}
           {...props}
+          value={checked ? 'true' : 'false'}
           checked={checked}
           onChange={() => {
             handleClick(id);

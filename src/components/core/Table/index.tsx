@@ -20,15 +20,16 @@ import {
   useState,
 } from 'react';
 import { SimplePagination as TablePagination } from './SimplePagination';
-import { PaginatedResponse } from 'types/Table';
+import { PaginatedResponse } from 'types/core/Table';
 import { TableHead as TableColumnsHead } from './TableHead';
 import { AppliedFilters } from './AppliedFilters';
-import { Spinner } from 'components/svgs/dashboard/Spinner';
 import { SimpleInformation } from 'components/modules/common/SimpleInformation';
 import clsx from 'clsx';
+import { IsLoading } from 'components/data-states/IsLoading';
+import { IsError } from 'components/data-states/IsError';
 
 export type Props<T> = JSX.IntrinsicElements['table'] & {
-  title?: string;
+  title: string;
   emptyTableText?: string;
   // TABLE
   columns: ColumnDef<T, unknown>[];
@@ -62,6 +63,7 @@ export type Props<T> = JSX.IntrinsicElements['table'] & {
   dontScrollToTopOnPageChange?: boolean;
   onFilterClick?: (filter: string) => void;
   headerSlot?: JSX.Element;
+  hideFilters?: boolean;
 };
 
 export function Table<T>({
@@ -88,12 +90,13 @@ export function Table<T>({
   isRefetching,
   currentSearchColumn,
   setCurrentSearchColumn,
-  sorting: _,
+  sorting,
   dontScrollToTopOnPageChange,
   initialColumns,
   setSorting,
   onFilterClick,
   headerSlot,
+  hideFilters,
 }: Props<T>) {
   const [columns] = useState<typeof defaultColumns>(() => [...defaultColumns]);
   const [rowSelection, setRowSelection] = useState({});
@@ -116,7 +119,7 @@ export function Table<T>({
       rowSelection,
       pagination: _pagination,
       columnVisibility,
-      // sorting,
+      sorting,
     },
     manualPagination: true,
     onColumnVisibilityChange: setColumnVisibility,
@@ -153,21 +156,6 @@ export function Table<T>({
     }
   }, [pagination?.pageIndex]);
 
-  const Pagination = () => {
-    if (!pagination || !setPagination || res?.empty) return <></>;
-
-    return (
-      <TablePagination
-        {...{
-          setPagination,
-          pagination,
-          ...res,
-        }}
-        fetching={isLoading || isRefetching}
-      />
-    );
-  };
-
   return (
     <div
       className={clsx(
@@ -176,29 +164,31 @@ export function Table<T>({
       )}
     >
       <div className='w-full overflow-x-auto'>
-        {filters && !!Object.values(filters!).filter((val) => !!val).length && (
-          <div className='y-center my-auto min-h-[60px] w-full px-6'>
-            <div className='x-between w-full'>
-              <AppliedFilters
-                reset={() => {
-                  reset && reset();
-                  setColumnVisibility({
-                    ...initialColumns,
-                  });
-                }}
-                className='my-auto'
-                {...{
-                  mustHaveRange,
-                  filters,
-                  onFilterClick,
-                  ...res,
-                }}
-              />
+        {!hideFilters &&
+          filters &&
+          !!Object.values(filters!).filter((val) => !!val).length && (
+            <div className='y-center my-auto min-h-[60px] w-full px-6'>
+              <div className='x-between w-full'>
+                <AppliedFilters
+                  reset={() => {
+                    reset && reset();
+                    setColumnVisibility({
+                      ...initialColumns,
+                    });
+                  }}
+                  className='my-auto'
+                  {...{
+                    mustHaveRange,
+                    filters,
+                    onFilterClick,
+                    ...res,
+                  }}
+                />
 
-              {headerSlot}
+                {headerSlot}
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
         <table className='w-full min-w-[800px] table-auto'>
           <thead className='border-b border-gray-100 pb-12 text-left'>
@@ -311,23 +301,20 @@ export function Table<T>({
         (typeof res?.hasContent === 'boolean' &&
           !res?.hasContent &&
           isRefetching) ? (
-          <div className='y-center h-[400px]'>
-            <div className='mx-auto'>
-              <Spinner className='h-8 w-8' />
-            </div>
-          </div>
+          <IsLoading />
         ) : isError ? (
-          <>An error occurred fetching {title}</>
+          <IsError
+            title='An error occurred'
+            description={`Failed to fetch ${title}`}
+          />
         ) : (typeof res?.hasContent === 'boolean' && !res?.hasContent) ||
           res?.empty ? (
           <div className='y-center h-full px-5 py-32'>
             {emptyTableText && (
-              <SimpleInformation
-                title={<span className='text-xl'>Nothing to show (yet)</span>}
-                description={
-                  <span className='mt-1 block'>{emptyTableText}</span>
-                }
-                icon='empty'
+              <EmptyTable
+                {...{
+                  emptyTableText,
+                }}
               />
             )}
           </div>
@@ -335,11 +322,50 @@ export function Table<T>({
       </>
 
       <div className='pl-3 640:pl-6'>
-        <Pagination />
+        <Pagination
+          {...{ pagination, setPagination, isLoading, isRefetching, res }}
+        />
       </div>
     </div>
   );
 }
+
+export const EmptyTable = ({ emptyTableText }: { emptyTableText: string }) => {
+  return (
+    <SimpleInformation
+      title={<span className='text-xl'>Nothing to show (yet)</span>}
+      description={<span className='mt-1 block'>{emptyTableText}</span>}
+      icon='empty'
+    />
+  );
+};
+
+export const Pagination = ({
+  pagination,
+  setPagination,
+  isLoading,
+  isRefetching,
+  res,
+}: {
+  setPagination?: Dispatch<SetStateAction<PaginationState>>;
+  pagination?: PaginationState;
+  res?: PaginatedResponse<any>;
+  isLoading?: boolean;
+  isRefetching?: boolean;
+}) => {
+  if (!pagination || !setPagination || res?.empty) return <></>;
+
+  return (
+    <TablePagination
+      {...{
+        setPagination,
+        pagination,
+        ...res,
+      }}
+      fetching={isLoading || isRefetching}
+    />
+  );
+};
 
 (Table as FC<Props<any>>).propTypes = {
   onRowClick: function (props, propName) {

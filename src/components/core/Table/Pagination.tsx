@@ -1,4 +1,4 @@
-import { PaginationDetails } from 'types/Table';
+import { PaginationDetails } from 'types/core/Table';
 import {
   Dispatch,
   useRef,

@@ -10,12 +10,12 @@ import {
   useReducer,
 } from 'react';
 import { deleteFromLocalStore, getFromLocalStore } from 'lib/localStore';
-import { User } from 'types/User';
+import { IUser } from 'types/User';
 import useMediaQuery from 'hooks/common/useMediaQuery';
 
 export interface State {
   isInitializing: boolean;
-  user: null | User;
+  user: null | IUser;
   redirectUrl: string;
   screenSize: {
     tablet: boolean;
@@ -29,7 +29,7 @@ type Action =
   | { type: 'set-redirect-url'; payload: string }
   | { type: 'toggle-is-initializing'; payload: boolean }
   | { type: 'set-screen-size'; payload: State['screenSize'] }
-  | { type: 'login'; payload: User }
+  | { type: 'login'; payload: IUser }
   | { type: 'logout' };
 
 const initialState: State = {
@@ -135,6 +135,7 @@ async function getCurrentUser() {
   if (!tokens) return null;
 
   try {
+    return fakeUser;
     const res = await axiosInstance['get'](`${modifier}/users/profile`);
     return res.data;
   } catch (error) {

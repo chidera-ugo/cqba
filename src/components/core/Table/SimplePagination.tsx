@@ -1,4 +1,4 @@
-import { PaginationDetails } from 'types/Table';
+import { PaginationDetails } from 'types/core/Table';
 import { Dispatch, useState, SetStateAction } from 'react';
 import { PaginationState } from '@tanstack/react-table';
 import { generatePlaceholderArray } from 'utils/helpers/generators/generatePlaceholderArray';

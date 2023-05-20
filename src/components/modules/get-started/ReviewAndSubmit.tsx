@@ -10,6 +10,15 @@ export const ReviewAndSubmit = () => {
   const [fields, setFields] = useState<Record<string, boolean>>({});
   const { replace } = useRouter();
 
+  function handleCheckInputClick(id: string) {
+    setFields((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  }
+
+  const isCheckInputChecked = (id: string) => fields[id] ?? false;
+
   return (
     <>
       <IdNavigator id='review-and-submit' autoFocus />
@@ -23,60 +32,32 @@ export const ReviewAndSubmit = () => {
       <CheckInput
         label='Company Information'
         withBorders
-        {...{
-          handleClick(id) {
-            setFields((prev) => ({
-              ...prev,
-              [id]: !prev[id],
-            }));
-          },
-        }}
-        isChecked={(id) => fields[id]}
-        className='mt-10'
+        handleClick={handleCheckInputClick}
+        isChecked={isCheckInputChecked}
+        className='mt-6'
       />
 
       <CheckInput
         label='Owner Information'
         withBorders
-        {...{
-          handleClick(id) {
-            setFields((prev) => ({
-              ...prev,
-              [id]: !prev[id],
-            }));
-          },
-        }}
-        isChecked={(id) => fields[id]}
+        handleClick={handleCheckInputClick}
+        isChecked={isCheckInputChecked}
         className='mt-3'
       />
 
       <CheckInput
         label='Business documentation'
         withBorders
-        {...{
-          handleClick(id) {
-            setFields((prev) => ({
-              ...prev,
-              [id]: !prev[id],
-            }));
-          },
-        }}
-        isChecked={(id) => fields[id]}
+        handleClick={handleCheckInputClick}
+        isChecked={isCheckInputChecked}
         className='mt-3'
       />
 
       <CheckInput
         id='isAccurate'
         label={`I/We confirm that the information provided are accurate and truthful.`}
-        {...{
-          handleClick(id) {
-            setFields((prev) => ({
-              ...prev,
-              [id]: !prev[id],
-            }));
-          },
-        }}
-        isChecked={(id) => fields[id]}
+        handleClick={handleCheckInputClick}
+        isChecked={isCheckInputChecked}
         className='mt-10'
       />
 

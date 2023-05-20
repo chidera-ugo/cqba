@@ -24,6 +24,7 @@ export const MakeTransfer = () => {
             setShowModal(false);
           },
         }}
+        closeOnClickOutside
         title={modalTitle}
         slot={
           showMethodSwitchTabs ? (

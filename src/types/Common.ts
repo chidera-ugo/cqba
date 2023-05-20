@@ -4,15 +4,18 @@ export interface IFile {
   id: string;
 }
 
+export type SetFieldValue = (
+  field: string,
+  value: any,
+  shouldValidate?: boolean | undefined
+) => void;
+
 export interface Field {
-  setFieldValue?: (
-    field: string,
-    value: any,
-    shouldValidate?: boolean | undefined
-  ) => void;
+  setFieldValue?: SetFieldValue;
   capitalizeLabel?: boolean;
   fieldType?:
     | 'idNumber'
+    | 'phoneNumber'
     | 'idNumberWithSlashes'
     | 'name'
     | 'dateOfBirth'
@@ -32,7 +35,8 @@ export interface Field {
 export interface FileField {
   id?: string;
   maximumFileSizeInMB?: number;
-  setFile: (value: IFile) => void;
-  file: IFile | null;
+  setFieldValue: SetFieldValue;
+  file?: IFile | null;
+  getFile?: (id: string) => IFile | null;
   extensions?: string[];
 }

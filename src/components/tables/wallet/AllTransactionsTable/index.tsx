@@ -9,8 +9,8 @@ import { useColumns } from './useColumns';
 import { useRouter } from 'next/router';
 import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 import { generateTableEntries } from 'utils/helpers/generators/generateTableEntries';
-import { TransactionHistoryEntry } from 'types/Transaction';
-import { PaginatedResponse } from 'types/Table';
+import { ITransactionHistoryEntry } from 'types/transactions/Transaction';
+import { PaginatedResponse } from 'types/core/Table';
 import { Table } from 'components/core/Table';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { TransactionDetails } from 'components/modules/transactions/TransactionDetails';
@@ -31,7 +31,7 @@ export const AllTransactionsTable = ({
   const { push } = useRouter();
 
   const [currentTransaction, setCurrentTransaction] =
-    useState<TransactionHistoryEntry | null>(null);
+    useState<ITransactionHistoryEntry | null>(null);
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -52,7 +52,7 @@ export const AllTransactionsTable = ({
     data: res,
   } = useMakeDummyHttpRequest({
     method: 'get',
-    res: generateTableEntries<TransactionHistoryEntry>(
+    res: generateTableEntries<ITransactionHistoryEntry>(
       {
         id: '',
         accountName: 'John Doe',
@@ -70,7 +70,7 @@ export const AllTransactionsTable = ({
   }, [res]);
 
   const [data, setData] = useState<
-    PaginatedResponse<TransactionHistoryEntry> | undefined
+    PaginatedResponse<ITransactionHistoryEntry> | undefined
   >(res?.data);
 
   const { columns } = useColumns();
@@ -96,7 +96,7 @@ export const AllTransactionsTable = ({
         )}
       </RightModalWrapper>
 
-      <Table<TransactionHistoryEntry>
+      <Table<ITransactionHistoryEntry>
         title='transactions'
         headerSlot={slot}
         dontScrollToTopOnPageChange

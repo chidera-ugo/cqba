@@ -6,6 +6,6 @@ export const initialValues = {
   dateOfBirth: '',
   idType: '',
   idNumber: '',
-  idFile: false,
+  idFile: {},
   politicalAffiliation: '',
 };

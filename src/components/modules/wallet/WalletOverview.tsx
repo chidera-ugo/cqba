@@ -1,9 +1,8 @@
 import clsx from 'clsx';
-import { MoreInfo } from 'components/common/MoreInfo';
+import { DisplayValue } from 'components/common/DisplayValue';
 import { FundWallet } from 'components/modules/wallet/FundWallet';
 import { MakeTransfer } from 'components/modules/wallet/MakeTransfer';
 import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
-import { formatAmount } from 'utils/helpers/formatters/formatAmount';
 
 export const WalletOverview = () => {
   const { isLoading, isError, data } = useMakeDummyHttpRequest({
@@ -14,27 +13,18 @@ export const WalletOverview = () => {
   });
 
   if (isLoading) return <IsLoadingIsError isLoading />;
-  if (isError) return <IsLoadingIsError />;
+  if (isError || !data) return <IsLoadingIsError />;
 
   return (
     <div className='768:card w-full gap-8 768:flex 768:w-fit'>
       <div className='y-center card w-full 768:w-auto 768:border-none 768:p-0'>
         <div className='my-auto'>
-          <div className='flex text-neutral-500'>
-            <div>Main balance</div>
-            <MoreInfo id={`wallet_overview_balance`}>
-              Your main wallet balance
-            </MoreInfo>
-          </div>
-
-          <div className={clsx('mt-3 text-3xl font-semibold')}>
-            <span className='mr-1.5'>NGN</span>
-            {formatAmount({
-              value: data?.balance,
-              decimalPlaces: 2,
-              kFormatter: Number(data?.balance) > 999999,
-            })}
-          </div>
+          <DisplayValue
+            value={data?.balance}
+            isAmount
+            title='Main balance'
+            moreInfo='Your main wallet balance'
+          />
         </div>
       </div>
 

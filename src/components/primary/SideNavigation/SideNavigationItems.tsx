@@ -117,7 +117,7 @@ const IsLoadingIsError = ({ type }: { type: 'loading' | 'error' }) => {
               {p}
             </div>
 
-            {generatePlaceholderArray(3).map((p) => {
+            {generatePlaceholderArray(4).map((p) => {
               return (
                 <div key={p} className='my-5 flex gap-2'>
                   <div

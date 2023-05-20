@@ -135,3 +135,8 @@ export function phoneNumberTest(
     return phoneNumberRegex.test(val);
   }
 }
+
+export function validateFile(val?: any) {
+  if (!val) return false;
+  return !!val.file && !!val.id && !!val.url;
+}

@@ -2,7 +2,6 @@ export const getFromLocalStore = (query: string, session?: boolean) => {
   try {
     const res = (session ? sessionStorage : localStorage).getItem(query);
     if (!res) return null;
-
     return JSON.parse(res);
   } catch (e) {
     return null;

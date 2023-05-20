@@ -8,11 +8,12 @@ interface Props {
 export const IsError = ({ title, description }: Props) => {
   return (
     <SimpleInformation
+      className='py-20'
       title={<span className='text-xl text-red-500'>{title}</span>}
       description={
         <span className='mt-1 block text-red-600'>{description}</span>
       }
-      icon='empty'
+      icon='error'
     />
   );
 };

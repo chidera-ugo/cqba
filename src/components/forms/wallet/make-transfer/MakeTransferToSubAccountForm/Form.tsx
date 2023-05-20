@@ -44,7 +44,7 @@ export const Form = ({ processing, formikProps, subAccounts }: Props) => {
       >
         <button
           onClick={() => push('/sub-accounts?_a=new')}
-          className='x-between group w-full py-4 px-4 text-primary-main hover:text-black'
+          className='x-between group w-full py-4 px-4 text-primary-main'
         >
           <span className='my-auto font-semibold group-hover:underline'>
             Add sub account

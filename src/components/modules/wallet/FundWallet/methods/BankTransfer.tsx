@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { DisplayValue } from 'components/common/DisplayValue';
 import { useCopyToClipboard } from 'hooks/common/useCopyToClipboard';
 import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 
@@ -15,28 +16,23 @@ export const BankTransfer = () => {
   const { copyToClipboard } = useCopyToClipboard();
 
   if (isLoading) return <IsLoadingIsError isLoading />;
-  if (isError) return <IsLoadingIsError />;
+  if (isError || !data) return <IsLoadingIsError />;
 
   return (
     <>
       <div className='card p-0'>
         <div className='border-b border-neutral-200 p-8'>
-          <p className='font-medium text-neutral-400'>Account Number</p>
-          <div className='mt-2 text-3xl font-semibold text-neutral-980'>
-            {data?.accountNumber}
-          </div>
+          <DisplayValue value={data?.accountNumber} title='Account Number' />
         </div>
 
         <div className='p-8'>
-          <p className='font-medium text-neutral-400'>Bank Name</p>
-          <div className='text-lg font-semibold text-neutral-980'>
-            {data?.bankName}
-          </div>
-
-          <p className='mt-5 font-medium text-neutral-400'>Account Name</p>
-          <div className='text-lg font-semibold text-neutral-980'>
-            {data?.accountName}
-          </div>
+          <DisplayValue value={data?.bankName} title='Bank Name' smallText />
+          <DisplayValue
+            className='mt-5'
+            value={data?.accountName}
+            title='Account Name'
+            smallText
+          />
         </div>
       </div>
 
@@ -46,7 +42,7 @@ export const BankTransfer = () => {
         }
         className='secondary-button mt-7 h-12 w-full'
       >
-        Copy account details
+        Copy account number
       </button>
     </>
   );

@@ -4,13 +4,11 @@ import { validationSchema } from './validationSchema';
 import { Form } from './Form';
 import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 import { useState } from 'react';
-import { IFile } from 'types/Common';
 import { useRouter } from 'next/router';
 
 export const UpdateOwnerInformationForm = () => {
   const { replace } = useRouter();
   const { isLoading, mutate } = useMakeDummyHttpRequest({});
-  const [files, setFiles] = useState<Record<string, IFile> | null>(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   return (
@@ -41,8 +39,6 @@ export const UpdateOwnerInformationForm = () => {
               processing: isLoading,
               hasUnsavedChanges,
               setHasUnsavedChanges,
-              setFiles,
-              files,
             }}
           />
         );

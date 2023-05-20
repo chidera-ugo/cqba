@@ -1,5 +1,8 @@
-import { phoneNumberTest } from 'utils/helpers/validators/validateField';
-import { object, boolean, string } from 'yup';
+import {
+  phoneNumberTest,
+  validateFile,
+} from 'utils/helpers/validators/validateField';
+import { object, string } from 'yup';
 
 export const validationSchema = object({
   phoneNumber: string()
@@ -13,6 +16,10 @@ export const validationSchema = object({
   gender: string().required('Please select your gender'),
   lastName: string().required('Please provide your last name'),
   firstName: string().required('Please provide your first name'),
-  idFile: boolean().isTrue('Please upload a copy of your ID'),
+  idFile: object().test(
+    'invalidFile',
+    'Please upload a copy of your ID',
+    (val) => validateFile(val)
+  ),
   politicalAffiliation: string().required('Please select an option'),
 });
