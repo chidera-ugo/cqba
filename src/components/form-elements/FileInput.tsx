@@ -42,7 +42,7 @@ export const FileInput = ({
   const grabFile = () => {
     fileSelector({
       id,
-      maximumFileSizeInMB: 10,
+      maximumFileSizeInMB,
       successCb: (val) => setFile(val),
       errorCb,
       extensions,
