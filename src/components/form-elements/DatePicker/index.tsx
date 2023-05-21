@@ -17,7 +17,6 @@ type Props = JSX.IntrinsicElements['input'] &
     maxDate?: Date;
     minDate?: Date;
     label: string;
-    setDate: (date: string) => void;
     setCalendarValue: (date: Date) => void;
     calendarValue: Date | null;
     dropdownClassname?: string;
@@ -32,7 +31,6 @@ export const DatePicker = ({
   dropdownClassname,
   setCalendarValue,
   calendarValue,
-  setDate,
   setFieldValue,
   fieldType,
   limit,
@@ -46,7 +44,9 @@ export const DatePicker = ({
 
   function finish(date: any, dontClose?: boolean) {
     setCalendarValue(date);
-    setDate(date.toISOString());
+    if (setFieldValue && name) {
+      setFieldValue(name, date.toISOString());
+    }
     if (!dontClose) {
       setShowCalendar(false);
     }
@@ -57,7 +57,9 @@ export const DatePicker = ({
     if (!val) return '';
     if (val.split('/').join('').length < 8) return val;
     const date = dayjs(val);
-    if (!date.isValid() || date.isAfter(maxDate)) return val;
+    if (maxDate) {
+      if (!date.isValid() || date.isAfter(maxDate)) return val;
+    }
     return dayjs(val).format('MM/DD/YYYY');
   }
 

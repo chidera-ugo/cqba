@@ -4,6 +4,10 @@ import dayjs from 'dayjs';
 import { useState } from 'react';
 import { DatePicker } from 'components/form-elements/DatePicker';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
+import { Input } from 'components/form-elements/Input';
+import { AmountInput } from 'components/form-elements/AmountInput';
+import { Select } from 'components/form-elements/Select';
+import { TextArea } from 'components/form-elements/Textarea';
 
 interface Props {
   formikProps: FormikProps<typeof initialValues>;
@@ -12,40 +16,32 @@ interface Props {
 
 export const Form = ({ formikProps, processing }: Props) => {
   const { handleSubmit, setFieldValue } = formikProps;
+  const [dueDate, setDueDate] = useState<Date | null>(null);
 
-  const [fromCalendarValue, setFromCalendarValue] = useState<Date | null>(null);
-  const [toCalendarValue, setToCalendarValue] = useState<Date | null>(null);
-
-  // Add validation for invalid end date
   return (
     <FormikForm onSubmit={handleSubmit}>
-      <DatePicker
-        label='Start Date'
-        name='fromDate'
-        {...{
-          calendarValue: fromCalendarValue,
-          setCalendarValue: setFromCalendarValue,
-        }}
-        maxDate={dayjs().subtract(1, 'day').toDate()}
-        minDate={dayjs().subtract(1, 'year').toDate()}
-        setDate={(value) => {
-          setFieldValue('fromDate', value);
-        }}
-      />
+      <Input label='Budget Title' name='title' />
+      <TextArea label='Description' name='description' />
 
-      <DatePicker
-        label='End Date'
-        name='toDate'
-        disabled={!fromCalendarValue}
-        {...{
-          calendarValue: toCalendarValue,
-          setCalendarValue: setToCalendarValue,
-        }}
-        minDate={dayjs(fromCalendarValue).add(1, 'day').toDate()}
-        maxDate={dayjs().toDate()}
-        setDate={(value) => {
-          setFieldValue('toDate', value);
-        }}
+      <div className='gap-4 880:flex'>
+        <Select label='Priority' name='priority' options={['High', 'Low']} />
+        <DatePicker
+          label='Due Date'
+          name='dueDate'
+          {...{
+            calendarValue: dueDate,
+            setCalendarValue: setDueDate,
+            setFieldValue,
+          }}
+          minDate={dayjs().toDate()}
+        />
+      </div>
+
+      <AmountInput
+        label='Amount'
+        name='amount'
+        currency='NGN'
+        setFieldValue={setFieldValue}
       />
 
       <div className='flex justify-end'>

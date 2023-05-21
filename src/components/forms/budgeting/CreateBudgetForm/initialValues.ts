@@ -1,4 +1,7 @@
 export const initialValues = {
-  toDate: '',
-  fromDate: '',
+  title: '',
+  description: '',
+  priority: '',
+  dueDate: '',
+  amount: '',
 };

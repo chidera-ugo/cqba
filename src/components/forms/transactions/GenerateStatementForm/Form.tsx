@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const Form = ({ formikProps, processing }: Props) => {
-  const { handleSubmit, setFieldValue } = formikProps;
+  const { handleSubmit } = formikProps;
 
   const [fromCalendarValue, setFromCalendarValue] = useState<Date | null>(null);
   const [toCalendarValue, setToCalendarValue] = useState<Date | null>(null);
@@ -28,9 +28,6 @@ export const Form = ({ formikProps, processing }: Props) => {
         }}
         maxDate={dayjs().subtract(1, 'day').toDate()}
         minDate={dayjs().subtract(1, 'year').toDate()}
-        setDate={(value) => {
-          setFieldValue('fromDate', value);
-        }}
       />
 
       <DatePicker
@@ -43,9 +40,6 @@ export const Form = ({ formikProps, processing }: Props) => {
         }}
         minDate={dayjs(fromCalendarValue).add(1, 'day').toDate()}
         maxDate={dayjs().toDate()}
-        setDate={(value) => {
-          setFieldValue('toDate', value);
-        }}
       />
 
       <div className='flex justify-end'>

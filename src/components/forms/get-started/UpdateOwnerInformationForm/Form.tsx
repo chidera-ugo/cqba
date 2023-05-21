@@ -79,7 +79,6 @@ export const Form = ({
           maxDate={dayjs()
             .year(dayjs().year() - 18)
             .toDate()}
-          setDate={(value) => setFieldValue('dateOfBirth', value)}
         />
       </div>
 

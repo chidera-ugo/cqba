@@ -23,7 +23,8 @@ export const TextArea = ({ label, className, ...props }: Props) => {
         id={id}
         className={clsx(
           meta.touched && meta.error ? 'border-error-main' : '',
-          'min-h-[100px] w-full'
+          'min-h-[100px] w-full',
+          !!field.value ? 'bg-white' : 'bg-neutral-100'
         )}
       />
 
