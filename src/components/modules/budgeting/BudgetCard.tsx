@@ -63,7 +63,7 @@ export const BudgetCard = ({
         <h4 className='text-lg'>{request.title}</h4>
         <p
           className={clsx(
-            'mt-1 text-sm font-medium leading-6 text-neutral-500',
+            'mt-1 text-sm leading-6 text-neutral-500',
             !showFullDetails && 'line-clamp-2'
           )}
         >
