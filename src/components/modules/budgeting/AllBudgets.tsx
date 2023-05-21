@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { PaginationState } from '@tanstack/react-table';
-import { useRouter } from 'next/router';
 import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 import { generateTableEntries } from 'utils/helpers/generators/generateTableEntries';
 import { IBudget } from 'types/budgeting/Budget';
@@ -9,6 +8,7 @@ import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { AllBudgetsCardView } from 'components/modules/budgeting/AllBudgetsCardView';
 import { AllBudgetsTable } from 'components/tables/budgeting/AllBudgetsTable';
 import { BudgetCard } from 'components/modules/budgeting/BudgetCard';
+import { ApproveBudget } from 'components/modules/budgeting/ApproveBudget';
 
 interface Props {
   viewMode: ViewMode;
@@ -32,8 +32,7 @@ export type BudgetListProps = {
 export type ViewMode = 'table' | 'cards';
 
 export const AllBudgets = ({ viewMode, ...props }: Props) => {
-  const { push } = useRouter();
-
+  const [showPinModal, setShowPinModal] = useState(false);
   const [currentBudget, setCurrentBudget] = useState<IBudget | null>(null);
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -86,19 +85,36 @@ export const AllBudgets = ({ viewMode, ...props }: Props) => {
     res?.data
   );
 
-  function close() {
-    setCurrentBudget(null);
-    push('/budgeting', undefined, {
-      scroll: false,
-    });
-  }
-
   return (
     <>
       <RightModalWrapper
-        title='Budget details'
-        show={!!currentBudget && currentBudget.status === 'pending'}
-        {...{ close }}
+        title='Approve Budget'
+        show={showPinModal}
+        {...{
+          close() {
+            setShowPinModal(false);
+          },
+        }}
+        closeOnClickOutside
+        childrenClassname='p-8'
+      >
+        <ApproveBudget
+          close={() => {
+            setShowPinModal(false);
+          }}
+        />
+      </RightModalWrapper>
+
+      <RightModalWrapper
+        title='Budget Details'
+        show={
+          !showPinModal && !!currentBudget && currentBudget.status === 'pending'
+        }
+        {...{
+          close() {
+            setCurrentBudget(null);
+          },
+        }}
         closeOnClickOutside
         childrenClassname='p-8'
       >
@@ -108,7 +124,12 @@ export const AllBudgets = ({ viewMode, ...props }: Props) => {
 
             <div className='mt-8 flex gap-4'>
               <button className='secondary-button h-11 w-full'>Reject</button>
-              <button className='dark-button h-11 w-full'>Approve</button>
+              <button
+                onClick={() => setShowPinModal(true)}
+                className='dark-button h-11 w-full'
+              >
+                Approve
+              </button>
             </div>
           </>
         )}
