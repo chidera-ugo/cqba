@@ -9,6 +9,7 @@ type Props = PaginationDetails & {
   setPagination: Dispatch<SetStateAction<PaginationState>>;
   pagination: PaginationState;
   fetching?: boolean;
+  className?: string;
 };
 
 export const SimplePagination = ({
@@ -18,6 +19,7 @@ export const SimplePagination = ({
   totalPages,
   setPagination,
   pagination,
+  className,
 }: Props) => {
   const buttonsDisabled = typeof number === 'undefined' || !totalPages;
   const [page, setPage] = useState(pagination.pageIndex);
@@ -86,7 +88,12 @@ export const SimplePagination = ({
   }
 
   return (
-    <div className='x-between flex h-16 w-full grid-cols-12 py-3 pr-3 text-neutral-400 640:grid 640:pr-6'>
+    <div
+      className={clsx(
+        'x-between flex h-16 w-full grid-cols-12 py-3 text-neutral-400 640:grid',
+        className ?? 'pr-3 640:pr-6'
+      )}
+    >
       <span className='y-center col-span-3'>
         <button
           className='pagination-button my-auto mr-auto flex h-full disabled:cursor-not-allowed 640:-ml-5 640:px-5'

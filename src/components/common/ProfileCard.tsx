@@ -8,7 +8,7 @@ export const ProfileCard = ({ title, subTitle, avatar: _ }: Props) => {
   return (
     <div className='x-between relative z-[25] w-full'>
       <div className='flex'>
-        <div className='y-center mr-2.5 h-12 w-12 rounded-full bg-neutral-200 font-semibold'>
+        <div className='y-center mr-2.5 h-12 w-12 rounded-full bg-neutral-200 text-center text-xl font-bold'>
           {title.charAt(0)}
         </div>
 

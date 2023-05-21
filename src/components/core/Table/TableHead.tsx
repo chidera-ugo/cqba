@@ -48,16 +48,11 @@ export const TableHead = <T,>({
             <div className='x-between'>
               <span
                 className={clsx(
-                  `y-center my-auto block w-full text-sm font-semibold capitalize text-neutral-500`,
+                  `y-center my-auto block w-full text-xs font-normal uppercase text-neutral-400`,
                   header.column.getCanSort() &&
                     !isNotDisplayColumn &&
                     'select-none'
                 )}
-                // onClick={
-                //   isNotDisplayColumn
-                //     ? () => null
-                //     : header.column.getToggleSortingHandler()
-                // }
               >
                 {isNotDisplayColumn ? (
                   <div>
@@ -70,32 +65,12 @@ export const TableHead = <T,>({
                   </div>
                 ) : (
                   <div className='group flex align-middle'>
-                    <span className='my-auto text-xs font-normal uppercase text-neutral-400'>
+                    <span className='my-auto'>
                       {flexRender(
                         header.column.columnDef.header,
                         header.getContext()
                       )}
                     </span>
-                    {/* <span className='my-auto ml-3 min-w-[20px]'>
-                      {header.column.getCanSort() && (
-                        <span>
-                          <Up
-                            className={`-mb-[5px] h-3 w-3 ${
-                              header.column.getIsSorted() === 'asc'
-                                ? 'text-primary-main'
-                                : 'text-gray-400 opacity-60'
-                            }`}
-                          />
-                          <Down
-                            className={`-mt-[5px] h-3 w-3 ${
-                              header.column.getIsSorted() === 'desc'
-                                ? 'text-primary-main'
-                                : 'text-gray-400 opacity-60'
-                            }`}
-                          />
-                        </span>
-                      )}
-                    </span> */}
                   </div>
                 )}
               </span>

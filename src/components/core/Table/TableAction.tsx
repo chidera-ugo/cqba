@@ -1,29 +1,20 @@
 import clsx from 'clsx';
 import { Dropdown } from 'components/common/Dropdown';
-import {
-  Pause,
-  CircleOptions,
-  Lock,
-} from 'components/svgs/budgeting/Budget_Icons';
+import { CircleOptions } from 'components/svgs/others/Options';
 import { useState } from 'react';
 
-export const BudgetAction = ({ dropdownId }: { dropdownId: string }) => {
+interface Props {
+  dropdownId: string;
+  options: { title: string; icon: JSX.Element }[];
+  className?: string;
+}
+
+export const TableAction = ({ dropdownId, className, options }: Props) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const budgetOptions = [
-    {
-      title: 'Pause Budget',
-      icon: <Pause />,
-    },
-    {
-      title: 'Close Budget',
-      icon: <Lock />,
-    },
-  ];
-
   return (
-    <div id={dropdownId} className='relative h-min'>
-      <button onClick={() => setShowDropdown((prev) => !prev)} className=''>
+    <div id={dropdownId} className={clsx('relative', className)}>
+      <button onClick={() => setShowDropdown((prev) => !prev)}>
         <CircleOptions />
       </button>
 
@@ -33,7 +24,7 @@ export const BudgetAction = ({ dropdownId }: { dropdownId: string }) => {
         close={() => setShowDropdown(false)}
         wrapperId={dropdownId}
       >
-        {budgetOptions.map(({ title, icon }) => {
+        {options.map(({ title, icon }) => {
           return (
             <button key={title} className='action-button'>
               <span className='my-auto mr-2 text-primary-main'>{icon}</span>

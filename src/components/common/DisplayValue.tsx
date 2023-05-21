@@ -4,11 +4,12 @@ import { formatAmount } from 'utils/helpers/formatters/formatAmount';
 
 interface Props {
   moreInfo?: string;
-  title: string;
+  title?: string;
   isAmount?: boolean;
   smallText?: boolean;
   value: string | number;
   className?: string;
+  titleClassname?: string;
 }
 
 export const DisplayValue = ({
@@ -18,19 +19,26 @@ export const DisplayValue = ({
   isAmount,
   moreInfo,
   className,
+  titleClassname,
 }: Props) => {
   return (
     <div className={clsx('my-auto', className)}>
-      <div className='flex font-medium text-neutral-400'>
-        <div>{title}</div>
-        {moreInfo && <MoreInfo>{moreInfo}</MoreInfo>}
-      </div>
+      {title && (
+        <div className='flex font-medium text-neutral-400'>
+          <div>{title}</div>
+          {moreInfo && <MoreInfo>{moreInfo}</MoreInfo>}
+        </div>
+      )}
 
       <div
         className={clsx(
           clsx(
             'font-semibold text-neutral-980',
-            smallText ? 'text-lg' : 'mt-2 text-3xl'
+            titleClassname
+              ? titleClassname
+              : smallText
+              ? 'text-lg'
+              : 'mt-2 text-3xl'
           )
         )}
       >

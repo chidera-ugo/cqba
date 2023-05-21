@@ -1,24 +1,64 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { Pill } from 'components/common/Pill';
+import { ProfileCard } from 'components/common/ProfileCard';
+import { TableAction } from 'components/core/Table/TableAction';
 import { TableCell } from 'components/core/Table/TableCell';
+import { useBudgetActionOptions } from 'components/modules/budgeting/BudgetCard';
 import { useMemo } from 'react';
 import { IBudget } from 'types/budgeting/Budget';
 import { formatDate } from 'utils/helpers/formatters/formatDate';
 
 export const useColumns = () => {
+  const { options } = useBudgetActionOptions();
+
   const columns = useMemo<ColumnDef<IBudget>[]>(
     () => [
       {
-        header: 'Transaction ID',
-        accessorKey: 'id',
+        header: 'Employee',
+        accessorKey: 'employee',
+        enableColumnFilter: false,
+        cell: ({ row }) => {
+          const { employee } = row.original;
+          return (
+            <ProfileCard
+              title={employee.fullName}
+              subTitle={employee.department}
+              avatar={employee.avatar}
+            />
+          );
+        },
+      },
+      {
+        header: 'Request',
+        accessorKey: 'request.title',
         enableColumnFilter: false,
         cell: (props) => <TableCell {...props} />,
       },
       {
-        header: 'Account Name',
-        accessorKey: 'accountName',
+        header: 'Date/Time',
+        accessorKey: 'createdAt',
         enableColumnFilter: false,
-        cell: (props) => <TableCell {...props} />,
+        cell: ({ getValue }) => {
+          return <div>{formatDate(getValue() as string, 'semi-full')}</div>;
+        },
+      },
+      {
+        header: 'Priority',
+        accessorKey: 'priority',
+        enableColumnFilter: false,
+        cell: ({ getValue }) => {
+          const val = getValue() as string;
+          return (
+            <Pill
+              config={{
+                failed: 'high',
+                pending: 'low',
+              }}
+              suffix='priority'
+              value={val}
+            />
+          );
+        },
       },
       {
         header: 'Amount',
@@ -27,38 +67,23 @@ export const useColumns = () => {
         cell: (props) => <TableCell isAmount {...props} />,
       },
       {
-        header: 'Type',
-        accessorKey: 'type',
-        enableColumnFilter: false,
-        cell: (props) => (
-          <span className='capitalize'>
-            <TableCell {...props} />
-          </span>
+        header: () => (
+          <span className='block h-full w-full pr-3 text-right'>Actions</span>
         ),
-      },
-      {
-        header: 'Status',
-        accessorKey: 'status',
+        id: 'actions',
+        accessorKey: 'id',
         enableColumnFilter: false,
         cell: ({ getValue }) => {
-          const val = getValue() as string;
+          const id = getValue() as any;
           return (
-            <Pill
-              config={{
-                success: 'successful',
-                pending: 'pending',
-              }}
-              value={val}
-            />
+            <div className='relative my-auto ml-auto flex justify-end pr-2'>
+              <TableAction
+                className='y-center'
+                options={options}
+                dropdownId={id}
+              />
+            </div>
           );
-        },
-      },
-      {
-        header: 'Date/Time',
-        accessorKey: 'createdAt',
-        enableColumnFilter: false,
-        cell: ({ getValue }) => {
-          return <div>{formatDate(getValue() as string, 'semi-full')}</div>;
         },
       },
     ],

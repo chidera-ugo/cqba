@@ -110,7 +110,7 @@
   }
 
   .action-button {
-    @apply flex w-full rounded-lg p-2 transition-colors hover:bg-neutral-200;
+    @apply flex w-full rounded-lg p-2 transition-colors hover:bg-gray-100;
   }
 
   .outline-button {
@@ -189,6 +189,30 @@
 
   .red-pill {
     @apply pill bg-red-500 bg-opacity-20 text-[10px] font-semibold uppercase text-red-500 !important;
+  }
+
+  .green-alt-pill {
+    @apply alt-pill bg-success-600 text-green-700;
+  }
+
+  .red-alt-pill {
+    @apply alt-pill bg-red-600 text-red-700;
+  }
+
+  .yellow-alt-pill {
+    @apply alt-pill bg-yellow-600 text-yellow-600;
+  }
+
+  .blue-pill {
+    @apply pill bg-primary-main bg-opacity-20 text-[10px] font-semibold uppercase text-primary-main !important;
+  }
+
+  .red-pill {
+    @apply pill bg-red-500 bg-opacity-20 text-[10px] font-semibold uppercase text-red-500 !important;
+  }
+
+  .alt-pill {
+    @apply y-center smooth h-[26px] rounded-full bg-opacity-10 px-2 py-1 text-xs font-medium capitalize transition-colors;
   }
 
   .pill {

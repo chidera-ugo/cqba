@@ -89,5 +89,13 @@ export const useMakeDummyHttpRequest = <T>({
     });
   }
 
-  return { isLoading, mutate, data, isError: false };
+  return {
+    isLoading,
+    mutate,
+    data,
+    isError: false,
+    refetch() {
+      setData(res);
+    },
+  };
 };

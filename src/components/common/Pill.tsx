@@ -2,24 +2,31 @@ import clsx from 'clsx';
 
 interface Props {
   config: {
-    success: string;
-    pending: string;
+    success?: string;
+    pending?: string;
+    failed?: string;
   };
   value: string;
+  suffix?: string;
 }
 
-export const Pill = ({ value, config }: Props) => {
+export const Pill = ({ value, suffix, config }: Props) => {
   const getPillColor = () => {
     if (value === config.success) {
-      return 'green-pill';
+      return 'green-alt-pill';
     } else if (value === config.pending) {
-      return 'yellow-pill';
-    } else return 'gray-pill';
+      return 'yellow-alt-pill';
+    } else if (value === config.failed) {
+      return 'red-alt-pill';
+    } else return 'gray-alt-pill';
   };
 
   return (
     <div className='flex align-middle'>
-      <span className={clsx(getPillColor(), 'my-auto')}>{value}</span>
+      <span className={clsx(getPillColor(), 'my-auto capitalize')}>
+        {value}
+        {suffix && ` ${suffix}`}
+      </span>
     </div>
   );
 };

@@ -8,6 +8,7 @@ import { PaginatedResponse } from 'types/core/Table';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { AllBudgetsCardView } from 'components/modules/budgeting/AllBudgetsCardView';
 import { AllBudgetsTable } from 'components/tables/budgeting/AllBudgetsTable';
+import { BudgetCard } from 'components/modules/budgeting/BudgetCard';
 
 interface Props {
   viewMode: ViewMode;
@@ -47,6 +48,7 @@ export const AllBudgets = ({ viewMode, ...props }: Props) => {
     isLoading,
     isError,
     data: res,
+    refetch,
   } = useMakeDummyHttpRequest({
     method: 'get',
     res: generateTableEntries<IBudget>(
@@ -58,12 +60,12 @@ export const AllBudgets = ({ viewMode, ...props }: Props) => {
           department: 'Security',
         },
         amount: 200000,
-        status: 'pending',
-        priority: 'high',
+        status: String(props.filters.status).toLowerCase(),
+        priority: 'low',
         request: {
           title: 'Ergonomic office furniture',
           description:
-            'Request for budget allocation to create or improve meeting rooms, conference areas.',
+            'Request for budget allocation to purchase ergonomic chairs, desks, and accessories. Request for budget allocation to purchase ergonomic chairs, desks, and accessories. Request for budget allocation to purchase ergonomic chairs, desks, and accessories. Request for budget allocation to purchase ergonomic chairs, desks, and accessories.',
         },
         createdAt: new Date().toISOString(),
         dueDate: new Date().toISOString(),
@@ -75,6 +77,10 @@ export const AllBudgets = ({ viewMode, ...props }: Props) => {
   useEffect(() => {
     if (!!res) setData(res.data);
   }, [res]);
+
+  useEffect(() => {
+    refetch();
+  }, [props.filters]);
 
   const [data, setData] = useState<PaginatedResponse<IBudget> | undefined>(
     res?.data
@@ -91,11 +97,22 @@ export const AllBudgets = ({ viewMode, ...props }: Props) => {
     <>
       <RightModalWrapper
         title='Budget details'
-        show={!!currentBudget}
+        show={!!currentBudget && currentBudget.status === 'pending'}
         {...{ close }}
         closeOnClickOutside
-        childrenClassname='p-0'
-      ></RightModalWrapper>
+        childrenClassname='p-8'
+      >
+        {currentBudget && (
+          <>
+            <BudgetCard {...currentBudget} showFullDetails />
+
+            <div className='mt-8 flex gap-4'>
+              <button className='secondary-button h-11 w-full'>Reject</button>
+              <button className='dark-button h-11 w-full'>Approve</button>
+            </div>
+          </>
+        )}
+      </RightModalWrapper>
 
       <AllBudgetsList
         {...props}
@@ -103,6 +120,9 @@ export const AllBudgets = ({ viewMode, ...props }: Props) => {
         emptyTableText='You have not received any requests yet.'
         {...{
           viewMode,
+          onItemClick(res) {
+            setCurrentBudget(res);
+          },
           data,
           isLoading,
           isError,

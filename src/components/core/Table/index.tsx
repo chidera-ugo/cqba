@@ -346,12 +346,14 @@ export const Pagination = ({
   isLoading,
   isRefetching,
   res,
+  className,
 }: {
   setPagination?: Dispatch<SetStateAction<PaginationState>>;
   pagination?: PaginationState;
   res?: PaginatedResponse<any>;
   isLoading?: boolean;
   isRefetching?: boolean;
+  className?: string;
 }) => {
   if (!pagination || !setPagination || res?.empty) return <></>;
 
@@ -360,6 +362,7 @@ export const Pagination = ({
       {...{
         setPagination,
         pagination,
+        className,
         ...res,
       }}
       fetching={isLoading || isRefetching}

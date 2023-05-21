@@ -18,7 +18,6 @@ const filterOptions = [
 
 export default function Budgeting() {
   const preferences = getFromLocalStore('preferences');
-  console.log(preferences);
 
   const [filters, setFilters] = useState<Record<string, any>>({
     status: filterOptions[0]?.name,
@@ -62,6 +61,8 @@ export default function Budgeting() {
             <SearchInput
               placeholder='Search budgets'
               className='mt-3 w-full 640:w-[300px] 880:mt-0'
+              value=''
+              onChange={() => null}
             />
           </div>
         </div>
