@@ -108,7 +108,9 @@ export const AllBudgets = ({ viewMode, ...props }: Props) => {
       <RightModalWrapper
         title='Budget Details'
         show={
-          !showPinModal && !!currentBudget && currentBudget.status === 'pending'
+          !showPinModal &&
+          !!currentBudget &&
+          currentBudget.status !== 'approved'
         }
         {...{
           close() {
@@ -122,15 +124,17 @@ export const AllBudgets = ({ viewMode, ...props }: Props) => {
           <>
             <BudgetCard {...currentBudget} showFullDetails />
 
-            <div className='mt-8 flex gap-4'>
-              <button className='secondary-button h-11 w-full'>Reject</button>
-              <button
-                onClick={() => setShowPinModal(true)}
-                className='dark-button h-11 w-full'
-              >
-                Approve
-              </button>
-            </div>
+            {currentBudget.status === 'pending' && (
+              <div className='mt-8 flex gap-4'>
+                <button className='secondary-button h-11 w-full'>Reject</button>
+                <button
+                  onClick={() => setShowPinModal(true)}
+                  className='dark-button h-11 w-full'
+                >
+                  Approve
+                </button>
+              </div>
+            )}
           </>
         )}
       </RightModalWrapper>
