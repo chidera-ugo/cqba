@@ -37,7 +37,7 @@ export const AllBudgets = ({ viewMode, ...props }: Props) => {
   const [currentBudget, setCurrentBudget] = useState<IBudget | null>(null);
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: viewMode === 'cards' ? 9 : 10,
   });
 
   useEffect(() => {
@@ -70,7 +70,7 @@ export const AllBudgets = ({ viewMode, ...props }: Props) => {
         createdAt: new Date().toISOString(),
         dueDate: new Date().toISOString(),
       },
-      10
+      9
     ),
   });
 

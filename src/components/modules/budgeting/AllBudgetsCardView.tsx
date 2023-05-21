@@ -71,7 +71,7 @@ export const AllBudgetsCardView = ({
       <Pagination
         {...props}
         {...{ isLoading, isRefetching, res }}
-        className='px-0'
+        className='mt-4 px-0'
       />
     </div>
   );
