@@ -7,9 +7,10 @@ interface Props {
   title?: string;
   isAmount?: boolean;
   smallText?: boolean;
-  value: string | number;
+  value?: string | number;
   className?: string;
   titleClassname?: string;
+  disableFormatting?: boolean;
 }
 
 export const DisplayValue = ({
@@ -20,6 +21,7 @@ export const DisplayValue = ({
   moreInfo,
   className,
   titleClassname,
+  disableFormatting,
 }: Props) => {
   return (
     <div className={clsx('my-auto', className)}>
@@ -42,13 +44,16 @@ export const DisplayValue = ({
           )
         )}
       >
-        {isAmount && <span className='mr-1.5'>NGN</span>}
-        {typeof value === 'string'
+        {isAmount && !disableFormatting && <span className='mr-1.5'>NGN</span>}
+        {!value
+          ? ''
+          : typeof value === 'string'
           ? value
           : formatAmount({
               value,
-              decimalPlaces: isAmount ? 2 : 0,
-              kFormatter: isAmount ? value > 999999 : false,
+              decimalPlaces: isAmount && !disableFormatting ? 2 : 0,
+              kFormatter:
+                isAmount && !disableFormatting ? value > 999999 : false,
             })}
       </div>
     </div>

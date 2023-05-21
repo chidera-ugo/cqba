@@ -207,6 +207,7 @@ export const LargeRightModalWrapper = ({
   children,
   show,
   className,
+  childrenClassname,
   ...props
 }: PropsWithChildren<ModalWrapperProps>) => {
   return (
@@ -216,10 +217,11 @@ export const LargeRightModalWrapper = ({
         `relative z-[1000] ml-auto mt-auto h-full overflow-y-auto bg-white`,
         className ? className : 'w-[85vw]'
       )}
+      {...props}
       {...{ show }}
     >
       <Header {...props} />
-      {children}
+      <div className={clsx(childrenClassname ?? 'p-4 640:p-8')}>{children}</div>
     </Modal>
   );
 };

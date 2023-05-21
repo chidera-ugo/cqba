@@ -4,6 +4,7 @@ export interface IBudget {
     fullName: string;
     avatar: string;
     department: string;
+    email?: string;
   };
   request: {
     title: string;

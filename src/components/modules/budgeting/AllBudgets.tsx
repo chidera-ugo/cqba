@@ -4,11 +4,15 @@ import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 import { generateTableEntries } from 'utils/helpers/generators/generateTableEntries';
 import { IBudget } from 'types/budgeting/Budget';
 import { PaginatedResponse } from 'types/core/Table';
-import { RightModalWrapper } from 'components/modal/ModalWrapper';
+import {
+  LargeRightModalWrapper,
+  RightModalWrapper,
+} from 'components/modal/ModalWrapper';
 import { AllBudgetsCardView } from 'components/modules/budgeting/AllBudgetsCardView';
 import { AllBudgetsTable } from 'components/tables/budgeting/AllBudgetsTable';
 import { BudgetCard } from 'components/modules/budgeting/BudgetCard';
 import { ApproveBudget } from 'components/modules/budgeting/ApproveBudget';
+import { ApprovedBudgetDetails } from 'components/modules/budgeting/ApprovedBudgetDetails';
 
 interface Props {
   viewMode: ViewMode;
@@ -57,6 +61,7 @@ export const AllBudgets = ({ viewMode, ...props }: Props) => {
           avatar: '',
           fullName: 'John Doe',
           department: 'Security',
+          email: 'johndoe@gmail.com',
         },
         amount: 200000,
         status: String(props.filters.status).toLowerCase(),
@@ -138,6 +143,24 @@ export const AllBudgets = ({ viewMode, ...props }: Props) => {
           </>
         )}
       </RightModalWrapper>
+
+      <LargeRightModalWrapper
+        title='Budget Details'
+        show={
+          !showPinModal &&
+          !!currentBudget &&
+          currentBudget.status === 'approved'
+        }
+        {...{
+          close() {
+            setCurrentBudget(null);
+          },
+        }}
+        closeOnClickOutside
+        childrenClassname='p-8'
+      >
+        {currentBudget && <ApprovedBudgetDetails budget={currentBudget} />}
+      </LargeRightModalWrapper>
 
       <AllBudgetsList
         {...props}
