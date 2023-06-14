@@ -1,4 +1,4 @@
-import { validateAmount } from 'utils/helpers/formatters/formatAmount';
+import { validateAmount } from 'utils/formatters/formatAmount';
 import { object, string } from 'yup';
 
 export const validationSchema = object({

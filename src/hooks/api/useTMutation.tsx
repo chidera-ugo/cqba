@@ -6,11 +6,11 @@ import {
 import useHttp, { Service, Method, urlModifier } from 'hooks/api/useHttp';
 import { useHandleError } from 'hooks/api/useHandleError';
 import { AxiosRequestConfig } from 'axios';
-import { generateUrlParamsFromObject } from 'utils/helpers/generators/generateUrlParamsFromObject';
+import { generateUrlParamsFromObject } from 'utils/generators/generateUrlParamsFromObject';
 
-type Args = {
+type Args<Res> = {
   url: string;
-  options?: UseMutationOptions<any, unknown, any, unknown>;
+  options?: UseMutationOptions<Res, unknown, any, unknown>;
   service?: Service;
   method?: Method;
   pathParams?: string[];
@@ -18,7 +18,7 @@ type Args = {
   config?: AxiosRequestConfig<any>;
 };
 
-export function useTMutation<T>({
+export function useTMutation<Dto, Res>({
   url,
   options,
   service,
@@ -26,9 +26,11 @@ export function useTMutation<T>({
   pathParams,
   appendQueryParams = false,
   config,
-}: Args): UseMutationResult<any, unknown, T, unknown> {
+}: Args<Res>): UseMutationResult<Res, unknown, Dto, unknown> {
   const api = useHttp({ config });
+
   const modifier = urlModifier(service);
+
   const { handleError } = useHandleError();
 
   return useMutation(

@@ -24,7 +24,7 @@ export const UpdateCompanyInformationForm = () => {
           {
             onSuccess() {
               setHasUnsavedChanges(false);
-              replace('/get-started?tab=owner-information');
+              replace('/kyc?tab=owner-information');
             },
           }
         );

@@ -27,6 +27,7 @@ export const BankTransfer = () => {
 
         <div className='p-8'>
           <DisplayValue value={data?.bankName} title='Bank Name' smallText />
+
           <DisplayValue
             className='mt-5'
             value={data?.accountName}

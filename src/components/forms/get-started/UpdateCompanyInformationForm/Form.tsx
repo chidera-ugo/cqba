@@ -47,8 +47,8 @@ export const Form = ({
   });
 
   useEffect(() => {
-    if (user?.businessName) {
-      setFieldValue('businessName', user.businessName);
+    if (user?.firstName) {
+      setFieldValue('businessName', user.firstName);
     }
   }, [user]);
 
@@ -72,7 +72,7 @@ export const Form = ({
       </p>
 
       <Select
-        label={`What kind of company is ${user?.businessName}`}
+        label={`What kind of company is ${user?.firstName}`}
         name='companyType'
         options={industries}
       />

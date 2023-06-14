@@ -1,5 +1,6 @@
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
 import { CodeInput } from 'components/form-elements/CodeInput';
+import { GreenCheck } from 'components/illustrations/Success';
 import { SimpleInformation } from 'components/modules/common/SimpleInformation';
 import { useHandleError } from 'hooks/api/useHandleError';
 import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
@@ -52,7 +53,7 @@ export const Transact = ({
               suites you.
             </div>
           }
-          icon='success'
+          icon={<GreenCheck />}
           actionButton={{
             text: 'Thanks chief',
             action() {

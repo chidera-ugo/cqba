@@ -31,7 +31,7 @@ export const Form = ({ processing, formikProps }: Props) => {
 
       <div className='mt-4 text-left text-sm text-neutral-600'>
         <Link
-          href='/forgot-password'
+          href='/auth/forgot-password'
           className='text-button ml-1 text-left font-medium'
         >
           Forgot password?

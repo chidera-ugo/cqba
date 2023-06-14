@@ -1,4 +1,4 @@
-import { validateFile } from 'utils/helpers/validators/validateField';
+import { validateFile } from 'utils/validators/validateField';
 import { object, string } from 'yup';
 
 export const validationSchema = object({

@@ -8,11 +8,18 @@ import icon_white from '/public/logos/icon-white.svg';
 interface Props {
   white?: boolean;
   id?: string;
+  message?: string;
   asPage?: boolean;
   show?: boolean;
 }
 
-export const FullScreenLoader = ({ white, asPage, id, show = true }: Props) => {
+export const FullScreenLoader = ({
+  white,
+  message,
+  asPage,
+  id,
+  show = true,
+}: Props) => {
   return (
     <div>
       {asPage && <PageHead />}
@@ -31,12 +38,18 @@ export const FullScreenLoader = ({ white, asPage, id, show = true }: Props) => {
             </div>
           )}
 
-          <Image
-            priority
-            className='mx-auto h-16 w-16 animate-spin'
-            src={white ? icon : icon_white}
-            alt='icon'
-          />
+          <div className='y-center'>
+            <Image
+              priority
+              className='mx-auto h-16 w-16 animate-spin'
+              src={asPage ?? white ? icon : icon_white}
+              alt='icon'
+            />
+
+            {message && (
+              <p className={'z-10 mt-4 text-center font-medium'}>{message}</p>
+            )}
+          </div>
         </div>
       </Modal>
     </div>

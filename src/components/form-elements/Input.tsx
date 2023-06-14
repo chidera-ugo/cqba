@@ -1,7 +1,7 @@
 import { useField } from 'formik';
 import clsx from 'clsx';
 import { Field } from 'types/Common';
-import { validateField } from 'utils/helpers/validators/validateField';
+import { validateField } from 'utils/validators/validateField';
 import { useEffect } from 'react';
 
 type Props = JSX.IntrinsicElements['input'] & Field;

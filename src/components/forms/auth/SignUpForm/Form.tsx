@@ -3,7 +3,6 @@ import { Form as FormikForm, FormikProps } from 'formik';
 import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { Select } from 'components/form-elements/Select';
-import { countries } from 'utils/constants/countries';
 import { PhoneNumberInput } from 'components/form-elements/PhoneNumberInput';
 import { PasswordInput } from 'components/form-elements/PasswordInput';
 
@@ -28,13 +27,6 @@ export const Form = ({ processing, formikProps }: Props) => {
         label='Industry'
         name='industry'
         options={industries}
-        className='w-full'
-      />
-
-      <Select
-        label='Country'
-        name='country'
-        options={countries.map(({ name }) => name)}
         className='w-full'
       />
 
@@ -67,7 +59,7 @@ export const Form = ({ processing, formikProps }: Props) => {
               setFieldValue('acceptedTerms', !values.acceptedTerms)
             }
             id='accept-terms'
-            className='mr-2'
+            className='mr-1'
           />
         </label>
 

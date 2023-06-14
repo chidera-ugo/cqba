@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { PaginationState } from '@tanstack/react-table';
 import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
-import { generateTableEntries } from 'utils/helpers/generators/generateTableEntries';
+import { generateTableEntries } from 'utils/generators/generateTableEntries';
 import { IBudget } from 'types/budgeting/Budget';
 import { PaginatedResponse } from 'types/core/Table';
 import {

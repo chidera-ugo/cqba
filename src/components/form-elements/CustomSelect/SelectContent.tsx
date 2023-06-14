@@ -67,7 +67,7 @@ export const SelectContent = ({
         <Dropdown
           className={dropdownClassname}
           show={showList}
-          close={() => setShowList(false)}
+          dismiss={() => setShowList(false)}
           wrapperId={id}
         >
           <MainSelect />

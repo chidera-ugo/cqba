@@ -6,7 +6,7 @@ import { TableCell } from 'components/core/Table/TableCell';
 import { useBudgetActionOptions } from 'components/modules/budgeting/BudgetCard';
 import { useMemo } from 'react';
 import { IBudget } from 'types/budgeting/Budget';
-import { formatDate } from 'utils/helpers/formatters/formatDate';
+import { formatDate } from 'utils/formatters/formatDate';
 
 export const useColumns = () => {
   const { options } = useBudgetActionOptions();
@@ -75,15 +75,7 @@ export const useColumns = () => {
         enableColumnFilter: false,
         cell: ({ getValue }) => {
           const id = getValue() as any;
-          return (
-            <div className='relative my-auto ml-auto flex justify-end pr-2'>
-              <TableAction
-                className='y-center'
-                options={options}
-                dropdownId={id}
-              />
-            </div>
-          );
+          return <TableAction options={options} id={id} />;
         },
       },
     ],

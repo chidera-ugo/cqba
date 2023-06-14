@@ -12,6 +12,7 @@ export interface Props<T> {
   currentSearchColumn?: string;
   setCurrentSearchColumn?: Dispatch<SetStateAction<string>>;
   clear: () => void;
+  className?: string;
 }
 
 export const TableHead = <T,>({
@@ -22,13 +23,14 @@ export const TableHead = <T,>({
   currentSearchColumn,
   setCurrentSearchColumn,
   isNotDisplayColumn,
+  className,
 }: Props<T>) => {
   const accessorKey = (header.column.columnDef as any)['accessorKey'];
 
   return (
     <th
       colSpan={header.colSpan}
-      className={clsx(`my-auto h-12 pr-3`, index === 0 && 'pl-6')}
+      className={clsx(`my-auto h-12 pr-3`, index === 0 && 'pl-6', className)}
     >
       {header.isPlaceholder ? null : (
         <>
@@ -37,7 +39,7 @@ export const TableHead = <T,>({
           !isNotDisplayColumn ? (
             <ColumnFilter
               header={header}
-              close={() => {
+              abandonSearch={() => {
                 setCurrentSearchColumn && setCurrentSearchColumn('');
               }}
               clear={clear}
@@ -48,15 +50,15 @@ export const TableHead = <T,>({
             <div className='x-between'>
               <span
                 className={clsx(
-                  `y-center my-auto block w-full text-xs font-normal uppercase text-neutral-400`,
+                  `y-center my-auto block w-full text-sm font-semibold capitalize text-neutral-500`,
                   header.column.getCanSort() &&
                     !isNotDisplayColumn &&
                     'select-none'
                 )}
               >
                 {isNotDisplayColumn ? (
-                  <div>
-                    <span>
+                  <div className='group flex w-full align-middle'>
+                    <span className='my-auto w-full text-xs font-normal uppercase text-neutral-400'>
                       {flexRender(
                         header.column.columnDef.header,
                         header.getContext()
@@ -65,7 +67,7 @@ export const TableHead = <T,>({
                   </div>
                 ) : (
                   <div className='group flex align-middle'>
-                    <span className='my-auto'>
+                    <span className='my-auto text-xs font-normal uppercase text-neutral-400'>
                       {flexRender(
                         header.column.columnDef.header,
                         header.getContext()

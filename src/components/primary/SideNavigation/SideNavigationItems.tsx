@@ -1,13 +1,13 @@
 import { useNavigationItems } from 'hooks/dashboard/useNavigationItems';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { convertToUrlString } from 'utils/helpers/converters/convertToUrlString';
+import { convertToUrlString } from 'utils/converters/convertToUrlString';
 import clsx from 'clsx';
 import { Fragment } from 'react';
 import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 import { TooltipWrapper } from 'components/common/Tooltip';
 import { useDismiss } from 'hooks/common/useDismiss';
-import { generatePlaceholderArray } from 'utils/helpers/generators/generatePlaceholderArray';
+import { generatePlaceholderArray } from 'utils/generators/generatePlaceholderArray';
 
 export const SideNavigationItems = () => {
   const { pathname } = useRouter();
@@ -43,19 +43,19 @@ export const SideNavigationItems = () => {
 
             <div>
               {navigationItems[item]?.map(
-                ({ icon, title, showWhenUnverified, isRoot }) => {
-                  const titleAsUrl = convertToUrlString(title);
+                ({ icon, title, url, showWhenUnverified, isRoot }) => {
+                  const route = url ?? convertToUrlString(title);
 
                   if (showWhenUnverified && data?.verified)
                     return <Fragment key={title}></Fragment>;
 
                   const isActive = checkIsActive(title, isRoot);
-                  const tooltipId = `side_nav_tooltip_id_${titleAsUrl}`;
+                  const tooltipId = `side_nav_tooltip_id_${route}`;
 
                   return (
                     <div key={title}>
                       <Link
-                        href={isRoot ? '/' : titleAsUrl}
+                        href={isRoot ? '/' : route}
                         className={clsx(
                           'x-between relative w-full py-1.5',
                           isActive
@@ -83,11 +83,11 @@ export const SideNavigationItems = () => {
                           anchorId={tooltipId}
                           show={
                             isActive &&
-                            !checkIsSideNavItemToolTipDismissed(titleAsUrl) &&
+                            !checkIsSideNavItemToolTipDismissed(route) &&
                             !isDismissed
                           }
                           close={() => {
-                            dismiss(titleAsUrl);
+                            dismiss(route);
                           }}
                           title={title}
                         >

@@ -1,19 +1,15 @@
 import clsx from 'clsx';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
-import { Calendar } from 'components/illustrations/Calendar';
-import { Cancel } from 'components/illustrations/Cancel';
-import { ChatBubbles } from 'components/illustrations/ChatBubbles';
-import { NothingHere } from 'components/illustrations/NothingHere';
-import { GreenCheck } from 'components/illustrations/Success';
+import { PropsWithChildren } from 'react';
 
-interface Props {
+export interface Props {
   processing?: boolean;
-  icon?: 'calendar' | 'empty' | 'message' | 'success' | 'error';
+  icon?: JSX.Element;
   title?: JSX.Element;
   description?: JSX.Element;
   actionButton?: {
-    action: () => void;
-    text: string;
+    action?: () => void;
+    text?: string;
   };
   className?: string;
 }
@@ -22,29 +18,28 @@ export const SimpleInformation = ({
   title,
   actionButton,
   description,
-  icon = 'message',
   className,
-}: Props) => {
+  icon,
+  processing,
+  children,
+}: PropsWithChildren<Props>) => {
   return (
     <div className={clsx('y-center text-center', className)}>
-      <div className='mx-auto'>
-        {icon === 'message' && <ChatBubbles />}
-        {icon === 'calendar' && <Calendar />}
-        {icon === 'empty' && <NothingHere />}
-        {icon === 'success' && <GreenCheck />}
-        {icon === 'error' && <Cancel />}
-      </div>
-      <h4 className='mt-4'>{title}</h4>
-      <p>{description}</p>
+      {icon && <div className='mx-auto mb-4'>{icon}</div>}
+      <h4 className='mt-0 font-semibold'>{title}</h4>
+      <p className='mx-auto max-w-[640px]'>{description}</p>
+
+      {children}
 
       {actionButton && (
         <div className='x-center mt-8'>
           <SubmitButton
             onClick={actionButton.action}
             type='button'
-            className='dark-button'
+            submitting={processing}
+            className='dark-button min-w-[120px]'
           >
-            {actionButton.text}
+            {actionButton.text ?? 'Try Again'}
           </SubmitButton>
         </div>
       )}

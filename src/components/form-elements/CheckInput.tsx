@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { convertToUrlString } from 'utils/helpers/converters/convertToUrlString';
+import { convertToUrlString } from 'utils/converters/convertToUrlString';
 
 /* eslint-disable @next/next/no-img-element */
 type Props = JSX.IntrinsicElements['input'] & {
@@ -16,7 +16,6 @@ export const CheckInput = ({
   isChecked,
   handleClick,
   withBorders,
-  value: _,
   ...props
 }: Props) => {
   const id = _id ?? convertToUrlString(label);
@@ -36,13 +35,12 @@ export const CheckInput = ({
         <input
           id={id}
           {...props}
-          value={checked ? 'true' : 'false'}
           checked={checked}
           onChange={() => {
             handleClick(id);
           }}
           type='checkbox'
-          className='mr-3 flex-shrink-0'
+          className='mr-2 flex-shrink-0'
         />
 
         <div className='my-auto text-sm'>{label}</div>

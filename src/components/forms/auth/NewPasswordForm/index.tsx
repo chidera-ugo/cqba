@@ -1,13 +1,27 @@
+import { AppToast } from 'components/primary/AppToast';
 import { Formik } from 'formik';
+import { useResetPassword } from 'hooks/api/auth/useResetPassword';
+import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
-import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 
-export const NewPasswordForm = () => {
-  const { isLoading, mutate } = useMakeDummyHttpRequest({
+interface Props {
+  userId: string;
+  code: string;
+}
+
+export const NewPasswordForm = ({ code, userId }: Props) => {
+  const { replace } = useRouter();
+
+  const { isLoading, mutate } = useResetPassword({
     onSuccess() {
-      null;
+      replace('/auth/signin').then(() => {
+        toast(<AppToast>Password reset successful, please login</AppToast>, {
+          type: 'success',
+        });
+      });
     },
   });
 
@@ -15,9 +29,11 @@ export const NewPasswordForm = () => {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={({ ...values }) => {
+      onSubmit={({ password }) => {
         mutate({
-          ...values,
+          password,
+          userId,
+          code,
         });
       }}
       validateOnBlur={false}
