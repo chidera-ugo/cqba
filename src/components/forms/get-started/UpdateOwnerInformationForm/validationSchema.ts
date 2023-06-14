@@ -1,7 +1,4 @@
-import {
-  phoneNumberTest,
-  validateFile,
-} from 'utils/helpers/validators/validateField';
+import { phoneNumberTest, validateFile } from 'utils/validators/validateField';
 import { object, string } from 'yup';
 
 export const validationSchema = object({

@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { Cell } from './Cell';
 import { clsx } from 'clsx';
 import { Field } from 'types/Common';
-import { formatCode } from 'utils/helpers/formatters/formatCode';
-import { convertToUrlString } from 'utils/helpers/converters/convertToUrlString';
+import { formatCode } from 'utils/formatters/formatCode';
+import { convertToUrlString } from 'utils/converters/convertToUrlString';
 
 type Props = JSX.IntrinsicElements['input'] &
   Field & {
@@ -18,6 +18,7 @@ type Props = JSX.IntrinsicElements['input'] &
     clear?: boolean;
     donotFocusOnClear?: boolean;
     cellClassName?: string;
+    mustBeNumeric?: boolean;
   };
 
 export function CodeInput({
@@ -37,8 +38,9 @@ export function CodeInput({
   autoComplete,
   dotCode,
   clear,
+  name,
 }: Props) {
-  const id = convertToUrlString(label ?? '');
+  const id = convertToUrlString(name ?? '');
   const [code, setCode] = useState<Record<string, string>>({});
   const validCode = Object.values(code).filter((val) => !!val)?.length;
 
@@ -122,7 +124,6 @@ export function CodeInput({
               }}
               setCode={(val) => {
                 if (val.length === charLimit) {
-                  // Todo: Valid 'val' to match the code 'type' that was choosen
                   for (let i = 0; i < charLimit; i++) {
                     handleChange(val[i]!, i, true);
                   }

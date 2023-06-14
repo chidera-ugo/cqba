@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { ColumnFiltersState, SortingState } from '@tanstack/react-table';
-
 import { useColumns } from './useColumns';
 import { IBudget } from 'types/budgeting/Budget';
 import { Table } from 'components/core/Table';
@@ -20,7 +19,6 @@ export const AllBudgetsTable = ({ onItemClick, ...props }: BudgetListProps) => {
       returnOriginalOnRowClick
       accessor='id'
       mustHaveRange
-      hideFilters
       {...props}
       {...{
         setColumnFilters,

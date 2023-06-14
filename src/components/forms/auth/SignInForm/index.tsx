@@ -4,15 +4,15 @@ import { validationSchema } from './validationSchema';
 import { Form } from './Form';
 import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 import { saveToLocalStore } from 'lib/localStore';
-import { fakeUser, useAppContext } from 'context/AppContext';
+import { useAppContext } from 'context/AppContext';
 
 export const SignInForm = () => {
   const { dispatch } = useAppContext();
 
   const { isLoading, mutate } = useMakeDummyHttpRequest({
-    onSuccess() {
+    onSuccess(res) {
       saveToLocalStore('tokens', { accessToken: 'token' });
-      dispatch({ type: 'login', payload: fakeUser });
+      dispatch({ type: 'saveTokens', payload: res });
     },
   });
 

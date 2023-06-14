@@ -3,7 +3,7 @@ import { InflowOutflowChart } from 'components/charts/overview/InflowOutflowChar
 import { useGetChartDataByMonth } from 'hooks/charts/useGetChartDataByMonth';
 import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 import { useState } from 'react';
-import { formatAmount } from 'utils/helpers/formatters/formatAmount';
+import { formatAmount } from 'utils/formatters/formatAmount';
 
 export const InflowOutflow = () => {
   const [filter, setFilter] = useState<'inflow' | 'outflow'>('inflow');
@@ -14,54 +14,56 @@ export const InflowOutflow = () => {
     res: {
       balance: 318301.41,
     },
-    onSuccess() {
-      // setProvidedData((prev) => ({
-      //   ...prev,
-      //   [Number(mon) - 1]: {
-      //     value,
-      //     volume,
-      //   },
-      // }));
-    },
   });
 
   if (isLoading) return <IsLoadingIsError type='loading' />;
   if (isError) return <IsLoadingIsError type='error' />;
 
-  const chartData = [
-    {
-      date: '2023-01-12T23:00:00.000Z',
-      value: 3130144,
-    },
-    {
-      date: '2023-02-05T23:00:00.000Z',
-      value: 122100,
-    },
-    {
-      date: '2023-03-11T23:00:00.000Z',
-      value: 444700,
-    },
-    {
-      date: '2023-04-13T23:00:00.000Z',
-      value: 341700,
-    },
-    {
-      date: '2023-05-29T23:00:00.000Z',
-      value: 2431700,
-    },
-    {
-      date: '2023-06-12T23:00:00.000Z',
-      value: 170044,
-    },
-    {
-      date: '2023-07-30T23:00:00.000Z',
-      value: 547100,
-    },
-    {
-      date: '2023-08-12T23:00:00.000Z',
-      value: 1002420,
-    },
-  ];
+  const chartData = {
+    label: 'Sales Volume',
+    data: [
+      {
+        primary: '2023-06-09T00:00:00.000Z',
+        secondary: 89,
+      },
+      {
+        primary: '2023-06-10T00:00:00.000Z',
+        secondary: 91,
+      },
+      {
+        primary: '2023-06-11T00:00:00.000Z',
+        secondary: 13,
+      },
+      {
+        primary: '2023-06-12T00:00:00.000Z',
+        secondary: 66,
+      },
+      {
+        primary: '2023-06-13T00:00:00.000Z',
+        secondary: 68,
+      },
+      {
+        primary: '2023-06-14T00:00:00.000Z',
+        secondary: 87,
+      },
+      {
+        primary: '2023-06-15T00:00:00.000Z',
+        secondary: 61,
+      },
+      {
+        primary: '2023-06-16T00:00:00.000Z',
+        secondary: 56,
+      },
+      {
+        primary: '2023-06-17T00:00:00.000Z',
+        secondary: 91,
+      },
+      {
+        primary: '2023-06-18T00:00:00.000Z',
+        secondary: 38,
+      },
+    ],
+  };
 
   return (
     <div className='card p-0'>
@@ -102,10 +104,7 @@ export const InflowOutflow = () => {
         <div className='thin-scrollbar h-full min-w-[900px]'>
           <InflowOutflowChart
             {...{
-              chartData: {
-                label: filter == 'inflow' ? 'Inflow' : 'Outflow',
-                data: chartData,
-              },
+              chartData,
             }}
           />
         </div>

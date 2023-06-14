@@ -1,26 +1,34 @@
-import { useState } from 'react';
-import { TransactionType } from 'types/core/Transact';
+import { useRef, useState } from 'react';
 
 interface Args {
-  transactionType: TransactionType;
+  transactionType: any;
   actionOnAuthorize?: () => void;
 }
 
-export const useTransact = ({ transactionType, actionOnAuthorize }: Args) => {
-  const [mode, setMode] = useState<'authorize' | 'success' | null>(null);
-  const [transactionPayload, setTransactionPayload] = useState<any>(null);
+export type TransactionProcess = {
+  successCb?: () => void;
+  shortRef?: string;
+} | null;
+
+export const useTransact = ({ transactionType }: Args) => {
+  const [mode, setMode] = useState<'authorize' | 'success' | 'receipt' | null>(
+    null
+  );
+
+  const transaction = useRef<TransactionProcess>(null);
 
   return {
     mode,
     setMode,
-    transactionType,
-    transactionPayload,
-    setTransactionPayload,
-    authorize(payload: any) {
-      if (actionOnAuthorize) actionOnAuthorize();
-      setTransactionPayload(payload);
-      setMode('authorize');
+    terminate() {
+      setMode(null);
+      transaction.current = null;
     },
+    authorize() {
+      null;
+    },
+    transactionType,
+    transaction: transaction.current,
   };
 };
 

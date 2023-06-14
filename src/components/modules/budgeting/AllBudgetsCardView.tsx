@@ -1,5 +1,6 @@
 import clsx from 'clsx';
-import { EmptyTable, Pagination } from 'components/core/Table';
+import { IsEmpty } from 'components/core/Table';
+import { Pagination } from 'components/core/Table/Pagination';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
 import { BudgetListProps } from 'components/modules/budgeting/AllBudgets';
@@ -57,7 +58,7 @@ export const AllBudgetsCardView = ({
             res?.empty ? (
             <div className='y-center h-full px-5 py-32'>
               {emptyTableText && (
-                <EmptyTable
+                <IsEmpty
                   {...{
                     emptyTableText,
                   }}
@@ -68,11 +69,7 @@ export const AllBudgetsCardView = ({
         </>
       </div>
 
-      <Pagination
-        {...props}
-        {...{ isLoading, isRefetching, res }}
-        className='mt-4 px-0'
-      />
+      <Pagination {...props} {...{ isLoading, isRefetching, res }} />
     </div>
   );
 };

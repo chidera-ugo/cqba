@@ -6,7 +6,7 @@ import { IdNavigator } from 'components/common/IdNavigator';
 import Image from 'next/image';
 import { SearchInput } from 'components/form-elements/SearchInput';
 import { BackLine } from 'components/svgs/navigation/Arrows';
-import { convertToUrlString } from 'utils/helpers/converters/convertToUrlString';
+import { convertToUrlString } from 'utils/converters/convertToUrlString';
 import { useAppContext } from 'context/AppContext';
 
 export type TMultiSelect = {

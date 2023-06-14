@@ -1,10 +1,7 @@
 import { useField, useFormikContext } from 'formik';
 import clsx from 'clsx';
 import { Field } from 'types/Common';
-import {
-  sanitizeAmount,
-  formatAmount,
-} from 'utils/helpers/formatters/formatAmount';
+import { formatAmount, sanitizeAmount } from 'utils/formatters/formatAmount';
 
 type Props = JSX.IntrinsicElements['input'] &
   Field & {

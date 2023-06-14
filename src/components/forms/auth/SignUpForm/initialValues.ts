@@ -4,7 +4,6 @@ export const initialValues = {
   businessName: '',
   email: '',
   industry: '',
-  country: '',
   phoneNumber: '',
   password: '',
   acceptedTerms: false,

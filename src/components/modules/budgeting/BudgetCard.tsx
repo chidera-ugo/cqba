@@ -5,7 +5,7 @@ import { ProfileCard } from 'components/common/ProfileCard';
 import { TableAction } from 'components/core/Table/TableAction';
 import { Lock, Pause } from 'components/svgs/budgeting/Budget_Icons';
 import { IBudget } from 'types/budgeting/Budget';
-import { formatDate } from 'utils/helpers/formatters/formatDate';
+import { formatDate } from 'utils/formatters/formatDate';
 
 export const BudgetCard = ({
   onItemClick,
@@ -55,7 +55,7 @@ export const BudgetCard = ({
         />
 
         {status === 'approved' && (
-          <TableAction options={options} dropdownId={id} />
+          <TableAction options={options} id={'budget-card-table-action'} />
         )}
       </div>
 
@@ -96,7 +96,7 @@ export const BudgetCard = ({
           )}
         >
           <DisplayValue
-            titleClassname={clsx('mt-0 text-2xl', showFullDetails && 'mt-1')}
+            titleClassName={clsx('mt-0 text-2xl', showFullDetails && 'mt-1')}
             value={amount}
             title={showFullDetails ? 'Amount' : undefined}
             isAmount

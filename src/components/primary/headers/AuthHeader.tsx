@@ -25,7 +25,7 @@ export const AuthHeader = () => {
 
         <div className='y-center'>
           <a
-            href='?_a=waitlist'
+            href='https://chequebase.io'
             target='_blank'
             rel='noreferrer noopenner'
             className='text-button flex text-sm'

@@ -19,14 +19,17 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { SimplePagination as TablePagination } from './SimplePagination';
-import { PaginatedResponse } from 'types/core/Table';
+import { Pagination as TablePagination } from './Pagination';
+import { PaginatedResponse } from 'types/Table';
 import { TableHead as TableColumnsHead } from './TableHead';
 import { AppliedFilters } from './AppliedFilters';
 import { SimpleInformation } from 'components/modules/common/SimpleInformation';
 import clsx from 'clsx';
+import { NothingHere } from 'components/illustrations/NothingHere';
 import { IsLoading } from 'components/data-states/IsLoading';
 import { IsError } from 'components/data-states/IsError';
+import { SimpleToast } from 'components/common/SimpleToast';
+import { Spinner } from 'components/svgs/dashboard/Spinner';
 
 export type Props<T> = JSX.IntrinsicElements['table'] & {
   title: string;
@@ -45,14 +48,14 @@ export type Props<T> = JSX.IntrinsicElements['table'] & {
   sorting?: SortingState;
   reset?: () => void;
   getSelectedRows?: (selectedRows: any[]) => void;
-  getColumns?: (colums: any[]) => void;
+  getColumns?: (columns: any[]) => void;
   initialColumns?: Record<string, boolean>;
   // DATA FETCHING
   isLoading?: boolean;
   isError?: boolean;
   isRefetching?: boolean;
   // FILTERING
-  filters?: Record<string, unknown>;
+  filters?: Record<string, any>;
   columnFilters?: ColumnFiltersState;
   setColumnFilters?: Dispatch<SetStateAction<ColumnFiltersState>>;
   currentSearchColumn?: string;
@@ -63,7 +66,14 @@ export type Props<T> = JSX.IntrinsicElements['table'] & {
   dontScrollToTopOnPageChange?: boolean;
   onFilterClick?: (filter: string) => void;
   headerSlot?: JSX.Element;
-  hideFilters?: boolean;
+  darkTableHead?: boolean;
+  tableClassname?: string;
+  enableHorizontalScroll?: boolean;
+  canNotShowData?: boolean;
+  refetch?: () => void;
+  hidePagination?: boolean;
+  minimal?: boolean;
+  tableFiltersKeyValuePairs?: Record<string, any>;
 };
 
 export function Table<T>({
@@ -73,6 +83,7 @@ export function Table<T>({
   accessor,
   onRowClick,
   title,
+  canNotShowData,
   alignTop,
   pagination,
   setPagination,
@@ -90,13 +101,18 @@ export function Table<T>({
   isRefetching,
   currentSearchColumn,
   setCurrentSearchColumn,
-  sorting,
+  sorting: _,
   dontScrollToTopOnPageChange,
   initialColumns,
   setSorting,
   onFilterClick,
   headerSlot,
-  hideFilters,
+  darkTableHead,
+  tableClassname,
+  refetch,
+  hidePagination,
+  tableFiltersKeyValuePairs,
+  minimal,
 }: Props<T>) {
   const [columns] = useState<typeof defaultColumns>(() => [...defaultColumns]);
   const [rowSelection, setRowSelection] = useState({});
@@ -119,7 +135,7 @@ export function Table<T>({
       rowSelection,
       pagination: _pagination,
       columnVisibility,
-      sorting,
+      // sorting,
     },
     manualPagination: true,
     onColumnVisibilityChange: setColumnVisibility,
@@ -156,219 +172,256 @@ export function Table<T>({
     }
   }, [pagination?.pageIndex]);
 
+  function checkIfOnlyRangeFilterIsPresent() {
+    if (!filters) return false;
+
+    const validFilters = Object.values(filters).filter((val) => !!val);
+
+    return !!filters?.dateRange && validFilters.length === 1;
+  }
+
+  const onlyRangeFilterPresent = checkIfOnlyRangeFilterIsPresent();
+
+  const Pagination = () => {
+    if (
+      !pagination ||
+      !setPagination ||
+      res?.empty ||
+      (isLoading && !res?.content.length)
+    )
+      return <></>;
+
+    return (
+      <TablePagination
+        {...{
+          setPagination,
+          pagination,
+          ...res,
+        }}
+        fetching={isLoading || isRefetching}
+      />
+    );
+  };
+
   return (
     <div
       className={clsx(
-        `rounded-[10px] border border-neutral-200 bg-white`,
+        `rounded-[10px] border border-neutral-300 bg-white`,
         className
       )}
     >
-      <div className='w-full overflow-x-auto'>
-        {!hideFilters &&
-          filters &&
-          !!Object.values(filters!).filter((val) => !!val).length && (
-            <div className='y-center my-auto min-h-[60px] w-full px-6'>
-              <div className='x-between w-full'>
-                <AppliedFilters
-                  reset={() => {
-                    reset && reset();
-                    setColumnVisibility({
-                      ...initialColumns,
-                    });
-                  }}
-                  className='my-auto'
-                  {...{
-                    mustHaveRange,
-                    filters,
-                    onFilterClick,
-                    ...res,
-                  }}
-                />
+      <SimpleToast
+        show={!!isLoading && !!res?.content.length}
+        className='left-0 top-24 1180:left-[122px]'
+      >
+        <div className='flex py-2'>
+          <Spinner className='my-auto mr-1 h-4 text-white' />
+          <span className='my-auto'>Fetching</span>
+        </div>
+      </SimpleToast>
 
-                {headerSlot}
-              </div>
-            </div>
-          )}
-
-        <table className='w-full min-w-[800px] table-auto'>
-          <thead className='border-b border-gray-100 pb-12 text-left'>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header, index) => {
-                  const isNotDisplayColumn =
-                    header.column.id === 'actions' ||
-                    header.column.id === 'select';
-
-                  return (
-                    <TableColumnsHead
-                      {...{
-                        isNotDisplayColumn,
-                        currentSearchColumn,
-                        setCurrentSearchColumn,
-                        table,
-                        index,
-                        clear: () => setColumnFilters && setColumnFilters([]),
-                        header,
+      <div className={'h-full overflow-x-auto'}>
+        <div className='thin-scrollbar min-w-[900px]'>
+          <div className={clsx('w-full ')}>
+            {filters &&
+              !!Object.values(filters!).filter((val) => !!val).length &&
+              !(mustHaveRange && onlyRangeFilterPresent) && (
+                <div className='y-center my-auto min-h-[60px] w-full px-6'>
+                  <div className='x-between w-full'>
+                    <AppliedFilters
+                      reset={() => {
+                        reset && reset();
+                        setColumnVisibility({
+                          ...initialColumns,
+                        });
                       }}
-                      key={header.id}
+                      className='my-auto'
+                      {...{
+                        tableFiltersKeyValuePairs,
+                        mustHaveRange,
+                        filters,
+                        onlyRangeFilterPresent,
+                        onFilterClick,
+                        ...res,
+                      }}
                     />
-                  );
-                })}
-              </tr>
-            ))}
-          </thead>
 
-          {!isError && (
-            <tbody>
-              {table.getRowModel().rows.map((row) => {
-                let textColor = 'text-neutral-800';
+                    {headerSlot}
+                  </div>
+                </div>
+              )}
 
-                if (getRowTextColor) {
-                  textColor = getRowTextColor(row);
-                }
+            <table className={clsx('w-full table-auto', tableClassname)}>
+              <thead
+                className={clsx(
+                  'overflow-hidden rounded-t-xl border-b border-gray-100 text-left'
+                )}
+              >
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <tr key={headerGroup.id}>
+                    {headerGroup.headers.map((header, index) => {
+                      const isNotDisplayColumn =
+                        header.column.id === 'actions' ||
+                        header.column.id === 'select';
 
-                return (
-                  <tr
-                    key={row.id}
-                    className={clsx(
-                      `smooth group h-[71px] border-b border-gray-100 text-sm font-semibold`,
-                      onRowClick && 'cursor-pointer',
-                      textColor
-                    )}
-                  >
-                    {row.getVisibleCells().map((cell, index) => {
                       return (
-                        <td
-                          key={cell.id}
-                          valign={alignTop ? 'top' : 'middle'}
-                          className={clsx(
-                            `smooth my-auto max-w-[200px] py-3 pr-3 font-medium`,
-                            onRowClick && 'group-hover:bg-[#F4FBFF]',
-                            alignTop && 'h-16 pt-5',
-                            index === row.getVisibleCells().length - 1 &&
-                              'rounded-r-none',
-                            index === 0 && 'rounded-l-none pl-6'
-                          )}
-                          onClick={(e) => {
-                            if (
-                              cell.column.id !== 'actions' &&
-                              cell.column.id !== 'select'
-                            ) {
-                              const el = e.target as HTMLElement;
-                              // Checking is the element clicked is an sub-button on the row
-                              if (!el.classList.contains('cell-button')) {
-                                if (onRowClick) {
-                                  if (returnOriginalOnRowClick) {
-                                    onRowClick(row.original);
-                                  } else if (accessor) {
-                                    onRowClick(
-                                      (row.original as any)[accessor] as string
-                                    );
-                                  }
-                                }
-                              }
-                            }
+                        <TableColumnsHead
+                          {...{
+                            isNotDisplayColumn,
+                            currentSearchColumn,
+                            setCurrentSearchColumn,
+                            table,
+                            index,
+                            className: clsx(
+                              darkTableHead && 'bg-neutral-50',
+                              index === 0 && 'rounded-tl-xl',
+                              index === headerGroup.headers.length - 1 &&
+                                'rounded-tr-xl'
+                            ),
+                            clear: () =>
+                              setColumnFilters && setColumnFilters([]),
+                            header,
                           }}
-                        >
-                          <div
-                            className={clsx(
-                              alignTop &&
-                                cell.column.id === 'actions' &&
-                                '-mt-2'
-                            )}
-                          >
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
-                          </div>
-                        </td>
+                          key={header.id}
+                        />
                       );
                     })}
                   </tr>
-                );
-              })}
-            </tbody>
-          )}
-        </table>
+                ))}
+              </thead>
+
+              {!isError && (
+                <tbody>
+                  {table.getRowModel().rows.map((row) => {
+                    let textColor = 'text-neutral-800';
+
+                    if (getRowTextColor) {
+                      textColor = getRowTextColor(row);
+                    }
+
+                    return (
+                      <tr
+                        key={row.id}
+                        className={clsx(
+                          `group h-[71px] border-b border-gray-100 text-sm font-semibold`,
+                          onRowClick && 'cursor-pointer',
+                          textColor
+                        )}
+                      >
+                        {row.getVisibleCells().map((cell, index) => {
+                          return (
+                            <td
+                              key={cell.id}
+                              valign={alignTop ? 'top' : 'middle'}
+                              className={clsx(
+                                `my-auto max-w-[200px] py-3 pr-3 font-medium`,
+                                onRowClick && 'group-hover:bg-[#2A85FF10]',
+                                alignTop && 'h-16 pt-5',
+                                index === row.getVisibleCells().length - 1 &&
+                                  'rounded-r-none',
+                                index === 0 && 'rounded-l-none pl-6'
+                              )}
+                              onClick={(e) => {
+                                if (
+                                  cell.column.id !== 'actions' &&
+                                  cell.column.id !== 'select'
+                                ) {
+                                  const el = e.target as HTMLElement;
+
+                                  // Checking is the element clicked is a sub-button on the row
+                                  if (!el.classList.contains('cell-button')) {
+                                    if (onRowClick) {
+                                      if (returnOriginalOnRowClick) {
+                                        onRowClick(row.original);
+                                      } else if (accessor) {
+                                        onRowClick(
+                                          (row.original as any)[
+                                            accessor
+                                          ] as string
+                                        );
+                                      }
+                                    }
+                                  }
+                                }
+                              }}
+                            >
+                              <div
+                                className={clsx(
+                                  alignTop &&
+                                    cell.column.id === 'actions' &&
+                                    '-mt-2',
+                                  'w-full'
+                                )}
+                              >
+                                {flexRender(
+                                  cell.column.columnDef.cell,
+                                  cell.getContext()
+                                )}
+                              </div>
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              )}
+            </table>
+          </div>
+        </div>
       </div>
 
       <>
-        {(isLoading &&
-          typeof res?.hasContent === 'boolean' &&
-          !res?.hasContent) ||
-        (!res && isLoading) ||
-        (typeof res?.hasContent === 'boolean' &&
-          !res?.hasContent &&
-          isRefetching) ? (
-          <IsLoading />
+        {canNotShowData ? (
+          <IsEmpty {...{ emptyTableText, minimal }} />
+        ) : isLoading && !res?.content.length ? (
+          <IsLoading
+            className={clsx(minimal ? 'h-[50px]' : 'h-[200px] 640:h-[300px]')}
+          />
         ) : isError ? (
           <IsError
-            title='An error occurred'
-            description={`Failed to fetch ${title}`}
+            className={clsx(minimal ? 'py-10' : 'py-20')}
+            noIcon={minimal}
+            description={`An error occurred fetching ${title}`}
+            actionButton={
+              !refetch || minimal
+                ? undefined
+                : {
+                    action: refetch,
+                  }
+            }
           />
-        ) : (typeof res?.hasContent === 'boolean' && !res?.hasContent) ||
-          res?.empty ? (
-          <div className='y-center h-full px-5 py-32'>
-            {emptyTableText && (
-              <EmptyTable
-                {...{
-                  emptyTableText,
-                }}
-              />
-            )}
-          </div>
+        ) : res?.empty ? (
+          <IsEmpty {...{ emptyTableText, minimal }} />
         ) : null}
       </>
 
-      <div className='pl-3 640:pl-6'>
-        <Pagination
-          {...{ pagination, setPagination, isLoading, isRefetching, res }}
-        />
-      </div>
+      {!hidePagination && !minimal && <Pagination />}
     </div>
   );
 }
 
-export const EmptyTable = ({ emptyTableText }: { emptyTableText: string }) => {
-  return (
-    <SimpleInformation
-      title={<span className='text-xl'>Nothing to show (yet)</span>}
-      description={<span className='mt-1 block'>{emptyTableText}</span>}
-      icon='empty'
-    />
-  );
-};
-
-export const Pagination = ({
-  pagination,
-  setPagination,
-  isLoading,
-  isRefetching,
-  res,
-  className,
+export const IsEmpty = ({
+  emptyTableText,
+  minimal,
 }: {
-  setPagination?: Dispatch<SetStateAction<PaginationState>>;
-  pagination?: PaginationState;
-  res?: PaginatedResponse<any>;
-  isLoading?: boolean;
-  isRefetching?: boolean;
-  className?: string;
-}) => {
-  if (!pagination || !setPagination || res?.empty) return <></>;
-
-  return (
-    <TablePagination
-      {...{
-        setPagination,
-        pagination,
-        className,
-        ...res,
-      }}
-      fetching={isLoading || isRefetching}
-    />
-  );
-};
+  emptyTableText: Props<any>['emptyTableText'];
+  minimal?: boolean;
+}) => (
+  <div className={clsx('y-center h-full px-5', minimal ? 'py-10' : 'py-20')}>
+    {emptyTableText && (
+      <SimpleInformation
+        title={
+          minimal ? undefined : (
+            <span className='text-xl'>Nothing to show (yet)</span>
+          )
+        }
+        description={<span className='mt-1 block'>{emptyTableText}</span>}
+        icon={minimal ? undefined : <NothingHere />}
+      />
+    )}
+  </div>
+);
 
 (Table as FC<Props<any>>).propTypes = {
   onRowClick: function (props, propName) {

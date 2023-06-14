@@ -1,26 +1,34 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { motion } from 'framer-motion';
-import React, { PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react';
 import clsx from 'clsx';
 import { useDismissDropdown } from 'hooks/dashboard/useDismissDropdown';
 
 type Props = {
-  close: () => void;
+  dismiss: () => void;
   show: boolean;
   wrapperId: string;
   className?: string;
   exceptedId?: string;
+  anchorPosition?: 'top' | 'bottom';
 };
 
+/**
+ * Dropdown component
+ * @param {function} dismiss - The function to be called when closing the dropdown
+ * @param {string} exceptedId- The ID of an element that when clicked on shouldn't trigger the dismiss action
+ * @returns {JSX.Element} The rendered Dropdown element.
+ */
 export const Dropdown = ({
-  close,
+  dismiss,
   wrapperId,
   exceptedId,
+  anchorPosition = 'bottom',
   show,
   children,
   className,
 }: PropsWithChildren<Props>) => {
-  useDismissDropdown(wrapperId, close, exceptedId);
+  useDismissDropdown(wrapperId, dismiss, exceptedId);
 
   if (!show) return <></>;
 
@@ -39,14 +47,15 @@ export const Dropdown = ({
         },
         hide: {
           opacity: 0,
-          y: '-20px',
+          y: anchorPosition === 'top' ? '5px' : '-5px',
           transition: {
             duration: 0,
           },
         },
       }}
       className={clsx(
-        'absolute top-[100%] z-[100] mt-2 w-full overflow-hidden rounded-xl border border-neutral-300 p-0 shadow-lg',
+        'absolute z-[100] w-full overflow-hidden rounded-xl border border-neutral-300 p-0 shadow-lg',
+        anchorPosition === 'bottom' ? 'top-[100%] mt-2' : 'bottom-[100%] mb-2',
         className
       )}
     >

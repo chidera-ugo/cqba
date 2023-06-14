@@ -64,7 +64,7 @@ export const Filter = ({
           'min-w-[200px] bg-white p-2',
           dropdownClassName ?? 'right-0 '
         )}
-        close={() => setShowDropdown(false)}
+        dismiss={() => setShowDropdown(false)}
         wrapperId={id}
       >
         <div>

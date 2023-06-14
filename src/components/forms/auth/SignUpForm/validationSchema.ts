@@ -1,15 +1,15 @@
-import { phoneNumberTest } from 'utils/helpers/validators/validateField';
+import { phoneNumberTest } from 'utils/validators/validateField';
 import { object, boolean, string } from 'yup';
 
 export const validationSchema = object({
   firstName: string().required('Please provide your first name'),
   lastName: string().required('Please provide your last name'),
   email: string()
+    .trim()
     .required('Please provide your email')
     .email('Please provide a valid email'),
   businessName: string().required('Please provide your company name'),
   industry: string().required('Please provide your industry'),
-  country: string().required('Please provide your country'),
   password: string()
     .trim()
     .required('Please provide new password')

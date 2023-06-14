@@ -3,10 +3,7 @@ import { Dollar } from 'components/svgs/wallet/Icons_MakeTransfer';
 import { useDebouncer } from 'hooks/common/useDebouncer';
 import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 import { useEffect, useState } from 'react';
-import {
-  formatAmount,
-  sanitizeAmount,
-} from 'utils/helpers/formatters/formatAmount';
+import { formatAmount, sanitizeAmount } from 'utils/formatters/formatAmount';
 
 interface Props {
   transactionType: string;

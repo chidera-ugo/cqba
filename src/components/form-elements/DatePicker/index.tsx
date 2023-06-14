@@ -10,7 +10,7 @@ import dayjs from 'dayjs';
 import clsx from 'clsx';
 import { Dropdown } from './Dropdown';
 import { Field } from 'types/Common';
-import { validateField } from 'utils/helpers/validators/validateField';
+import { validateField } from 'utils/validators/validateField';
 
 type Props = JSX.IntrinsicElements['input'] &
   Field & {

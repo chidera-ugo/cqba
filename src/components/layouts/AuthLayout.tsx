@@ -1,46 +1,31 @@
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
 import { PageHead } from 'components/primary/PageHead';
 import { AuthHeader } from 'components/primary/headers/AuthHeader';
-import { useAppContext } from 'context/AppContext';
-import { useRouter } from 'next/router';
-import { PropsWithChildren, useEffect } from 'react';
+import { useAuthenticationRoutesGuard } from 'hooks/app/useAuthenticationRoutesGuard';
+import { PropsWithChildren } from 'react';
 
 export interface Props {
   title?: string;
 }
 
 export const AuthLayout = ({ children, title }: PropsWithChildren<Props>) => {
-  const { redirectUrl, user } = useAppContext().state;
+  const { userExists } = useAuthenticationRoutesGuard();
 
-  const { replace } = useRouter();
-
-  useEffect(() => {
-    if (!user) return;
-
-    for (const i of authPaths) {
-      if (redirectUrl.includes(i)) {
-        replace('/');
-        return;
-      }
-    }
-
-    replace(redirectUrl ? redirectUrl : '/');
-  }, [user]);
-
-  if (user) return <FullScreenLoader id='auth-layout' asPage />;
+  if (userExists) return <FullScreenLoader id='auth-layout' asPage />;
 
   return (
     <>
       <PageHead title={title} />
+
       <AuthHeader />
-      <main>{children}</main>
+
+      <main
+        style={{
+          minHeight: 'calc(100vh - 120px)',
+        }}
+      >
+        {children}
+      </main>
     </>
   );
 };
-
-export const authPaths = [
-  'signin',
-  'signup',
-  'forgot-password',
-  'new-password',
-];

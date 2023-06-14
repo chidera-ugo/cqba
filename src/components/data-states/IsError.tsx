@@ -1,19 +1,32 @@
-import { SimpleInformation } from 'components/modules/common/SimpleInformation';
+import { NothingHere } from 'components/illustrations/NothingHere';
+import {
+  SimpleInformation,
+  Props as PropsSimpleInformation,
+} from 'components/modules/common/SimpleInformation';
 
 interface Props {
-  title: string;
+  title?: string;
   description: string;
+  actionButton?: PropsSimpleInformation['actionButton'];
+  className?: string;
+  noIcon?: boolean;
 }
 
-export const IsError = ({ title, description }: Props) => {
+export const IsError = ({
+  title = 'Uh oh!',
+  description,
+  actionButton,
+  className,
+  noIcon,
+}: Props) => {
   return (
     <SimpleInformation
-      className='py-20'
       title={<span className='text-xl text-red-500'>{title}</span>}
       description={
         <span className='mt-1 block text-red-600'>{description}</span>
       }
-      icon='error'
+      {...{ actionButton, className }}
+      icon={noIcon ? undefined : <NothingHere />}
     />
   );
 };

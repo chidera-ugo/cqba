@@ -3,15 +3,23 @@ import type { AppProps } from 'next/app';
 import { Slide, ToastContainer } from 'react-toastify';
 import clsx from 'clsx';
 import { toastClasses } from 'components/primary/AppToast';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
 import { useState } from 'react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AppContextProvider } from 'context/AppContext';
-
 import 'react-toastify/dist/ReactToastify.min.css';
 import 'react-tooltip/dist/react-tooltip.css';
+import { AppErrorBoundary } from 'components/core/ErrorBoundary';
+import { KycContextProvider } from 'context/KycContext';
+import { useHandleError } from 'hooks/api/useHandleError';
 
 export default function App({ Component, pageProps }: AppProps) {
+  const { handleError } = useHandleError();
+
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -21,6 +29,19 @@ export default function App({ Component, pageProps }: AppProps) {
             refetchOnWindowFocus: false,
           },
         },
+        queryCache: new QueryCache({
+          onError(e, query) {
+            handleError(
+              e,
+              query.state.data === undefined || query?.meta?.silent === true,
+              // Only show error toasts if we already have data in the cache
+              // which indicates a failed background update or if a "silent" value is passed
+              // directly to the meta object
+              undefined,
+              'query_cache'
+            );
+          },
+        }),
       })
   );
 
@@ -28,9 +49,11 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <ToastContainer
         position={'top-center'}
-        autoClose={4000}
+        autoClose={3000}
         hideProgressBar={true}
         transition={Slide}
+        draggablePercent={60}
+        draggableDirection='y'
         icon={false}
         toastClassName={({ type }: any) => {
           const classes = toastClasses[type];
@@ -45,12 +68,20 @@ export default function App({ Component, pageProps }: AppProps) {
         pauseOnHover
         closeButton={false}
       />
-      <AppContextProvider>
+
+      <AppErrorBoundary>
         <QueryClientProvider client={queryClient}>
-          <Component {...pageProps} />
-          <ReactQueryDevtools position='bottom-left' initialIsOpen={false} />
+          <AppContextProvider>
+            <KycContextProvider>
+              <Component {...pageProps} />
+              <ReactQueryDevtools
+                position='bottom-left'
+                initialIsOpen={false}
+              />
+            </KycContextProvider>
+          </AppContextProvider>
         </QueryClientProvider>
-      </AppContextProvider>
+      </AppErrorBoundary>
     </>
   );
 }

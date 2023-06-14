@@ -1,6 +1,6 @@
 import { getStartedSteps } from 'components/modules/get-started/GetStartedSteps';
 import { useRouter } from 'next/router';
-import { convertToUrlString } from 'utils/helpers/converters/convertToUrlString';
+import { convertToUrlString } from 'utils/converters/convertToUrlString';
 
 export const useGetCurrentTab = () => {
   const { query, replace } = useRouter();

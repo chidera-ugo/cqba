@@ -2,9 +2,9 @@ import { useField } from 'formik';
 import { useEffect } from 'react';
 import clsx from 'clsx';
 import { Field } from 'types/Common';
-import { validateField } from 'utils/helpers/validators/validateField';
+import { validateField } from 'utils/validators/validateField';
 import { ChevronDown } from 'components/svgs/navigation/Chevrons';
-import { formatPhoneNumber } from 'utils/helpers/formatters/formatPhoneNumber';
+import { formatPhoneNumber } from 'utils/formatters/formatPhoneNumber';
 
 type Props = JSX.IntrinsicElements['input'] & Field;
 

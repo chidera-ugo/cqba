@@ -7,7 +7,7 @@ import { useMemo } from 'react';
 interface Props<T> {
   column: Column<T, unknown>;
   table: Table<T>;
-  close: () => void;
+  abandonSearch: () => void;
   header: Header<T, unknown>;
   clear: () => void;
 }
@@ -16,7 +16,7 @@ export function ColumnFilter<T>({
   column,
   header,
   table,
-  close,
+  abandonSearch,
   clear,
 }: Props<T>) {
   const firstValue = table
@@ -54,17 +54,17 @@ export function ColumnFilter<T>({
         }}
         autoFocus
         placeholder={`Search ${columnTitle?.toString()}`}
-        className='generic-input inline-block h-9 w-full rounded-lg bg-white px-2 text-sm font-normal'
+        className='input inline-block h-9 w-full rounded-lg bg-white px-2 text-sm font-normal'
         list={column.id + 'list'}
       />
 
       <button
         onClick={() => {
           clear();
-          close();
+          abandonSearch();
         }}
         type='button'
-        className='my-auto h-6 w-6 flex-shrink-0 rounded-full bg-neutral-300 text-neutral-400 hover:text-primary-main'
+        className='my-auto h-6 w-6 flex-shrink-0 rounded-full bg-neutral-200 text-neutral-400 hover:text-primary-main'
       >
         <Cancel className='h-4 w-4' />
       </button>

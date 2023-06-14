@@ -54,12 +54,9 @@ export const FileInput = ({
   return (
     <div className={clsx(className, 'mt-5 w-full')}>
       <div className='mb-1.5 flex'>
-        <label
-          htmlFor={id}
-          className='text-left text-sm font-medium text-neutral-400'
-        >
+        <div className='text-left text-sm font-medium text-neutral-400'>
           {label}
-        </label>
+        </div>
       </div>
 
       <label htmlFor={id} id={`drop-${id}`} className='group'>
