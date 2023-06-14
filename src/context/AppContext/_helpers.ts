@@ -14,7 +14,9 @@ export function reducer(state: State, action: Action): State {
     }
     case 'saveTokens': {
       const tokens = action.payload;
+
       saveToLocalStore('tokens', tokens);
+
       return { ...state, tokens };
     }
     case 'removeTokens': {
@@ -24,7 +26,7 @@ export function reducer(state: State, action: Action): State {
     case 'saveCurrentUser': {
       return {
         ...state,
-        user: {} as any,
+        user: action.payload,
         isInitializing: false,
       };
     }

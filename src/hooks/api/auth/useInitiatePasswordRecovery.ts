@@ -1,11 +1,12 @@
 import { UseMutationOptions } from '@tanstack/react-query';
 import { useTMutation } from 'hooks/api/useTMutation';
 
-export const useJoinWaitlist = (
+export function useInitiatePasswordRecovery(
   options?: UseMutationOptions<any, unknown, void, unknown>
-) => {
-  return useTMutation({
-    url: `/pre-register`,
+) {
+  return useTMutation<{ email: string }, any>({
+    url: '/forgot-password',
+    service: 'auth',
     options,
   });
-};
+}

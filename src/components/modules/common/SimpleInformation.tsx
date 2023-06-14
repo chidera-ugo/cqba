@@ -26,7 +26,7 @@ export const SimpleInformation = ({
   return (
     <div className={clsx('y-center text-center', className)}>
       {icon && <div className='mx-auto mb-4'>{icon}</div>}
-      <div className='mt-0 font-semibold'>{title}</div>
+      <h4 className='mt-0 font-semibold'>{title}</h4>
       <p className='mx-auto max-w-[640px]'>{description}</p>
 
       {children}

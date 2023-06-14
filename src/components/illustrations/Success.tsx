@@ -15,7 +15,6 @@ export const GreenCheck = () => {
         strokeLinejoin='round'
       />
       <path
-        opacity='0.34'
         d='M26.6562 40.5005L36.2075 50.0517L55.3438 30.9492'
         stroke='#22C55E'
         strokeWidth='2.5'

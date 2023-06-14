@@ -7,12 +7,16 @@ import { toast } from 'react-toastify';
 
 export type Method = 'get' | 'post' | 'put' | 'delete' | 'patch';
 
-export type Service = 'auth';
+export type Service = 'auth' | 'organizations';
 
 export function urlModifier(url?: Service) {
   switch (url) {
-    default:
+    case 'organizations':
+      return '/v1/organizations';
+    case 'auth':
       return '/v1/auth';
+    default:
+      return '/';
   }
 }
 

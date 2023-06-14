@@ -43,19 +43,19 @@ export const SideNavigationItems = () => {
 
             <div>
               {navigationItems[item]?.map(
-                ({ icon, title, showWhenUnverified, isRoot }) => {
-                  const titleAsUrl = convertToUrlString(title);
+                ({ icon, title, url, showWhenUnverified, isRoot }) => {
+                  const route = url ?? convertToUrlString(title);
 
                   if (showWhenUnverified && data?.verified)
                     return <Fragment key={title}></Fragment>;
 
                   const isActive = checkIsActive(title, isRoot);
-                  const tooltipId = `side_nav_tooltip_id_${titleAsUrl}`;
+                  const tooltipId = `side_nav_tooltip_id_${route}`;
 
                   return (
                     <div key={title}>
                       <Link
-                        href={isRoot ? '/' : titleAsUrl}
+                        href={isRoot ? '/' : route}
                         className={clsx(
                           'x-between relative w-full py-1.5',
                           isActive
@@ -83,11 +83,11 @@ export const SideNavigationItems = () => {
                           anchorId={tooltipId}
                           show={
                             isActive &&
-                            !checkIsSideNavItemToolTipDismissed(titleAsUrl) &&
+                            !checkIsSideNavItemToolTipDismissed(route) &&
                             !isDismissed
                           }
                           close={() => {
-                            dismiss(titleAsUrl);
+                            dismiss(route);
                           }}
                           title={title}
                         >

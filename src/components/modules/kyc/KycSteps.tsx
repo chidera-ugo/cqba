@@ -6,7 +6,7 @@ import { useGetCurrentTab } from 'hooks/dashboard/get-started/useGetCurrentTab';
 import { useRouter } from 'next/router';
 import { convertToUrlString } from 'utils/converters/convertToUrlString';
 
-export const GetStartedSteps = () => {
+export const KycSteps = () => {
   const { currentTab } = useGetCurrentTab();
   const { push } = useRouter();
 
@@ -31,13 +31,13 @@ export const GetStartedSteps = () => {
           convertOptionsToObjectArray
           dropdownInMobileView
           id='get-started-steps'
-          options={getStartedSteps}
+          options={kycSteps}
           className='w-full'
           onSelect={(option) => {
             push(`/get-started?tab=${option}`);
           }}
           defaultOption={{
-            name: getStartedSteps.find(
+            name: kycSteps.find(
               (step) => convertToUrlString(step) === currentTab
             ),
             id: currentTab,
@@ -92,7 +92,7 @@ export const GetStartedSteps = () => {
 
   return (
     <div className='mt-5 hidden 768:block'>
-      {getStartedSteps.map((step, i) => {
+      {kycSteps.map((step, i) => {
         const url = convertToUrlString(step);
         const isActive = currentTab === url;
         const isCompleted = checkIsStepCompleted(step);
@@ -101,7 +101,7 @@ export const GetStartedSteps = () => {
           <button
             onClick={() => {
               if (url === currentTab) return;
-              push(`/get-started?tab=${url}`);
+              push(`/kyc?tab=${url}`);
             }}
             key={step}
             className={clsx(
@@ -139,7 +139,7 @@ export const GetStartedSteps = () => {
   );
 };
 
-export const getStartedSteps = [
+export const kycSteps = [
   'Create account',
   'Company information',
   'Owner information',

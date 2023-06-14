@@ -11,7 +11,7 @@ export default function Signin() {
         <div className='mt-4 text-left text-sm text-neutral-600'>
           {`Don't have an account?`}
           <Link
-            href='/signup'
+            href='/auth/signup'
             className='text-button ml-1 text-left font-medium'
           >
             Sign Up

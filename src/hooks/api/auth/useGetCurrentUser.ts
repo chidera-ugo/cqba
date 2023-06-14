@@ -1,15 +1,15 @@
 import axios from 'axios';
-import { CurrentUserRes } from 'types/Auth';
+import { IUser } from 'types/Auth';
 import {
   useQuery,
   UseQueryResult,
   UseQueryOptions,
 } from '@tanstack/react-query';
 
-export const useGetCurrentUser = (
+export function useGetCurrentUser(
   token?: string,
-  options?: UseQueryOptions<any, any, CurrentUserRes, string[]>
-): UseQueryResult<CurrentUserRes, unknown> => {
+  options?: UseQueryOptions<any, any, IUser, string[]>
+): UseQueryResult<IUser, unknown> {
   const axiosInstance = axios.create({
     headers: {
       Accept: 'application/json',
@@ -24,8 +24,8 @@ export const useGetCurrentUser = (
   return useQuery({
     queryKey: ['current-user'],
     queryFn: () =>
-      axiosInstance['get'](`/uaa/v1/user/details`).then((res) => res.data),
+      axiosInstance['get'](`/v1/users/profile`).then((res) => res.data),
     ...options,
     staleTime: Infinity,
   });
-};
+}

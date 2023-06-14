@@ -9,12 +9,11 @@ import {
   useMemo,
   useReducer,
 } from 'react';
-import { CurrentUserRes, IUser } from 'types/Auth';
+import { IUser } from 'types/Auth';
 import useMediaQuery from 'hooks/common/useMediaQuery';
 import { useGetCurrentUser } from 'hooks/api/auth/useGetCurrentUser';
 import { reducer } from './_helpers';
 import { getFromLocalStore } from 'lib/localStore';
-import { deleteFromLocalStore } from 'lib/localStore';
 import { useQueryClient } from '@tanstack/react-query';
 
 export interface State {
@@ -37,7 +36,7 @@ export type Action =
   | { type: 'accessToken'; payload: string }
   | { type: 'saveTokens'; payload: Tokens }
   | { type: 'removeTokens' }
-  | { type: 'saveCurrentUser'; payload: CurrentUserRes }
+  | { type: 'saveCurrentUser'; payload: IUser }
   | { type: 'signout' };
 
 export interface Tokens {
@@ -77,23 +76,20 @@ function AppContextProvider({ children, ...props }: PropsWithChildren<any>) {
       onSuccess(data) {
         if (!data) {
           dispatch({ type: 'setIsInitializing', payload: false });
+
           dispatch({ type: 'removeTokens' });
+
           return;
         }
 
         queryClient.setQueryData(['current-user'], data);
 
-        return dispatch({ type: 'saveCurrentUser', payload: data });
+        dispatch({ type: 'saveCurrentUser', payload: data });
       },
-      onError(e: any) {
+      onError() {
         dispatch({ type: 'setIsInitializing', payload: false });
+
         dispatch({ type: 'removeTokens' });
-
-        const statusCode = e?.response?.data?.statusCode;
-
-        if (statusCode === 401) deleteFromLocalStore('tokens');
-
-        return null;
       },
       enabled: !!state.user,
     }

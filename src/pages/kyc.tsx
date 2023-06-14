@@ -3,12 +3,12 @@ import { UpdateCompanyInformationForm } from 'components/forms/get-started/Updat
 import { UpdateOwnerInformationForm } from 'components/forms/get-started/UpdateOwnerInformationForm';
 import { AppLayout } from 'components/layouts/AppLayout';
 import { SimpleInformation } from 'components/modules/common/SimpleInformation';
-import { GetStartedSteps } from 'components/modules/get-started/GetStartedSteps';
-import { ReviewAndSubmit } from 'components/modules/get-started/ReviewAndSubmit';
+import { KycSteps } from 'components/modules/kyc/KycSteps';
+import { ReviewAndSubmit } from 'components/modules/kyc/ReviewAndSubmit';
 import { useAppContext } from 'context/AppContext';
 import { useGetCurrentTab } from 'hooks/dashboard/get-started/useGetCurrentTab';
 
-export default function GetStarted() {
+export default function Kyc() {
   const { user } = useAppContext().state;
   const { currentTab, next } = useGetCurrentTab();
 
@@ -25,7 +25,7 @@ export default function GetStarted() {
         <div className='col-span-5 border-neutral-200 768:m-5 768:mr-0 768:border-r 1200:col-span-4'>
           <div className='mx-auto max-w-[540px]'>
             <h5>Setup Guide</h5>
-            <GetStartedSteps />
+            <KycSteps />
           </div>
         </div>
 

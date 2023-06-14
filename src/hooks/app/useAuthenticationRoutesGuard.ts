@@ -8,7 +8,7 @@ export const useAuthenticationRoutesGuard = () => {
 
   const isVerified = false;
 
-  const url = isVerified ? '/' : '/setup';
+  const url = isVerified ? '/' : '/kyc';
 
   useEffect(() => {
     // Redirect to saved url if auth session is valid
@@ -19,17 +19,13 @@ export const useAuthenticationRoutesGuard = () => {
       return;
     }
 
-    for (const item of authPaths) {
-      if (redirectUrl.includes(item)) {
-        replace(url);
-        return;
-      }
+    if (redirectUrl.includes('/auth')) {
+      replace(url);
+      return;
     }
 
     replace(redirectUrl ? redirectUrl : url);
   }, [user]);
-
-  const authPaths = ['signin', 'signup', 'forgot-password', 'new-password'];
 
   return {
     userExists: !!user,

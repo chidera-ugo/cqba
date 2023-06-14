@@ -31,7 +31,7 @@ export const Form = ({ processing, formikProps }: Props) => {
         </SubmitButton>
 
         <Link
-          href='/signin'
+          href='/auth/signin'
           className='text-button my-auto mt-5 block w-full text-center text-sm text-neutral-600 640:mt-auto 640:w-auto'
         >
           Return to Sign in

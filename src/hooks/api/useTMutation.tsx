@@ -28,7 +28,9 @@ export function useTMutation<Dto, Res>({
   config,
 }: Args<Res>): UseMutationResult<Res, unknown, Dto, unknown> {
   const api = useHttp({ config });
+
   const modifier = urlModifier(service);
+
   const { handleError } = useHandleError();
 
   return useMutation(

@@ -4,6 +4,7 @@ import { ChevronDown } from 'components/svgs/navigation/Chevrons';
 import { Exit } from 'components/svgs/navigation/Exit';
 import { PlusCircle } from 'components/svgs/others/Plus';
 import { useAppContext } from 'context/AppContext';
+import { useGetOrganizationInformation } from 'hooks/api/useGetOrganizationInformation';
 import { useDestroySession } from 'hooks/app/useDestroySession';
 import { useState } from 'react';
 
@@ -15,6 +16,8 @@ export const ProfileSwitcher = ({ mobile }: { mobile?: boolean }) => {
 
   const { destroySession } = useDestroySession();
 
+  const { data } = useGetOrganizationInformation();
+
   return (
     <div className='sticky top-0 left-0 z-[100] bg-white p-8 pb-0 1024:bg-neutral-100'>
       <div id={id} className='relative'>
@@ -23,14 +26,14 @@ export const ProfileSwitcher = ({ mobile }: { mobile?: boolean }) => {
           onClick={() => setShowDropdown((prev) => !prev)}
         >
           <div className='flex'>
-            <div className='y-center mr-2.5 h-12 w-12 rounded-full bg-white font-semibold'>
-              {user?.firstName.charAt(0)}
-              {user?.lastName.charAt(0)}
+            <div className='y-center mr-2.5 h-12 w-12 rounded-full bg-white font-semibold uppercase'>
+              {user?.firstName?.charAt(0)}
+              {user?.lastName?.charAt(0)}
             </div>
 
             <div className='my-auto text-left'>
               <div className='text-base font-semibold text-neutral-1000 line-clamp-1'>
-                {user?.businessName}
+                {data?.businessName ?? '----'}
               </div>
               <div className='text-xs text-neutral-600 line-clamp-1'>
                 {user?.firstName} {user?.lastName}

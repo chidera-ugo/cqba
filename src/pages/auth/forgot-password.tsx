@@ -1,33 +1,45 @@
 import clsx from 'clsx';
+import { FullScreenLoader } from 'components/common/FullScreenLoader';
 import { ForgotPasswordForm } from 'components/forms/auth/ForgotPasswordForm';
 import { AuthLayout } from 'components/layouts/AuthLayout';
 import { SimpleInformation } from 'components/modules/common/SimpleInformation';
+import { AppToast } from 'components/primary/AppToast';
+import { useInitiatePasswordRecovery } from 'hooks/api/auth/useInitiatePasswordRecovery';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 export default function ForgotPassword() {
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [email, setEmail] = useState('');
+
+  const { isLoading, mutate } = useInitiatePasswordRecovery({
+    onSuccess() {
+      toast(<AppToast>Email has been resent</AppToast>, { type: 'success' });
+    },
+  });
 
   return (
     <AuthLayout title='Forgot Password'>
+      <FullScreenLoader show={isLoading} />
+
       <div
         className={clsx(
           'auth-container mx-auto py-8 640:py-[93px]',
-          isSuccess ? 'max-w-[781px]' : 'max-w-[540px]'
+          email ? 'max-w-[781px]' : 'max-w-[540px]'
         )}
       >
-        {isSuccess ? (
+        {email ? (
           <SimpleInformation
             title={<span>We sent you a reset link.</span>}
             description={
               <span className='mt-3 block'>
-                We sent a reset password link to the email address you provided.
+                {`We sent a password reset link to the email address you provided.
                 If you didn’t get the email, check your spam folder or try
-                again.
+                again.`}
               </span>
             }
             actionButton={{
               action() {
-                null;
+                mutate({ email });
               },
               text: 'Resend Reset Link',
             }}
@@ -42,8 +54,8 @@ export default function ForgotPassword() {
 
             <ForgotPasswordForm
               {...{
-                onSuccess() {
-                  setIsSuccess(true);
+                onSuccess(email) {
+                  setEmail(email);
                 },
               }}
             />

@@ -11,11 +11,12 @@ export interface SignupDto {
   password?: string;
 }
 
-export const useSignup = (
+export function useSignup(
   options?: UseMutationOptions<any, unknown, void, unknown>
-) => {
+) {
   return useTMutation<SignupDto, any>({
     url: '/register',
+    service: 'auth',
     options,
   });
-};
+}

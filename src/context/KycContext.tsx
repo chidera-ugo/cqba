@@ -1,8 +1,11 @@
+import { useGetOrganizationInformation } from 'hooks/api/useGetOrganizationInformation';
 import { PropsWithChildren, createContext, useContext } from 'react';
 
 const KycContext = createContext(null);
 
 function KycContextProvider({ children }: PropsWithChildren<any>) {
+  useGetOrganizationInformation();
+
   return <KycContext.Provider value={null}>{children}</KycContext.Provider>;
 }
 

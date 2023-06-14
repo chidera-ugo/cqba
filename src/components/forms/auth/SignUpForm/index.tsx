@@ -4,29 +4,31 @@ import { appendCountryCode } from 'utils/modifiers/appendCountryCode';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
-import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 
 interface Props {
-  onSuccess: () => void;
+  onSuccess: ({ email }: { email: string }) => void;
 }
 
 export const SignUpForm = ({ onSuccess }: Props) => {
-  const { isLoading, mutate } = useSignup({
-    onSuccess(res) {
-      console.log('res', res);
-    },
-  });
+  const { isLoading, mutate } = useSignup();
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={({ email, phoneNumber, acceptedTerms: _, ...values }) => {
-        mutate({
-          ...values,
-          email: email.trim(),
-          phone: appendCountryCode(phoneNumber),
-        });
+        const _email = email.trim();
+
+        mutate(
+          {
+            ...values,
+            email: _email,
+            phone: appendCountryCode(phoneNumber),
+          },
+          {
+            onSuccess: () => onSuccess({ email: _email }),
+          }
+        );
       }}
       validateOnBlur={false}
     >
