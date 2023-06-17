@@ -1,16 +1,56 @@
 import { UpdateBusinessDocumentionForm } from 'components/forms/get-started/UpdateBusinessDocumentionForm';
 import { UpdateCompanyInformationForm } from 'components/forms/get-started/UpdateCompanyInformationForm';
 import { UpdateOwnerInformationForm } from 'components/forms/get-started/UpdateOwnerInformationForm';
+import { GreenCheck } from 'components/illustrations/Success';
 import { AppLayout } from 'components/layouts/AppLayout';
 import { SimpleInformation } from 'components/modules/common/SimpleInformation';
 import { KycSteps } from 'components/modules/kyc/KycSteps';
 import { ReviewAndSubmit } from 'components/modules/kyc/ReviewAndSubmit';
 import { useAppContext } from 'context/AppContext';
-import { useGetCurrentTab } from 'hooks/dashboard/get-started/useGetCurrentTab';
+import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
+import { useCurrentAccountSetupStepUrl } from 'hooks/dashboard/kyc/useCurrentAccountSetupStepUrl';
+import { useKycSteps } from 'hooks/kyc/useKycSteps';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 export default function Kyc() {
   const { user } = useAppContext().state;
-  const { currentTab, next } = useGetCurrentTab();
+
+  const { currentTab, isValidAccountSetupStep, goToNextAccountSetupStep } =
+    useKycSteps();
+
+  const { replace } = useRouter();
+
+  const { isVerified } = useAccountVerificationStatus();
+
+  const { getCurrentAccountSetupStepUrl } = useCurrentAccountSetupStepUrl();
+
+  useEffect(() => {
+    if (isValidAccountSetupStep) return;
+
+    replace(getCurrentAccountSetupStepUrl());
+  }, [isValidAccountSetupStep]);
+
+  if (isVerified)
+    return (
+      <AppLayout title='Setup your account'>
+        <div className='py-10'>
+          <SimpleInformation
+            title={<div className='text-xl'>Account Verified</div>}
+            description={
+              <span className='mt-1 block'>
+                {`We have approved your application and an account has been created for you.`}
+              </span>
+            }
+            actionButton={{
+              action: () => replace('/'),
+              text: 'Go Home',
+            }}
+            icon={<GreenCheck />}
+          />
+        </div>
+      </AppLayout>
+    );
 
   return (
     <AppLayout title='Get Started'>
@@ -49,7 +89,7 @@ export default function Kyc() {
                     </span>
                   }
                   actionButton={{
-                    action: next,
+                    action: goToNextAccountSetupStep,
                     text: 'Proceed',
                   }}
                 />

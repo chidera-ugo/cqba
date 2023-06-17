@@ -1,46 +1,80 @@
+import { useQueryClient } from '@tanstack/react-query';
+import { FullScreenLoader } from 'components/common/FullScreenLoader';
+import UnsavedChangesPrompt from 'components/common/UnsavedChangesPrompt';
 import { Formik } from 'formik';
+import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
+import { useUpdateCompanyInformation } from 'hooks/api/kyc/useUpdateCompanyInformation';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
-import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 export const UpdateCompanyInformationForm = () => {
   const { replace } = useRouter();
-  const { isLoading, mutate } = useMakeDummyHttpRequest({});
+  const queryClient = useQueryClient();
+
+  const { isLoading, mutate } = useUpdateCompanyInformation({
+    onSuccess() {
+      queryClient.invalidateQueries(['organization-information']);
+      replace('/kyc?tab=owner-information');
+    },
+  });
+
+  const {
+    isLoading: gettingOrganizationInformation,
+    data: organizationInformation,
+  } = useGetOrganizationInformation();
+
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={({ ...values }) => {
+      onSubmit={({
+        companyType,
+        city,
+        state,
+        address,
+        employees,
+        expenses,
+      }) => {
         setHasUnsavedChanges(false);
-        mutate(
-          {
-            ...values,
-          },
-          {
-            onSuccess() {
-              setHasUnsavedChanges(false);
-              replace('/kyc?tab=owner-information');
-            },
-          }
-        );
+
+        mutate({
+          businessAddress: address,
+          averageMonthlyExpenses: expenses,
+          businessType: companyType,
+          numberOfEmployees: employees,
+          city,
+          state,
+        });
       }}
       validateOnBlur={false}
     >
       {(formikProps) => {
         return (
-          <Form
-            {...{
-              formikProps,
-              processing: isLoading,
-              hasUnsavedChanges,
-              setHasUnsavedChanges,
-            }}
-          />
+          <>
+            <UnsavedChangesPrompt {...{ hasUnsavedChanges }} />
+
+            <FullScreenLoader show={isLoading} />
+
+            <h5>Company Information</h5>
+            <p className='mt-1 font-normal text-neutral-400'>
+              Provide your company information
+            </p>
+
+            <Form
+              {...{
+                formikProps,
+                processing: isLoading,
+                setHasUnsavedChanges,
+                organizationInformation,
+                gettingOrganizationInformation,
+              }}
+            />
+          </>
         );
       }}
     </Formik>

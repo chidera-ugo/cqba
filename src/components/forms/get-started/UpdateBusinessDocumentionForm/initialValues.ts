@@ -1,7 +1,9 @@
+import { IFile } from 'types/Common';
+
 export const initialValues = {
   bnNumber: '',
   tin: '',
   utilityBillType: '',
-  utilityBillFile: {},
-  bnDocumentFile: {},
+  utilityBillFile: {} as IFile,
+  bnDocumentFile: {} as IFile,
 };

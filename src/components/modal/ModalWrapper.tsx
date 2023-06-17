@@ -24,7 +24,7 @@ export type ModalProps = {
   className?: string;
   duration?: number;
   white?: boolean;
-  close?: () => void;
+  closeModal?: () => void;
 };
 
 export type CenteredModalWrapperProps = ModalWrapperProps & {
@@ -139,7 +139,7 @@ export const CentredModalWrapper = ({
         }}
         onDragEnd={(_e, info) => {
           if (info.offset.y > 150) {
-            props.close && props.close();
+            props.closeModal && props.closeModal();
           } else {
             setDuration(0.2);
           }
@@ -169,10 +169,10 @@ export const CentredModalWrapper = ({
             </div>
           )} */}
 
-          {!hideHeader && props.close && (
+          {!hideHeader && props.closeModal && (
             <div className='x-between p-4 pb-0'>
               <div></div>
-              <button onClick={props.close} className='text-gray-400'>
+              <button onClick={props.closeModal} className='text-gray-400'>
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   viewBox='0 0 24 24'

@@ -1,11 +1,14 @@
+import { DatePickerValue, IFile } from 'types/Common';
+
 export const initialValues = {
   firstName: '',
   lastName: '',
   phoneNumber: '',
   gender: '',
-  dateOfBirth: '',
+  dateOfBirth: {} as DatePickerValue,
   idType: '',
   idNumber: '',
-  idFile: {},
+  bvn: '',
+  idFile: {} as IFile,
   politicalAffiliation: '',
 };

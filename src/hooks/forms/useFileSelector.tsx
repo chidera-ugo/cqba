@@ -1,13 +1,21 @@
 import { AppToast } from 'components/primary/AppToast';
 import { toast } from 'react-toastify';
+import { IFile } from 'types/Common';
+import { getBase64String } from 'utils/getters/getBase64String';
 
 interface HandleFileProps {
   id: string;
   files?: FileList;
+  existingFile?: IFile | null;
   maximumFileSizeInMB: number;
-  successCb: (IFile: { id: string; file: File; url: string }) => void;
+  successCb: (IFile: {
+    id: string;
+    file: File;
+    url: string;
+    base64Url?: string;
+  }) => void;
   errorCb: (reason: string, maximumFileSizeInMB?: number) => void;
-  multipleCommonId?: string; // common value in id array of inputs like cover-1 cover-2, hence "cover";
+  multipleFilesSelected?: string; // common value in id array of inputs like cover-1 cover-2, hence "cover";
   extensions?: string[];
 }
 
@@ -17,12 +25,13 @@ export const useFileSelector = () => {
     maximumFileSizeInMB,
     successCb,
     errorCb,
-    multipleCommonId,
+    multipleFilesSelected,
     extensions,
+    existingFile,
   }: HandleFileProps): void => {
     const input = document.getElementById(id) as HTMLInputElement;
 
-    if (multipleCommonId) {
+    if (multipleFilesSelected) {
       if (input?.files !== null && input?.files?.length > 0) {
         const files = input.files;
 
@@ -33,7 +42,7 @@ export const useFileSelector = () => {
           errorCb,
           files,
           extensions,
-          multipleCommonId,
+          multipleFilesSelected,
         });
 
         input.value = '';
@@ -48,6 +57,7 @@ export const useFileSelector = () => {
           maximumFileSizeInMB,
           successCb,
           extensions,
+          existingFile,
           errorCb,
         });
 
@@ -62,12 +72,13 @@ export const useFileSelector = () => {
     maximumFileSizeInMB,
     successCb,
     errorCb,
-    multipleCommonId,
+    existingFile,
+    multipleFilesSelected,
     extensions,
   }: HandleFileProps) => {
     if (!files) return;
 
-    if (multipleCommonId) {
+    if (multipleFilesSelected) {
       for (let i = 0; i < files?.length; i++) {
         const file = files[i];
 
@@ -76,10 +87,13 @@ export const useFileSelector = () => {
             const parser = new FileReader();
 
             parser.onload = () => {
+              const url = parser.result as string;
+
               successCb({
-                id: `${multipleCommonId}-${i + 1}`,
+                id: `${multipleFilesSelected}-${i + 1}`,
                 file,
-                url: parser.result as string,
+                url,
+                base64Url: getBase64String(url),
               });
             };
 
@@ -102,10 +116,14 @@ export const useFileSelector = () => {
         const parser = new FileReader();
 
         parser.onload = () => {
+          const url = parser.result as string;
+
           successCb({
+            ...existingFile,
             id,
             file,
-            url: parser.result as string,
+            url,
+            base64Url: getBase64String(url),
           });
         };
 

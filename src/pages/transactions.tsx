@@ -70,7 +70,7 @@ export default function Transactions() {
       <RightModalWrapper
         show={showModal}
         title='Generate statement'
-        close={closeModal}
+        closeModal={closeModal}
         closeOnClickOutside
         childrenClassname='py-0 640:px-8 px-4'
       >

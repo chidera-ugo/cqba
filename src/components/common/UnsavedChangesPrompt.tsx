@@ -1,12 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Confirmation } from 'components/modals/Confirmation';
+import { isDev } from 'utils/constants/environmentVariables';
 
 interface Props {
   hasUnsavedChanges: boolean;
+  actionToPerformAfterRoutingByUnsavedChangesPrompt?: () => void;
 }
 
-const UnsavedChangesPrompt = ({ hasUnsavedChanges }: Props) => {
+const UnsavedChangesPrompt = ({
+  hasUnsavedChanges,
+  actionToPerformAfterRoutingByUnsavedChangesPrompt,
+}: Props) => {
   const router = useRouter();
   const [showConfirmation, setShowConfirmation] = useState(false);
   const destinationRef = useRef('');
@@ -16,7 +21,7 @@ const UnsavedChangesPrompt = ({ hasUnsavedChanges }: Props) => {
     'You have unsaved changes, are you sure you want to leave this page? Your changes will be lost';
 
   useEffect(() => {
-    if (process.env.NODE_ENV === 'development') return;
+    if (isDev) return;
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (hasUnsavedChanges && !canProceed.current) {
         e.preventDefault();
@@ -32,7 +37,7 @@ const UnsavedChangesPrompt = ({ hasUnsavedChanges }: Props) => {
   }, [hasUnsavedChanges]);
 
   useEffect(() => {
-    if (process.env.NODE_ENV === 'development') return;
+    if (isDev) return;
     const handleRouteChangeStart = (destination: string) => {
       if (hasUnsavedChanges && !canProceed.current) {
         setShowConfirmation(true);
@@ -58,7 +63,15 @@ const UnsavedChangesPrompt = ({ hasUnsavedChanges }: Props) => {
       positive={() => {
         canProceed.current = true;
         setShowConfirmation(false);
-        router.push(destinationRef.current);
+
+        const url = destinationRef.current;
+
+        const changeType = url.startsWith('/') ? 'push' : 'replace';
+
+        router[changeType](url).then(() => {
+          if (!actionToPerformAfterRoutingByUnsavedChangesPrompt) return;
+          actionToPerformAfterRoutingByUnsavedChangesPrompt();
+        });
       }}
       negative={() => {
         setShowConfirmation(false);

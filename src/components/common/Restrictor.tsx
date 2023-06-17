@@ -15,6 +15,7 @@ type Props = {
     action: (() => void) | string;
   };
   className?: string;
+  icon?: JSX.Element;
 };
 
 export const Restrictor = ({
@@ -23,6 +24,7 @@ export const Restrictor = ({
   action,
   secondaryAction,
   subTitle,
+  icon,
 }: Props) => {
   const { push } = useRouter();
 
@@ -33,6 +35,8 @@ export const Restrictor = ({
         className
       )}
     >
+      {icon && <div className='x-center mb-5'>{icon}</div>}
+
       <h1 className='text-3xl'>{title}</h1>
 
       {subTitle && <p className='mx-auto mt-2 max-w-[460px]'>{subTitle}</p>}
@@ -44,12 +48,12 @@ export const Restrictor = ({
                 ? () => push(action.action as string)
                 : action.action
             }
-            className='primary-button y-center px-10'
+            className='dark-button y-center px-10'
           >
             {action.text}
           </button>
         ) : action ? (
-          <Link href={action.link!} className='primary-button y-center px-10'>
+          <Link href={action.link!} className='dark-button y-center px-10'>
             {action.text}
           </Link>
         ) : null}

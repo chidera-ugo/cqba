@@ -17,7 +17,7 @@ export const NewPasswordForm = ({ code, userId }: Props) => {
 
   const { isLoading, mutate } = useResetPassword({
     onSuccess() {
-      replace('/auth/signin').then(() => {
+      replace('/http/signin').then(() => {
         toast(<AppToast>Password reset successful, please login</AppToast>, {
           type: 'success',
         });

@@ -38,7 +38,7 @@ export const CreatePin = () => {
       <RightModalWrapper
         show={showModal}
         title='Create Transaction PIN'
-        close={close}
+        closeModal={close}
       >
         <CreatePinContent
           {...{

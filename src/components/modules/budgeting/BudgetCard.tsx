@@ -38,7 +38,6 @@ export const BudgetCard = ({
       key={id}
       onClick={() => {
         if (showFullDetails || !onItemClick) return;
-        console.log('hello');
         onItemClick(budget);
       }}
     >

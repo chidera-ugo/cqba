@@ -1,14 +1,28 @@
+import { useQueryClient } from '@tanstack/react-query';
+import { FullScreenLoader } from 'components/common/FullScreenLoader';
 import { IdNavigator } from 'components/common/IdNavigator';
 import { CheckInput } from 'components/form-elements/CheckInput';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
-import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
-import { useRouter } from 'next/router';
+import { DocumentReview } from 'components/illustrations/DocumentReview';
+import { SimpleInformation } from 'components/modules/common/SimpleInformation';
+import { useApplyForReview } from 'hooks/api/kyc/useGetApplyForReview';
+import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import { useState } from 'react';
 
 export const ReviewAndSubmit = () => {
-  const { isLoading, mutate } = useMakeDummyHttpRequest({});
+  const queryClient = useQueryClient();
+
+  const { isLoading, mutate } = useApplyForReview({
+    onSuccess() {
+      queryClient.invalidateQueries(['organization-information']);
+    },
+  });
+
+  const { isUnderReview } = useAccountVerificationStatus();
+
   const [fields, setFields] = useState<Record<string, boolean>>({});
-  const { replace } = useRouter();
+
+  if (isUnderReview) return <ApplicationUnderReview />;
 
   function handleCheckInputClick(id: string) {
     setFields((prev) => ({
@@ -22,6 +36,8 @@ export const ReviewAndSubmit = () => {
   return (
     <>
       <IdNavigator id='review-and-submit' autoFocus />
+
+      <FullScreenLoader show={isLoading} />
 
       <h5>Review your application</h5>
       <p className='mt-1 font-normal text-neutral-400'>
@@ -67,16 +83,7 @@ export const ReviewAndSubmit = () => {
           type='button'
           disabled={!fields['isAccurate']}
           onClick={() => {
-            mutate(
-              {
-                ...fields,
-              },
-              {
-                onSuccess() {
-                  replace('/');
-                },
-              }
-            );
+            mutate({});
           }}
           className='dark-button min-w-[200px]'
         >
@@ -84,5 +91,22 @@ export const ReviewAndSubmit = () => {
         </SubmitButton>
       </div>
     </>
+  );
+};
+
+export const ApplicationUnderReview = () => {
+  return (
+    <div className='py-10'>
+      <SimpleInformation
+        title={<div className='text-xl'>Verification Pending</div>}
+        description={
+          <span className='mt-1 block'>
+            {`We're reviewing your application, this may take a while. You will be
+            notified once this process has been completed.`}
+          </span>
+        }
+        icon={<DocumentReview />}
+      />
+    </div>
   );
 };

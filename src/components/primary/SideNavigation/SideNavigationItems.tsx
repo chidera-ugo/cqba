@@ -1,36 +1,24 @@
+import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
+import { useCurrentAccountSetupStepUrl } from 'hooks/dashboard/kyc/useCurrentAccountSetupStepUrl';
 import { useNavigationItems } from 'hooks/dashboard/useNavigationItems';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { convertToUrlString } from 'utils/converters/convertToUrlString';
 import clsx from 'clsx';
 import { Fragment } from 'react';
-import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 import { TooltipWrapper } from 'components/common/Tooltip';
 import { useDismiss } from 'hooks/common/useDismiss';
-import { generatePlaceholderArray } from 'utils/generators/generatePlaceholderArray';
 
 export const SideNavigationItems = () => {
   const { pathname } = useRouter();
   const { navigationItems } = useNavigationItems();
 
-  function checkIsActive(query: string, isRoot?: boolean) {
-    if (isRoot && pathname === '/') return true;
-    if (pathname.includes(convertToUrlString(query))) return true;
-    return false;
-  }
-
   const [dismiss, isDismissed, checkIsSideNavItemToolTipDismissed] =
     useDismiss('side_nav_tooltip');
 
-  const { isLoading, isError, data } = useMakeDummyHttpRequest({
-    method: 'get',
-    res: {
-      verified: false,
-    },
-  });
+  const { isVerified } = useAccountVerificationStatus();
 
-  if (isLoading) return <IsLoadingIsError type='loading' />;
-  if (isError) return <IsLoadingIsError type='error' />;
+  const { getCurrentAccountSetupStepUrl } = useCurrentAccountSetupStepUrl();
 
   return (
     <>
@@ -43,19 +31,29 @@ export const SideNavigationItems = () => {
 
             <div>
               {navigationItems[item]?.map(
-                ({ icon, title, url, showWhenUnverified, isRoot }) => {
+                ({ icon, title, id, url, showWhenUnverified, isRoot }) => {
                   const route = url ?? convertToUrlString(title);
 
-                  if (showWhenUnverified && data?.verified)
+                  if (showWhenUnverified && isVerified)
                     return <Fragment key={title}></Fragment>;
 
-                  const isActive = checkIsActive(title, isRoot);
-                  const tooltipId = `side_nav_tooltip_id_${route}`;
+                  const isActive = checkIsActive(pathname, title, isRoot, url);
+
+                  const tooltipId = `side_nav_tooltip_id_${route?.replaceAll(
+                    '/',
+                    ''
+                  )}`;
 
                   return (
                     <div key={title}>
                       <Link
-                        href={isRoot ? '/' : route}
+                        href={
+                          isRoot
+                            ? '/'
+                            : id === 'kyc'
+                            ? getCurrentAccountSetupStepUrl()
+                            : route
+                        }
                         className={clsx(
                           'x-between relative w-full py-1.5',
                           isActive
@@ -107,37 +105,14 @@ export const SideNavigationItems = () => {
   );
 };
 
-const IsLoadingIsError = ({ type }: { type: 'loading' | 'error' }) => {
-  return (
-    <div className='mt-8'>
-      {['Home', 'Organisation', 'Others'].map((p, i) => {
-        return (
-          <div key={p} className={clsx(i > 0 && 'mt-12')}>
-            <div className='mb-3 text-sm font-semibold text-neutral-1000'>
-              {p}
-            </div>
-
-            {generatePlaceholderArray(4).map((p) => {
-              return (
-                <div key={p} className='my-5 flex gap-2'>
-                  <div
-                    className={clsx(
-                      type === 'loading' ? 'skeleton' : 'skeleton-error',
-                      'h-4 w-7 rounded-md'
-                    )}
-                  ></div>
-                  <div
-                    className={clsx(
-                      type === 'loading' ? 'skeleton' : 'skeleton-error',
-                      'h-4 w-full rounded-md'
-                    )}
-                  ></div>
-                </div>
-              );
-            })}
-          </div>
-        );
-      })}
-    </div>
-  );
-};
+function checkIsActive(
+  pathname: string,
+  query: string,
+  isRoot?: boolean,
+  url?: string
+) {
+  if (isRoot && pathname === '/') return true;
+  if (url && pathname.includes(url)) return true;
+  if (pathname.split('/')[1]?.includes(convertToUrlString(query))) return true;
+  return false;
+}

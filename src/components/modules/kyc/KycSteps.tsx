@@ -1,20 +1,41 @@
 import clsx from 'clsx';
-import { AgnosticCustomSelect } from 'components/form-elements/CustomSelect/AgnosticCustomSelect';
+import { useKycSteps } from 'hooks/kyc/useKycSteps';
+import { useRouter } from 'next/router';
 import { SolidCheck } from 'components/svgs/others/Check';
 import { useAppContext } from 'context/AppContext';
-import { useGetCurrentTab } from 'hooks/dashboard/get-started/useGetCurrentTab';
-import { useRouter } from 'next/router';
+import { AgnosticCustomSelect } from 'components/form-elements/CustomSelect/AgnosticCustomSelect';
+import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import { convertToUrlString } from 'utils/converters/convertToUrlString';
 
 export const KycSteps = () => {
-  const { currentTab } = useGetCurrentTab();
+  const { currentTab, kycSteps } = useKycSteps();
   const { push } = useRouter();
 
   const { screenSize } = useAppContext().state;
 
-  function checkIsStepCompleted(query: string) {
+  const {
+    hasProvidedDocuments,
+    hasProvidedCompanyInformation,
+    hasProvidedOwnerInformationRequirements,
+    isUnderReview,
+  } = useAccountVerificationStatus();
+
+  function checkIfStepCompleted(query: string) {
     const url = convertToUrlString(query);
+
     if (url === 'create-account') return true;
+
+    if (url === 'company-information' && hasProvidedCompanyInformation)
+      return true;
+
+    if (url === 'owner-information' && hasProvidedOwnerInformationRequirements)
+      return true;
+
+    if (url === 'business-documentation' && hasProvidedDocuments) return true;
+
+    if (url === 'review-and-submit' && isUnderReview) return true;
+
+    return false;
   }
 
   if (screenSize?.['miniTablet']) {
@@ -44,7 +65,7 @@ export const KycSteps = () => {
           }}
           renderer={(option: string, i: number, plainStyling?: boolean) => {
             const isActive = currentTab === convertToUrlString(option);
-            const isCompleted = checkIsStepCompleted(option);
+            const isCompleted = checkIfStepCompleted(option);
 
             return (
               <div
@@ -95,7 +116,7 @@ export const KycSteps = () => {
       {kycSteps.map((step, i) => {
         const url = convertToUrlString(step);
         const isActive = currentTab === url;
-        const isCompleted = checkIsStepCompleted(step);
+        const isCompleted = checkIfStepCompleted(step);
 
         return (
           <button
@@ -138,11 +159,3 @@ export const KycSteps = () => {
     </div>
   );
 };
-
-export const kycSteps = [
-  'Create account',
-  'Company information',
-  'Owner information',
-  'Business documentation',
-  'Review and submit',
-];

@@ -12,9 +12,8 @@ import {
 import { IUser } from 'types/Auth';
 import useMediaQuery from 'hooks/common/useMediaQuery';
 import { useGetCurrentUser } from 'hooks/api/auth/useGetCurrentUser';
-import { reducer } from './_helpers';
+import { reducer } from 'context/AppContext/appContextMethods';
 import { getFromLocalStore } from 'lib/localStore';
-import { useQueryClient } from '@tanstack/react-query';
 
 export interface State {
   isInitializing: boolean;
@@ -68,30 +67,23 @@ function AppContextProvider({ children, ...props }: PropsWithChildren<any>) {
     initialState
   );
 
-  const queryClient = useQueryClient();
-
-  const { refetch: getCurrentUser } = useGetCurrentUser(
+  const { mutate: getCurrentUser } = useGetCurrentUser(
+    (tokens) => {
+      dispatch({ type: 'saveTokens', payload: tokens });
+    },
     state.tokens?.accessToken,
     {
       onSuccess(data) {
         if (!data) {
           dispatch({ type: 'setIsInitializing', payload: false });
-
-          dispatch({ type: 'removeTokens' });
-
           return;
         }
-
-        queryClient.setQueryData(['current-user'], data);
 
         dispatch({ type: 'saveCurrentUser', payload: data });
       },
       onError() {
         dispatch({ type: 'setIsInitializing', payload: false });
-
-        dispatch({ type: 'removeTokens' });
       },
-      enabled: !!state.user,
     }
   );
 
@@ -117,7 +109,9 @@ function AppContextProvider({ children, ...props }: PropsWithChildren<any>) {
   }, []);
 
   useEffect(() => {
-    initializeSession();
+    if (state.user || !state?.tokens?.accessToken) return;
+
+    initializeSession(state?.tokens?.accessToken);
   }, [state.tokens]);
 
   useEffect(() => {
@@ -132,14 +126,12 @@ function AppContextProvider({ children, ...props }: PropsWithChildren<any>) {
     });
   }, [mobile, tablet, miniTablet]);
 
-  async function initializeSession() {
-    const token = state.tokens?.accessToken;
-
+  async function initializeSession(token: string) {
     if (!token) return dispatch({ type: 'setIsInitializing', payload: false });
 
     dispatch({ type: 'setIsInitializing', payload: true });
 
-    getCurrentUser();
+    getCurrentUser({});
   }
 
   if (state.isInitializing) return <FullScreenLoader id='app-context' asPage />;

@@ -94,7 +94,7 @@ export default function Budgeting() {
       <RightModalWrapper
         show={showModal}
         title='Create Budget'
-        close={closeModal}
+        closeModal={closeModal}
         closeOnClickOutside
         childrenClassname='py-0 640:px-8 px-4'
       >

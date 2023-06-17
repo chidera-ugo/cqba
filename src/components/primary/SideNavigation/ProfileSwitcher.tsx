@@ -4,7 +4,7 @@ import { ChevronDown } from 'components/svgs/navigation/Chevrons';
 import { Exit } from 'components/svgs/navigation/Exit';
 import { PlusCircle } from 'components/svgs/others/Plus';
 import { useAppContext } from 'context/AppContext';
-import { useGetOrganizationInformation } from 'hooks/api/useGetOrganizationInformation';
+import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useDestroySession } from 'hooks/app/useDestroySession';
 import { useState } from 'react';
 

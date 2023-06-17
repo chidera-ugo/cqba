@@ -1,10 +1,16 @@
+import { IsLoading } from 'components/data-states/IsLoading';
 import { Input } from 'components/form-elements/Input';
+import { ImageViewer } from 'components/modals/ImageViewer';
 import { Form as FormikForm, FormikProps } from 'formik';
+import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
+import { useScrollToFormError } from 'hooks/forms/useScrollToFormError';
+import { constructIdTypes } from 'utils/constructors/constructIdTypes';
+import { formatPhoneNumber } from 'utils/formatters/formatPhoneNumber';
+import { sanitizeRecordToRemoveUndefinedAndNulls } from 'utils/sanitizers/sanitizeRecordToRemoveUndefinedAndNulls';
 import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { Select } from 'components/form-elements/Select';
-import { Dispatch, SetStateAction, useState } from 'react';
-import UnsavedChangesPrompt from 'components/common/UnsavedChangesPrompt';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { IdNavigator } from 'components/common/IdNavigator';
 import { PhoneNumberInput } from 'components/form-elements/PhoneNumberInput';
 import { DatePicker } from 'components/form-elements/DatePicker';
@@ -15,21 +21,71 @@ import { RadioInput } from 'components/form-elements/RadioInput';
 interface Props {
   formikProps: FormikProps<typeof initialValues>;
   processing: boolean;
-  hasUnsavedChanges: boolean;
   setHasUnsavedChanges: Dispatch<SetStateAction<boolean>>;
 }
 
 export const Form = ({
   processing,
   formikProps,
-  hasUnsavedChanges,
   setHasUnsavedChanges,
 }: Props) => {
-  const { handleSubmit, setFieldValue, values } = formikProps;
-  const [calendarValue, setCalendarValue] = useState<Date | null>(null);
+  const {
+    handleSubmit,
+    setValues,
+    setFieldValue,
+    errors,
+    submitCount,
+    values,
+  } = formikProps;
+
+  const { isLoading, data } = useGetOrganizationInformation();
+  const [previewImageUrl, setPreviewImageUrl] = useState('');
+
+  useScrollToFormError(errors, submitCount);
+
   const v = values as any;
 
-  // Todo: Scroll to invalid required field on submit
+  useEffect(() => {
+    if (!data) return;
+
+    const {
+      dob,
+      idImageUrl,
+      formOfId,
+      bvn,
+      phone,
+      firstName,
+      lastName,
+      idNumber,
+      gender,
+      politicalAffiliation,
+    } = sanitizeRecordToRemoveUndefinedAndNulls(data);
+
+    const _dob = dayjs(dob);
+
+    setValues({
+      ...values,
+      dateOfBirth: {
+        value: _dob.toISOString(),
+        calendarValue: _dob.toDate(),
+      },
+      idFile: {
+        ...values.idFile,
+        webUrl: idImageUrl,
+      },
+      politicalAffiliation,
+      firstName,
+      lastName,
+      gender,
+      bvn,
+      idNumber,
+      phoneNumber: formatPhoneNumber(phone),
+      idType: formOfId,
+    });
+  }, [data]);
+
+  if (isLoading) return <IsLoading />;
+
   return (
     <FormikForm
       onChange={() => {
@@ -38,12 +94,12 @@ export const Form = ({
       onSubmit={handleSubmit}
     >
       <IdNavigator id='owner-information' autoFocus />
-      <UnsavedChangesPrompt {...{ hasUnsavedChanges }} />
 
-      <h5>Owner Information</h5>
-      <p className='mt-1 font-normal text-neutral-400'>
-        Provide your company information
-      </p>
+      <ImageViewer
+        show={!!previewImageUrl}
+        closeModal={() => setPreviewImageUrl('')}
+        image={previewImageUrl}
+      />
 
       <div className='gap-4 880:flex'>
         <Input label='First Name' name='firstName' />
@@ -69,8 +125,6 @@ export const Form = ({
           label='Date of Birth'
           name='dateOfBirth'
           {...{
-            calendarValue,
-            setCalendarValue,
             setFieldValue,
           }}
           limit={8}
@@ -87,8 +141,26 @@ export const Form = ({
         Verify business owner identity
       </p>
 
+      <Input
+        label='BVN'
+        name='bvn'
+        setFieldValue={setFieldValue}
+        type='text'
+        inputMode='tel'
+        autoComplete='off'
+        fieldType='idNumber'
+        limit={11}
+        shouldValidate
+      />
+
       <div className='gap-4 880:flex'>
-        <Select label='Form of ID' name='idType' options={['NIN']} />
+        <Select
+          label='Form of ID'
+          name='idType'
+          displayValueKey={'name'}
+          trueValueKey={'id'}
+          options={constructIdTypes()}
+        />
         <Input label='ID Number' name='idNumber' />
       </div>
 
@@ -100,6 +172,7 @@ export const Form = ({
         {...{
           setFieldValue,
         }}
+        onClickViewExistingFile={(src) => setPreviewImageUrl(src)}
         getFile={(id) => v[id]}
       />
 

@@ -1,35 +1,41 @@
+import { IsLoading } from 'components/data-states/IsLoading';
 import { Input } from 'components/form-elements/Input';
 import { Form as FormikForm, FormikProps } from 'formik';
+import { IOrganization } from 'hooks/api/kyc/useGetOrganizationInformation';
+import { useScrollToFormError } from 'hooks/forms/useScrollToFormError';
+import { sanitizeRecordToRemoveUndefinedAndNulls } from 'utils/sanitizers/sanitizeRecordToRemoveUndefinedAndNulls';
 import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { Select } from 'components/form-elements/Select';
-import { useAppContext } from 'context/AppContext';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { useStatesAndLgas } from 'hooks/dashboard/get-started/useStatesAndLgas';
+import { useStatesAndLgas } from 'hooks/dashboard/kyc/useStatesAndLgas';
 import { TooltipWrapper } from 'components/common/Tooltip';
 import { useDismiss } from 'hooks/common/useDismiss';
-import UnsavedChangesPrompt from 'components/common/UnsavedChangesPrompt';
 import { useInView } from 'react-intersection-observer';
 import { IdNavigator } from 'components/common/IdNavigator';
 
 interface Props {
   formikProps: FormikProps<typeof initialValues>;
-  processing: boolean;
-  hasUnsavedChanges: boolean;
   setHasUnsavedChanges: Dispatch<SetStateAction<boolean>>;
+  organizationInformation?: IOrganization;
+  processing: boolean;
+  gettingOrganizationInformation: boolean;
 }
 
 export const Form = ({
   processing,
   formikProps,
-  hasUnsavedChanges,
   setHasUnsavedChanges,
+  organizationInformation,
+  gettingOrganizationInformation,
 }: Props) => {
-  const { handleSubmit, setFieldValue, values } = formikProps;
+  const { handleSubmit, errors, submitCount, setValues, values } = formikProps;
   const submitButtonId = 'update-company-information-submit-button';
 
-  const { user } = useAppContext().state;
+  useScrollToFormError(errors, submitCount);
+
   const { states, lgas } = useStatesAndLgas({ state: values.state });
+
   const [dismiss, isDismissed, checkIsDismissed] =
     useDismiss('save_and_continue');
 
@@ -47,14 +53,35 @@ export const Form = ({
   });
 
   useEffect(() => {
-    if (user?.firstName) {
-      setFieldValue('businessName', user.firstName);
-    }
-  }, [user]);
+    if (!organizationInformation) return;
+
+    const {
+      businessAddress,
+      averageMonthlyExpenses,
+      city,
+      businessName,
+      industry,
+      state,
+      numberOfEmployees,
+    } = sanitizeRecordToRemoveUndefinedAndNulls(organizationInformation);
+
+    setValues({
+      ...values,
+      businessName,
+      address: businessAddress,
+      companyType: industry,
+      expenses: averageMonthlyExpenses,
+      employees: numberOfEmployees,
+      city,
+      state,
+    });
+  }, [organizationInformation]);
 
   function dismissSaveAndContinueTooltip() {
     dismiss();
   }
+
+  if (gettingOrganizationInformation) return <IsLoading />;
 
   return (
     <FormikForm
@@ -64,15 +91,11 @@ export const Form = ({
       onSubmit={handleSubmit}
     >
       <IdNavigator id='company-information' autoFocus />
-      <UnsavedChangesPrompt {...{ hasUnsavedChanges }} />
-
-      <h5>Company Information</h5>
-      <p className='mt-1 font-normal text-neutral-400'>
-        Provide your company information
-      </p>
 
       <Select
-        label={`What kind of company is ${user?.firstName}`}
+        label={`What kind of company is ${
+          organizationInformation?.businessName ?? 'this'
+        }`}
         name='companyType'
         options={industries}
       />
