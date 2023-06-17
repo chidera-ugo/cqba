@@ -113,6 +113,5 @@ function checkIsActive(
 ) {
   if (isRoot && pathname === '/') return true;
   if (url && pathname.includes(url)) return true;
-  if (pathname.split('/')[1]?.includes(convertToUrlString(query))) return true;
-  return false;
+  return !!pathname.split('/')[1]?.includes(convertToUrlString(query));
 }

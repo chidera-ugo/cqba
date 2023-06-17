@@ -33,9 +33,7 @@ export const KycSteps = () => {
 
     if (url === 'business-documentation' && hasProvidedDocuments) return true;
 
-    if (url === 'review-and-submit' && isUnderReview) return true;
-
-    return false;
+    return url === 'review-and-submit' && isUnderReview;
   }
 
   if (screenSize?.['miniTablet']) {

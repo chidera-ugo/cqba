@@ -40,7 +40,7 @@ export default function useHttp({
       Authorization: tokens?.accessToken ? `Bearer ${tokens.accessToken}` : '',
     },
     baseURL,
-    withCredentials: process.env.WITH_CREDENTIALS === 'positive' ? true : false,
+    withCredentials: process.env.WITH_CREDENTIALS === 'positive',
     timeout: 60 * 1000,
     ...config,
   });
