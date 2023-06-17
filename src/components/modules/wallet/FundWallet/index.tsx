@@ -20,7 +20,7 @@ export const FundWallet = () => {
       <RightModalWrapper
         {...{
           show: showModal,
-          close() {
+          closeModal() {
             if (currentMethod) {
               setCurrentMethod(null);
             } else {

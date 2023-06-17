@@ -1,6 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
-import { IdNavigator } from 'components/common/IdNavigator';
 import { CheckInput } from 'components/form-elements/CheckInput';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { DocumentReview } from 'components/illustrations/DocumentReview';
@@ -35,8 +34,6 @@ export const ReviewAndSubmit = () => {
 
   return (
     <>
-      <IdNavigator id='review-and-submit' autoFocus />
-
       <FullScreenLoader show={isLoading} />
 
       <h5>Review your application</h5>

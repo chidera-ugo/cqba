@@ -11,7 +11,6 @@ import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { Select } from 'components/form-elements/Select';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { IdNavigator } from 'components/common/IdNavigator';
 import { PhoneNumberInput } from 'components/form-elements/PhoneNumberInput';
 import { DatePicker } from 'components/form-elements/DatePicker';
 import dayjs from 'dayjs';
@@ -93,8 +92,6 @@ export const Form = ({
       }}
       onSubmit={handleSubmit}
     >
-      <IdNavigator id='owner-information' autoFocus />
-
       <ImageViewer
         show={!!previewImageUrl}
         closeModal={() => setPreviewImageUrl('')}

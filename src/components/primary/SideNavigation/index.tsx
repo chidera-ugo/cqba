@@ -19,12 +19,13 @@ export const SideNavigationContent = ({ mobile }: { mobile?: boolean }) => {
     <div className='y-between relative h-screen'>
       <div className='h-max'>
         <ProfileSwitcher {...{ mobile }} />
-        <div className='p-8 pt-0'>
+
+        <div className='p-5 pt-0 640:p-8'>
           <SideNavigationItems />
         </div>
       </div>
 
-      <div className='sticky bottom-0 left-0 mt-auto bg-white py-5 px-8 1024:bg-neutral-100'>
+      <div className='sticky bottom-0 left-0 mt-auto bg-white py-5 px-5 640:px-8 1024:bg-neutral-100'>
         <div className='flex'>
           <Link href='/' className='my-auto'>
             <Image

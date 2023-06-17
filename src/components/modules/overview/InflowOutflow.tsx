@@ -67,7 +67,7 @@ export const InflowOutflow = () => {
 
   return (
     <div className='card p-0'>
-      <div className='border-b border-neutral-100 p-5'>
+      <div className='p-5'>
         <div className='flex gap-2'>
           <button
             onClick={() => setFilter('inflow')}
@@ -100,7 +100,7 @@ export const InflowOutflow = () => {
         </div>
       </div>
 
-      <div className='h-[300px] overflow-x-auto pb-3'>
+      <div className='h-[300px] overflow-x-auto px-3'>
         <div className='thin-scrollbar h-full min-w-[900px]'>
           <InflowOutflowChart
             {...{

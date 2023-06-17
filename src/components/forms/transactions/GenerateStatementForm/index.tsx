@@ -2,7 +2,6 @@ import { Formik } from 'formik';
 import { Form } from './Form';
 import { validationSchema } from './validationSchema';
 import { initialValues } from './initialValues';
-import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 import { encode } from 'base64-arraybuffer';
 import { AppToast } from 'components/primary/AppToast';
@@ -21,9 +20,7 @@ export const GenerateStatementForm = ({ accountNumber, close }: Props) => {
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={(values) => {
-        const { fromDate, toDate } = values;
-        const startDate = dayjs(fromDate).format('YYYY-MM-DD');
-        const endDate = dayjs(toDate).format('YYYY-MM-DD');
+        const { startDate, endDate } = values;
 
         mutate(
           {

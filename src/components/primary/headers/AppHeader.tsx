@@ -17,7 +17,9 @@ export const AppHeader = ({ title, children }: PropsWithChildren<Props>) => {
         <div className='my-auto text-xl font-semibold text-neutral-1000 640:text-2xl'>
           {title}
         </div>
+
         {children}
+
         <MobileMenu />
       </div>
     </header>

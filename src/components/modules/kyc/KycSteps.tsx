@@ -42,18 +42,18 @@ export const KycSteps = () => {
         <AgnosticCustomSelect
           noSearch
           disableSorting
-          entity='get-started-steps'
+          entity='kyc-steps'
           minimalist
           dropdownClassname='mt-2 bg-white'
           trueValueKey='id'
           displayValueKey='name'
           convertOptionsToObjectArray
           dropdownInMobileView
-          id='get-started-steps'
+          id='agnostic-select-kyc-steps'
           options={kycSteps}
           className='w-full'
           onSelect={(option) => {
-            push(`/get-started?tab=${option}`);
+            push(`/kyc?tab=${option}`);
           }}
           defaultOption={{
             name: kycSteps.find(

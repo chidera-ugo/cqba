@@ -37,8 +37,7 @@ export default function App({ Component, pageProps }: AppProps) {
               // Only show error toasts if we already have data in the cache
               // which indicates a failed background update or if a "silent" value is passed
               // directly to the meta object
-              undefined,
-              'query_cache'
+              undefined
             );
           },
         }),
@@ -74,10 +73,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <AppContextProvider>
             <KycContextProvider>
               <Component {...pageProps} />
-              <ReactQueryDevtools
-                position='bottom-left'
-                initialIsOpen={false}
-              />
+              <ReactQueryDevtools position='top-left' initialIsOpen={false} />
             </KycContextProvider>
           </AppContextProvider>
         </QueryClientProvider>

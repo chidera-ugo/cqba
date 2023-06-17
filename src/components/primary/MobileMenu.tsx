@@ -6,7 +6,7 @@ import { SideNavigationContent } from 'components/primary/SideNavigation';
 export const MobileMenu = () => {
   const [show, setShow] = useState(false);
 
-  function close() {
+  function closeModal() {
     setShow(false);
   }
 
@@ -26,7 +26,7 @@ export const MobileMenu = () => {
       <MobileMenuWrapper
         {...{
           show,
-          close,
+          closeModal,
         }}
         className='max-w-[400px] bg-white'
       >

@@ -1,4 +1,6 @@
+import { DatePickerValue } from 'types/Common';
+
 export const initialValues = {
-  toDate: '',
-  fromDate: '',
+  endDate: {} as DatePickerValue,
+  startDate: {} as DatePickerValue,
 };
