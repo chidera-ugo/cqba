@@ -40,7 +40,7 @@ export default function VerifyEmail() {
             icon={<Cancel />}
             actionButton={{
               action() {
-                push('/signup');
+                push('/http/signup');
               },
 
               text: 'Go Home',

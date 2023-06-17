@@ -16,6 +16,7 @@ import {
 interface NavigationItem {
   icon: JSX.Element;
   title: string;
+  id?: string;
   url?: string;
   isRoot?: boolean;
   showWhenUnverified?: boolean;
@@ -28,6 +29,7 @@ export const useNavigationItems = () => {
         icon: <BadgeCheck />,
         title: 'Get Started',
         url: '/kyc',
+        id: 'kyc',
         showWhenUnverified: true,
       },
       {

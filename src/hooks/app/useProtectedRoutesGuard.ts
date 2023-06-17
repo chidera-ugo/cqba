@@ -8,7 +8,7 @@ export const useProtectedRoutesGuard = () => {
   const { user } = state;
 
   useEffect(() => {
-    // Save current url and redirect to signin page if auth session is invalid
+    // Save current url and redirect to signin page if http session is invalid
     if (!!user) return;
 
     let path = window.location.href.replace(window.location.origin, '');
@@ -24,7 +24,7 @@ export const useProtectedRoutesGuard = () => {
     }
 
     replace({
-      pathname: '/auth/signin',
+      pathname: '/http/signin',
       query,
     });
   }, [user]);

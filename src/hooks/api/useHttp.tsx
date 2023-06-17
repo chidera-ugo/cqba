@@ -3,18 +3,20 @@ import { AppToast } from 'components/primary/AppToast';
 import { useAppContext } from 'context/AppContext';
 import { useDestroySession } from 'hooks/app/useDestroySession';
 import { OutgoingHttpHeaders } from 'http2';
+import { handleAxiosError } from 'methods/http/handleAxiosError';
 import { toast } from 'react-toastify';
 
 export type Method = 'get' | 'post' | 'put' | 'delete' | 'patch';
-
 export type Service = 'auth' | 'organizations';
+
+export const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 export function urlModifier(url?: Service) {
   switch (url) {
     case 'organizations':
       return '/v1/organizations';
     case 'auth':
-      return '/v1/auth';
+      return '/v1/http';
     default:
       return '/';
   }
@@ -27,8 +29,7 @@ export default function useHttp({
   config?: AxiosRequestConfig<any>;
   headers?: OutgoingHttpHeaders;
 }): AxiosInstance {
-  const { state } = useAppContext();
-
+  const { state, dispatch } = useAppContext();
   const { destroySession } = useDestroySession();
 
   const { tokens } = state;
@@ -38,7 +39,7 @@ export default function useHttp({
       Accept: 'application/json',
       Authorization: tokens?.accessToken ? `Bearer ${tokens.accessToken}` : '',
     },
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+    baseURL,
     withCredentials: process.env.WITH_CREDENTIALS === 'positive' ? true : false,
     timeout: 60 * 1000,
     ...config,
@@ -60,19 +61,17 @@ export default function useHttp({
   }
 
   axiosInstance.interceptors.response.use(
-    (response) => {
-      return response;
-    },
-    async function (e: any) {
-      const data = e?.response?.data;
+    (response) => response,
+    async (e) => {
+      const req = await handleAxiosError(
+        e,
+        (tokens) => {
+          dispatch({ type: 'saveTokens', payload: tokens });
+        },
+        terminateSession
+      );
 
-      const statusCode = data?.statusCode;
-
-      if (isHtmlResponse(data)) return terminateSession();
-      else if (statusCode === 401)
-        return terminateSession(e?.response?.data?.message);
-
-      return Promise.reject(e);
+      return await axiosInstance(req);
     }
   );
 
@@ -87,12 +86,4 @@ export default function useHttp({
   }
 
   return axiosInstance;
-}
-
-export function isHtmlResponse(data: any) {
-  if (typeof data !== 'string') return false;
-
-  const chunk = data.substring(0, 20).toLowerCase();
-
-  return chunk.includes('<!doctype html');
 }

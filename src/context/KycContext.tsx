@@ -1,4 +1,4 @@
-import { useGetOrganizationInformation } from 'hooks/api/useGetOrganizationInformation';
+import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { PropsWithChildren, createContext, useContext } from 'react';
 
 const KycContext = createContext(null);

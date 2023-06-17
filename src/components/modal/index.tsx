@@ -8,7 +8,7 @@ export const Modal = ({
   children,
   type,
   show,
-  close,
+  closeModal,
   className,
   duration = 0.2,
   closeOnClickOutside,
@@ -41,7 +41,7 @@ export const Modal = ({
               initial='hide'
               animate='show'
               exit='hide'
-              onClick={closeOnClickOutside ? close : () => setGrow(true)}
+              onClick={closeOnClickOutside ? closeModal : () => setGrow(true)}
               variants={{
                 show: {
                   opacity: 1,
@@ -89,8 +89,8 @@ export const Modal = ({
               id='modal-child-wrapper'
               onClick={(e: any) => {
                 if (e.target.id === 'modal-child-wrapper') {
-                  if (closeOnClickOutside && close) {
-                    close();
+                  if (closeOnClickOutside && closeModal) {
+                    closeModal();
                   } else {
                     setGrow(true);
                   }

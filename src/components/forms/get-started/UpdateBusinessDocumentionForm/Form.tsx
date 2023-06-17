@@ -1,28 +1,73 @@
+import { IsLoading } from 'components/data-states/IsLoading';
 import { Input } from 'components/form-elements/Input';
+import { ImageViewer } from 'components/modals/ImageViewer';
 import { Form as FormikForm, FormikProps } from 'formik';
+import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
+import { useScrollToFormError } from 'hooks/forms/useScrollToFormError';
+import { sanitizeRecordToRemoveUndefinedAndNulls } from 'utils/sanitizers/sanitizeRecordToRemoveUndefinedAndNulls';
 import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { Select } from 'components/form-elements/Select';
-import { Dispatch, SetStateAction } from 'react';
-import UnsavedChangesPrompt from 'components/common/UnsavedChangesPrompt';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { IdNavigator } from 'components/common/IdNavigator';
 import { FileInput } from 'components/form-elements/FileInput';
 
 interface Props {
   formikProps: FormikProps<typeof initialValues>;
   processing: boolean;
-  hasUnsavedChanges: boolean;
   setHasUnsavedChanges: Dispatch<SetStateAction<boolean>>;
 }
 
 export const Form = ({
   processing,
   formikProps,
-  hasUnsavedChanges,
   setHasUnsavedChanges,
 }: Props) => {
-  const { handleSubmit, setFieldValue, values } = formikProps;
+  const {
+    handleSubmit,
+    setValues,
+    setFieldValue,
+    values,
+    errors,
+    submitCount,
+  } = formikProps;
+
   const v = values as any;
+
+  useScrollToFormError(errors, submitCount);
+
+  const [previewImageUrl, setPreviewImageUrl] = useState('');
+
+  const { data, isLoading } = useGetOrganizationInformation();
+
+  useEffect(() => {
+    if (!data) return;
+
+    const {
+      utilityBillType,
+      utilityBillImageUrl,
+      bnNumberImageUrl,
+      bnNumber,
+      taxIdNumber,
+    } = sanitizeRecordToRemoveUndefinedAndNulls(data);
+
+    setValues({
+      ...values,
+      tin: taxIdNumber,
+      bnNumber,
+      bnDocumentFile: {
+        ...values.bnDocumentFile,
+        webUrl: bnNumberImageUrl,
+      },
+      utilityBillFile: {
+        ...values.utilityBillFile,
+        webUrl: utilityBillImageUrl,
+      },
+      utilityBillType,
+    });
+  }, [data]);
+
+  if (isLoading) return <IsLoading />;
 
   return (
     <FormikForm
@@ -32,13 +77,12 @@ export const Form = ({
       onSubmit={handleSubmit}
     >
       <IdNavigator id='business-documentation' autoFocus />
-      <UnsavedChangesPrompt {...{ hasUnsavedChanges }} />
 
-      <h5>Provide your business documents</h5>
-      <p className='mt-1 font-normal text-neutral-400'>
-        Please provide additional business information and upload business
-        documents
-      </p>
+      <ImageViewer
+        show={!!previewImageUrl}
+        closeModal={() => setPreviewImageUrl('')}
+        image={previewImageUrl}
+      />
 
       <Input label='BN Number' name='bnNumber' />
       <Input label='Tax Identification Number' name='tin' />
@@ -57,6 +101,7 @@ export const Form = ({
         {...{
           setFieldValue,
         }}
+        onClickViewExistingFile={(src) => setPreviewImageUrl(src)}
         getFile={(id) => v[id]}
       />
 
@@ -68,6 +113,7 @@ export const Form = ({
         {...{
           setFieldValue,
         }}
+        onClickViewExistingFile={(src) => setPreviewImageUrl(src)}
         getFile={(id) => v[id]}
       />
 

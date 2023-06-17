@@ -218,6 +218,18 @@
   .pill {
     @apply y-center smooth h-[26px] rounded-full px-2 py-1 text-sm font-normal capitalize transition-colors;
   }
+
+  .mpill {
+    @apply flex rounded-full bg-opacity-40 px-2 py-1 text-xs font-semibold;
+  }
+
+  .blue-mpill {
+    @apply mpill bg-blue-300 text-blue-700;
+  }
+
+  .blue-mpill-h {
+    @apply mpill text-blue-500 bg-blue-300 hover:bg-opacity-60;
+  }
 }
 
 /* CUSTOM SCROLL BAR */

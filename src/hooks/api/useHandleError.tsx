@@ -2,23 +2,7 @@ import { AppToast } from 'components/primary/AppToast';
 import { toast } from 'react-toastify';
 
 export const useHandleError = () => {
-  const handleError = (
-    e: any,
-    silent?: boolean,
-    onClick?: () => void,
-    originator?: string
-  ) => {
-    console.log(
-      'HANDLE_ERROR',
-      e.message,
-      e.response?.status,
-      e.response?.data,
-      {
-        originator,
-        silent,
-      }
-    );
-
+  const handleError = (e: any, silent?: boolean, onClick?: () => void) => {
     let message: string;
 
     const statusCode = e?.response?.data?.statusCode;

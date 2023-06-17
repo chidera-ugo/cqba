@@ -1,46 +1,72 @@
+import { useQueryClient } from '@tanstack/react-query';
+import { FullScreenLoader } from 'components/common/FullScreenLoader';
+import UnsavedChangesPrompt from 'components/common/UnsavedChangesPrompt';
 import { Formik } from 'formik';
+import { useUpdateOrganizationDocuments } from 'hooks/api/kyc/useGetOrganizationDocuments';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
-import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 export const UpdateBusinessDocumentionForm = () => {
   const { replace } = useRouter();
-  const { isLoading, mutate } = useMakeDummyHttpRequest({});
+
+  const queryClient = useQueryClient();
+
+  const { isLoading, mutate } = useUpdateOrganizationDocuments({
+    onSuccess() {
+      queryClient.invalidateQueries(['organization-information']);
+      replace('/kyc?tab=review-and-submit');
+    },
+  });
+
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={({ ...values }) => {
+      onSubmit={({
+        bnDocumentFile,
+        bnNumber,
+        utilityBillFile,
+        utilityBillType,
+        tin,
+      }) => {
         setHasUnsavedChanges(false);
-        mutate(
-          {
-            ...values,
-          },
-          {
-            onSuccess() {
-              setHasUnsavedChanges(false);
-              replace('/kyc?tab=owner-information');
-            },
-          }
-        );
+
+        mutate({
+          bnNumber,
+          bnNumberImageUrl: bnDocumentFile?.file?.name,
+          utilityBillType,
+          taxIdNumber: tin,
+          utilityBillImageUrl: utilityBillFile?.file?.name,
+        });
       }}
       validateOnBlur={false}
     >
       {(formikProps) => {
         return (
-          <Form
-            {...{
-              formikProps,
-              processing: isLoading,
-              hasUnsavedChanges,
-              setHasUnsavedChanges,
-            }}
-          />
+          <>
+            <UnsavedChangesPrompt {...{ hasUnsavedChanges }} />
+
+            <FullScreenLoader show={isLoading} />
+
+            <h5>Provide your business documents</h5>
+            <p className='mt-1 font-normal text-neutral-400'>
+              Please provide additional business information and upload business
+              documents
+            </p>
+
+            <Form
+              {...{
+                formikProps,
+                processing: isLoading,
+                setHasUnsavedChanges,
+              }}
+            />
+          </>
         );
       }}
     </Formik>

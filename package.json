@@ -40,6 +40,7 @@
     "react-virtualized": "^9.22.5",
     "react-virtualized-auto-sizer": "^1.0.15",
     "react-window": "^1.8.9",
+    "react-zoom-pan-pinch": "^3.0.8",
     "recharts": "^2.6.2",
     "typescript": "5.0.2",
     "uuid": "^9.0.0",

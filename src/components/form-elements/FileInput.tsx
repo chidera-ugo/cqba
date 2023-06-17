@@ -4,11 +4,13 @@ import { useDropFile } from 'hooks/forms/useDropFile';
 import { useFileSelector } from 'hooks/forms/useFileSelector';
 import { FileField } from 'types/Common';
 import { FileUpload } from 'components/svgs/forms/FileUpload';
+import { ViewUploadedDocument } from 'components/modules/common/ViewUploadedDocument';
 
 type Props = JSX.IntrinsicElements['input'] &
   FileField & {
     label: string;
     fileType?: 'image' | 'all';
+    onClickViewExistingFile?: (src: any) => void;
   };
 
 export const FileInput = ({
@@ -19,6 +21,7 @@ export const FileInput = ({
   getFile,
   fileType = 'image',
   extensions: _extensions,
+  onClickViewExistingFile,
   ...props
 }: Props) => {
   const { fileSelector, errorCb } = useFileSelector();
@@ -47,7 +50,7 @@ export const FileInput = ({
   function constructAcceptList() {
     if (!extensions?.length) return '';
     const arr = [];
-    for (const i of extensions) arr.push(`.${i}`);
+    for (const item of extensions) arr.push(`.${item}`);
     return arr.join(', ');
   }
 
@@ -67,7 +70,9 @@ export const FileInput = ({
             !props.disabled
               ? 'hover:border-primary-500 cursor-pointer'
               : 'cursor-not-allowed',
-            !!file?.file ? 'bg-white' : 'border-white',
+            !!file?.file || !!file?.webUrl
+              ? 'border-solid border-blue-400 bg-white'
+              : 'border-white',
             meta.touched && meta.error ? 'border-error-main' : ''
           )}
         >
@@ -103,6 +108,7 @@ export const FileInput = ({
           onChange={() =>
             fileSelector({
               id,
+              existingFile: file,
               maximumFileSizeInMB,
               successCb: (val) => setFieldValue(id, val),
               errorCb,
@@ -120,6 +126,35 @@ export const FileInput = ({
 
       {!!submitCount && meta.error ? (
         <div className='generic-error'>{meta.error}</div>
+      ) : null}
+
+      {!!file?.webUrl && onClickViewExistingFile ? (
+        <div className='mt-2 flex justify-end'>
+          <ViewUploadedDocument
+            url={file.webUrl}
+            onClick={(src) => onClickViewExistingFile(src)}
+          >
+            <div className='blue-mpill-h'>
+              <span className='my-auto mr-2'>View Uploaded Document</span>
+              <span className='my-auto'>
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  strokeWidth={1.5}
+                  stroke='currentColor'
+                  className={clsx('h-4 w-4')}
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    d='M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25'
+                  />
+                </svg>
+              </span>
+            </div>
+          </ViewUploadedDocument>
+        </div>
       ) : null}
     </div>
   );

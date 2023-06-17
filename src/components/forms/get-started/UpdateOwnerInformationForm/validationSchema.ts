@@ -9,7 +9,14 @@ export const validationSchema = object({
     ),
   idNumber: string().required('Please provide your ID number'),
   idType: string().required('Please select your form of ID'),
-  dateOfBirth: string().required('Please provide your date of birth'),
+  dateOfBirth: object().test(
+    'required',
+    'Please provide date of birth',
+    (val: any) => {
+      return !!val.value && !!val.calendarValue;
+    }
+  ),
+  bvn: string().required('Please provide bvn'),
   gender: string().required('Please select your gender'),
   lastName: string().required('Please provide your last name'),
   firstName: string().required('Please provide your first name'),

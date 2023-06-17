@@ -1,6 +1,8 @@
 export interface IFile {
   file?: File;
   url?: string;
+  base64Url?: string;
+  webUrl?: string;
   id: string;
 }
 
@@ -9,6 +11,11 @@ export type SetFieldValue = (
   value: any,
   shouldValidate?: boolean | undefined
 ) => void;
+
+export type DatePickerValue = {
+  value: string;
+  calendarValue: Date | null;
+};
 
 export interface Field {
   setFieldValue?: SetFieldValue;
