@@ -71,7 +71,7 @@ export const useNavigationItems = () => {
       },
       {
         icon: <Users />,
-        title: 'Employee',
+        title: 'Employees',
       },
       {
         icon: <Code />,

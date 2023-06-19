@@ -6,8 +6,8 @@ import logo from '/public/logos/main-logo.svg';
 
 export const SideNavigation = () => {
   return (
-    <div className='thin-scrollbar overflows-y-auto fixed left-0 top-0 z-[1200] w-[324px] overflow-x-visible bg-neutral-100'>
-      <div className='y-between relative z-10 h-full min-h-full'>
+    <div className='thin-scrollbar fixed left-0 top-0 z-[1200] w-[324px] overflow-x-visible bg-neutral-100'>
+      <div className='relative z-10 h-full min-h-full'>
         <SideNavigationContent />
       </div>
     </div>
@@ -20,7 +20,7 @@ export const SideNavigationContent = ({ mobile }: { mobile?: boolean }) => {
       <div className='h-max'>
         <ProfileSwitcher {...{ mobile }} />
 
-        <div className='p-5 pt-0 640:p-8'>
+        <div className='p-5 pt-0 640:p-8 640:pt-0'>
           <SideNavigationItems />
         </div>
       </div>
