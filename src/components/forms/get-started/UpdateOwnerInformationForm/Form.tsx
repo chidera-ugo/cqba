@@ -4,6 +4,7 @@ import { ImageViewer } from 'components/modals/ImageViewer';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useScrollToFormError } from 'hooks/forms/useScrollToFormError';
+import { DatePickerValue } from 'types/Common';
 import { constructIdTypes } from 'utils/constructors/constructIdTypes';
 import { formatPhoneNumber } from 'utils/formatters/formatPhoneNumber';
 import { sanitizeRecordToRemoveUndefinedAndNulls } from 'utils/sanitizers/sanitizeRecordToRemoveUndefinedAndNulls';
@@ -11,7 +12,6 @@ import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { Select } from 'components/form-elements/Select';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { IdNavigator } from 'components/common/IdNavigator';
 import { PhoneNumberInput } from 'components/form-elements/PhoneNumberInput';
 import { DatePicker } from 'components/form-elements/DatePicker';
 import dayjs from 'dayjs';
@@ -61,14 +61,17 @@ export const Form = ({
       politicalAffiliation,
     } = sanitizeRecordToRemoveUndefinedAndNulls(data);
 
-    const _dob = dayjs(dob);
+    const _dob = !!dob ? dayjs(dob) : '';
 
     setValues({
       ...values,
-      dateOfBirth: {
-        value: _dob.toISOString(),
-        calendarValue: _dob.toDate(),
-      },
+      dateOfBirth:
+        !!dob && !!_dob
+          ? {
+              value: _dob.toISOString(),
+              calendarValue: _dob.toDate(),
+            }
+          : ({} as DatePickerValue),
       idFile: {
         ...values.idFile,
         webUrl: idImageUrl,
@@ -93,8 +96,6 @@ export const Form = ({
       }}
       onSubmit={handleSubmit}
     >
-      <IdNavigator id='owner-information' autoFocus />
-
       <ImageViewer
         show={!!previewImageUrl}
         closeModal={() => setPreviewImageUrl('')}

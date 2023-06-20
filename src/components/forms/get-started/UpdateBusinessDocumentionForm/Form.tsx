@@ -9,7 +9,6 @@ import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { Select } from 'components/form-elements/Select';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { IdNavigator } from 'components/common/IdNavigator';
 import { FileInput } from 'components/form-elements/FileInput';
 
 interface Props {
@@ -76,8 +75,6 @@ export const Form = ({
       }}
       onSubmit={handleSubmit}
     >
-      <IdNavigator id='business-documentation' autoFocus />
-
       <ImageViewer
         show={!!previewImageUrl}
         closeModal={() => setPreviewImageUrl('')}

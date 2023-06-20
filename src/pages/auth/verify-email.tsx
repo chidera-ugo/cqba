@@ -60,7 +60,7 @@ export default function VerifyEmail() {
           }
           icon={<GreenCheck />}
           actionButton={{
-            action: () => replace('/signin'),
+            action: () => replace('/auth/signin'),
             text: 'Proceed',
           }}
         />
