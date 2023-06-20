@@ -1,5 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
+import { IdNavigator } from 'components/common/IdNavigator';
 import UnsavedChangesPrompt from 'components/common/UnsavedChangesPrompt';
 import { Formik } from 'formik';
 import { useUpdateOwnerInformation } from 'hooks/api/kyc/useUpdateOwnerInformation';
@@ -53,6 +54,8 @@ export const UpdateOwnerInformationForm = () => {
       {(formikProps) => {
         return (
           <>
+            <IdNavigator id='owner-information' autoFocus />
+
             <UnsavedChangesPrompt {...{ hasUnsavedChanges }} />
 
             <FullScreenLoader show={isLoading} />

@@ -19,7 +19,7 @@ export const useAuthenticationRoutesGuard = () => {
       return;
     }
 
-    if (redirectUrl.includes('/http')) {
+    if (redirectUrl.includes('/auth')) {
       replace(url);
       return;
     }

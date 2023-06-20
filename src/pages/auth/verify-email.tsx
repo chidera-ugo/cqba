@@ -40,7 +40,7 @@ export default function VerifyEmail() {
             icon={<Cancel />}
             actionButton={{
               action() {
-                push('/http/signup');
+                push('/auth/signup');
               },
 
               text: 'Go Home',
@@ -60,7 +60,7 @@ export default function VerifyEmail() {
           }
           icon={<GreenCheck />}
           actionButton={{
-            action: () => replace('/signin'),
+            action: () => replace('/auth/signin'),
             text: 'Proceed',
           }}
         />

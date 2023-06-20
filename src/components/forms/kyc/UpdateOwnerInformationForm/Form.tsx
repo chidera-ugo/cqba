@@ -4,6 +4,7 @@ import { ImageViewer } from 'components/modals/ImageViewer';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useScrollToFormError } from 'hooks/forms/useScrollToFormError';
+import { DatePickerValue } from 'types/Common';
 import { constructIdTypes } from 'utils/constructors/constructIdTypes';
 import { formatPhoneNumber } from 'utils/formatters/formatPhoneNumber';
 import { sanitizeRecordToRemoveUndefinedAndNulls } from 'utils/sanitizers/sanitizeRecordToRemoveUndefinedAndNulls';
@@ -60,14 +61,17 @@ export const Form = ({
       politicalAffiliation,
     } = sanitizeRecordToRemoveUndefinedAndNulls(data);
 
-    const _dob = dayjs(dob);
+    const _dob = !!dob ? dayjs(dob) : '';
 
     setValues({
       ...values,
-      dateOfBirth: {
-        value: _dob.toISOString(),
-        calendarValue: _dob.toDate(),
-      },
+      dateOfBirth:
+        !!dob && !!_dob
+          ? {
+              value: _dob.toISOString(),
+              calendarValue: _dob.toDate(),
+            }
+          : ({} as DatePickerValue),
       idFile: {
         ...values.idFile,
         webUrl: idImageUrl,

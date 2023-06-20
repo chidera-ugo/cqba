@@ -24,7 +24,7 @@ export const useProtectedRoutesGuard = () => {
     }
 
     replace({
-      pathname: '/http/signin',
+      pathname: '/auth/signin',
       query,
     });
   }, [user]);

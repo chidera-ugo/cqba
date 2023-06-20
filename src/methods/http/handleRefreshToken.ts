@@ -5,7 +5,7 @@ import { getFromLocalStore } from 'lib/localStore';
 export async function handleRefreshToken(onError: () => void) {
   const tokens = getFromLocalStore('tokens');
 
-  if (!tokens.refreshToken) return;
+  if (!tokens || !tokens?.refreshToken) return;
 
   try {
     const response = await axios.post(

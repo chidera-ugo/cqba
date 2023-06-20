@@ -1,5 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
+import { IdNavigator } from 'components/common/IdNavigator';
 import UnsavedChangesPrompt from 'components/common/UnsavedChangesPrompt';
 import { Formik } from 'formik';
 import { useUpdateOrganizationDocuments } from 'hooks/api/kyc/useGetOrganizationDocuments';
@@ -49,6 +50,8 @@ export const UpdateBusinessDocumentionForm = () => {
       {(formikProps) => {
         return (
           <>
+            <IdNavigator id='business-documentation' autoFocus />
+
             <UnsavedChangesPrompt {...{ hasUnsavedChanges }} />
 
             <FullScreenLoader show={isLoading} />

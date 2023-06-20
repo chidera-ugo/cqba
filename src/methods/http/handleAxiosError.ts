@@ -10,10 +10,11 @@ export async function handleAxiosError(
   const data = e?.response?.data;
 
   const statusCode = data?.statusCode;
+  const error = data?.error;
 
   if (isHtmlResponse(data)) return onError();
 
-  if (statusCode === 401) {
+  if (statusCode === 401 && error == 'ExpiredToken') {
     const previousRequest = e.config;
 
     if (!previousRequest.sent) {
