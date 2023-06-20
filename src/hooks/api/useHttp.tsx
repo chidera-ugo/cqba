@@ -16,7 +16,7 @@ export function urlModifier(url?: Service) {
     case 'organizations':
       return '/v1/organizations';
     case 'auth':
-      return '/v1/http';
+      return '/v1/auth';
     default:
       return '/';
   }
