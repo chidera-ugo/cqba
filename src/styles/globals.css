@@ -228,7 +228,7 @@
   }
 
   .blue-mpill-h {
-    @apply mpill text-blue-500 bg-blue-300 hover:bg-opacity-60;
+    @apply mpill bg-blue-300 text-blue-500 hover:bg-opacity-60;
   }
 }
 
