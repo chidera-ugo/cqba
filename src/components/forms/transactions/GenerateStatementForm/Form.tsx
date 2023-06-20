@@ -1,8 +1,5 @@
 import { Form as FormikForm, FormikProps } from 'formik';
 import { initialValues } from './initialValues';
-import dayjs from 'dayjs';
-import { useState } from 'react';
-import { DatePicker } from 'components/form-elements/DatePicker';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 
 interface Props {
@@ -13,35 +10,8 @@ interface Props {
 export const Form = ({ formikProps, processing }: Props) => {
   const { handleSubmit } = formikProps;
 
-  const [fromCalendarValue, setFromCalendarValue] = useState<Date | null>(null);
-  const [toCalendarValue, setToCalendarValue] = useState<Date | null>(null);
-
-  // Add validation for invalid end date
   return (
     <FormikForm onSubmit={handleSubmit}>
-      <DatePicker
-        label='Start Date'
-        name='fromDate'
-        {...{
-          calendarValue: fromCalendarValue,
-          setCalendarValue: setFromCalendarValue,
-        }}
-        maxDate={dayjs().subtract(1, 'day').toDate()}
-        minDate={dayjs().subtract(1, 'year').toDate()}
-      />
-
-      <DatePicker
-        label='End Date'
-        name='toDate'
-        disabled={!fromCalendarValue}
-        {...{
-          calendarValue: toCalendarValue,
-          setCalendarValue: setToCalendarValue,
-        }}
-        minDate={dayjs(fromCalendarValue).add(1, 'day').toDate()}
-        maxDate={dayjs().toDate()}
-      />
-
       <div className='flex justify-end'>
         <SubmitButton
           id='transfer-to-bank-submit-button'
