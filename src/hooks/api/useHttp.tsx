@@ -10,6 +10,7 @@ export type Method = 'get' | 'post' | 'put' | 'delete' | 'patch';
 export type Service =
   | 'auth'
   | 'organizations'
+  | 'departments'
   | 'transactions'
   | 'employees'
   | 'dashboard';
@@ -28,6 +29,8 @@ export function urlModifier(url?: Service) {
       return '/v1/transactions';
     case 'auth':
       return '/v1/auth';
+    case 'departments':
+      return '/v1/departments';
     default:
       return '/';
   }

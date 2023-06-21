@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import { useEffect, useState } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import { FixedSizeList as List } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { IdNavigator } from 'components/common/IdNavigator';
@@ -56,7 +56,8 @@ export const Select = ({
   dropdownInMobileView,
   renderer,
   isLoading,
-}: Props) => {
+  children,
+}: PropsWithChildren<Props>) => {
   const options = !convertOptionsToObjectArray
     ? _options
     : _options.map((option) => {
@@ -244,7 +245,7 @@ export const Select = ({
                             )}
 
                             {isActive(data[trueValueKey]) && (
-                              <div className='my-auto text-primary-main'>
+                              <div className='my-auto text-black'>
                                 <SolidCheck />
                               </div>
                             )}
@@ -259,6 +260,8 @@ export const Select = ({
           )}
         </div>
       </div>
+
+      <div className='sticky bottom-0 left-0'>{children}</div>
     </>
   );
 };

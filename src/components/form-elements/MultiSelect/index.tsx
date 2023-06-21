@@ -121,10 +121,11 @@ export function getOriginalSelectionOfMultiCheck(
 ) {
   const arr: any[] = [];
 
-  originalOptionsList.forEach((option) => {
-    if (selectedOptionsMap[option[trueValueKey]]) {
+  originalOptionsList?.forEach((option) => {
+    if (selectedOptionsMap?.[option[trueValueKey]]) {
       arr.push(option);
     }
   });
+
   return arr;
 }

@@ -12,7 +12,7 @@ export function generateTableEntries<T>(
       ...sampleEntry,
       id: `Ref${generateUUID().split('-')[0]}`,
       createdAt: dayjs()
-        .subtract(i % 2 === 0 ? 1 * i : 2 * i, 'days')
+        .subtract(i % 2 === 0 ? i : 2 * i, 'days')
         .toISOString(),
     };
 
@@ -23,14 +23,10 @@ export function generateTableEntries<T>(
     data: {
       first: true,
       last: false,
-      number: 0,
-      hasContent: true,
-      numberOfElements: 50,
-      size: 50,
-      totalElements: 268,
+      pageNumber: 0,
       totalPages: 6,
       content: entries,
-      empty: !!limit ? false : true,
+      empty: !limit,
     },
   };
 }

@@ -1,30 +1,44 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-interface Args {
-  performDebouncedAction: (value?: any) => void;
-  onChange?: () => void;
-  value?: any;
-  dependencies: any[];
+interface Args<T> {
+  performDebouncedAction?: (value?: any) => void;
+  onChange?: (value?: T) => void;
+  value?: T;
+  dependencies?: any[];
   debounce?: number;
 }
 
-export const useDebouncer = ({
+export const useDebouncer = <T>({
   performDebouncedAction,
   onChange,
-  dependencies,
+  dependencies = [],
   debounce = 600,
   value,
-}: Args) => {
+}: Args<T>) => {
   const timeout = useRef<any>();
+  const [debouncedValue, setDebouncedValue] = useState(value ?? '');
 
   useEffect(() => {
     clearTimeout(timeout.current);
-    onChange && onChange();
+
+    if (onChange) {
+      onChange(value);
+    }
+
+    setDebouncedValue('');
 
     timeout.current = setTimeout(() => {
-      performDebouncedAction(value);
+      if (!!value) {
+        setDebouncedValue(value);
+
+        if (!performDebouncedAction) return;
+
+        performDebouncedAction(value);
+      }
     }, debounce);
 
     return () => clearTimeout(timeout.current);
-  }, dependencies);
+  }, [...dependencies, value]);
+
+  return [debouncedValue] as const;
 };

@@ -74,7 +74,7 @@ export const Modal = ({
                 hide: {
                   y:
                     type === 'center'
-                      ? '100%'
+                      ? '75vh'
                       : type === 'center-top'
                       ? '-100%'
                       : 0,

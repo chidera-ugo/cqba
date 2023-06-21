@@ -187,6 +187,7 @@ export function Table<T>({
       !pagination ||
       !setPagination ||
       res?.empty ||
+      isError ||
       (isLoading && !res?.content.length)
     )
       return <></>;

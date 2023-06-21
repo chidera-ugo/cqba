@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { Dropdown } from 'components/common/Dropdown';
+import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { CentredModalWrapper } from 'components/modal/ModalWrapper';
 import { Dispatch, PropsWithChildren, SetStateAction } from 'react';
 import { Select, MultiCheckHandleChanges } from './Select';
@@ -24,18 +25,20 @@ export const SelectContent = ({
 
   const MainSelect = () => {
     return (
-      <Select
-        {...{
-          close() {
-            setShowList(false);
-          },
-          minimalist,
-          dropdownClassname,
-        }}
-        {...props}
-      >
-        {children}
-      </Select>
+      <AppErrorBoundary>
+        <Select
+          {...{
+            close() {
+              setShowList(false);
+            },
+            minimalist,
+            dropdownClassname,
+          }}
+          {...props}
+        >
+          {children}
+        </Select>
+      </AppErrorBoundary>
     );
   };
 
