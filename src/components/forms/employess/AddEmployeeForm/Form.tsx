@@ -3,7 +3,7 @@ import { Form as FormikForm, FormikProps } from 'formik';
 import { useScrollToFormError } from 'hooks/forms/useScrollToFormError';
 import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { PhoneNumberInput } from 'components/form-elements/PhoneNumberInput';
 
 interface Props {
@@ -17,18 +17,11 @@ export const Form = ({
   formikProps,
   setHasUnsavedChanges,
 }: Props) => {
-  const {
-    handleSubmit,
-    setValues,
-    setFieldValue,
-    errors,
-    submitCount,
-    values,
-  } = formikProps;
+  const { handleSubmit, setFieldValue, errors, submitCount } = formikProps;
 
   useScrollToFormError(errors, submitCount);
 
-  const v = values as any;
+  // const v = values as any;
 
   // useEffect(() => {
   //   if (!data) return;

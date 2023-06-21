@@ -12,10 +12,10 @@ import NotFound from 'pages/404';
 export default function VerifyEmail() {
   const { replace, push } = useRouter();
 
-  const { validateQuery } = useQueryValidator();
+  const { getValidQuery } = useQueryValidator();
 
-  const email = validateQuery('email');
-  const code = validateQuery('code');
+  const email = getValidQuery('email');
+  const code = getValidQuery('code');
 
   const { isLoading, isError } = useVerifyEmail(email, code, {
     enabled: !!email && !!code,

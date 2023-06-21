@@ -5,10 +5,10 @@ import { useQueryValidator } from 'hooks/common/useQueryValidator';
 import NotFound from 'pages/404';
 
 export default function NewPassword() {
-  const { validateQuery } = useQueryValidator();
+  const { getValidQuery } = useQueryValidator();
 
-  const userId = validateQuery('userId');
-  const code = validateQuery('code');
+  const userId = getValidQuery('userId');
+  const code = getValidQuery('code');
 
   if (!userId || !code) return <NotFound />;
 

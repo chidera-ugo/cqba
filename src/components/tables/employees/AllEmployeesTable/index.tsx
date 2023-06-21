@@ -8,8 +8,6 @@ import {
 
 import { useColumns } from './useColumns';
 import { useRouter } from 'next/router';
-import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
-import { generateTableEntries } from 'utils/generators/generateTableEntries';
 import { ITransactionHistoryEntry } from 'types/transactions/Transaction';
 import { PaginatedResponse } from 'types/core/Table';
 import { Table } from 'components/core/Table';
