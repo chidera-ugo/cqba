@@ -19,7 +19,7 @@ export const ProfileSwitcher = ({ mobile }: { mobile?: boolean }) => {
   const { data } = useGetOrganizationInformation();
 
   return (
-    <div className='sticky top-0 left-0 z-[100] bg-white p-8 pb-0 1024:bg-neutral-100'>
+    <div className='sticky top-0 left-0 z-[100] bg-white p-5 pb-0 640:p-8 1024:bg-neutral-100'>
       <div id={id} className='relative'>
         <button
           className='x-between relative z-[25] w-full rounded-2xl bg-neutral-200 p-2.5'

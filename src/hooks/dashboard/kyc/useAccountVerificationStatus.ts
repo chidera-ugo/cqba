@@ -4,7 +4,7 @@ import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationI
 export const useAccountVerificationStatus = () => {
   const { user } = useAppContext().state;
 
-  const isVerified = user?.kybStatus === 'DONE';
+  const isVerified = user?.kybStatus === 'completed';
 
   const { data: organizationInformation } = useGetOrganizationInformation({
     enabled: !isVerified,

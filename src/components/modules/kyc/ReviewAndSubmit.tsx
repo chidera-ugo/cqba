@@ -1,11 +1,10 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
-import { IdNavigator } from 'components/common/IdNavigator';
 import { CheckInput } from 'components/form-elements/CheckInput';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { DocumentReview } from 'components/illustrations/DocumentReview';
 import { SimpleInformation } from 'components/modules/common/SimpleInformation';
-import { useApplyForReview } from 'hooks/api/kyc/useGetApplyForReview';
+import { useApplyForReview } from 'hooks/api/kyc/useApplyForReview';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import { useState } from 'react';
 
@@ -35,8 +34,6 @@ export const ReviewAndSubmit = () => {
 
   return (
     <>
-      <IdNavigator id='review-and-submit' autoFocus />
-
       <FullScreenLoader show={isLoading} />
 
       <h5>Review your application</h5>

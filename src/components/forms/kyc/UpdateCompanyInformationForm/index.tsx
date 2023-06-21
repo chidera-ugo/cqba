@@ -1,26 +1,34 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
 import UnsavedChangesPrompt from 'components/common/UnsavedChangesPrompt';
+import { AppToast } from 'components/primary/AppToast';
 import { Formik } from 'formik';
-import { useUpdateOwnerInformation } from 'hooks/api/kyc/useUpdateOwnerInformation';
-import { appendCountryCode } from 'utils/modifiers/appendCountryCode';
+import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
+import { useUpdateCompanyInformation } from 'hooks/api/kyc/useUpdateCompanyInformation';
+import { toast } from 'react-toastify';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 
-export const UpdateOwnerInformationForm = () => {
+export const UpdateCompanyInformationForm = () => {
   const { replace } = useRouter();
-
   const queryClient = useQueryClient();
 
-  const { isLoading, mutate } = useUpdateOwnerInformation({
+  const { isLoading, mutate } = useUpdateCompanyInformation({
     onSuccess() {
       queryClient.invalidateQueries(['organization-information']);
-      replace('/kyc?tab=business-documentation');
+      replace('/kyc?tab=owner-information').then(() => {
+        toast(<AppToast>Update successful</AppToast>, { type: 'success' });
+      });
     },
   });
+
+  const {
+    isLoading: gettingOrganizationInformation,
+    data: organizationInformation,
+  } = useGetOrganizationInformation();
 
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
@@ -29,23 +37,22 @@ export const UpdateOwnerInformationForm = () => {
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={({
-        phoneNumber,
-        dateOfBirth,
-        politicalAffiliation,
-        idFile,
-        idType,
-
-        ...values
+        companyType,
+        city,
+        state,
+        address,
+        employees,
+        expenses,
       }) => {
         setHasUnsavedChanges(false);
 
         mutate({
-          ...values,
-          phone: appendCountryCode(phoneNumber),
-          dob: dateOfBirth?.calendarValue?.toISOString(),
-          politicalAffiliation: politicalAffiliation === 'Yes',
-          formOfId: idType,
-          idImageUrl: idFile?.file?.name,
+          businessAddress: address,
+          averageMonthlyExpenses: expenses,
+          businessType: companyType,
+          numberOfEmployees: employees,
+          city,
+          state,
         });
       }}
       validateOnBlur={false}
@@ -57,7 +64,7 @@ export const UpdateOwnerInformationForm = () => {
 
             <FullScreenLoader show={isLoading} />
 
-            <h5>Owner Information</h5>
+            <h5>Company Information</h5>
             <p className='mt-1 font-normal text-neutral-400'>
               Provide your company information
             </p>
@@ -66,8 +73,9 @@ export const UpdateOwnerInformationForm = () => {
               {...{
                 formikProps,
                 processing: isLoading,
-                hasUnsavedChanges,
                 setHasUnsavedChanges,
+                organizationInformation,
+                gettingOrganizationInformation,
               }}
             />
           </>

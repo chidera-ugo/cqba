@@ -7,14 +7,25 @@ import { handleAxiosError } from 'methods/http/handleAxiosError';
 import { toast } from 'react-toastify';
 
 export type Method = 'get' | 'post' | 'put' | 'delete' | 'patch';
-export type Service = 'auth' | 'organizations';
+export type Service =
+  | 'auth'
+  | 'organizations'
+  | 'transactions'
+  | 'employees'
+  | 'dashboard';
 
 export const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 export function urlModifier(url?: Service) {
   switch (url) {
+    case 'dashboard':
+      return '/v1/dashboard';
+    case 'employees':
+      return '/v1/employee';
     case 'organizations':
       return '/v1/organizations';
+    case 'transactions':
+      return '/v1/transactions';
     case 'auth':
       return '/v1/auth';
     default:
@@ -40,7 +51,7 @@ export default function useHttp({
       Authorization: tokens?.accessToken ? `Bearer ${tokens.accessToken}` : '',
     },
     baseURL,
-    withCredentials: process.env.WITH_CREDENTIALS === 'positive' ? true : false,
+    withCredentials: process.env.WITH_CREDENTIALS === 'positive',
     timeout: 60 * 1000,
     ...config,
   });

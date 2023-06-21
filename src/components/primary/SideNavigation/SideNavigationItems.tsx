@@ -1,5 +1,5 @@
-import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import { useCurrentAccountSetupStepUrl } from 'hooks/dashboard/kyc/useCurrentAccountSetupStepUrl';
+import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useNavigationItems } from 'hooks/dashboard/useNavigationItems';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -16,15 +16,15 @@ export const SideNavigationItems = () => {
   const [dismiss, isDismissed, checkIsSideNavItemToolTipDismissed] =
     useDismiss('side_nav_tooltip');
 
-  const { isVerified } = useAccountVerificationStatus();
+  const { isVerified } = useIsVerified();
 
   const { getCurrentAccountSetupStepUrl } = useCurrentAccountSetupStepUrl();
 
   return (
     <>
-      {Object.keys(navigationItems).map((item) => {
+      {Object.keys(navigationItems).map((item, i) => {
         return (
-          <div key={item} className='mt-8'>
+          <div key={item} className={clsx(i > 0 && 'mt-8')}>
             <div className='mb-3 text-sm font-semibold text-neutral-1000'>
               {item}
             </div>
@@ -113,6 +113,5 @@ function checkIsActive(
 ) {
   if (isRoot && pathname === '/') return true;
   if (url && pathname.includes(url)) return true;
-  if (pathname.split('/')[1]?.includes(convertToUrlString(query))) return true;
-  return false;
+  return !!pathname.split('/')[1]?.includes(convertToUrlString(query));
 }

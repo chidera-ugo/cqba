@@ -1,6 +1,6 @@
-import { UpdateBusinessDocumentionForm } from 'components/forms/get-started/UpdateBusinessDocumentionForm';
-import { UpdateCompanyInformationForm } from 'components/forms/get-started/UpdateCompanyInformationForm';
-import { UpdateOwnerInformationForm } from 'components/forms/get-started/UpdateOwnerInformationForm';
+import { UpdateBusinessDocumentionForm } from 'components/forms/kyc/UpdateBusinessDocumentionForm';
+import { UpdateCompanyInformationForm } from 'components/forms/kyc/UpdateCompanyInformationForm';
+import { UpdateOwnerInformationForm } from 'components/forms/kyc/UpdateOwnerInformationForm';
 import { GreenCheck } from 'components/illustrations/Success';
 import { AppLayout } from 'components/layouts/AppLayout';
 import { SimpleInformation } from 'components/modules/common/SimpleInformation';
@@ -61,7 +61,7 @@ export default function Kyc() {
         </p>
       </div>
 
-      <div className='768:get-started-layout-height mt-7 grid-cols-12 rounded-xl border-neutral-200 768:grid 768:border'>
+      <div className='768:kyc-layout-height mt-7 grid-cols-12 rounded-xl border-neutral-200 768:grid 768:border'>
         <div className='col-span-5 border-neutral-200 768:m-5 768:mr-0 768:border-r 1200:col-span-4'>
           <div className='mx-auto max-w-[540px]'>
             <h5>Setup Guide</h5>

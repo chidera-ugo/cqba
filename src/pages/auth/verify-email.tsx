@@ -12,10 +12,10 @@ import NotFound from 'pages/404';
 export default function VerifyEmail() {
   const { replace, push } = useRouter();
 
-  const { validateQuery } = useQueryValidator();
+  const { getValidQuery } = useQueryValidator();
 
-  const email = validateQuery('email');
-  const code = validateQuery('code');
+  const email = getValidQuery('email');
+  const code = getValidQuery('code');
 
   const { isLoading, isError } = useVerifyEmail(email, code, {
     enabled: !!email && !!code,
@@ -55,12 +55,14 @@ export default function VerifyEmail() {
           title={<span className={'mt-5 block'}>Verification Successful</span>}
           description={
             <span className='mt-3 block'>
-              {"We've verified your email, you may proceed"}
+              {
+                "We've verified your email, you may proceed to sign in to your new account"
+              }
             </span>
           }
           icon={<GreenCheck />}
           actionButton={{
-            action: () => replace('/signin'),
+            action: () => replace('/auth/signin'),
             text: 'Proceed',
           }}
         />

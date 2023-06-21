@@ -128,10 +128,10 @@ export const FileInput = ({
         <div className='generic-error'>{meta.error}</div>
       ) : null}
 
-      {!!file?.webUrl && onClickViewExistingFile ? (
+      {(!!file?.webUrl || !!file?.url) && onClickViewExistingFile ? (
         <div className='mt-2 flex justify-end'>
           <ViewUploadedDocument
-            url={file.webUrl}
+            url={file.webUrl ?? file.url!}
             onClick={(src) => onClickViewExistingFile(src)}
           >
             <div className='blue-mpill-h'>

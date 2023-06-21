@@ -62,7 +62,7 @@ export const MoreInfo = ({
               },
             }}
             className={clsx(
-              'absolute w-max max-w-[280px] rounded-lg bg-white p-2.5 text-primary-main 640:max-w-[320px]',
+              'absolute w-max max-w-[280px] rounded-lg bg-white p-2.5 text-xs text-primary-main 640:max-w-[320px]',
               screenSize?.['mobile'] ? 'mt-2' : 'top-0 left-[100%] ml-2'
             )}
             style={{

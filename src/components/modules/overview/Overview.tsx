@@ -1,31 +1,28 @@
 import clsx from 'clsx';
 import { MoreInfo } from 'components/common/MoreInfo';
-import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
+import { useGetDashboardSummary } from 'hooks/api/dashboard/useGetDashboardSummary';
 import { formatAmount } from 'utils/formatters/formatAmount';
 import { generatePlaceholderArray } from 'utils/generators/generatePlaceholderArray';
 
 export const Overview = () => {
-  const { isLoading, isError, data } = useMakeDummyHttpRequest({
-    method: 'get',
-    res: {
-      subAccountsBalance: 824482.31,
-      budgetBalance: 48104,
-      subAccountsCount: 13,
-      requestsCount: 5,
-      cardsCount: 67,
-      activeBudgets: 381,
-    },
-  });
+  const { isLoading, isError, data } = useGetDashboardSummary();
 
   if (isLoading) return <IsLoadingIsError type='loading' />;
   if (isError) return <IsLoadingIsError type='error' />;
 
-  const payload = [
+  const payload: {
+    name: string;
+    value: any;
+    isAmount?: boolean;
+    moreInfo?: string;
+    hideInMobile?: boolean;
+  }[] = [
     {
       name: 'Total sum in sub accounts',
-      value: data?.subAccountsBalance,
+      value: data?.subAccountBalance,
       isAmount: true,
       moreInfo: 'Total amount in your sub-accounts',
+      hideInMobile: true,
     },
     {
       name: 'Budget balance',
@@ -34,22 +31,18 @@ export const Overview = () => {
       moreInfo: 'Total amount in your budget balance',
     },
     {
+      name: 'Total requests',
+      value: data?.requestsCount,
+    },
+    {
       name: 'No of sub-acccounts',
       value: data?.subAccountsCount,
     },
     {
       name: 'Active budgets',
-      value: data?.activeBudgets,
+      value: data?.activeBudgetCount,
     },
-    {
-      name: 'No of cards',
-      value: data?.cardsCount,
-    },
-    {
-      name: 'Total requests',
-      value: data?.requestsCount,
-    },
-  ] as { name: string; value: any; isAmount?: boolean; moreInfo?: string }[];
+  ];
 
   return (
     <div className='grid grid-cols-12 gap-5'>
@@ -57,18 +50,25 @@ export const Overview = () => {
         return (
           <div
             className={clsx(
-              'card y-center col-span-12 h-[140px] 640:col-span-6 1280:col-span-4',
-              i > 2 && 'hidden 640:flex'
+              'card y-center h-[100px] 640:h-[140px]',
+              i > 1 && 'hidden 640:flex',
+              i < 2
+                ? 'col-span-12 1280:col-span-6'
+                : 'col-span-6 1280:col-span-4'
             )}
             key={name}
           >
             <div className='my-auto'>
-              <div className='flex text-neutral-500'>
+              <div className='flex text-sm text-neutral-500 640:text-base'>
                 <div>{name}</div>
                 {moreInfo && <MoreInfo>{moreInfo}</MoreInfo>}
               </div>
 
-              <div className={clsx('mt-3 text-3xl font-semibold')}>
+              <div
+                className={clsx(
+                  'mt-2 text-2xl font-semibold 640:mt-3 640:text-3xl'
+                )}
+              >
                 {isAmount && <span className='mr-1.5'>NGN</span>}
                 {formatAmount({
                   value,
@@ -87,11 +87,17 @@ export const Overview = () => {
 const IsLoadingIsError = ({ type }: { type: 'loading' | 'error' }) => {
   return (
     <div className='grid grid-cols-12 gap-5'>
-      {generatePlaceholderArray(6).map((i) => {
+      {generatePlaceholderArray(5).map((id, i) => {
         return (
           <div
-            className='card y-center col-span-12 h-[140px] 640:col-span-6 1280:col-span-4'
-            key={i}
+            className={clsx(
+              'card y-center h-[100px] 640:h-[140px]',
+              i > 1 && 'hidden 640:flex',
+              i < 2
+                ? 'col-span-12 1280:col-span-6'
+                : 'col-span-6 1280:col-span-4'
+            )}
+            key={id}
           >
             <div className='my-auto'>
               <div
@@ -102,7 +108,7 @@ const IsLoadingIsError = ({ type }: { type: 'loading' | 'error' }) => {
               ></div>
               <div
                 className={clsx(
-                  'mt-7 h-8 w-[70%]',
+                  'mt-4 h-8 w-[70%] 640:mt-7',
                   type === 'loading' ? 'skeleton' : 'skeleton-error'
                 )}
               ></div>

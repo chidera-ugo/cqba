@@ -74,7 +74,7 @@ export const Form = ({ processing, formikProps }: Props) => {
         id='signup-submit-button'
         submitting={processing}
         disabled={!values.acceptedTerms}
-        className='dark-button mt-12 w-full min-w-[200px] 640:w-auto'
+        className='dark-button mt-5 w-full min-w-[200px] 640:w-auto'
       >
         Create an account
       </SubmitButton>

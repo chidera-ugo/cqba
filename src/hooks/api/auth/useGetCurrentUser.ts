@@ -20,7 +20,7 @@ export function useGetCurrentUser(
       Authorization: `Bearer ${token}`,
     },
     baseURL: process.env.NEXT_PUBLIC_API_URL,
-    withCredentials: process.env.WITH_CREDENTIALS === 'positive' ? true : false,
+    withCredentials: process.env.WITH_CREDENTIALS === 'positive',
     timeout: 30 * 1000,
   });
 

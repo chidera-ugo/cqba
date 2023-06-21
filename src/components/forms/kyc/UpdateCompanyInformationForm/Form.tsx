@@ -90,8 +90,6 @@ export const Form = ({
       }}
       onSubmit={handleSubmit}
     >
-      <IdNavigator id='company-information' autoFocus />
-
       <Select
         label={`What kind of company is ${
           organizationInformation?.businessName ?? 'this'

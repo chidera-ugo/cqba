@@ -1,11 +1,12 @@
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
+import { CreatePin } from 'components/modules/core/CreatePin';
 import { VerifyYourAccount } from 'components/modules/kyc/VerifyYourAccount';
 import { PageHead } from 'components/primary/PageHead';
+import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { PropsWithChildren } from 'react';
 import { SideNavigation } from 'components/primary/SideNavigation';
 import { AppHeader } from 'components/primary/headers/AppHeader';
 import { useAppContext } from 'context/AppContext';
-import { CreatePin } from 'components/modules/app/CreatePin';
 import { useProtectedRoutesGuard } from 'hooks/app/useProtectedRoutesGuard';
 
 export interface Props {
@@ -21,9 +22,10 @@ export const AppLayout = ({
   requiresVerification,
 }: PropsWithChildren<Props>) => {
   const { userExists } = useProtectedRoutesGuard();
-  const { screenSize, user } = useAppContext().state;
 
-  const isVerified = user?.kybStatus === 'DONE';
+  const { screenSize } = useAppContext().state;
+
+  const { isVerified } = useIsVerified();
 
   if (!userExists) return <FullScreenLoader asPage />;
 

@@ -2,22 +2,23 @@ import { useQueryClient } from '@tanstack/react-query';
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
 import UnsavedChangesPrompt from 'components/common/UnsavedChangesPrompt';
 import { Formik } from 'formik';
-import { useUpdateOrganizationDocuments } from 'hooks/api/kyc/useGetOrganizationDocuments';
+import { useAddEmployee } from 'hooks/api/employees/useAddEmployee';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
 import { useState } from 'react';
-import { useRouter } from 'next/router';
 
-export const UpdateBusinessDocumentionForm = () => {
-  const { replace } = useRouter();
+interface Props {
+  onSuccess: () => void;
+}
 
+export const AddEmployeeForm = ({ onSuccess }: Props) => {
   const queryClient = useQueryClient();
 
-  const { isLoading, mutate } = useUpdateOrganizationDocuments({
+  const { isLoading, mutate } = useAddEmployee({
     onSuccess() {
-      queryClient.invalidateQueries(['organization-information']);
-      replace('/kyc?tab=review-and-submit');
+      queryClient.invalidateQueries(['employees']);
+      onSuccess();
     },
   });
 
@@ -27,21 +28,12 @@ export const UpdateBusinessDocumentionForm = () => {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={({
-        bnDocumentFile,
-        bnNumber,
-        utilityBillFile,
-        utilityBillType,
-        tin,
-      }) => {
+      onSubmit={({ phoneNumber: _, ...values }) => {
         setHasUnsavedChanges(false);
 
         mutate({
-          bnNumber,
-          bnNumberImageUrl: bnDocumentFile?.file?.name,
-          utilityBillType,
-          taxIdNumber: tin,
-          utilityBillImageUrl: utilityBillFile?.file?.name,
+          ...values,
+          department: 'sales',
         });
       }}
       validateOnBlur={false}
@@ -52,12 +44,6 @@ export const UpdateBusinessDocumentionForm = () => {
             <UnsavedChangesPrompt {...{ hasUnsavedChanges }} />
 
             <FullScreenLoader show={isLoading} />
-
-            <h5>Provide your business documents</h5>
-            <p className='mt-1 font-normal text-neutral-400'>
-              Please provide additional business information and upload business
-              documents
-            </p>
 
             <Form
               {...{
