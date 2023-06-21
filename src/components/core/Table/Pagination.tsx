@@ -14,11 +14,11 @@ type Props = PaginationDetails & {
 export const Pagination = ({
   first,
   last,
-  totalPages,
-  pageNumber,
   setPagination,
   pagination,
   fetching,
+  totalPages,
+  pageNumber,
 }: Props) => {
   const disabled = typeof pageNumber === 'undefined' || !totalPages;
 

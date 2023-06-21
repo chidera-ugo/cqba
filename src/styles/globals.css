@@ -47,7 +47,7 @@
   }
 
   .pagination-button {
-    @apply smooth block appearance-none rounded-lg border border-neutral-300 bg-white px-3.5 text-neutral-1000 placeholder-neutral-400 shadow-sm transition-colors focus:border-neutral-400 focus:outline-none 640:border-none 640:shadow-none;
+    @apply smooth block appearance-none rounded-lg bg-white px-3.5 text-neutral-1000 placeholder-neutral-400 shadow-sm transition-colors focus:border-neutral-400 focus:outline-none 640:border-none 640:shadow-none;
   }
 
   input[type='checkbox'] {
