@@ -1,9 +1,11 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
 import UnsavedChangesPrompt from 'components/common/UnsavedChangesPrompt';
+import { AppToast } from 'components/primary/AppToast';
 import { Formik } from 'formik';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useUpdateCompanyInformation } from 'hooks/api/kyc/useUpdateCompanyInformation';
+import { toast } from 'react-toastify';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
@@ -17,7 +19,9 @@ export const UpdateCompanyInformationForm = () => {
   const { isLoading, mutate } = useUpdateCompanyInformation({
     onSuccess() {
       queryClient.invalidateQueries(['organization-information']);
-      replace('/kyc?tab=owner-information');
+      replace('/kyc?tab=owner-information').then(() => {
+        toast(<AppToast>Update successful</AppToast>, { type: 'success' });
+      });
     },
   });
 

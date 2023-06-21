@@ -55,7 +55,9 @@ export default function VerifyEmail() {
           title={<span className={'mt-5 block'}>Verification Successful</span>}
           description={
             <span className='mt-3 block'>
-              {"We've verified your email, you may proceed"}
+              {
+                "We've verified your email, you may proceed to sign in to your new account"
+              }
             </span>
           }
           icon={<GreenCheck />}

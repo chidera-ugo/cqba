@@ -10,11 +10,11 @@ export async function handleAxiosError(
   const data = e?.response?.data;
 
   const statusCode = data?.statusCode;
-  const error = data?.error;
+  const message = data?.message;
 
   if (isHtmlResponse(data)) return onError();
 
-  if (statusCode === 401 && error == 'ExpiredToken') {
+  if (statusCode === 401 && message === 'jwt-expired') {
     const previousRequest = e.config;
 
     if (!previousRequest.sent) {

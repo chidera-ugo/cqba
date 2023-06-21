@@ -7,12 +7,19 @@ import { handleAxiosError } from 'methods/http/handleAxiosError';
 import { toast } from 'react-toastify';
 
 export type Method = 'get' | 'post' | 'put' | 'delete' | 'patch';
-export type Service = 'auth' | 'organizations' | 'transactions' | 'employees';
+export type Service =
+  | 'auth'
+  | 'organizations'
+  | 'transactions'
+  | 'employees'
+  | 'dashboard';
 
 export const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 export function urlModifier(url?: Service) {
   switch (url) {
+    case 'dashboard':
+      return '/v1/dashboard';
     case 'employees':
       return '/v1/employee';
     case 'organizations':

@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
 import { CodeInput } from 'components/form-elements/CodeInput';
 import { AppToast } from 'components/primary/AppToast';
+import { useAppContext } from 'context/AppContext';
 import { useCreatePin } from 'hooks/api/useCreatePin';
 import { useHandleError } from 'hooks/api/useHandleError';
 import { useState } from 'react';
@@ -17,15 +18,23 @@ export const CreatePinSteps = ({ closeModal }: Props) => {
 
   const [mode, setMode] = useState<'new' | 'confirm'>('new');
 
+  const { refetchCurrentUser } = useAppContext();
+
   const { handleError } = useHandleError();
 
   const { mutate, isLoading } = useCreatePin({
     onSuccess(res) {
-      toast(<AppToast>{res.message}</AppToast>, {
-        type: 'success',
-      });
-
-      closeModal();
+      refetchCurrentUser!(
+        {},
+        {
+          onSuccess() {
+            closeModal();
+            toast(<AppToast>{res.message}</AppToast>, {
+              type: 'success',
+            });
+          },
+        }
+      );
     },
     onError(e) {
       handleError(e);

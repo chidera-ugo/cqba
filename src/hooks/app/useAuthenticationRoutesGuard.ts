@@ -1,4 +1,5 @@
 import { useAppContext } from 'context/AppContext';
+import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
@@ -6,7 +7,7 @@ export const useAuthenticationRoutesGuard = () => {
   const { user, redirectUrl } = useAppContext().state;
   const { replace } = useRouter();
 
-  const isVerified = false;
+  const { isVerified } = useIsVerified();
 
   const url = isVerified ? '/' : '/kyc';
 

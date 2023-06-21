@@ -149,6 +149,7 @@ export const Form = ({
         type='text'
         inputMode='tel'
         autoComplete='off'
+        next={'idType'}
         fieldType='idNumber'
         limit={11}
         shouldValidate
@@ -158,10 +159,12 @@ export const Form = ({
         <Select
           label='Form of ID'
           name='idType'
+          next={'idNumber'}
           displayValueKey={'name'}
           trueValueKey={'id'}
           options={constructIdTypes()}
         />
+
         <Input label='ID Number' name='idNumber' />
       </div>
 

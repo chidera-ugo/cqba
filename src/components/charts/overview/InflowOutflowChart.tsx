@@ -18,14 +18,14 @@ interface Props {
   chartData: Series;
 }
 
-type Series = { label: string; data: { primary: string; secondary: any }[] };
+type Series = { primary: string; secondary: any }[];
 
 type Data = { primary: any; secondary: any };
 
 export const InflowOutflowChart = ({ chartData }: Props) => {
   const data: Data[] = useMemo(
     () =>
-      chartData.data.map((item) => ({
+      chartData.map((item) => ({
         primary: dayjs(item.primary).format('Do MMM'),
         secondary: item.secondary,
       })),

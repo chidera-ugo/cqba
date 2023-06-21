@@ -15,4 +15,5 @@ export interface IUser {
   hashRt?: string;
   id?: string;
   phone?: string;
+  pinSet?: boolean;
 }

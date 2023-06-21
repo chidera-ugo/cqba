@@ -1,5 +1,5 @@
-import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import { useCurrentAccountSetupStepUrl } from 'hooks/dashboard/kyc/useCurrentAccountSetupStepUrl';
+import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useNavigationItems } from 'hooks/dashboard/useNavigationItems';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -16,7 +16,7 @@ export const SideNavigationItems = () => {
   const [dismiss, isDismissed, checkIsSideNavItemToolTipDismissed] =
     useDismiss('side_nav_tooltip');
 
-  const { isVerified } = useAccountVerificationStatus();
+  const { isVerified } = useIsVerified();
 
   const { getCurrentAccountSetupStepUrl } = useCurrentAccountSetupStepUrl();
 

@@ -2,8 +2,10 @@ import { useQueryClient } from '@tanstack/react-query';
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
 import { IdNavigator } from 'components/common/IdNavigator';
 import UnsavedChangesPrompt from 'components/common/UnsavedChangesPrompt';
+import { AppToast } from 'components/primary/AppToast';
 import { Formik } from 'formik';
-import { useUpdateOrganizationDocuments } from 'hooks/api/kyc/useGetOrganizationDocuments';
+import { useUpdateOrganizationDocuments } from 'hooks/api/kyc/useUpdateOrganizationDocuments';
+import { toast } from 'react-toastify';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
@@ -18,7 +20,9 @@ export const UpdateBusinessDocumentionForm = () => {
   const { isLoading, mutate } = useUpdateOrganizationDocuments({
     onSuccess() {
       queryClient.invalidateQueries(['organization-information']);
-      replace('/kyc?tab=review-and-submit');
+      replace('/kyc?tab=review-and-submit').then(() => {
+        toast(<AppToast>Update successful</AppToast>, { type: 'success' });
+      });
     },
   });
 

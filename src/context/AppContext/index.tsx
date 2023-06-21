@@ -1,3 +1,4 @@
+import { UseMutateFunction } from '@tanstack/react-query';
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
 import {
   Dispatch,
@@ -17,7 +18,7 @@ import { getFromLocalStore } from 'lib/localStore';
 
 export interface State {
   isInitializing: boolean;
-  user: null | IUser;
+  user: IUser | null;
   redirectUrl: string;
   tokens: Tokens | null;
   screenSize: {
@@ -54,6 +55,7 @@ const initialState: State = {
 type StoreApi = {
   state: State;
   dispatch: Dispatch<Action>;
+  refetchCurrentUser?: UseMutateFunction<IUser, unknown, any, unknown>;
 };
 
 const AppContext = createContext<StoreApi>({
@@ -95,6 +97,7 @@ function AppContextProvider({ children, ...props }: PropsWithChildren<any>) {
     () => ({
       state,
       dispatch,
+      refetchCurrentUser: getCurrentUser,
     }),
     [state, dispatch]
   );
