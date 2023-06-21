@@ -4,13 +4,12 @@ import {
   PaginationState,
   SortingState,
 } from '@tanstack/react-table';
+import { PaginatedResponse } from 'types/Table';
 
 import { useColumns } from './useColumns';
 import { useRouter } from 'next/router';
 import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 import { generateTableEntries } from 'utils/generators/generateTableEntries';
-import { IEmployee } from 'types/transactions/Transaction';
-import { PaginatedResponse } from 'types/core/Table';
 import { Table } from 'components/core/Table';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { TransactionDetails } from 'components/modules/transactions/TransactionDetails';
@@ -30,8 +29,9 @@ export const AllTransactionsTable = ({
 }: Props) => {
   const { push } = useRouter();
 
-  const [currentTransaction, setCurrentTransaction] =
-    useState<IEmployee | null>(null);
+  const [currentTransaction, setCurrentTransaction] = useState<any | null>(
+    null
+  );
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -52,7 +52,7 @@ export const AllTransactionsTable = ({
     data: res,
   } = useMakeDummyHttpRequest({
     method: 'get',
-    res: generateTableEntries<IEmployee>(
+    res: generateTableEntries<any>(
       {
         id: '',
         accountName: 'John Doe',
@@ -69,7 +69,7 @@ export const AllTransactionsTable = ({
     if (!!res) setData(res.data);
   }, [res]);
 
-  const [data, setData] = useState<PaginatedResponse<IEmployee> | undefined>(
+  const [data, setData] = useState<PaginatedResponse<any> | undefined>(
     res?.data
   );
 
@@ -96,7 +96,7 @@ export const AllTransactionsTable = ({
         )}
       </RightModalWrapper>
 
-      <Table<IEmployee>
+      <Table<any>
         title='transactions'
         headerSlot={slot}
         dontScrollToTopOnPageChange
