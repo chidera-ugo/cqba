@@ -9,7 +9,7 @@ import { useColumns } from './useColumns';
 import { useRouter } from 'next/router';
 import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 import { generateTableEntries } from 'utils/generators/generateTableEntries';
-import { ITransactionHistoryEntry } from 'types/transactions/Transaction';
+import { IEmployee } from 'types/transactions/Transaction';
 import { PaginatedResponse } from 'types/core/Table';
 import { Table } from 'components/core/Table';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
@@ -31,7 +31,7 @@ export const AllTransactionsTable = ({
   const { push } = useRouter();
 
   const [currentTransaction, setCurrentTransaction] =
-    useState<ITransactionHistoryEntry | null>(null);
+    useState<IEmployee | null>(null);
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -52,7 +52,7 @@ export const AllTransactionsTable = ({
     data: res,
   } = useMakeDummyHttpRequest({
     method: 'get',
-    res: generateTableEntries<ITransactionHistoryEntry>(
+    res: generateTableEntries<IEmployee>(
       {
         id: '',
         accountName: 'John Doe',
@@ -69,9 +69,9 @@ export const AllTransactionsTable = ({
     if (!!res) setData(res.data);
   }, [res]);
 
-  const [data, setData] = useState<
-    PaginatedResponse<ITransactionHistoryEntry> | undefined
-  >(res?.data);
+  const [data, setData] = useState<PaginatedResponse<IEmployee> | undefined>(
+    res?.data
+  );
 
   const { columns } = useColumns();
 
@@ -96,7 +96,7 @@ export const AllTransactionsTable = ({
         )}
       </RightModalWrapper>
 
-      <Table<ITransactionHistoryEntry>
+      <Table<IEmployee>
         title='transactions'
         headerSlot={slot}
         dontScrollToTopOnPageChange

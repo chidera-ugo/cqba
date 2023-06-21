@@ -54,7 +54,7 @@ export const Overview = () => {
               i > 1 && 'hidden 640:flex',
               i < 2
                 ? 'col-span-12 1280:col-span-6'
-                : 'col-span-6 1280:col-span-4'
+                : 'col-span-6 880:col-span-4'
             )}
             key={name}
           >
@@ -95,7 +95,7 @@ const IsLoadingIsError = ({ type }: { type: 'loading' | 'error' }) => {
               i > 1 && 'hidden 640:flex',
               i < 2
                 ? 'col-span-12 1280:col-span-6'
-                : 'col-span-6 1280:col-span-4'
+                : 'col-span-6 880:col-span-4'
             )}
             key={id}
           >

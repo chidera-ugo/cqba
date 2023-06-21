@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import { useField, useFormikContext } from 'formik';
 import clsx from 'clsx';
 import { TSelect, TOptions } from './Select';
@@ -18,7 +18,7 @@ export type Props = JSX.IntrinsicElements['input'] &
     asModal?: boolean;
   };
 
-export const CustomSelect = (props: Props) => {
+export const CustomSelect = (props: PropsWithChildren<Props>) => {
   const { className, label, name, setFieldValue, next } = props;
 
   const [field, meta] = useField(name as string);
@@ -28,7 +28,17 @@ export const CustomSelect = (props: Props) => {
   const id = props.id ?? name;
 
   useEffect(() => {
-    if (!field.value) setSelectedOption(null);
+    const val = field.value;
+
+    if (!val) setSelectedOption(null);
+
+    const selectedOption = props.options.find(
+      (option) => option[props.trueValueKey] === val
+    );
+
+    if (!selectedOption) return;
+
+    setSelectedOption(selectedOption);
   }, [field.value]);
 
   return (

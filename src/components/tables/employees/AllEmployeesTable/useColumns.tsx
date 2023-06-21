@@ -1,40 +1,38 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { Pill } from 'components/common/Pill';
 import { TableCell } from 'components/core/Table/TableCell';
+import { IEmployee } from 'hooks/api/employees/useGetAllEmployees';
 import { useMemo } from 'react';
-import { ITransactionHistoryEntry } from 'types/transactions/Transaction';
 import { formatDate } from 'utils/formatters/formatDate';
 
 export const useColumns = () => {
-  const columns = useMemo<ColumnDef<ITransactionHistoryEntry>[]>(
+  const columns = useMemo<ColumnDef<IEmployee>[]>(
     () => [
       {
-        header: 'Transaction ID',
+        header: 'Name',
         accessorKey: 'id',
         enableColumnFilter: false,
-        cell: (props) => <TableCell {...props} />,
+        cell: ({ row }) => {
+          const { firstName, lastName } = row.original;
+
+          return (
+            <span>
+              {firstName} {lastName}
+            </span>
+          );
+        },
       },
       {
-        header: 'Account Name',
-        accessorKey: 'accountName',
+        header: 'Email',
+        accessorKey: 'email',
         enableColumnFilter: false,
         cell: (props) => <TableCell {...props} />,
       },
       {
-        header: 'Amount',
-        accessorKey: 'amount',
+        header: 'Department',
+        accessorKey: 'department',
         enableColumnFilter: false,
-        cell: (props) => <TableCell isAmount {...props} />,
-      },
-      {
-        header: 'Type',
-        accessorKey: 'type',
-        enableColumnFilter: false,
-        cell: (props) => (
-          <span className='capitalize'>
-            <TableCell {...props} />
-          </span>
-        ),
+        cell: (props) => <TableCell {...props} />,
       },
       {
         header: 'Status',
@@ -45,8 +43,9 @@ export const useColumns = () => {
           return (
             <Pill
               config={{
-                success: 'successful',
-                pending: 'pending',
+                success: 'active',
+                pending: 'invited',
+                failed: 'blocked',
               }}
               value={val}
             />
@@ -54,8 +53,8 @@ export const useColumns = () => {
         },
       },
       {
-        header: 'Date/Time',
-        accessorKey: 'createdAt',
+        header: 'Created',
+        accessorKey: 'updatedAt',
         enableColumnFilter: false,
         cell: ({ getValue }) => {
           return <div>{formatDate(getValue() as string, 'semi-full')}</div>;

@@ -54,7 +54,9 @@ export const AppliedFilters = ({
 
       arr.push({
         id: i,
-        value: `${tableFiltersKeyValuePairs?.[i as any] ?? i} - ${filters[i]}`,
+        value: `${tableFiltersKeyValuePairs?.[i as any] ?? i} - ${
+          filters[i]['name']
+        }`,
       });
     }
 

@@ -111,7 +111,7 @@ export const CentredModalWrapper = ({
   return (
     <Modal
       className={clsx(
-        'y-between 640:y-center relative z-[1000] mx-auto mb-0 mt-auto h-full w-full p-0 560:my-auto 640:w-auto',
+        'y-between 640:y-center relative z-[1000] mx-auto mb-0 mt-auto w-full p-0 560:my-auto 640:w-auto',
         withGutter && 'p-3'
       )}
       {...{ duration, show }}
@@ -157,21 +157,9 @@ export const CentredModalWrapper = ({
         )}
       >
         <div className='sticky top-0 left-0 z-[1200] rounded-t-2xl'>
-          {/* {mobile && (props.closeOnClickOutside || mustShowIsDraggable) && (
-            <div
-              onPointerDown={(e) => controls.start(e)}
-              className={clsx(
-                'x-center w-full py-3',
-                backgroundClassname ?? defaultBackgroundClassname
-              )}
-            >
-              <div className='h-1.5 w-12 rounded-full bg-neutral-300 bg-opacity-50'></div>
-            </div>
-          )} */}
-
           {!hideHeader && props.closeModal && (
-            <div className='x-between p-4 pb-0'>
-              <div></div>
+            <div className='x-between bg-white p-4'>
+              <h5>{props.title}</h5>
               <button onClick={props.closeModal} className='text-gray-400'>
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
@@ -191,10 +179,7 @@ export const CentredModalWrapper = ({
         </div>
 
         <div
-          className={clsx(
-            'h-full 560:min-w-[400px]',
-            className ?? 'px-4 640:px-8'
-          )}
+          className={clsx('560:min-w-[400px]', className ?? 'px-4 640:px-8')}
         >
           {children}
         </div>

@@ -30,7 +30,7 @@ export const InflowOutflow = () => {
 
   return (
     <div className='card p-0'>
-      <div className='x-between relative p-5'>
+      <div className='x-between relative block p-5 768:flex'>
         <div className='flex gap-2'>
           <button
             onClick={() => setFilter('INFLOW')}
@@ -63,7 +63,7 @@ export const InflowOutflow = () => {
           )}
         </div>
 
-        <div className={clsx('my-auto text-3xl font-semibold')}>
+        <div className={clsx('my-auto mt-4 text-3xl font-semibold 768:mt-0')}>
           <span className='mr-1'>NGN</span>
           {formatAmount({ value: data?.totalBalance, decimalPlaces: 2 })}
         </div>
@@ -83,7 +83,7 @@ export const InflowOutflow = () => {
 const IsLoadingIsError = ({ type }: { type: 'loading' | 'error' }) => {
   return (
     <div className='card'>
-      <div className='x-between'>
+      <div className='x-between block 768:flex'>
         <div className='flex gap-2'>
           <div
             className={clsx(
@@ -99,7 +99,7 @@ const IsLoadingIsError = ({ type }: { type: 'loading' | 'error' }) => {
           ></div>
         </div>
 
-        <div className='flex'>
+        <div className='mt-4 flex 768:mt-0'>
           <div
             className={clsx(
               'mr-1 h-10 w-[200px] rounded-lg',

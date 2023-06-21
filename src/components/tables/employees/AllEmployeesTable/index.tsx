@@ -1,24 +1,25 @@
-import { useGetAllEmployees } from 'hooks/api/employees/useGetAllEmployees';
+import {
+  IEmployee,
+  useGetAllEmployees,
+} from 'hooks/api/employees/useGetAllEmployees';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import {
   ColumnFiltersState,
   PaginationState,
   SortingState,
 } from '@tanstack/react-table';
-
+import { PaginatedResponse } from 'types/Table';
 import { useColumns } from './useColumns';
-import { useRouter } from 'next/router';
-import { ITransactionHistoryEntry } from 'types/transactions/Transaction';
-import { PaginatedResponse } from 'types/core/Table';
 import { Table } from 'components/core/Table';
-import { RightModalWrapper } from 'components/modal/ModalWrapper';
-import { TransactionDetails } from 'components/modules/transactions/TransactionDetails';
 
 interface Props {
   reset?: () => void;
+  search?: string;
   filters?: Record<string, unknown>;
   setFilters?: Dispatch<SetStateAction<Record<string, string>>>;
   slot?: JSX.Element;
+  currentEmployee: IEmployee | null;
+  onRowClick: Dispatch<SetStateAction<IEmployee | null>>;
 }
 
 export const AllEmployeesTable = ({
@@ -26,12 +27,8 @@ export const AllEmployeesTable = ({
   reset,
   filters,
   setFilters,
+  onRowClick,
 }: Props) => {
-  const { push } = useRouter();
-
-  const [currentTransaction, setCurrentTransaction] =
-    useState<ITransactionHistoryEntry | null>(null);
-
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -45,80 +42,66 @@ export const AllEmployeesTable = ({
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
   }, [filters, columnFilters]);
 
-  const { isLoading, isError, data: res } = useGetAllEmployees();
+  const {
+    isLoading,
+    isError,
+    data: res,
+  } = useGetAllEmployees({
+    page: pagination.pageIndex,
+    size: pagination.pageSize,
+  });
 
   useEffect(() => {
-    if (!!res) setData(res.data);
+    if (!!res) setData(res);
   }, [res]);
 
-  const [data, setData] = useState<
-    PaginatedResponse<ITransactionHistoryEntry> | undefined
-  >(res?.data);
+  const [data, setData] = useState<PaginatedResponse<IEmployee> | undefined>(
+    res
+  );
 
   const { columns } = useColumns();
 
-  function close() {
-    setCurrentTransaction(null);
-    push('/wallet', undefined, {
-      scroll: false,
-    });
-  }
-
   return (
-    <>
-      <RightModalWrapper
-        title='Transaction details'
-        show={!!currentTransaction}
-        {...{ close }}
-        closeOnClickOutside
-        childrenClassname='p-0'
-      >
-        {currentTransaction && (
-          <TransactionDetails transaction={currentTransaction} />
-        )}
-      </RightModalWrapper>
-
-      <Table<ITransactionHistoryEntry>
-        title='transactions'
-        headerSlot={slot}
-        dontScrollToTopOnPageChange
-        onRowClick={(transaction) => {
-          setCurrentTransaction(transaction);
-        }}
-        onFilterClick={
-          !setFilters
-            ? undefined
-            : (filter) => setFilters(({ [filter]: _, ...rest }) => rest)
-        }
-        returnOriginalOnRowClick
-        accessor='id'
-        mustHaveRange
-        {...{
-          isLoading,
-          filters,
-          data,
-          setColumnFilters,
-          columnFilters,
-          currentSearchColumn,
-          pagination,
-          columns,
-          setPagination,
-          setCurrentSearchColumn,
-          setSorting,
-          sorting,
-          isError,
-        }}
-        reset={() => {
-          setFilters && setFilters({});
-          setPagination({
-            pageIndex: 0,
-            pageSize: 10,
-          });
-          setSorting([]);
-          reset && reset();
-        }}
-        emptyTableText='You have not processed any transactions on this account yet.'
-      />
-    </>
+    <Table<IEmployee>
+      title='employees'
+      headerSlot={slot}
+      dontScrollToTopOnPageChange
+      onRowClick={(employee) => {
+        onRowClick(employee);
+      }}
+      onFilterClick={
+        !setFilters
+          ? undefined
+          : (filter) => setFilters(({ [filter]: _, ...rest }) => rest)
+      }
+      returnOriginalOnRowClick
+      accessor='id'
+      mustHaveRange
+      {...{
+        isLoading,
+        filters,
+        data,
+        setColumnFilters,
+        columnFilters,
+        currentSearchColumn,
+        pagination,
+        columns,
+        setPagination,
+        setCurrentSearchColumn,
+        setSorting,
+        sorting,
+        isError,
+      }}
+      reset={() => {
+        setFilters && setFilters({});
+        setPagination({
+          pageIndex: 0,
+          pageSize: 10,
+        });
+        setSorting([]);
+        reset && reset();
+      }}
+      emptyTableText='You have not added any employees yet.'
+    />
   );
 };

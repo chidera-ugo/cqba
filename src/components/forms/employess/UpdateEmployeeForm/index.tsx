@@ -1,8 +1,9 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { FullScreenLoader } from 'components/common/FullScreenLoader';
 import UnsavedChangesPrompt from 'components/common/UnsavedChangesPrompt';
 import { Formik } from 'formik';
-import { useAddEmployee } from 'hooks/api/employees/useAddEmployee';
+import { useUpdateEmployee } from 'hooks/api/employees/useUpdateEmployee';
+import { IEmployee } from 'hooks/api/employees/useGetAllEmployees';
+import { IDepartment } from 'hooks/api/employees/useGetDepartments';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
@@ -10,12 +11,20 @@ import { useState } from 'react';
 
 interface Props {
   onSuccess: () => void;
+  departments: IDepartment[];
+  handleClickCreateDepartment: () => void;
+  currentEmployee?: IEmployee | null;
 }
 
-export const AddEmployeeForm = ({ onSuccess }: Props) => {
+export const UpdateEmployeeForm = ({
+  onSuccess,
+  departments,
+  handleClickCreateDepartment,
+  currentEmployee,
+}: Props) => {
   const queryClient = useQueryClient();
 
-  const { isLoading, mutate } = useAddEmployee({
+  const { isLoading, mutate } = useUpdateEmployee(currentEmployee?.id, {
     onSuccess() {
       queryClient.invalidateQueries(['employees']);
       onSuccess();
@@ -28,12 +37,12 @@ export const AddEmployeeForm = ({ onSuccess }: Props) => {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={({ phoneNumber: _, ...values }) => {
+      onSubmit={({ department, ...values }) => {
         setHasUnsavedChanges(false);
 
         mutate({
           ...values,
-          department: 'sales',
+          departmentId: department,
         });
       }}
       validateOnBlur={false}
@@ -43,13 +52,14 @@ export const AddEmployeeForm = ({ onSuccess }: Props) => {
           <>
             <UnsavedChangesPrompt {...{ hasUnsavedChanges }} />
 
-            <FullScreenLoader show={isLoading} />
-
             <Form
               {...{
                 formikProps,
                 processing: isLoading,
                 setHasUnsavedChanges,
+                departments,
+                currentEmployee,
+                handleClickCreateDepartment,
               }}
             />
           </>

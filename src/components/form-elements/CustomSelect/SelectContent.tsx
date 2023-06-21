@@ -1,8 +1,9 @@
 import clsx from 'clsx';
 import { Dropdown } from 'components/common/Dropdown';
+import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { CentredModalWrapper } from 'components/modal/ModalWrapper';
 import useMediaQuery from 'hooks/common/useMediaQuery';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, PropsWithChildren, SetStateAction } from 'react';
 import { Select } from './Select';
 import { Props } from '.';
 
@@ -16,33 +17,40 @@ export const SelectContent = ({
   showList,
   setSelectedOption,
   onChooseAction,
+  children,
   ...props
-}: Props & {
-  setShowList: Dispatch<SetStateAction<boolean>>;
-  showList: boolean;
-  setSelectedOption: Dispatch<SetStateAction<any>>;
-  onChooseAction: (option: any) => void;
-}) => {
+}: PropsWithChildren<
+  Props & {
+    setShowList: Dispatch<SetStateAction<boolean>>;
+    showList: boolean;
+    setSelectedOption: Dispatch<SetStateAction<any>>;
+    onChooseAction: (option: any) => void;
+  }
+>) => {
   const mobile = useMediaQuery('(max-width: 640px)');
 
   const MainSelect = () => {
     return (
-      <Select
-        {...{
-          onChoose(option: any) {
-            setShowList(false);
-            setSelectedOption(option);
-            onChooseAction(option);
-          },
-          close() {
-            setShowList(false);
-          },
-          minimalist,
-          ...props,
-          dropdownClassname,
-          selectedOption,
-        }}
-      />
+      <AppErrorBoundary>
+        <Select
+          {...{
+            onChoose(option: any) {
+              setShowList(false);
+              setSelectedOption(option);
+              onChooseAction(option);
+            },
+            close() {
+              setShowList(false);
+            },
+            minimalist,
+            ...props,
+            dropdownClassname,
+            selectedOption,
+          }}
+        >
+          {children}
+        </Select>
+      </AppErrorBoundary>
     );
   };
 

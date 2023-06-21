@@ -12,10 +12,10 @@ type Props = PaginationDetails & {
 };
 
 export const Pagination = ({
-  number: pageNumber,
   first,
   last,
   totalPages,
+  pageNumber,
   setPagination,
   pagination,
   fetching,
