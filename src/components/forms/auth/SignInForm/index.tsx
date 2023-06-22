@@ -6,7 +6,7 @@ import { Form } from './Form';
 import { useAppContext } from 'context/AppContext';
 
 export const SignInForm = () => {
-  const { dispatch } = useAppContext();
+  const { dispatch, getCurrentUser } = useAppContext();
 
   const { isLoading, mutate } = useSignin({
     onSuccess(res) {
@@ -19,6 +19,8 @@ export const SignInForm = () => {
           refreshToken: refresh_token,
         },
       });
+
+      getCurrentUser!(access_token);
     },
   });
 

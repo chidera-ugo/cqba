@@ -20,7 +20,7 @@ export const SideNavigationContent = ({ mobile }: { mobile?: boolean }) => {
       <div className='h-max'>
         <ProfileSwitcher {...{ mobile }} />
 
-        <div className='p-5 pt-0 640:p-8 640:pt-0'>
+        <div className='p-5 640:p-8 640:pt-0'>
           <SideNavigationItems />
         </div>
       </div>

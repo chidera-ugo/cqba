@@ -3,6 +3,7 @@ import { InflowOutflowChart } from 'components/charts/overview/InflowOutflowChar
 import { Spinner } from 'components/svgs/dashboard/Spinner';
 import { useGetInflowOutflowChart } from 'hooks/api/dashboard/useGetInflowOutflowChart';
 import { usePopulateEmptyChartData } from 'hooks/charts/usePopulateEmptyChartData';
+import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useState } from 'react';
 import { formatAmount } from 'utils/formatters/formatAmount';
 import { getDateRange } from 'utils/getters/getDateRange';
@@ -12,13 +13,20 @@ export const InflowOutflow = () => {
 
   const { getChartData } = usePopulateEmptyChartData();
 
-  const { isLoading, isFetching, isError, data } = useGetInflowOutflowChart({
-    type: filter,
-    duration: 'DAILY',
-    dateRange: getDateRange({ days: 7 }),
-  });
+  const { isVerified } = useIsVerified();
 
-  if (isLoading) return <IsLoadingIsError type='loading' />;
+  const { isLoading, isFetching, isError, data } = useGetInflowOutflowChart(
+    {
+      type: filter,
+      duration: 'DAILY',
+      dateRange: getDateRange({ days: 7 }),
+    },
+    {
+      enabled: isVerified,
+    }
+  );
+
+  if (isVerified && isLoading) return <IsLoadingIsError type='loading' />;
   if (isError) return <IsLoadingIsError type='error' />;
 
   const chartData = data?.chart.map(({ volume, date }) => {

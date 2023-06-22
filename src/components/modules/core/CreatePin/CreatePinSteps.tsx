@@ -18,13 +18,13 @@ export const CreatePinSteps = ({ closeModal }: Props) => {
 
   const [mode, setMode] = useState<'new' | 'confirm'>('new');
 
-  const { refetchCurrentUser } = useAppContext();
+  const { getCurrentUser } = useAppContext();
 
   const { handleError } = useHandleError();
 
   const { mutate, isLoading } = useCreatePin({
     onSuccess(res) {
-      refetchCurrentUser!(
+      getCurrentUser!(
         {},
         {
           onSuccess() {

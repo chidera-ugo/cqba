@@ -13,7 +13,7 @@ export function useUpdateEmployee(
   options?: UseMutationOptions<any, unknown, void, unknown>
 ) {
   return useTMutation<UpdateEmployeeDto, any>({
-    method: employeeId ? 'patch' : 'post',
+    method: employeeId ? 'put' : 'post',
     url: employeeId ? `/${employeeId}` : '',
     service: 'employees',
     options,

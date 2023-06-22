@@ -21,6 +21,11 @@ export default function Employees() {
 
   const [search, setSearch] = useState('');
 
+  const [formRecoveryValues, setFormRecoveryValues] = useState<Record<
+    string,
+    any
+  > | null>(null);
+
   const [currentEmployee, setCurrentEmployee] = useState<IEmployee | null>(
     null
   );
@@ -30,6 +35,7 @@ export default function Employees() {
   function closeModal() {
     setCurrentEmployee(null);
     setModal(null);
+    setFormRecoveryValues(null);
   }
 
   const { isLoading, data } = useGetDepartments();
@@ -40,10 +46,10 @@ export default function Employees() {
 
   return (
     <AppLayout title='Employees'>
-      <div className='my-5 justify-between gap-2 640:my-7 880:flex'>
-        <div className='gap-2 480:flex'>
+      <div className='my-5 justify-between gap-2 640:my-7 690:flex'>
+        <div className='gap-2 360:flex'>
           {!!data?.content?.length && (
-            <div className='flex gap-2'>
+            <div className='flex w-full gap-2 360:w-1/2 690:w-fit'>
               <Filter
                 id='department-filter'
                 title='Department'
@@ -53,7 +59,7 @@ export default function Employees() {
                   isLoading,
                 }}
                 withChevron
-                className='w-full 480:w-auto'
+                className='w-full 690:w-auto'
                 dropdownClassName='left-0'
                 options={data.content.map(({ title, id }) => ({
                   name: title!,
@@ -63,30 +69,34 @@ export default function Employees() {
             </div>
           )}
 
-          <SearchInput
-            placeholder='Search employees'
-            value={search}
-            className='mt-3 w-full 640:w-[300px] 880:mt-0'
-            onChange={(e) => {
-              setSearch(e.target.value);
-            }}
-            clear={() => setSearch('')}
-          />
+          <div className='x-center mt-3 w-full 360:mt-0 360:w-1/2 690:w-fit'>
+            {isLoading ? (
+              <Spinner className={'my-auto h-6 w-6'} />
+            ) : !!data ? (
+              <button
+                onClick={() => {
+                  setModal('employee');
+                }}
+                className='dark-button x-center h-11 w-full px-2 text-sm 640:px-4'
+              >
+                <span className={'my-auto mr-2'}>Add Employee</span>
+                <span className={'my-auto'}>
+                  <PlusCircle />
+                </span>
+              </button>
+            ) : null}
+          </div>
         </div>
 
-        {isLoading ? (
-          <Spinner className={'my-auto h-6 w-6'} />
-        ) : !!data ? (
-          <button
-            onClick={() => setModal('employee')}
-            className='dark-button x-center h-10 px-4 text-sm'
-          >
-            <span className={'my-auto mr-2'}>Add Employee</span>
-            <span className={'my-auto'}>
-              <PlusCircle />
-            </span>
-          </button>
-        ) : null}
+        <SearchInput
+          placeholder='Search employees'
+          value={search}
+          className='mt-3 w-full 690:mt-0 690:w-[300px]'
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
+          clear={() => setSearch('')}
+        />
       </div>
 
       <CreateDepartment
@@ -113,17 +123,22 @@ export default function Employees() {
               }
             />
 
-            <CreateDepartmentButton
-              className={'dark-button mx-auto mt-5 h-12 w-fit text-white'}
-            />
+            <div className='x-center mx-auto w-fit'>
+              <CreateDepartmentButton
+                onClick={() => setModal('department')}
+                className={'dark-button mx-auto mt-5 h-12 w-fit text-white'}
+              />
+            </div>
           </>
         ) : (
           <UpdateEmployeeForm
-            handleClickCreateDepartment={() => {
+            handleClickCreateDepartment={(values) => {
               setModal('department');
+              setFormRecoveryValues(values);
             }}
             {...{
               currentEmployee,
+              formRecoveryValues,
             }}
             departments={data.content}
             onSuccess={closeModal}

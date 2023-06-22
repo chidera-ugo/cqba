@@ -11,6 +11,8 @@ export const useAuthenticationRoutesGuard = () => {
 
   const url = isVerified ? '/' : '/kyc';
 
+  console.log({ url });
+
   useEffect(() => {
     // Redirect to saved url if http session is valid
     if (!user) return;

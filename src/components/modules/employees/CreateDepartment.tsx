@@ -13,7 +13,6 @@ export const CreateDepartment = ({ showModal, closeModal }: Props) => {
     <CentredModalWrapper
       title={'Add Department'}
       show={showModal}
-      closeOnClickOutside
       closeModal={closeModal}
       className={'min-h-[80vh] px-4 640:min-h-fit'}
     >
@@ -29,10 +28,7 @@ export const CreateDepartmentButton = ({
   return (
     <button
       {...props}
-      className={clsx(
-        'x-between group w-full px-4 text-primary-main',
-        className
-      )}
+      className={clsx('x-between group w-full px-4 text-black', className)}
       type={'button'}
     >
       <span className='my-auto font-semibold group-hover:underline'>

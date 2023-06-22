@@ -42,8 +42,13 @@ export function useGetCurrentUser(
   );
 
   return useMutation({
-    mutationFn: () =>
-      axiosInstance['get'](`/v1/users/profile`).then((res) => res?.data),
+    mutationFn: (token) => {
+      return axiosInstance['get'](`/v1/users/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((res) => res?.data);
+    },
     ...options,
   });
 }

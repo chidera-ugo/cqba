@@ -1,5 +1,4 @@
 import { useQueryClient } from '@tanstack/react-query';
-import UnsavedChangesPrompt from 'components/common/UnsavedChangesPrompt';
 import { Formik } from 'formik';
 import { useUpdateEmployee } from 'hooks/api/employees/useUpdateEmployee';
 import { IEmployee } from 'hooks/api/employees/useGetAllEmployees';
@@ -7,12 +6,12 @@ import { IDepartment } from 'hooks/api/employees/useGetDepartments';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
-import { useState } from 'react';
 
 interface Props {
   onSuccess: () => void;
   departments: IDepartment[];
-  handleClickCreateDepartment: () => void;
+  handleClickCreateDepartment: (values: Record<string, any>) => void;
+  formRecoveryValues?: Record<string, any> | null;
   currentEmployee?: IEmployee | null;
 }
 
@@ -21,6 +20,7 @@ export const UpdateEmployeeForm = ({
   departments,
   handleClickCreateDepartment,
   currentEmployee,
+  formRecoveryValues,
 }: Props) => {
   const queryClient = useQueryClient();
 
@@ -31,38 +31,30 @@ export const UpdateEmployeeForm = ({
     },
   });
 
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={({ department, ...values }) => {
-        setHasUnsavedChanges(false);
-
+      onSubmit={({ departmentId, ...values }) => {
         mutate({
           ...values,
-          departmentId: department,
+          departmentId,
         });
       }}
       validateOnBlur={false}
     >
       {(formikProps) => {
         return (
-          <>
-            <UnsavedChangesPrompt {...{ hasUnsavedChanges }} />
-
-            <Form
-              {...{
-                formikProps,
-                processing: isLoading,
-                setHasUnsavedChanges,
-                departments,
-                currentEmployee,
-                handleClickCreateDepartment,
-              }}
-            />
-          </>
+          <Form
+            {...{
+              formikProps,
+              processing: isLoading,
+              departments,
+              currentEmployee,
+              formRecoveryValues,
+              handleClickCreateDepartment,
+            }}
+          />
         );
       }}
     </Formik>
