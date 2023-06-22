@@ -4,7 +4,7 @@ import { PaginatedResponse } from 'types/Table';
 import { generateUrlParamsFromObject } from 'utils/generators/generateUrlParamsFromObject';
 
 export interface IEmployee {
-  department?: string;
+  departmentTitle?: string;
   departmentId?: string;
   organizationId?: string;
   lastName?: string;

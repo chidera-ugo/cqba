@@ -5,6 +5,7 @@ import { useTMutation } from 'hooks/api/useTMutation';
 export interface UpdateCompanyInformationDto {
   businessType?: string;
   businessAddress?: string;
+  businessName?: string;
   numberOfEmployees?: string;
   averageMonthlyExpenses?: string;
   city?: string;

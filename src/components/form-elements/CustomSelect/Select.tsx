@@ -245,7 +245,7 @@ export const Select = ({
                             )}
 
                             {isActive(data[trueValueKey]) && (
-                              <div className='my-auto text-black'>
+                              <div className='my-auto text-primary-main'>
                                 <SolidCheck />
                               </div>
                             )}

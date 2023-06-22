@@ -1,3 +1,4 @@
+import { useDetectKeyPress } from 'hooks/common/useDetectKeyPress';
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { useField, useFormikContext } from 'formik';
 import clsx from 'clsx';
@@ -25,7 +26,16 @@ export const CustomSelect = (props: PropsWithChildren<Props>) => {
   const { submitCount } = useFormikContext();
   const [showList, setShowList] = useState(false);
   const [selectedOption, setSelectedOption] = useState<any>(null);
+
   const id = props.id ?? name;
+
+  useDetectKeyPress('ArrowDown', () => {
+    const focusedElement = document.activeElement;
+
+    if (focusedElement?.getAttribute('name') === name) {
+      setShowList(true);
+    }
+  });
 
   useEffect(() => {
     const val = field.value;

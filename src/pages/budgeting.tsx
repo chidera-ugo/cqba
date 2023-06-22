@@ -7,6 +7,7 @@ import { AllBudgets, ViewMode } from 'components/modules/budgeting/AllBudgets';
 import { PlusCircle } from 'components/svgs/others/Plus';
 import { Squares } from 'components/svgs/others/Squares';
 import { TableIcon } from 'components/svgs/others/Table';
+import { useDebouncer } from 'hooks/common/useDebouncer';
 import { getFromLocalStore, saveToLocalStore } from 'lib/localStore';
 import { useState } from 'react';
 
@@ -22,7 +23,15 @@ export default function Budgeting() {
   const [filters, setFilters] = useState<Record<string, any>>({
     status: filterOptions[0]?.name,
   });
+
+  const [search, setSearch] = useState('');
+
+  const [debouncedSearch] = useDebouncer({
+    value: search,
+  });
+
   const [showModal, setShowModal] = useState(false);
+
   const [viewMode, setViewMode] = useState<ViewMode>(
     preferences?.budgetingViewMode
   );
@@ -60,9 +69,12 @@ export default function Budgeting() {
 
             <SearchInput
               placeholder='Search budgets'
+              value={search}
               className='mt-3 w-full 640:w-[300px] 880:mt-0'
-              value=''
-              onChange={() => null}
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+              clear={() => setSearch('')}
             />
           </div>
         </div>
@@ -101,7 +113,10 @@ export default function Budgeting() {
         <CreateBudgetForm close={closeModal} />
       </RightModalWrapper>
 
-      <AllBudgets {...{ viewMode, filters, setFilters }} />
+      <AllBudgets
+        search={debouncedSearch}
+        {...{ viewMode, filters, setFilters }}
+      />
     </AppLayout>
   );
 }

@@ -56,7 +56,7 @@ export default function VerifyEmail() {
           description={
             <span className='mt-3 block'>
               {
-                "We've verified your email, you may proceed to sign in to your new account"
+                'Your email has been verified, you may proceed to sign in to your new account'
               }
             </span>
           }

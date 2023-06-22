@@ -19,6 +19,7 @@ interface Props {
   filters?: Record<string, unknown>;
   setFilters?: Dispatch<SetStateAction<Record<string, string>>>;
   slot?: JSX.Element;
+  search: string;
 }
 
 export const AllTransactionsTable = ({
@@ -26,6 +27,7 @@ export const AllTransactionsTable = ({
   reset,
   filters,
   setFilters,
+  search,
 }: Props) => {
   const { push } = useRouter();
 
@@ -59,6 +61,7 @@ export const AllTransactionsTable = ({
         amount: 200000,
         type: 'credit',
         status: 'successful',
+        search,
         createdAt: new Date().toISOString(),
       },
       10

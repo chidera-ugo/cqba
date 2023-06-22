@@ -9,24 +9,24 @@ import { useScrollToFormError } from 'hooks/forms/useScrollToFormError';
 import { sanitizeRecordToRemoveUndefinedAndNulls } from 'utils/sanitizers/sanitizeRecordToRemoveUndefinedAndNulls';
 import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { useEffect } from 'react';
 
 interface Props {
   formikProps: FormikProps<typeof initialValues>;
   processing: boolean;
-  setHasUnsavedChanges: Dispatch<SetStateAction<boolean>>;
   departments: IDepartment[];
-  handleClickCreateDepartment?: () => void;
+  handleClickCreateDepartment: (values: Record<string, any>) => void;
+  formRecoveryValues?: Record<string, any> | null;
   currentEmployee?: IEmployee | null;
 }
 
 export const Form = ({
   processing,
   formikProps,
-  setHasUnsavedChanges,
   departments,
   handleClickCreateDepartment,
   currentEmployee,
+  formRecoveryValues,
 }: Props) => {
   const {
     handleSubmit,
@@ -40,27 +40,24 @@ export const Form = ({
   useScrollToFormError(errors, submitCount);
 
   useEffect(() => {
-    if (!currentEmployee) return;
+    if (!currentEmployee && !formRecoveryValues) return;
 
     const { firstName, lastName, email, departmentId } =
-      sanitizeRecordToRemoveUndefinedAndNulls(currentEmployee);
+      sanitizeRecordToRemoveUndefinedAndNulls(
+        currentEmployee ?? (formRecoveryValues as typeof initialValues)
+      );
 
     setValues({
       ...values,
       firstName,
       lastName,
       email,
-      department: departmentId,
+      departmentId,
     });
-  }, [currentEmployee]);
+  }, [currentEmployee, formRecoveryValues]);
 
   return (
-    <FormikForm
-      onChange={() => {
-        setHasUnsavedChanges(true);
-      }}
-      onSubmit={handleSubmit}
-    >
+    <FormikForm onSubmit={handleSubmit}>
       <div className='gap-4 880:flex'>
         <Input autoFocus label='First Name' name='firstName' />
         <Input label='Last Name' name='lastName' />
@@ -72,7 +69,7 @@ export const Form = ({
         <CustomSelect
           id={'select-department'}
           label='Department'
-          name='department'
+          name='departmentId'
           displayValueKey='title'
           trueValueKey='id'
           {...{
@@ -81,7 +78,9 @@ export const Form = ({
           }}
         >
           <CreateDepartmentButton
-            onClick={handleClickCreateDepartment}
+            onClick={() => {
+              handleClickCreateDepartment(values);
+            }}
             className={'py-4'}
           />
         </CustomSelect>
@@ -92,7 +91,7 @@ export const Form = ({
           submitting={processing}
           className='dark-button min-w-[200px]'
         >
-          Add Department
+          Add Employee
         </SubmitButton>
       </div>
     </FormikForm>

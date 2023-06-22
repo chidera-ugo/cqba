@@ -86,7 +86,7 @@ export const Filter = ({
               >
                 {displayValue}
 
-                {filters[title ?? 'filter'] === displayValue && (
+                {filters[title ?? 'filter']?.['name'] === displayValue && (
                   <div className='my-auto text-primary-main'>
                     <div className='h-4 w-4'>
                       <SolidCheck />

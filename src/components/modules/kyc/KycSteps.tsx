@@ -80,7 +80,7 @@ export const KycSteps = () => {
               >
                 {!plainStyling && isCompleted ? (
                   <div className='y-center my-auto mr-2 h-5 w-5'>
-                    <div className='mx-auto'>
+                    <div className='mx-auto text-primary-main'>
                       <SolidCheck />
                     </div>
                   </div>
@@ -134,7 +134,7 @@ export const KycSteps = () => {
           >
             {isCompleted ? (
               <div className='y-center my-auto mr-2 h-5 w-5'>
-                <div className='mx-auto'>
+                <div className='mx-auto text-primary-main'>
                   <SolidCheck />
                 </div>
               </div>

@@ -14,7 +14,7 @@ const commaSeperator = (num: string) => {
 };
 
 export const formatAmount = ({
-  value,
+  value = 0,
   decimalPlaces = 2,
   kFormatter,
   typing,
@@ -87,11 +87,9 @@ export const sanitizeAmount = ({
   }
 
   if (returnTrueAmount) {
-    const trueAmount = `${amount.substring(
-      0,
+    return `${amount.substring(0, amount?.length - 2)}.${amount.substring(
       amount?.length - 2
-    )}.${amount.substring(amount?.length - 2)}`;
-    return trueAmount;
+    )}`;
   }
 
   return amount;

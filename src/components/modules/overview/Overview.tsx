@@ -1,13 +1,18 @@
 import clsx from 'clsx';
 import { MoreInfo } from 'components/common/MoreInfo';
 import { useGetDashboardSummary } from 'hooks/api/dashboard/useGetDashboardSummary';
+import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { formatAmount } from 'utils/formatters/formatAmount';
 import { generatePlaceholderArray } from 'utils/generators/generatePlaceholderArray';
 
 export const Overview = () => {
-  const { isLoading, isError, data } = useGetDashboardSummary();
+  const { isVerified } = useIsVerified();
 
-  if (isLoading) return <IsLoadingIsError type='loading' />;
+  const { isLoading, isError, data } = useGetDashboardSummary({
+    enabled: isVerified,
+  });
+
+  if (isVerified && isLoading) return <IsLoadingIsError type='loading' />;
   if (isError) return <IsLoadingIsError type='error' />;
 
   const payload: {
@@ -71,7 +76,7 @@ export const Overview = () => {
               >
                 {isAmount && <span className='mr-1.5'>NGN</span>}
                 {formatAmount({
-                  value,
+                  value: value,
                   decimalPlaces: isAmount ? 2 : 0,
                   kFormatter: value > 999999,
                 })}

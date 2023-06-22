@@ -46,12 +46,12 @@ export default function useHttp({
   const { state, dispatch } = useAppContext();
   const { destroySession } = useDestroySession();
 
-  const { tokens } = state;
-
   const axiosInstance = axios.create({
     headers: {
       Accept: 'application/json',
-      Authorization: tokens?.accessToken ? `Bearer ${tokens.accessToken}` : '',
+      Authorization: state?.tokens?.accessToken
+        ? `Bearer ${state?.tokens.accessToken}`
+        : '',
     },
     baseURL,
     withCredentials: process.env.WITH_CREDENTIALS === 'positive',

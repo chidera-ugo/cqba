@@ -43,10 +43,12 @@ export const UpdateCompanyInformationForm = () => {
         address,
         employees,
         expenses,
+        businessName,
       }) => {
         setHasUnsavedChanges(false);
 
         mutate({
+          businessName,
           businessAddress: address,
           averageMonthlyExpenses: expenses,
           businessType: companyType,

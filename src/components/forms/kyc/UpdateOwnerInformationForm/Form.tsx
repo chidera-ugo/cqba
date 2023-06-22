@@ -1,6 +1,7 @@
 import { IsLoading } from 'components/data-states/IsLoading';
 import { Input } from 'components/form-elements/Input';
 import { ImageViewer } from 'components/modals/ImageViewer';
+import { useAppContext } from 'context/AppContext';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useScrollToFormError } from 'hooks/forms/useScrollToFormError';
@@ -41,6 +42,8 @@ export const Form = ({
   const { isLoading, data } = useGetOrganizationInformation();
   const [previewImageUrl, setPreviewImageUrl] = useState('');
 
+  const { user } = useAppContext().state;
+
   useScrollToFormError(errors, submitCount);
 
   const v = values as any;
@@ -76,16 +79,20 @@ export const Form = ({
         ...values.idFile,
         webUrl: idImageUrl,
       },
-      politicalAffiliation,
-      firstName,
-      lastName,
+      politicalAffiliation: !politicalAffiliation
+        ? ''
+        : politicalAffiliation
+        ? 'Yes'
+        : 'No',
+      firstName: firstName ?? user?.firstName,
+      lastName: lastName ?? user?.lastName,
       gender,
       bvn,
       idNumber,
-      phoneNumber: formatPhoneNumber(phone),
+      phoneNumber: formatPhoneNumber(phone ?? user?.phone),
       idType: formOfId,
     });
-  }, [data]);
+  }, [data, user]);
 
   if (isLoading) return <IsLoading />;
 

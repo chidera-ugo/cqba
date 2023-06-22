@@ -55,7 +55,7 @@ const initialState: State = {
 type StoreApi = {
   state: State;
   dispatch: Dispatch<Action>;
-  refetchCurrentUser?: UseMutateFunction<IUser, unknown, any, unknown>;
+  getCurrentUser?: UseMutateFunction<IUser, unknown, any, unknown>;
 };
 
 const AppContext = createContext<StoreApi>({
@@ -73,7 +73,7 @@ function AppContextProvider({ children, ...props }: PropsWithChildren<any>) {
     (tokens) => {
       dispatch({ type: 'saveTokens', payload: tokens });
     },
-    state.tokens?.accessToken,
+    state?.tokens?.accessToken,
     {
       onSuccess(data) {
         if (!data) {
@@ -97,7 +97,7 @@ function AppContextProvider({ children, ...props }: PropsWithChildren<any>) {
     () => ({
       state,
       dispatch,
-      refetchCurrentUser: getCurrentUser,
+      getCurrentUser,
     }),
     [state, dispatch]
   );
@@ -109,13 +109,9 @@ function AppContextProvider({ children, ...props }: PropsWithChildren<any>) {
       return dispatch({ type: 'setIsInitializing', payload: false });
 
     dispatch({ type: 'saveTokens', payload: tokens });
+
+    initializeSession(tokens?.accessToken);
   }, []);
-
-  useEffect(() => {
-    if (state.user || !state?.tokens?.accessToken) return;
-
-    initializeSession(state?.tokens?.accessToken);
-  }, [state.tokens]);
 
   useEffect(() => {
     dispatch({
@@ -134,7 +130,7 @@ function AppContextProvider({ children, ...props }: PropsWithChildren<any>) {
 
     dispatch({ type: 'setIsInitializing', payload: true });
 
-    getCurrentUser({});
+    getCurrentUser(token);
   }
 
   if (state.isInitializing) return <FullScreenLoader id='app-context' asPage />;

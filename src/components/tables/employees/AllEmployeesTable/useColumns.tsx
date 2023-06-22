@@ -1,16 +1,24 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { Pill } from 'components/common/Pill';
 import { TableCell } from 'components/core/Table/TableCell';
+import {
+  EmployeeAction,
+  EmployeeActions,
+} from 'components/tables/employees/AllEmployeesTable/EmployeeActions';
 import { IEmployee } from 'hooks/api/employees/useGetAllEmployees';
 import { useMemo } from 'react';
 import { formatDate } from 'utils/formatters/formatDate';
 
-export const useColumns = () => {
+interface Args {
+  handleActionClick: (employee: IEmployee, action: EmployeeAction) => void;
+}
+
+export const useColumns = ({ handleActionClick }: Args) => {
   const columns = useMemo<ColumnDef<IEmployee>[]>(
     () => [
       {
         header: 'Name',
-        accessorKey: 'id',
+        accessorKey: 'firstName',
         enableColumnFilter: false,
         cell: ({ row }) => {
           const { firstName, lastName } = row.original;
@@ -30,7 +38,7 @@ export const useColumns = () => {
       },
       {
         header: 'Department',
-        accessorKey: 'department',
+        accessorKey: 'departmentTitle',
         enableColumnFilter: false,
         cell: (props) => <TableCell {...props} />,
       },
@@ -58,6 +66,23 @@ export const useColumns = () => {
         enableColumnFilter: false,
         cell: ({ getValue }) => {
           return <div>{formatDate(getValue() as string, 'semi-full')}</div>;
+        },
+      },
+      {
+        header: 'Actions',
+        accessorKey: 'id',
+        enableColumnFilter: false,
+        cell: ({ row }) => {
+          const employee = row.original;
+
+          return (
+            <EmployeeActions
+              handleActionClick={(action) => {
+                handleActionClick(employee, action);
+              }}
+              employee={employee}
+            />
+          );
         },
       },
     ],

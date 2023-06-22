@@ -1,6 +1,5 @@
 import { UseQueryOptions } from '@tanstack/react-query';
 import { useTQuery } from 'hooks/api/useTQuery';
-import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { generateUrlParamsFromObject } from 'utils/generators/generateUrlParamsFromObject';
 import { DateRange } from 'utils/getters/getDateRange';
 
@@ -27,15 +26,10 @@ export function useGetInflowOutflowChart(
     },
   });
 
-  const { isVerified } = useIsVerified();
-
   return useTQuery<InflowOutflowRes>({
     queryKey: ['inflow-outflow-chart', _params],
     url: `/balance-volume${_params}`,
     service: 'transactions',
-    options: {
-      enabled: !!isVerified,
-      ...options,
-    },
+    options,
   });
 }

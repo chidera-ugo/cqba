@@ -5,11 +5,19 @@ import { AppLayout } from 'components/layouts/AppLayout';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { Download } from 'components/svgs/others/Download';
 import { AllTransactionsTable } from 'components/tables/wallet/AllTransactionsTable';
+import { useDebouncer } from 'hooks/common/useDebouncer';
 import { useState } from 'react';
 
 export default function Transactions() {
   const [filters, setFilters] = useState<Record<string, any>>({});
+
   const [showModal, setShowModal] = useState(false);
+
+  const [search, setSearch] = useState('');
+
+  const [debouncedSearch] = useDebouncer({
+    value: search,
+  });
 
   function closeModal() {
     setShowModal(false);
@@ -63,7 +71,12 @@ export default function Transactions() {
 
         <SearchInput
           placeholder='Search transactions'
+          value={search}
           className='mt-3 w-full 640:w-[300px] 880:mt-0'
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
+          clear={() => setSearch('')}
         />
       </div>
 
@@ -77,7 +90,10 @@ export default function Transactions() {
         <GenerateStatementForm close={closeModal} accountNumber='01848828848' />
       </RightModalWrapper>
 
-      <AllTransactionsTable {...{ filters, setFilters }} />
+      <AllTransactionsTable
+        search={debouncedSearch}
+        {...{ filters, setFilters }}
+      />
     </AppLayout>
   );
 }

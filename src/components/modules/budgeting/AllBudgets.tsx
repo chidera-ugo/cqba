@@ -18,6 +18,7 @@ interface Props {
   viewMode: ViewMode;
   filters: Record<string, unknown>;
   setFilters: Dispatch<SetStateAction<Record<string, string>>>;
+  search: string;
 }
 
 export type BudgetListProps = {

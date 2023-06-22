@@ -39,7 +39,7 @@ export type Props<T> = JSX.IntrinsicElements['table'] & {
   data?: PaginatedResponse<T>;
   returnOriginalOnRowClick?: boolean;
   onRowClick?: (res: any) => void;
-  accessor?: string;
+  accessor: string;
   // MANIPULATION
   alignTop?: boolean;
   setPagination?: Dispatch<SetStateAction<PaginationState>>;
@@ -212,8 +212,8 @@ export function Table<T>({
       )}
     >
       <SimpleToast
-        show={!!isLoading && !!res?.content.length}
-        className='left-0 top-24 1180:left-[122px]'
+        show={(!!isLoading || !!isRefetching) && !!res?.content.length}
+        className='left-0 top-32 1180:left-[122px]'
       >
         <div className='flex py-2'>
           <Spinner className='my-auto mr-1 h-4 text-white' />
@@ -300,9 +300,11 @@ export function Table<T>({
                       textColor = getRowTextColor(row);
                     }
 
+                    const key = (row.original as any)[accessor];
+
                     return (
                       <tr
-                        key={row.id}
+                        key={key}
                         className={clsx(
                           `group h-[71px] border-b border-gray-100 text-sm font-semibold`,
                           onRowClick && 'cursor-pointer',
