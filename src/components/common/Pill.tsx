@@ -24,7 +24,7 @@ export const Pill = ({ value, suffix, config }: Props) => {
   return (
     <div className='flex align-middle'>
       <span className={clsx(getPillColor(), 'my-auto capitalize')}>
-        {value}
+        {value?.replaceAll('-', ' ')}
         {suffix && ` ${suffix}`}
       </span>
     </div>

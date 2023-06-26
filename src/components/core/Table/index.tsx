@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -34,6 +33,7 @@ import { Spinner } from 'components/svgs/dashboard/Spinner';
 export type Props<T> = JSX.IntrinsicElements['table'] & {
   title: string;
   emptyTableText?: string;
+  emptyTableIcon?: JSX.Element;
   // TABLE
   columns: ColumnDef<T, unknown>[];
   data?: PaginatedResponse<T>;
@@ -111,6 +111,7 @@ export function Table<T>({
   tableClassname,
   refetch,
   hidePagination,
+  emptyTableIcon,
   tableFiltersKeyValuePairs,
   minimal,
 }: Props<T>) {
@@ -207,7 +208,7 @@ export function Table<T>({
   return (
     <div
       className={clsx(
-        `rounded-[10px] border border-neutral-300 bg-white`,
+        `rounded-[10px] border border-neutral-200 bg-white`,
         className
       )}
     >
@@ -221,7 +222,7 @@ export function Table<T>({
         </div>
       </SimpleToast>
 
-      <div className={'h-full overflow-x-auto'}>
+      <div className={'overflows-x-auto h-full'}>
         <div className='thin-scrollbar min-w-[900px]'>
           <div className={clsx('w-full ')}>
             {filters &&
@@ -293,7 +294,7 @@ export function Table<T>({
 
               {!isError && (
                 <tbody>
-                  {table.getRowModel().rows.map((row) => {
+                  {table.getRowModel().rows.map((row, i) => {
                     let textColor = 'text-neutral-800';
 
                     if (getRowTextColor) {
@@ -308,6 +309,7 @@ export function Table<T>({
                         className={clsx(
                           `group h-[71px] border-b border-gray-100 text-sm font-semibold`,
                           onRowClick && 'cursor-pointer',
+                          i % 2 !== 0 && 'bg-neutral-100',
                           textColor
                         )}
                       >
@@ -376,7 +378,7 @@ export function Table<T>({
 
       <>
         {canNotShowData ? (
-          <IsEmpty {...{ emptyTableText, minimal }} />
+          <IsEmpty {...{ emptyTableText, emptyTableIcon, minimal }} />
         ) : isLoading && !res?.content.length ? (
           <IsLoading
             className={clsx(minimal ? 'h-[50px]' : 'h-[200px] 640:h-[300px]')}
@@ -395,7 +397,7 @@ export function Table<T>({
             }
           />
         ) : res?.empty ? (
-          <IsEmpty {...{ emptyTableText, minimal }} />
+          <IsEmpty {...{ emptyTableText, emptyTableIcon, minimal }} />
         ) : null}
       </>
 
@@ -406,25 +408,35 @@ export function Table<T>({
 
 export const IsEmpty = ({
   emptyTableText,
+  emptyTableIcon,
   minimal,
 }: {
   emptyTableText: Props<any>['emptyTableText'];
+  emptyTableIcon: Props<any>['emptyTableIcon'];
   minimal?: boolean;
-}) => (
-  <div className={clsx('y-center h-full px-5', minimal ? 'py-10' : 'py-20')}>
-    {emptyTableText && (
-      <SimpleInformation
-        title={
-          minimal ? undefined : (
-            <span className='text-xl'>Nothing to show (yet)</span>
-          )
-        }
-        description={<span className='mt-1 block'>{emptyTableText}</span>}
-        icon={minimal ? undefined : <NothingHere />}
-      />
-    )}
-  </div>
-);
+}) => {
+  return (
+    <div className={clsx('y-center h-full px-5', minimal ? 'py-10' : 'py-20')}>
+      {emptyTableText && (
+        <SimpleInformation
+          title={
+            minimal ? undefined : (
+              <span className='text-xl'>Nothing to show (yet)</span>
+            )
+          }
+          description={<span className='mt-1 block'>{emptyTableText}</span>}
+          icon={
+            emptyTableIcon ? (
+              emptyTableIcon
+            ) : minimal ? undefined : (
+              <NothingHere />
+            )
+          }
+        />
+      )}
+    </div>
+  );
+};
 
 (Table as FC<Props<any>>).propTypes = {
   onRowClick: function (props, propName) {

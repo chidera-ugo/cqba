@@ -1,3 +1,4 @@
+import { Spinner } from 'components/svgs/dashboard/Spinner';
 import { useDetectKeyPress } from 'hooks/common/useDetectKeyPress';
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { useField, useFormikContext } from 'formik';
@@ -17,15 +18,20 @@ export type Props = JSX.IntrinsicElements['input'] &
     name?: string;
     dropdownClassname?: string;
     asModal?: boolean;
+    isLoading?: boolean;
+    isError?: boolean;
   };
 
 export const CustomSelect = (props: PropsWithChildren<Props>) => {
-  const { className, label, name, setFieldValue, next } = props;
+  const { className, isError, isLoading, label, name, setFieldValue, next } =
+    props;
 
   const [field, meta] = useField(name as string);
   const { submitCount } = useFormikContext();
   const [showList, setShowList] = useState(false);
   const [selectedOption, setSelectedOption] = useState<any>(null);
+
+  const errorExists = submitCount > 0 && meta.error;
 
   const id = props.id ?? name;
 
@@ -42,7 +48,7 @@ export const CustomSelect = (props: PropsWithChildren<Props>) => {
 
     if (!val) setSelectedOption(null);
 
-    const selectedOption = props.options.find(
+    const selectedOption = props?.options?.find(
       (option) => option[props.trueValueKey] === val
     );
 
@@ -50,6 +56,69 @@ export const CustomSelect = (props: PropsWithChildren<Props>) => {
 
     setSelectedOption(selectedOption);
   }, [field.value]);
+
+  if (isLoading)
+    return (
+      <div className={clsx(className, 'relative mt-5 w-full')}>
+        <div className='flex'>
+          <label htmlFor={id} className='text-left'>
+            {label}
+          </label>
+        </div>
+
+        <div id={id} className='relative'>
+          <div
+            className={clsx('relative h-full w-full cursor-pointer', className)}
+          >
+            <div
+              className={clsx(
+                `input block w-full cursor-pointer pr-11 text-left caret-transparent`,
+                submitCount > 0 &&
+                  meta.error &&
+                  !showList &&
+                  'border-error-main',
+                !!field.value ? 'bg-white' : 'bg-neutral-100'
+              )}
+            />
+
+            <div className='smooth y-center absolute right-0 top-0 inline-block h-full w-11 text-neutral-500 hover:text-primary-700'>
+              <Spinner className={'my-auto mx-auto h-full text-primary-main'} />
+            </div>
+          </div>
+        </div>
+
+        {errorExists ? <div className='generic-error'>{meta.error}</div> : null}
+      </div>
+    );
+
+  if (isError)
+    return (
+      <div className={clsx(className, 'relative mt-5 w-full')}>
+        <div className='flex'>
+          <label htmlFor={id} className='text-left'>
+            {label}
+          </label>
+        </div>
+
+        <div id={id} className='relative'>
+          <div
+            className={clsx('relative h-full w-full cursor-pointer', className)}
+          >
+            <div
+              className={clsx(
+                `input block w-full cursor-pointer bg-red-100 pr-11 text-left caret-transparent`,
+                submitCount > 0 &&
+                  meta.error &&
+                  !showList &&
+                  'border-error-main'
+              )}
+            />
+          </div>
+        </div>
+
+        {errorExists ? <div className='generic-error'>{meta.error}</div> : null}
+      </div>
+    );
 
   return (
     <div className={clsx(className, 'relative mt-5 w-full')}>
@@ -73,7 +142,7 @@ export const CustomSelect = (props: PropsWithChildren<Props>) => {
             value={selectedOption ? selectedOption[props.displayValueKey] : ''}
             className={clsx(
               `input block w-full cursor-pointer pr-11 text-left caret-transparent`,
-              submitCount > 0 && meta.error && !showList && 'border-error-main',
+              errorExists && !showList && 'border-error-main',
               !!field.value ? 'bg-white' : 'bg-neutral-100'
             )}
           />
@@ -108,9 +177,7 @@ export const CustomSelect = (props: PropsWithChildren<Props>) => {
         />
       </div>
 
-      {submitCount > 0 && meta.error ? (
-        <div className='generic-error'>{meta.error}</div>
-      ) : null}
+      {errorExists ? <div className='generic-error'>{meta.error}</div> : null}
     </div>
   );
 };

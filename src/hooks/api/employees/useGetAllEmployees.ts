@@ -9,7 +9,8 @@ export interface IEmployee {
   organizationId?: string;
   lastName?: string;
   userId?: string;
-  updatedAt?: number;
+  updatedAt?: string;
+  createdAt?: string;
   status?: string;
   email?: string;
   id?: string;
@@ -22,6 +23,7 @@ export function useGetAllEmployees(
     page: number;
     size: number;
     search?: string;
+    departmentId?: string;
   },
   options?: UseQueryOptions<any, any, any, string[]>
 ) {

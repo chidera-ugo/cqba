@@ -1,41 +1,21 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { Pill } from 'components/common/Pill';
-import { ProfileCard } from 'components/common/ProfileCard';
-import { TableAction } from 'components/core/Table/TableAction';
 import { TableCell } from 'components/core/Table/TableCell';
-import { useBudgetActionOptions } from 'components/modules/budgeting/BudgetCard';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
 import { useMemo } from 'react';
-import { IBudget } from 'types/budgeting/Budget';
 import { formatDate } from 'utils/formatters/formatDate';
 
 export const useColumns = () => {
-  const { options } = useBudgetActionOptions();
-
   const columns = useMemo<ColumnDef<IBudget>[]>(
     () => [
       {
-        header: 'Employee',
-        accessorKey: 'employee',
-        enableColumnFilter: false,
-        cell: ({ row }) => {
-          const { employee } = row.original;
-          return (
-            <ProfileCard
-              title={employee.fullName}
-              subTitle={employee.department}
-              avatar={employee.avatar}
-            />
-          );
-        },
-      },
-      {
         header: 'Request',
-        accessorKey: 'request.title',
+        accessorKey: 'title',
         enableColumnFilter: false,
         cell: (props) => <TableCell {...props} />,
       },
       {
-        header: 'Date/Time',
+        header: 'Created',
         accessorKey: 'createdAt',
         enableColumnFilter: false,
         cell: ({ getValue }) => {
@@ -65,18 +45,6 @@ export const useColumns = () => {
         accessorKey: 'amount',
         enableColumnFilter: false,
         cell: (props) => <TableCell isAmount {...props} />,
-      },
-      {
-        header: () => (
-          <span className='block h-full w-full pr-3 text-right'>Actions</span>
-        ),
-        id: 'actions',
-        accessorKey: 'id',
-        enableColumnFilter: false,
-        cell: ({ getValue }) => {
-          const id = getValue() as any;
-          return <TableAction options={options} id={id} />;
-        },
       },
     ],
     []

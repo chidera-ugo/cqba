@@ -1,10 +1,8 @@
 import clsx from 'clsx';
 import { DisplayValue } from 'components/common/DisplayValue';
 import { Pill } from 'components/common/Pill';
-import { ProfileCard } from 'components/common/ProfileCard';
-import { TableAction } from 'components/core/Table/TableAction';
 import { Lock, Pause } from 'components/svgs/budgeting/Budget_Icons';
-import { IBudget } from 'types/budgeting/Budget';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
 import { formatDate } from 'utils/formatters/formatDate';
 
 export const BudgetCard = ({
@@ -17,16 +15,16 @@ export const BudgetCard = ({
 }) => {
   const {
     id,
-    employee,
-    request,
+    description,
+    deadline,
+    title,
     status,
     amount,
-    dueDate,
     priority,
     createdAt,
   } = budget;
 
-  const { options } = useBudgetActionOptions();
+  const { options: _ } = useBudgetActionOptions();
 
   return (
     <div
@@ -47,19 +45,19 @@ export const BudgetCard = ({
           showFullDetails && 'mb-5 border-b border-neutral-200 pb-5'
         )}
       >
-        <ProfileCard
-          title={employee.fullName}
-          subTitle={`${employee.department} Department`}
-          avatar={employee.avatar}
-        />
+        {/*<ProfileCard*/}
+        {/*  title={employee.fullName}*/}
+        {/*  subTitle={`${employee.department} Department`}*/}
+        {/*  avatar={employee.avatar}*/}
+        {/*/>*/}
 
-        {status === 'approved' && (
-          <TableAction options={options} id={'budget-card-table-action'} />
-        )}
+        {/*{status === 'approved' && (*/}
+        {/*  <TableAction options={options} id={'budget-card-table-action'} />*/}
+        {/*)}*/}
       </div>
 
       <div className='text-left'>
-        <h4 className='text-lg'>{request.title}</h4>
+        <h4 className='text-lg'>{title}</h4>
         <p
           className={clsx(
             'mt-1 text-sm leading-6 text-neutral-500',
@@ -67,8 +65,8 @@ export const BudgetCard = ({
           )}
         >
           {status === 'approved'
-            ? `Approved by Admin - ${formatDate(dueDate, 'short')}`
-            : request.description}
+            ? `Approved by Admin - ${formatDate(deadline, 'short')}`
+            : description}
         </p>
       </div>
 

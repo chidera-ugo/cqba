@@ -8,9 +8,11 @@ interface Args<T> {
 export function handleSort<T>({
   direction = 'asc',
   disabled,
-  data,
+  data: _data,
   sortBy,
 }: Args<T>) {
+  const data = [...(_data ?? [])];
+
   if (disabled) return data ?? [];
 
   if (!sortBy)

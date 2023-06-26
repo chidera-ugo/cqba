@@ -13,7 +13,9 @@ export type Service =
   | 'departments'
   | 'transactions'
   | 'employees'
-  | 'dashboard';
+  | 'dashboard'
+  | 'sub-accounts'
+  | 'budgets';
 
 export const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -31,6 +33,10 @@ export function urlModifier(url?: Service) {
       return '/v1/auth';
     case 'departments':
       return '/v1/departments';
+    case 'budgets':
+      return '/v1/budgets';
+    case 'sub-accounts':
+      return '/v1/sub-accounts';
     default:
       return '/';
   }

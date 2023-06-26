@@ -1,13 +1,8 @@
-import { AlertBox } from 'components/common/AlertBox';
 import { Filter } from 'components/form-elements/Filter';
 import { SearchInput } from 'components/form-elements/SearchInput';
-import { UpdateEmployeeForm } from 'components/forms/employess/UpdateEmployeeForm';
 import { AppLayout } from 'components/layouts/AppLayout';
-import { RightModalWrapper } from 'components/modal/ModalWrapper';
-import {
-  CreateDepartment,
-  CreateDepartmentButton,
-} from 'components/modules/employees/CreateDepartment';
+import { CreateDepartment } from 'components/modules/employees/CreateDepartment';
+import { CreateEmployee } from 'components/modules/employees/CreateEmployee';
 import { Spinner } from 'components/svgs/dashboard/Spinner';
 import { PlusCircle } from 'components/svgs/others/Plus';
 import { AllEmployeesTable } from 'components/tables/employees/AllEmployeesTable';
@@ -16,8 +11,12 @@ import { useGetDepartments } from 'hooks/api/employees/useGetDepartments';
 import { useDebouncer } from 'hooks/common/useDebouncer';
 import { useState } from 'react';
 
+export type EmployeeModalType = 'department' | 'employee' | null;
+
 export default function Employees() {
-  const [filters, setFilters] = useState<Record<string, any>>({});
+  const [filters, setFilters] = useState<Record<string, any>>({
+    department: { name: 'All Departments', value: '' },
+  });
 
   const [search, setSearch] = useState('');
 
@@ -30,19 +29,29 @@ export default function Employees() {
     null
   );
 
-  const [modal, setModal] = useState<'department' | 'employee' | null>(null);
+  const [modal, setModal] = useState<EmployeeModalType>(null);
+
+  const [debouncedSearch] = useDebouncer({
+    value: search,
+  });
+
+  const { isLoading, data } = useGetDepartments();
+
+  const departmentFilterOptions = !data?.content.length
+    ? []
+    : [
+        { name: 'All Departments', value: '' },
+        ...data?.content.map(({ title, id }) => ({
+          name: title!,
+          value: id!,
+        })),
+      ];
 
   function closeModal() {
     setCurrentEmployee(null);
     setModal(null);
     setFormRecoveryValues(null);
   }
-
-  const { isLoading, data } = useGetDepartments();
-
-  const [debouncedSearch] = useDebouncer({
-    value: search,
-  });
 
   return (
     <AppLayout title='Employees'>
@@ -51,20 +60,13 @@ export default function Employees() {
           {!!data?.content?.length && (
             <div className='flex w-full gap-2 360:w-1/2 690:w-fit'>
               <Filter
-                id='department-filter'
-                title='Department'
-                {...{
-                  filters,
-                  setFilters,
-                  isLoading,
-                }}
                 withChevron
+                filterKey='department'
+                id='employees-table-filter'
+                {...{ filters, setFilters }}
                 className='w-full 690:w-auto'
-                dropdownClassName='left-0'
-                options={data.content.map(({ title, id }) => ({
-                  name: title!,
-                  value: id!,
-                }))}
+                dropdownClassName='left-0 min-w-[180px]'
+                options={departmentFilterOptions}
               />
             </div>
           )}
@@ -99,52 +101,23 @@ export default function Employees() {
         />
       </div>
 
+      <CreateEmployee
+        {...{
+          setModal,
+          closeModal,
+          setFormRecoveryValues,
+          formRecoveryValues,
+          currentEmployee,
+          modal,
+        }}
+      />
+
       <CreateDepartment
         showModal={modal === 'department'}
         closeModal={() => {
           setModal('employee');
         }}
       />
-
-      <RightModalWrapper
-        show={modal === 'employee'}
-        title='Add Employee'
-        closeModal={closeModal}
-        closeOnClickOutside
-        childrenClassname='py-0 640:px-8 px-4'
-      >
-        {!data?.content?.length ? (
-          <>
-            <AlertBox
-              message={
-                <span>
-                  You need to create a department before you can add an employee
-                </span>
-              }
-            />
-
-            <div className='x-center mx-auto w-fit'>
-              <CreateDepartmentButton
-                onClick={() => setModal('department')}
-                className={'dark-button mx-auto mt-5 h-12 w-fit text-white'}
-              />
-            </div>
-          </>
-        ) : (
-          <UpdateEmployeeForm
-            handleClickCreateDepartment={(values) => {
-              setModal('department');
-              setFormRecoveryValues(values);
-            }}
-            {...{
-              currentEmployee,
-              formRecoveryValues,
-            }}
-            departments={data.content}
-            onSuccess={closeModal}
-          />
-        )}
-      </RightModalWrapper>
 
       <AllEmployeesTable
         {...{

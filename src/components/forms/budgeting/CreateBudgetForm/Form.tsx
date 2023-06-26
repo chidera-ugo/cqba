@@ -1,7 +1,6 @@
 import { Form as FormikForm, FormikProps } from 'formik';
 import { initialValues } from './initialValues';
 import dayjs from 'dayjs';
-import { useState } from 'react';
 import { DatePicker } from 'components/form-elements/DatePicker';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { Input } from 'components/form-elements/Input';
@@ -16,7 +15,6 @@ interface Props {
 
 export const Form = ({ formikProps, processing }: Props) => {
   const { handleSubmit, setFieldValue } = formikProps;
-  const [dueDate, setDueDate] = useState<Date | null>(null);
 
   return (
     <FormikForm onSubmit={handleSubmit}>
@@ -25,12 +23,12 @@ export const Form = ({ formikProps, processing }: Props) => {
 
       <div className='gap-4 880:flex'>
         <Select label='Priority' name='priority' options={['High', 'Low']} />
+
         <DatePicker
           label='Due Date'
           name='dueDate'
+          disableTyping
           {...{
-            calendarValue: dueDate,
-            setCalendarValue: setDueDate,
             setFieldValue,
           }}
           minDate={dayjs().toDate()}

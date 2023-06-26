@@ -2,23 +2,20 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Formik } from 'formik';
 import { useUpdateEmployee } from 'hooks/api/employees/useUpdateEmployee';
 import { IEmployee } from 'hooks/api/employees/useGetAllEmployees';
-import { IDepartment } from 'hooks/api/employees/useGetDepartments';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
 
 interface Props {
   onSuccess: () => void;
-  departments: IDepartment[];
-  handleClickCreateDepartment: (values: Record<string, any>) => void;
+  addDepartment?: (values: Record<string, any>) => void;
   formRecoveryValues?: Record<string, any> | null;
   currentEmployee?: IEmployee | null;
 }
 
 export const UpdateEmployeeForm = ({
   onSuccess,
-  departments,
-  handleClickCreateDepartment,
+  addDepartment,
   currentEmployee,
   formRecoveryValues,
 }: Props) => {
@@ -49,10 +46,9 @@ export const UpdateEmployeeForm = ({
             {...{
               formikProps,
               processing: isLoading,
-              departments,
               currentEmployee,
               formRecoveryValues,
-              handleClickCreateDepartment,
+              addDepartment,
             }}
           />
         );

@@ -13,12 +13,14 @@ export interface Props {
   title?: string;
   headerSlot?: JSX.Element;
   requiresVerification?: boolean;
+  back?: string;
 }
 
 export const AppLayout = ({
   children,
   headerSlot,
   title,
+  back,
   requiresVerification,
 }: PropsWithChildren<Props>) => {
   const { userExists } = useProtectedRoutesGuard();
@@ -42,7 +44,8 @@ export const AppLayout = ({
         ) : null}
 
         <main className='1024:app-layout-desktop-width h-screen overflow-y-auto'>
-          <AppHeader title={title}>{headerSlot}</AppHeader>
+          <AppHeader {...{ back, title }}>{headerSlot}</AppHeader>
+
           <div className='app-container my-7'>
             {requiresVerification && !isVerified ? (
               <VerifyYourAccount />
