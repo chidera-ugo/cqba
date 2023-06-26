@@ -20,7 +20,7 @@ import { Table } from 'components/core/Table';
 interface Props {
   reset?: () => void;
   search?: string;
-  filters?: Record<string, unknown>;
+  filters?: Record<string, any>;
   setFilters?: Dispatch<SetStateAction<Record<string, string>>>;
   slot?: JSX.Element;
   currentEmployee: IEmployee | null;
@@ -34,6 +34,8 @@ export const AllEmployeesTable = ({
   setFilters,
   onRowClick,
 }: Props) => {
+  const queryClient = useQueryClient();
+
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -42,8 +44,6 @@ export const AllEmployeesTable = ({
   const [employeeToPerformActionOn, setEmployeeToPerformActionOn] =
     useState<IEmployee | null>(null);
 
-  const queryClient = useQueryClient();
-
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -51,6 +51,16 @@ export const AllEmployeesTable = ({
   const [action, setAction] = useState<EmployeeAction>(null);
 
   const [currentSearchColumn, setCurrentSearchColumn] = useState('');
+
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const { columns } = useColumns({
+    handleActionClick(employee, action) {
+      setAction(action);
+      setEmployeeToPerformActionOn(employee);
+      setShowConfirmation(true);
+    },
+  });
 
   const { mutate: blockEmployee, isLoading: blockingEmployee } =
     useBlockEmployee(employeeToPerformActionOn?.id, {
@@ -62,12 +72,6 @@ export const AllEmployeesTable = ({
       onSuccess,
     });
 
-  const [showConfirmation, setShowConfirmation] = useState(false);
-
-  useEffect(() => {
-    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-  }, [filters, columnFilters]);
-
   const {
     isLoading,
     isError,
@@ -76,7 +80,12 @@ export const AllEmployeesTable = ({
   } = useGetAllEmployees({
     page: pagination.pageIndex,
     size: pagination.pageSize,
+    departmentId: filters?.['department']?.['value'],
   });
+
+  useEffect(() => {
+    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+  }, [filters, columnFilters]);
 
   useEffect(() => {
     if (!!res) setData(res);
@@ -85,14 +94,6 @@ export const AllEmployeesTable = ({
   const [data, setData] = useState<PaginatedResponse<IEmployee> | undefined>(
     res
   );
-
-  const { columns } = useColumns({
-    handleActionClick(employee, action) {
-      setAction(action);
-      setEmployeeToPerformActionOn(employee);
-      setShowConfirmation(true);
-    },
-  });
 
   function onSuccess() {
     queryClient.invalidateQueries(['employees']);
@@ -132,17 +133,11 @@ export const AllEmployeesTable = ({
         onRowClick={(employee) => {
           onRowClick(employee);
         }}
-        onFilterClick={
-          !setFilters
-            ? undefined
-            : (filter) => setFilters(({ [filter]: _, ...rest }) => rest)
-        }
         returnOriginalOnRowClick
         accessor='id'
         mustHaveRange
         {...{
           isLoading,
-          filters,
           data,
           setColumnFilters,
           columnFilters,

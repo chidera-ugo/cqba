@@ -62,7 +62,7 @@ export const useColumns = ({ handleActionClick }: Args) => {
       },
       {
         header: 'Created',
-        accessorKey: 'updatedAt',
+        accessorKey: 'createdAt',
         enableColumnFilter: false,
         cell: ({ getValue }) => {
           return <div>{formatDate(getValue() as string, 'semi-full')}</div>;

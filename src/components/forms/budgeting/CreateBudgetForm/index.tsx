@@ -1,21 +1,28 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { Formik } from 'formik';
+import { useCreateBudget } from 'hooks/api/budgeting/useCreateBudget';
+import { sanitizeAmount } from 'utils/formatters/formatAmount';
 import { Form } from './Form';
 import { validationSchema } from './validationSchema';
 import { initialValues } from './initialValues';
 import { toast } from 'react-toastify';
 import { AppToast } from 'components/primary/AppToast';
-import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 
 interface Props {
   close: () => void;
 }
 
 export const CreateBudgetForm = ({ close }: Props) => {
-  const { mutate, isLoading } = useMakeDummyHttpRequest({
+  const queryClient = useQueryClient();
+
+  const { mutate, isLoading } = useCreateBudget({
     onSuccess() {
-      toast(<AppToast>Created budget successfully</AppToast>, {
+      queryClient.invalidateQueries(['budgets']);
+
+      toast(<AppToast>Created budget</AppToast>, {
         type: 'success',
       });
+
       close();
     },
   });
@@ -24,8 +31,13 @@ export const CreateBudgetForm = ({ close }: Props) => {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={(values) => {
-        mutate(values);
+      onSubmit={({ amount, dueDate, ...values }) => {
+        mutate({
+          ...values,
+          amount: sanitizeAmount({ value: amount, returnTrueAmount: true }),
+          deadline: dueDate.value,
+          departmentId: '',
+        });
       }}
     >
       {(formikProps) => {

@@ -1,9 +1,11 @@
+import { AppErrorBoundary } from 'components/core/ErrorBoundary';
+import {
+  IBudget,
+  useGetAllBudgets,
+} from 'hooks/api/budgeting/useGetAllBudgets';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { PaginationState } from '@tanstack/react-table';
-import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 import { PaginatedResponse } from 'types/Table';
-import { generateTableEntries } from 'utils/generators/generateTableEntries';
-import { IBudget } from 'types/budgeting/Budget';
 import {
   LargeRightModalWrapper,
   RightModalWrapper,
@@ -38,7 +40,9 @@ export type ViewMode = 'table' | 'cards';
 
 export const AllBudgets = ({ viewMode, ...props }: Props) => {
   const [showPinModal, setShowPinModal] = useState(false);
+
   const [currentBudget, setCurrentBudget] = useState<IBudget | null>(null);
+
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: viewMode === 'cards' ? 9 : 10,
@@ -53,53 +57,28 @@ export const AllBudgets = ({ viewMode, ...props }: Props) => {
     isError,
     data: res,
     refetch,
-  } = useMakeDummyHttpRequest({
-    method: 'get',
-    res: generateTableEntries<IBudget>(
-      {
-        id: '',
-        employee: {
-          avatar: '',
-          fullName: 'John Doe',
-          department: 'Security',
-          email: 'johndoe@gmail.com',
-        },
-        amount: 200000,
-        status: String(props.filters.status).toLowerCase(),
-        priority: 'low',
-        request: {
-          title: 'Ergonomic office furniture',
-          description:
-            'Request for budget allocation to purchase ergonomic chairs, desks, and accessories. Request for budget allocation to purchase ergonomic chairs, desks, and accessories. Request for budget allocation to purchase ergonomic chairs, desks, and accessories. Request for budget allocation to purchase ergonomic chairs, desks, and accessories.',
-        },
-        createdAt: new Date().toISOString(),
-        dueDate: new Date().toISOString(),
-      },
-      9
-    ),
+  } = useGetAllBudgets({
+    page: pagination.pageIndex,
+    size: pagination.pageSize,
   });
 
   useEffect(() => {
-    if (!!res) setData(res.data);
+    if (!!res) setData(res);
   }, [res]);
 
   useEffect(() => {
     refetch();
   }, [props.filters]);
 
-  const [data, setData] = useState<PaginatedResponse<IBudget> | undefined>(
-    res?.data
-  );
+  const [data, setData] = useState<PaginatedResponse<IBudget> | undefined>(res);
 
   return (
     <>
       <RightModalWrapper
         title='Approve Budget'
         show={showPinModal}
-        {...{
-          close() {
-            setShowPinModal(false);
-          },
+        closeModal={() => {
+          setShowPinModal(false);
         }}
         closeOnClickOutside
         childrenClassname='p-8'
@@ -118,16 +97,15 @@ export const AllBudgets = ({ viewMode, ...props }: Props) => {
           !!currentBudget &&
           currentBudget.status !== 'approved'
         }
-        {...{
-          close() {
-            setCurrentBudget(null);
-          },
+        closeModal={() => {
+          setShowPinModal(false);
+          setCurrentBudget(null);
         }}
         closeOnClickOutside
         childrenClassname='p-8'
       >
         {currentBudget && (
-          <>
+          <AppErrorBoundary>
             <BudgetCard {...currentBudget} showFullDetails />
 
             {currentBudget.status === 'pending' && (
@@ -141,7 +119,7 @@ export const AllBudgets = ({ viewMode, ...props }: Props) => {
                 </button>
               </div>
             )}
-          </>
+          </AppErrorBoundary>
         )}
       </RightModalWrapper>
 
@@ -160,25 +138,31 @@ export const AllBudgets = ({ viewMode, ...props }: Props) => {
         closeOnClickOutside
         childrenClassname='p-8'
       >
-        {currentBudget && <ApprovedBudgetDetails budget={currentBudget} />}
+        {currentBudget && (
+          <AppErrorBoundary>
+            <ApprovedBudgetDetails budget={currentBudget} />
+          </AppErrorBoundary>
+        )}
       </LargeRightModalWrapper>
 
-      <AllBudgetsList
-        {...props}
-        title='budgets'
-        emptyTableText='You have not received any requests yet.'
-        {...{
-          viewMode,
-          onItemClick(res) {
-            setCurrentBudget(res);
-          },
-          data,
-          isLoading,
-          isError,
-          pagination,
-          setPagination,
-        }}
-      />
+      <AppErrorBoundary>
+        <AllBudgetsList
+          {...props}
+          title='budgets'
+          emptyTableText='You have not received any requests yet.'
+          {...{
+            viewMode,
+            onItemClick(res) {
+              setCurrentBudget(res);
+            },
+            data,
+            isLoading,
+            isError,
+            pagination,
+            setPagination,
+          }}
+        />
+      </AppErrorBoundary>
     </>
   );
 };
@@ -188,5 +172,6 @@ export const AllBudgetsList = ({
   ...props
 }: { viewMode: ViewMode } & BudgetListProps) => {
   if (viewMode === 'cards') return <AllBudgetsCardView {...props} />;
+
   return <AllBudgetsTable {...props} />;
 };

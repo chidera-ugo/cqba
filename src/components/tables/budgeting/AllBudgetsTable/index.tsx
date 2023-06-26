@@ -1,7 +1,7 @@
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
 import { useState } from 'react';
 import { ColumnFiltersState, SortingState } from '@tanstack/react-table';
 import { useColumns } from './useColumns';
-import { IBudget } from 'types/budgeting/Budget';
 import { Table } from 'components/core/Table';
 import { BudgetListProps } from 'components/modules/budgeting/AllBudgets';
 

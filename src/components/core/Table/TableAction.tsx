@@ -1,14 +1,23 @@
+import clsx from 'clsx';
 import { Dropdown } from 'components/common/Dropdown';
 import { PropsWithChildren, useState } from 'react';
 
+interface TableActionItem {
+  title: string;
+  icon: JSX.Element;
+  onClick: () => void;
+}
+
 interface Props {
+  options: TableActionItem[];
   id: string;
-  options: { title: string; icon: JSX.Element }[];
+  isLastRow: boolean;
 }
 
 export const TableAction = ({
-  id,
   children,
+  id,
+  isLastRow,
   options,
 }: PropsWithChildren<Props>) => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -21,28 +30,31 @@ export const TableAction = ({
       >
         <svg
           width='24'
-          height='24'
-          viewBox='0 0 24 24'
+          height='25'
+          viewBox='0 0 24 25'
           fill='none'
           xmlns='http://www.w3.org/2000/svg'
         >
           <path
-            fillRule='evenodd'
-            clipRule='evenodd'
-            d='M5 13C5.55228 13 6 12.5523 6 12C6 11.4477 5.55228 11 5 11C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13ZM5 15C6.65685 15 8 13.6569 8 12C8 10.3431 6.65685 9 5 9C3.34315 9 2 10.3431 2 12C2 13.6569 3.34315 15 5 15Z'
-            fill='#6C737B'
+            d='M12 7.25C11.5858 7.25 11.25 6.91421 11.25 6.5C11.25 6.08579 11.5858 5.75 12 5.75C12.4142 5.75 12.75 6.08579 12.75 6.5C12.75 6.91421 12.4142 7.25 12 7.25Z'
+            stroke='#1A44ED'
+            strokeWidth='1.5'
+            strokeLinecap='round'
+            strokeLinejoin='round'
           />
           <path
-            fillRule='evenodd'
-            clipRule='evenodd'
-            d='M12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13ZM12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z'
-            fill='#6C737B'
+            d='M12 13.25C11.5858 13.25 11.25 12.9142 11.25 12.5C11.25 12.0858 11.5858 11.75 12 11.75C12.4142 11.75 12.75 12.0858 12.75 12.5C12.75 12.9142 12.4142 13.25 12 13.25Z'
+            stroke='#1A44ED'
+            strokeWidth='1.5'
+            strokeLinecap='round'
+            strokeLinejoin='round'
           />
           <path
-            fillRule='evenodd'
-            clipRule='evenodd'
-            d='M19 13C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11C18.4477 11 18 11.4477 18 12C18 12.5523 18.4477 13 19 13ZM19 15C20.6569 15 22 13.6569 22 12C22 10.3431 20.6569 9 19 9C17.3431 9 16 10.3431 16 12C16 13.6569 17.3431 15 19 15Z'
-            fill='#6C737B'
+            d='M12 19.25C11.5858 19.25 11.25 18.9142 11.25 18.5C11.25 18.0858 11.5858 17.75 12 17.75C12.4142 17.75 12.75 18.0858 12.75 18.5C12.75 18.9142 12.4142 19.25 12 19.25Z'
+            stroke='#1A44ED'
+            strokeWidth='1.5'
+            strokeLinecap='round'
+            strokeLinejoin='round'
           />
         </svg>
       </button>
@@ -55,14 +67,18 @@ export const TableAction = ({
             setShowDropdown(false);
           },
         }}
-        className='-mt-[6px] mr-3 min-w-[200px] bg-white p-2'
+        className={clsx(
+          'mr-9 min-w-[200px] bg-white p-2',
+          isLastRow ? '-mb-4' : '-mt-8'
+        )}
+        anchorPosition={isLastRow ? 'top' : 'bottom'}
       >
-        {options.map(({ title, icon }) => {
+        {options.map(({ title, icon, onClick }) => {
           return (
             <button
-              disabled
               key={title}
-              className='action-button hover:text-red-500 disabled:text-neutral-400'
+              onClick={onClick}
+              className='action-button disabled:text-neutral-400'
             >
               <span className='my-auto mr-2'>{icon}</span>
               <span className='my-auto'>{title}</span>

@@ -16,8 +16,8 @@ type Props = JSX.IntrinsicElements['input'] &
   Field & {
     maxDate?: Date;
     minDate?: Date;
-    name: string;
     label: string;
+    name: string;
     setFieldValue: SetFieldValue;
     dropdownClassname?: string;
     disableTyping?: boolean;
@@ -33,8 +33,8 @@ export const DatePicker = ({
   setFieldValue,
   fieldType,
   limit,
-  disableTyping,
   shouldValidate,
+  disableTyping,
   ...props
 }: Props) => {
   const [field, meta] = useField(name as string);
@@ -50,70 +50,73 @@ export const DatePicker = ({
     }
   }
 
+  function getValue() {
+    const val = field?.value?.value as string;
+
+    if (!val) return '';
+
+    if (val.split('/')?.join('').length < 8) return val;
+
+    const date = dayjs(val);
+
+    if (!date.isValid() || (maxDate && date.isAfter(maxDate))) return val;
+
+    return dayjs(val).format('MM/DD/YYYY');
+  }
+
   function handleClick() {
     if (!disableTyping || props.disabled) return;
 
     setShowCalendar((prev) => !prev);
   }
 
-  function getValue() {
-    const val = field?.value?.value as string;
-
-    if (!val) return '';
-    if (val.split('/').join('').length < 8) return val;
-    const date = dayjs(val);
-    if (!date.isValid() || date.isAfter(maxDate)) return val;
-    return dayjs(val).format('MM/DD/YYYY');
-  }
-
   return (
     <div className={clsx(className, 'mt-5 w-full')}>
-      <div className='flex'>
-        <label htmlFor={id} className='text-left'>
-          {label}
-        </label>
-      </div>
+      <div className={'relative'} id={id ?? 'date-picker-wrapper'}>
+        <div className={clsx('relative')}>
+          <div className='flex'>
+            <label htmlFor={id} className='text-left'>
+              {label}
+            </label>
+          </div>
 
-      <div className='relative' id={id ?? 'date-picker-wrapper'}>
-        <div
-          className={clsx(
-            'relative w-full rounded-xl',
-            props.disabled ? 'cursor-not-allowed' : 'cursor-pointer'
-          )}
-        >
-          <div onClick={handleClick}>
-            <input
-              {...props}
-              {...field}
-              id={id}
-              value={getValue()}
-              disabled={props.disabled || disableTyping}
-              onChange={(e) => {
-                setShowCalendar(false);
+          <div className='relative'>
+            <div onClick={handleClick}>
+              <input
+                {...props}
+                {...field}
+                id={id}
+                value={getValue()}
+                disabled={props.disabled || disableTyping}
+                onChange={(e) => {
+                  setShowCalendar(false);
 
-                if (disableTyping) {
-                  validateField(
-                    e,
-                    setFieldValue,
-                    fieldType,
-                    field.name,
-                    limit,
-                    shouldValidate
-                  );
-                } else {
-                  const val = e.target.value;
-                  setFieldValue(name, {
-                    value: val,
-                    calendarValue: dayjs(val).toDate(),
-                  });
-                }
-              }}
-              className={clsx(
-                'input w-full',
-                submitCount > 0 && meta.error ? 'border-error-main' : '',
-                !!field.value.value ? 'bg-white' : 'bg-neutral-100'
-              )}
-            />
+                  if (disableTyping) {
+                    validateField(
+                      e,
+                      setFieldValue,
+                      fieldType,
+                      field.name,
+                      limit,
+                      shouldValidate
+                    );
+                  } else {
+                    const val = e.target.value;
+                    setFieldValue(name, {
+                      value: val,
+                      calendarValue: dayjs(val).toDate(),
+                    });
+                  }
+                }}
+                className={clsx(
+                  `input block w-full pr-11 text-left`,
+                  disableTyping &&
+                    'disabled:cursor-pointer disabled:opacity-100',
+                  submitCount > 0 && meta.error ? 'border-error-main' : '',
+                  !!field.value.value ? 'bg-white' : 'bg-neutral-100'
+                )}
+              />
+            </div>
 
             <button
               onClick={() => {
@@ -137,7 +140,8 @@ export const DatePicker = ({
               }}
               disabled={props.disabled}
               type='button'
-              className='smooth y-center absolute top-0 right-0 h-full w-11 text-neutral-500 transition-colors hover:text-primary-700'
+              tabIndex={-1}
+              className='y-center absolute right-0 top-0 h-full w-11 text-neutral-500 hover:text-primary-700'
             >
               <div className='mx-auto'>
                 <CalendarIcon />

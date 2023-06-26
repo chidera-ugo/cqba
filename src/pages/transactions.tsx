@@ -1,4 +1,3 @@
-import { Filter } from 'components/form-elements/Filter';
 import { SearchInput } from 'components/form-elements/SearchInput';
 import { GenerateStatementForm } from 'components/forms/transactions/GenerateStatementForm';
 import { AppLayout } from 'components/layouts/AppLayout';
@@ -27,36 +26,7 @@ export default function Transactions() {
     <AppLayout title='Transactions'>
       <div className='my-5 justify-between gap-2 640:my-7 880:flex'>
         <div className='gap-2 480:flex'>
-          <div className='flex gap-2'>
-            <Filter
-              id='department-filter'
-              title='Department'
-              {...{
-                filters,
-                setFilters,
-              }}
-              withChevron
-              className='w-full 480:w-auto'
-              dropdownClassName='left-0'
-              options={['Engineering', 'Finance']}
-            />
-
-            <Filter
-              id='duration-filter'
-              title='Duration'
-              {...{
-                filters,
-                setFilters,
-              }}
-              withChevron
-              className='w-full 480:w-auto'
-              dropdownClassName='left-0'
-              options={[
-                { value: 7, name: 'Last 7 Days' },
-                { value: 30, name: 'Last 30 Days' },
-              ]}
-            />
-          </div>
+          <div className='flex gap-2'></div>
 
           <button
             onClick={() => setShowModal(true)}

@@ -18,9 +18,10 @@ export const Pagination = ({
   pagination,
   fetching,
   totalPages,
-  pageNumber,
+  pageNumber: _,
 }: Props) => {
-  const disabled = typeof pageNumber === 'undefined' || !totalPages;
+  const disabled = true;
+  // typeof pageNumber === 'undefined' || !totalPages;
 
   const [page, setPage] = useState(pagination.pageIndex);
 

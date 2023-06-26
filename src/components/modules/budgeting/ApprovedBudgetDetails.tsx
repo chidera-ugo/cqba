@@ -1,15 +1,15 @@
 import { DisplayValue } from 'components/common/DisplayValue';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
 import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
-import { IBudget } from 'types/budgeting/Budget';
 
 interface Props {
   budget: IBudget;
 }
 
 export const ApprovedBudgetDetails = ({ budget }: Props) => {
-  const { employee } = budget;
+  const { title, description, departmentId } = budget;
 
   const { isLoading, isError, data } = useMakeDummyHttpRequest({
     method: 'get',
@@ -33,15 +33,15 @@ export const ApprovedBudgetDetails = ({ budget }: Props) => {
   const overviewTopRow: { title: string; value?: string }[] = [
     {
       title: 'Account Holder',
-      value: employee.fullName,
+      value: title,
     },
     {
       title: 'Email Address',
-      value: employee.email,
+      value: description,
     },
     {
       title: 'Department',
-      value: employee.department,
+      value: departmentId,
     },
   ];
 

@@ -1,7 +1,9 @@
+import { DatePickerValue } from 'types/Common';
+
 export const initialValues = {
   title: '',
   description: '',
   priority: '',
-  dueDate: '',
+  dueDate: {} as DatePickerValue,
   amount: '',
 };
