@@ -69,7 +69,7 @@ export const TableAction = ({
         }}
         className={clsx(
           'mr-9 min-w-[200px] bg-white p-2',
-          isLastRow ? '-mb-4' : '-mt-8'
+          isLastRow ? '-mb-4' : '-mt-[20px]'
         )}
         anchorPosition={isLastRow ? 'top' : 'bottom'}
       >

@@ -5,7 +5,11 @@ import { useColumns } from './useColumns';
 import { Table } from 'components/core/Table';
 import { BudgetListProps } from 'components/modules/budgeting/AllBudgets';
 
-export const AllBudgetsTable = ({ onItemClick, ...props }: BudgetListProps) => {
+export const AllBudgetsTable = ({
+  onItemClick,
+  filters: _,
+  ...props
+}: BudgetListProps) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [currentSearchColumn, setCurrentSearchColumn] = useState('');

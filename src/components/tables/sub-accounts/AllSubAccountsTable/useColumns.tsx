@@ -75,7 +75,7 @@ export const useColumns = ({ handleActionClick }: Args) => {
         cell: ({ row, getValue, table }) => {
           const id = getValue() as any;
           const isLastRow =
-            row.index > 4 &&
+            row.index > 2 &&
             row.index === table.getRowModel().flatRows.length - 1;
 
           return (

@@ -4,7 +4,7 @@ import { SecondaryActionButton } from 'components/form-elements/CustomSelect/Sec
 import { Input } from 'components/form-elements/Input';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { IEmployee } from 'hooks/api/employees/useGetAllEmployees';
-import { useGetDepartments } from 'hooks/api/employees/useGetDepartments';
+import { useGetAllDepartments } from 'hooks/api/departments/useGetAllDepartments';
 import { useScrollToFormError } from 'hooks/forms/useScrollToFormError';
 import { sanitizeRecordToRemoveUndefinedAndNulls } from 'utils/sanitizers/sanitizeRecordToRemoveUndefinedAndNulls';
 import { initialValues } from './initialValues';
@@ -58,7 +58,7 @@ export const Form = ({
     isLoading: gettingDepartments,
     isError: failedToGetDepartments,
     data: departments,
-  } = useGetDepartments();
+  } = useGetAllDepartments();
 
   return (
     <FormikForm onSubmit={handleSubmit}>

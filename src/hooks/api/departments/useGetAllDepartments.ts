@@ -12,7 +12,7 @@ export interface IDepartment {
   title?: string;
 }
 
-export function useGetDepartments(
+export function useGetAllDepartments(
   params?: {
     page: number;
     size: number;

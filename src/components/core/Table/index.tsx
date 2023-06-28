@@ -222,7 +222,12 @@ export function Table<T>({
         </div>
       </SimpleToast>
 
-      <div className={'overflows-x-auto h-full'}>
+      <div
+        className={clsx(
+          'h-full overflow-x-auto',
+          res?.content.length && 'min-h-[400px]'
+        )}
+      >
         <div className='thin-scrollbar min-w-[900px]'>
           <div className={clsx('w-full ')}>
             {filters &&

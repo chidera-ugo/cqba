@@ -37,7 +37,7 @@ export const Filter = <T extends Record<string, any>>({
     <div id={id} className={clsx('relative my-auto flex-shrink-0', className)}>
       <button
         onClick={() => setShowDropdown((prev) => !prev)}
-        className='x-between z-50 h-11 w-full rounded-full border border-neutral-300 bg-white px-3 py-2'
+        className='x-between z-50 w-full bg-white'
       >
         {!withChevron && (
           <div className='my-auto mr-2'>{icon ?? <Adjusters />}</div>
@@ -64,7 +64,7 @@ export const Filter = <T extends Record<string, any>>({
       <Dropdown
         show={showDropdown}
         className={clsx(
-          'min-w-[120px] bg-white p-2',
+          'mt-2 min-w-[120px] bg-white p-2',
           dropdownClassName ?? 'right-0'
         )}
         dismiss={() => setShowDropdown(false)}

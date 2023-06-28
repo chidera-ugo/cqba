@@ -1,8 +1,8 @@
 import { Building } from 'components/illustrations/Building';
 import {
   IDepartment,
-  useGetDepartments,
-} from 'hooks/api/employees/useGetDepartments';
+  useGetAllDepartments,
+} from 'hooks/api/departments/useGetAllDepartments';
 import { useEffect, useState } from 'react';
 import {
   ColumnFiltersState,
@@ -36,7 +36,7 @@ export const AllDepartmentsTable = ({ search }: Props) => {
     isError,
     data: res,
     isRefetching,
-  } = useGetDepartments({
+  } = useGetAllDepartments({
     page: pagination.pageIndex,
     size: pagination.pageSize,
     search,
@@ -82,7 +82,7 @@ export const AllDepartmentsTable = ({ search }: Props) => {
         });
         setSorting([]);
       }}
-      emptyTableText='You have not added any sub accounts yet.'
+      emptyTableText='You have not added any departments yet.'
       emptyTableIcon={<Building />}
     />
   );

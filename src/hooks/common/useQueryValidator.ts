@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 
 export const useQueryValidator = () => {
-  const { query } = useRouter();
+  const { query, replace } = useRouter();
 
   function getValidQuery(queryKey: string) {
     const _queryValue = query[queryKey];
@@ -11,5 +11,6 @@ export const useQueryValidator = () => {
 
   return {
     getValidQuery,
+    replace,
   };
 };

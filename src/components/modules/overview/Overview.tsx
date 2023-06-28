@@ -36,16 +36,21 @@ export const Overview = () => {
       moreInfo: 'Total amount in your budget balance',
     },
     {
-      name: 'Total requests',
+      name: 'Total payouts',
       value: data?.requestsCount,
-    },
-    {
-      name: 'No of sub-acccounts',
-      value: data?.subAccountsCount,
+      isAmount: true,
     },
     {
       name: 'Active budgets',
       value: data?.activeBudgetCount,
+    },
+    {
+      name: 'No of sub-accounts',
+      value: data?.subAccountsCount,
+    },
+    {
+      name: 'Total requests',
+      value: data?.requestsCount,
     },
   ];
 
@@ -55,16 +60,20 @@ export const Overview = () => {
         return (
           <div
             className={clsx(
-              'card y-center h-[100px] 640:h-[140px]',
-              i > 1 && 'hidden 640:flex',
-              i < 2
-                ? 'col-span-12 1280:col-span-6'
-                : 'col-span-6 880:col-span-4'
+              'card y-center py-4',
+              i === 0 && 'bg-primary-main text-white',
+              i > 2 && 'hidden 640:flex',
+              'col-span-12 640:col-span-6 1280:col-span-4'
             )}
             key={name}
           >
             <div className='my-auto'>
-              <div className='flex text-sm text-neutral-500 640:text-base'>
+              <div
+                className={clsx(
+                  'flex text-sm 640:text-base',
+                  i === 0 ? 'text-white' : 'text-neutral-500'
+                )}
+              >
                 <div>{name}</div>
                 {moreInfo && <MoreInfo>{moreInfo}</MoreInfo>}
               </div>
@@ -74,7 +83,7 @@ export const Overview = () => {
                   'mt-2 text-2xl font-semibold 640:mt-3 640:text-3xl'
                 )}
               >
-                {isAmount && <span className='mr-1.5'>NGN</span>}
+                {isAmount && <span className='mr-1.5'>₦</span>}
                 {formatAmount({
                   value: value,
                   decimalPlaces: isAmount ? 2 : 0,
@@ -92,15 +101,13 @@ export const Overview = () => {
 const IsLoadingIsError = ({ type }: { type: 'loading' | 'error' }) => {
   return (
     <div className='grid grid-cols-12 gap-5'>
-      {generatePlaceholderArray(5).map((id, i) => {
+      {generatePlaceholderArray(6).map((id, i) => {
         return (
           <div
             className={clsx(
-              'card y-center h-[100px] 640:h-[140px]',
-              i > 1 && 'hidden 640:flex',
-              i < 2
-                ? 'col-span-12 1280:col-span-6'
-                : 'col-span-6 880:col-span-4'
+              'card y-center h-[94px] 640:h-[106px]',
+              i > 2 && 'hidden 640:flex',
+              'col-span-12 640:col-span-6 1280:col-span-4'
             )}
             key={id}
           >
@@ -113,7 +120,7 @@ const IsLoadingIsError = ({ type }: { type: 'loading' | 'error' }) => {
               ></div>
               <div
                 className={clsx(
-                  'mt-4 h-8 w-[70%] 640:mt-7',
+                  'mt-4 h-8 w-[70%] 640:mt-4',
                   type === 'loading' ? 'skeleton' : 'skeleton-error'
                 )}
               ></div>

@@ -26,6 +26,7 @@ interface Props {
 export type BudgetListProps = {
   isLoading?: boolean;
   isRefetching?: boolean;
+  filters: Record<string, any>;
   emptyTableText: string;
   isError?: boolean;
   data: PaginatedResponse<IBudget> | undefined;

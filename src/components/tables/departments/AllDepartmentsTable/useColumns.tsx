@@ -1,6 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { TableCell } from 'components/core/Table/TableCell';
-import { IDepartment } from 'hooks/api/employees/useGetDepartments';
+import { IDepartment } from 'hooks/api/departments/useGetAllDepartments';
 import { useMemo } from 'react';
 import { formatDate } from 'utils/formatters/formatDate';
 

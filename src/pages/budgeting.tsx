@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import { SearchInput } from 'components/form-elements/SearchInput';
 import { CreateBudgetForm } from 'components/forms/budgeting/CreateBudgetForm';
 import { AppLayout } from 'components/layouts/AppLayout';
@@ -45,27 +44,27 @@ export default function Budgeting() {
       <div className='my-5 justify-between gap-2 640:my-7 880:flex'>
         <div className='gap-2 480:flex'>
           <div className='flex gap-2'>
-            {filterOptions.map(({ name, count }) => {
-              return (
-                <button
-                  className={clsx(
-                    'h-11 border px-4 text-sm font-semibold',
-                    filters['status'] === name
-                      ? 'primary-button'
-                      : 'secondary-button'
-                  )}
-                  onClick={() => {
-                    setFilters({
-                      status: name,
-                    });
-                  }}
-                  key={name}
-                >
-                  {name}
-                  {count ? ` (${count})` : null}
-                </button>
-              );
-            })}
+            {/*{filterOptions.map(({ name, count }) => {*/}
+            {/*  return (*/}
+            {/*    <button*/}
+            {/*      className={clsx(*/}
+            {/*        'h-11 border px-4 text-sm font-semibold',*/}
+            {/*        filters['status'] === name*/}
+            {/*          ? 'primary-button'*/}
+            {/*          : 'secondary-button'*/}
+            {/*      )}*/}
+            {/*      onClick={() => {*/}
+            {/*        setFilters({*/}
+            {/*          status: name,*/}
+            {/*        });*/}
+            {/*      }}*/}
+            {/*      key={name}*/}
+            {/*    >*/}
+            {/*      {name}*/}
+            {/*      {count ? ` (${count})` : null}*/}
+            {/*    </button>*/}
+            {/*  );*/}
+            {/*})}*/}
 
             <SearchInput
               placeholder='Search budgets'

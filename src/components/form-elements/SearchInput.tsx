@@ -48,9 +48,9 @@ export const SearchInput = ({
         value={props.value ?? ''}
       />
 
-      <div className='x-center absolute inset-0 left-0 h-11 w-10 text-neutral-400'>
-        <span className='y-center'>
-          <Search className='h-5 w-5' />
+      <div className='y-center absolute top-0 left-0 h-full w-10 text-neutral-400'>
+        <span className='y-center h-full'>
+          <Search className='my-auto mx-auto h-5 w-5' />
         </span>
       </div>
 

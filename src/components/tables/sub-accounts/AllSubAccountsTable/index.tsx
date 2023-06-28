@@ -92,7 +92,7 @@ export const AllSubAccountsTable = ({
   } = useGetAllSubAccounts({
     page: pagination.pageIndex,
     size: pagination.pageSize,
-    accountStatus: filters?.['accountStatus'].value,
+    status: filters?.['accountStatus'].value,
   });
 
   useEffect(() => {

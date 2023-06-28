@@ -25,7 +25,7 @@ export function useGetAllSubAccounts(
     page: number;
     size: number;
     search?: string;
-    accountStatus?: string;
+    status?: string;
   },
   options?: UseQueryOptions<any, any, any, string[]>
 ) {

@@ -5,7 +5,6 @@ import {
   Code,
   Cog,
   Columns,
-  Departments,
   Home,
   OpenEnvelope,
   PieChart,
@@ -59,10 +58,6 @@ export const useNavigationItems = () => {
       {
         icon: <Columns />,
         title: 'Sub Accounts',
-      },
-      {
-        icon: <Departments />,
-        title: 'Departments',
       },
       {
         icon: <Refund />,
