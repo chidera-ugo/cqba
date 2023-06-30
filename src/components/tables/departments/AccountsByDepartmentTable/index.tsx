@@ -1,8 +1,6 @@
 import { Building } from 'components/illustrations/Building';
-import {
-  IDepartment,
-  useGetAllDepartments,
-} from 'hooks/api/departments/useGetAllDepartments';
+import { IDepartment } from 'hooks/api/departments/useGetAllDepartments';
+import { useGetAccountsByDepartment } from 'hooks/api/sub-accounts/useGetAccountsByDepartment';
 import { useEffect, useState } from 'react';
 import {
   ColumnFiltersState,
@@ -17,7 +15,7 @@ interface Props {
   search?: string;
 }
 
-export const AllDepartmentsTable = ({ search }: Props) => {
+export const AccountsByDepartmentTable = ({ search }: Props) => {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -36,7 +34,7 @@ export const AllDepartmentsTable = ({ search }: Props) => {
     isError,
     data: res,
     isRefetching,
-  } = useGetAllDepartments({
+  } = useGetAccountsByDepartment({
     page: pagination.pageIndex,
     size: pagination.pageSize,
     search,
@@ -56,7 +54,7 @@ export const AllDepartmentsTable = ({ search }: Props) => {
 
   return (
     <Table<IDepartment>
-      title='sub accounts'
+      title='departments'
       dontScrollToTopOnPageChange
       accessor='id'
       mustHaveRange

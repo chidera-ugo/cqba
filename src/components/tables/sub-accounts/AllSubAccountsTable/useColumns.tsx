@@ -74,9 +74,8 @@ export const useColumns = ({ handleActionClick }: Args) => {
         enableColumnFilter: false,
         cell: ({ row, getValue, table }) => {
           const id = getValue() as any;
-          const isLastRow =
-            row.index > 2 &&
-            row.index === table.getRowModel().flatRows.length - 1;
+
+          const totalRows = table.getRowModel().flatRows.length;
 
           return (
             <TableAction
@@ -100,9 +99,10 @@ export const useColumns = ({ handleActionClick }: Args) => {
                     handleActionClick(row.original, 'archive account'),
                 },
               ]}
+              index={row.index}
               {...{
                 id,
-                isLastRow,
+                totalRows,
               }}
             />
           );
