@@ -10,6 +10,7 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
+import { TableDataStates } from 'components/core/Table/TableDataStates';
 import {
   Dispatch,
   FC,
@@ -22,11 +23,7 @@ import { Pagination as TablePagination } from './Pagination';
 import { PaginatedResponse } from 'types/Table';
 import { TableHead as TableColumnsHead } from './TableHead';
 import { AppliedFilters } from './AppliedFilters';
-import { SimpleInformation } from 'components/modules/common/SimpleInformation';
 import clsx from 'clsx';
-import { NothingHere } from 'components/illustrations/NothingHere';
-import { IsLoading } from 'components/data-states/IsLoading';
-import { IsError } from 'components/data-states/IsError';
 import { SimpleToast } from 'components/common/SimpleToast';
 import { Spinner } from 'components/svgs/dashboard/Spinner';
 
@@ -225,7 +222,7 @@ export function Table<T>({
       <div
         className={clsx(
           'h-full overflow-x-auto',
-          res?.content.length && 'min-h-[400px]'
+          !!res?.content.length && !isError && 'min-h-[400px]'
         )}
       >
         <div className='thin-scrollbar min-w-[900px]'>
@@ -381,67 +378,24 @@ export function Table<T>({
         </div>
       </div>
 
-      <>
-        {canNotShowData ? (
-          <IsEmpty {...{ emptyTableText, emptyTableIcon, minimal }} />
-        ) : isLoading && !res?.content.length ? (
-          <IsLoading
-            className={clsx(minimal ? 'h-[50px]' : 'h-[200px] 640:h-[300px]')}
-          />
-        ) : isError ? (
-          <IsError
-            className={clsx(minimal ? 'py-10' : 'py-20')}
-            noIcon={minimal}
-            description={`An error occurred fetching ${title}`}
-            actionButton={
-              !refetch || minimal
-                ? undefined
-                : {
-                    action: refetch,
-                  }
-            }
-          />
-        ) : res?.empty ? (
-          <IsEmpty {...{ emptyTableText, emptyTableIcon, minimal }} />
-        ) : null}
-      </>
+      <TableDataStates
+        {...{
+          isLoading,
+          isError,
+          data: res,
+          emptyTableText,
+          emptyTableIcon,
+          minimal,
+          refetch,
+          canNotShowData,
+          title,
+        }}
+      />
 
       {!hidePagination && !minimal && <Pagination />}
     </div>
   );
 }
-
-export const IsEmpty = ({
-  emptyTableText,
-  emptyTableIcon,
-  minimal,
-}: {
-  emptyTableText: Props<any>['emptyTableText'];
-  emptyTableIcon: Props<any>['emptyTableIcon'];
-  minimal?: boolean;
-}) => {
-  return (
-    <div className={clsx('y-center h-full px-5', minimal ? 'py-10' : 'py-20')}>
-      {emptyTableText && (
-        <SimpleInformation
-          title={
-            minimal ? undefined : (
-              <span className='text-xl'>Nothing to show (yet)</span>
-            )
-          }
-          description={<span className='mt-1 block'>{emptyTableText}</span>}
-          icon={
-            emptyTableIcon ? (
-              emptyTableIcon
-            ) : minimal ? undefined : (
-              <NothingHere />
-            )
-          }
-        />
-      )}
-    </div>
-  );
-};
 
 (Table as FC<Props<any>>).propTypes = {
   onRowClick: function (props, propName) {

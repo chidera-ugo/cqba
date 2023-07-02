@@ -153,7 +153,7 @@ export const Select = ({
         )}
       </div>
 
-      <div className='hidden-scrollbar relative mb-2 h-full overflow-hidden bg-white'>
+      <div className='hidden-scrollbar relative h-full overflow-hidden bg-white'>
         <div
           className={clsx(
             'h-min bg-white 640:max-h-[400px] 640:pb-1',

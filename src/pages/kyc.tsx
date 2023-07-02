@@ -6,22 +6,20 @@ import { AppLayout } from 'components/layouts/AppLayout';
 import { SimpleInformation } from 'components/modules/common/SimpleInformation';
 import { KycSteps } from 'components/modules/kyc/KycSteps';
 import { ReviewAndSubmit } from 'components/modules/kyc/ReviewAndSubmit';
-import { useAppContext } from 'context/AppContext';
-import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
+import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useCurrentAccountSetupStepUrl } from 'hooks/dashboard/kyc/useCurrentAccountSetupStepUrl';
+import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useKycSteps } from 'hooks/kyc/useKycSteps';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 export default function Kyc() {
-  const { user } = useAppContext().state;
-
   const { currentTab, isValidAccountSetupStep, goToNextAccountSetupStep } =
     useKycSteps();
 
   const { replace } = useRouter();
 
-  const { isVerified } = useAccountVerificationStatus();
+  const { isVerified } = useIsVerified();
 
   const { getCurrentAccountSetupStepUrl } = useCurrentAccountSetupStepUrl();
 
@@ -31,9 +29,11 @@ export default function Kyc() {
     replace(getCurrentAccountSetupStepUrl());
   }, [isValidAccountSetupStep]);
 
+  const { data } = useGetOrganizationInformation();
+
   if (isVerified)
     return (
-      <AppLayout title='Setup your account'>
+      <AppLayout title='Setup your account' hideSideNavigation>
         <div className='py-10'>
           <SimpleInformation
             title={<div className='text-xl'>Account Verified</div>}
@@ -53,9 +53,9 @@ export default function Kyc() {
     );
 
   return (
-    <AppLayout title='Get Started'>
+    <AppLayout title='Get Started' hideSideNavigation>
       <div className='hidden 768:block'>
-        <h5>Hi {user?.firstName}, Welcome to ChequeBase</h5>
+        <h5>Welcome to ChequeBase Activate {data?.businessName}</h5>
         <p className='mt-1 font-normal text-neutral-500'>
           Let’s get you started with with managing your finances
         </p>

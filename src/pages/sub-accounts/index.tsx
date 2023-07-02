@@ -6,7 +6,7 @@ import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { CreateDepartment } from 'components/modules/employees/CreateDepartment';
 import { CreateEmployee } from 'components/modules/employees/CreateEmployee';
 import { PlusCircle } from 'components/svgs/others/Plus';
-import { AccountsByDepartmentTable } from 'components/tables/departments/AccountsByDepartmentTable';
+import { SubAccountsByDepartmentTable } from 'components/tables/departments/SubAccountsByDepartmentTable';
 import { AllSubAccountsTable } from 'components/tables/sub-accounts/AllSubAccountsTable';
 import { ISubAccount } from 'hooks/api/sub-accounts/useGetAllSubAccounts';
 import { useDebouncer } from 'hooks/common/useDebouncer';
@@ -194,7 +194,7 @@ export default function SubAccounts() {
           }}
         />
       ) : (
-        <AccountsByDepartmentTable
+        <SubAccountsByDepartmentTable
           {...{
             search: debouncedSearch,
           }}

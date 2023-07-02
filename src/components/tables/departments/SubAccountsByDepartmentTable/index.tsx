@@ -1,6 +1,6 @@
 import { Building } from 'components/illustrations/Building';
 import { IDepartment } from 'hooks/api/departments/useGetAllDepartments';
-import { useGetAccountsByDepartment } from 'hooks/api/sub-accounts/useGetAccountsByDepartment';
+import { useGetSubAccountsByDepartment } from 'hooks/api/sub-accounts/useGetSubAccountsByDepartment';
 import { useEffect, useState } from 'react';
 import {
   ColumnFiltersState,
@@ -15,7 +15,7 @@ interface Props {
   search?: string;
 }
 
-export const AccountsByDepartmentTable = ({ search }: Props) => {
+export const SubAccountsByDepartmentTable = ({ search }: Props) => {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -34,7 +34,7 @@ export const AccountsByDepartmentTable = ({ search }: Props) => {
     isError,
     data: res,
     isRefetching,
-  } = useGetAccountsByDepartment({
+  } = useGetSubAccountsByDepartment({
     page: pagination.pageIndex,
     size: pagination.pageSize,
     search,

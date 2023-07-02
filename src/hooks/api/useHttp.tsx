@@ -15,6 +15,7 @@ export type Service =
   | 'employees'
   | 'dashboard'
   | 'sub-accounts'
+  | 'category'
   | 'budgets';
 
 export const baseURL = process.env.NEXT_PUBLIC_API_URL;
@@ -35,6 +36,8 @@ export function urlModifier(url?: Service) {
       return '/v1/departments';
     case 'budgets':
       return '/v1/budgets';
+    case 'category':
+      return '/v1/category';
     case 'sub-accounts':
       return '/v1/sub-accounts';
     default:

@@ -1,7 +1,9 @@
 import clsx from 'clsx';
 import { Pagination } from 'components/core/Table/Pagination';
+import { TableDataStates } from 'components/core/Table/TableDataStates';
 import { BudgetListProps } from 'components/modules/budgeting/AllBudgets';
 import { BudgetCard } from 'components/modules/budgeting/BudgetCard';
+import { useGetColorByChar } from 'hooks/common/useGetColorByChar';
 
 export const AllBudgetsCardView = ({
   className,
@@ -13,6 +15,8 @@ export const AllBudgetsCardView = ({
   ...props
 }: BudgetListProps) => {
   const showData = !isError && !!res?.content?.length;
+
+  const { getColor } = useGetColorByChar();
 
   return (
     <div className={clsx(className)}>
@@ -26,7 +30,7 @@ export const AllBudgetsCardView = ({
             ? res.content.map((budget) => {
                 return (
                   <BudgetCard
-                    {...{ onItemClick }}
+                    {...{ onItemClick, getColor }}
                     {...budget}
                     key={budget.id}
                   />
@@ -34,9 +38,20 @@ export const AllBudgetsCardView = ({
               })
             : null}
         </div>
+
+        <TableDataStates
+          {...props}
+          {...{
+            data: res,
+            isError,
+            isLoading,
+          }}
+        />
       </div>
 
-      <Pagination {...props} {...{ isLoading, isRefetching, res }} />
+      {res?.empty || isError || (isLoading && !res?.content.length) ? null : (
+        <Pagination {...props} {...{ isLoading, isRefetching, res }} />
+      )}
     </div>
   );
 };

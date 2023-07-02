@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { Formik } from 'formik';
 import { useCreateBudget } from 'hooks/api/budgeting/useCreateBudget';
+import { Dispatch, SetStateAction } from 'react';
 import { sanitizeAmount } from 'utils/formatters/formatAmount';
 import { Form } from './Form';
 import { validationSchema } from './validationSchema';
@@ -10,9 +11,19 @@ import { AppToast } from 'components/primary/AppToast';
 
 interface Props {
   close: () => void;
+  createCategory: () => void;
+  formRecoveryValues: Record<string, any> | null;
+  setFormRecoveryValues: Dispatch<SetStateAction<Record<string, any> | null>>;
+  addDepartment?: (values: Record<string, any>) => void;
 }
 
-export const CreateBudgetForm = ({ close }: Props) => {
+export const CreateBudgetForm = ({
+  close,
+  createCategory,
+  setFormRecoveryValues,
+  formRecoveryValues,
+  addDepartment,
+}: Props) => {
   const queryClient = useQueryClient();
 
   const { mutate, isLoading } = useCreateBudget({
@@ -36,14 +47,19 @@ export const CreateBudgetForm = ({ close }: Props) => {
           ...values,
           amount: sanitizeAmount({ value: amount, returnTrueAmount: true }),
           deadline: dueDate.value,
-          departmentId: '',
         });
       }}
     >
       {(formikProps) => {
         return (
           <Form
+            createCategory={(values) => {
+              setFormRecoveryValues(values);
+              createCategory();
+            }}
             {...{
+              addDepartment,
+              formRecoveryValues,
               formikProps,
               processing: isLoading,
             }}

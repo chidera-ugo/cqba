@@ -65,7 +65,7 @@ export default function Employees() {
       <div className='my-5 justify-between gap-2 640:my-7 690:flex'>
         <div className='gap-5 360:flex'>
           {!!data?.content?.length && (
-            <div className='flex w-full gap-2 360:w-1/2 690:w-fit'>
+            <div className='mb-auto flex w-full gap-2 360:w-1/2 690:w-fit'>
               <Filter
                 withChevron
                 filterKey='department'

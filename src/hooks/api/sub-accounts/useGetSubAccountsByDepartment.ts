@@ -3,16 +3,20 @@ import { useTQuery } from 'hooks/api/useTQuery';
 import { PaginatedResponse } from 'types/Table';
 import { generateUrlParamsFromObject } from 'utils/generators/generateUrlParamsFromObject';
 
-export interface IDepartment {
+export interface ISubAccountsDepartment {
   organizationId?: string;
   userId?: string;
   updatedAt?: number;
+  createdAt?: number;
   id?: string;
   sKey?: string;
   title?: string;
+  employeeCount?: number;
+  activeBudgetCount?: number;
+  balance?: number;
 }
 
-export function useGetAccountsByDepartment(
+export function useGetSubAccountsByDepartment(
   params?: {
     page: number;
     size: number;
@@ -22,8 +26,8 @@ export function useGetAccountsByDepartment(
 ) {
   const _params = generateUrlParamsFromObject({ data: params });
 
-  return useTQuery<PaginatedResponse<IDepartment>>({
-    queryKey: ['accounts-by-department'],
+  return useTQuery<PaginatedResponse<ISubAccountsDepartment>>({
+    queryKey: ['sub-accounts-by-department'],
     url: `/subAccount${_params}`,
     service: 'departments',
     options: {

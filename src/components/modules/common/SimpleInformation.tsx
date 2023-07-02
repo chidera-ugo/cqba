@@ -5,8 +5,8 @@ import { PropsWithChildren } from 'react';
 export interface Props {
   processing?: boolean;
   icon?: JSX.Element;
-  title?: JSX.Element;
-  description?: JSX.Element;
+  title?: JSX.Element | string;
+  description?: JSX.Element | string;
   actionButton?: {
     action?: () => void;
     text?: string;
