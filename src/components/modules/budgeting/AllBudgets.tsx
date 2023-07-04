@@ -3,24 +3,19 @@ import {
   IBudget,
   useGetAllBudgets,
 } from 'hooks/api/budgeting/useGetAllBudgets';
+import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { PaginationState } from '@tanstack/react-table';
 import { PaginatedResponse } from 'types/Table';
-import {
-  LargeRightModalWrapper,
-  RightModalWrapper,
-} from 'components/modal/ModalWrapper';
+import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { AllBudgetsCardView } from 'components/modules/budgeting/AllBudgetsCardView';
 import { AllBudgetsTable } from 'components/tables/budgeting/AllBudgetsTable';
-import { BudgetCard } from 'components/modules/budgeting/BudgetCard';
-import { ApproveBudget } from 'components/modules/budgeting/ApproveBudget';
-import { ApprovedBudgetDetails } from 'components/modules/budgeting/ApprovedBudgetDetails';
+import { PendingBudgetDetails } from './PendingBudgetDetails';
 
 interface Props {
   viewMode: ViewMode;
-  filters: Record<string, unknown>;
-  setFilters: Dispatch<SetStateAction<Record<string, string>>>;
   search: string;
+  status?: string;
 }
 
 export type BudgetListProps = {
@@ -38,8 +33,10 @@ export type BudgetListProps = {
 
 export type ViewMode = 'table' | 'cards';
 
-export const AllBudgets = ({ viewMode, ...props }: Props) => {
+export const AllBudgets = ({ viewMode, status, ...props }: Props) => {
   const [showPinModal, setShowPinModal] = useState(false);
+
+  const { push } = useRouter();
 
   const [currentBudget, setCurrentBudget] = useState<IBudget | null>(null);
 
@@ -48,102 +45,46 @@ export const AllBudgets = ({ viewMode, ...props }: Props) => {
     pageSize: viewMode === 'cards' ? 9 : 10,
   });
 
-  useEffect(() => {
-    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-  }, [props.filters]);
-
   const {
     isLoading,
     isError,
     data: res,
-    refetch,
   } = useGetAllBudgets({
     page: pagination.pageIndex,
     size: pagination.pageSize,
+    status,
   });
 
   useEffect(() => {
     if (!!res) setData(res);
   }, [res]);
 
-  useEffect(() => {
-    refetch();
-  }, [props.filters]);
-
   const [data, setData] = useState<PaginatedResponse<IBudget> | undefined>(res);
+
+  function closeModal() {
+    setShowPinModal(false);
+    setCurrentBudget(null);
+  }
 
   return (
     <>
       <RightModalWrapper
-        title='Approve Budget'
-        show={showPinModal}
-        closeModal={() => {
-          setShowPinModal(false);
-        }}
-        closeOnClickOutside
-        childrenClassname='p-8'
-      >
-        <ApproveBudget
-          close={() => {
-            setShowPinModal(false);
-          }}
-        />
-      </RightModalWrapper>
-
-      <RightModalWrapper
-        title='Budget Details'
+        title='Pending Budget'
         show={
           !showPinModal &&
           !!currentBudget &&
           currentBudget.status !== 'approved'
         }
-        closeModal={() => {
-          setShowPinModal(false);
-          setCurrentBudget(null);
-        }}
+        closeModal={closeModal}
         closeOnClickOutside
         childrenClassname='p-8'
       >
         {currentBudget && (
           <AppErrorBoundary>
-            <BudgetCard {...currentBudget} showFullDetails />
-
-            {currentBudget.status === 'pending' && (
-              <div className='mt-8 flex gap-4'>
-                <button className='secondary-button h-11 w-full'>Reject</button>
-                <button
-                  onClick={() => setShowPinModal(true)}
-                  className='dark-button h-11 w-full'
-                >
-                  Approve
-                </button>
-              </div>
-            )}
+            <PendingBudgetDetails id={currentBudget.id} close={closeModal} />
           </AppErrorBoundary>
         )}
       </RightModalWrapper>
-
-      <LargeRightModalWrapper
-        title='Budget Details'
-        show={
-          !showPinModal &&
-          !!currentBudget &&
-          currentBudget.status === 'approved'
-        }
-        {...{
-          close() {
-            setCurrentBudget(null);
-          },
-        }}
-        closeOnClickOutside
-        childrenClassname='p-8'
-      >
-        {currentBudget && (
-          <AppErrorBoundary>
-            <ApprovedBudgetDetails budget={currentBudget} />
-          </AppErrorBoundary>
-        )}
-      </LargeRightModalWrapper>
 
       <AppErrorBoundary>
         <AllBudgetsList
@@ -152,7 +93,12 @@ export const AllBudgets = ({ viewMode, ...props }: Props) => {
           emptyTableText='You have not received any requests yet.'
           {...{
             viewMode,
-            onItemClick(res) {
+            onItemClick(res: IBudget) {
+              if (res.status === 'declined') return;
+
+              if (res.status === 'approved')
+                return push(`/budgeting/${res.id}`);
+
               setCurrentBudget(res);
             },
             data,

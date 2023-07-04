@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { InflowOutflowChart } from 'components/charts/overview/InflowOutflowChart';
+import { Filter } from 'components/form-elements/Filter';
 import { Spinner } from 'components/svgs/dashboard/Spinner';
 import { useGetInflowOutflowChart } from 'hooks/api/dashboard/useGetInflowOutflowChart';
 import { usePopulateEmptyChartData } from 'hooks/charts/usePopulateEmptyChartData';
@@ -9,7 +10,24 @@ import { formatAmount } from 'utils/formatters/formatAmount';
 import { getDateRange } from 'utils/getters/getDateRange';
 
 export const InflowOutflow = () => {
-  const [filter, setFilter] = useState('INFLOW');
+  const durationFilterOptions = [
+    { value: 7, name: 'Last 7 Days' },
+    { value: 30, name: 'Last 30 Days' },
+  ];
+
+  const transactionTypeFilterOptions = [
+    { value: 'INFLOW', name: 'Inflow' },
+    { value: 'OUTFLOW', name: 'Outflow' },
+  ];
+
+  const [dateRange, setDateRange] = useState(
+    getDateRange({ days: Number(durationFilterOptions[0]?.value) })
+  );
+
+  const [filters, setFilters] = useState<Record<string, any>>({
+    duration: durationFilterOptions[0],
+    transactionType: transactionTypeFilterOptions[0],
+  });
 
   const { getChartData } = usePopulateEmptyChartData();
 
@@ -17,9 +35,9 @@ export const InflowOutflow = () => {
 
   const { isLoading, isFetching, isError, data } = useGetInflowOutflowChart(
     {
-      type: filter,
+      type: filters.transactionType.value,
       duration: 'DAILY',
-      dateRange: getDateRange({ days: 7 }),
+      dateRange,
     },
     {
       enabled: isVerified,
@@ -40,29 +58,33 @@ export const InflowOutflow = () => {
     <div className='card p-0'>
       <div className='x-between relative block p-5 768:flex'>
         <div className='flex gap-2'>
-          <button
-            onClick={() => setFilter('INFLOW')}
-            className={clsx(
-              'h-11 px-5 text-sm duration-[0ms]',
-              filter === 'INFLOW'
-                ? 'primary-button hover:bg-primary-main'
-                : 'light-button border-neutral-400 text-neutral-500 hover:border-primary-main hover:bg-white'
-            )}
-          >
-            Total Inflow
-          </button>
+          <div className='flex gap-3'>
+            <Filter
+              withChevron
+              filterKey='transactionType'
+              id='inflow-outflow-chart-type-filter'
+              {...{ filters, setFilters }}
+              dropdownClassName='left-0'
+              options={transactionTypeFilterOptions}
+            />
 
-          <button
-            onClick={() => setFilter('OUTFLOW')}
-            className={clsx(
-              'h-11 px-5 text-sm duration-[0ms]',
-              filter === 'OUTFLOW'
-                ? 'primary-button hover:bg-primary-main'
-                : 'light-button border-neutral-400 text-neutral-500 hover:border-primary-main hover:bg-white'
-            )}
-          >
-            Total Outflow
-          </button>
+            <div className='my-auto h-5 w-[1px] bg-neutral-200'></div>
+
+            <Filter
+              withChevron
+              filterKey='duration'
+              id='inflow-outflow-chart-duration-filter'
+              {...{ filters, setFilters }}
+              secondaryAction={(option) => {
+                if (typeof option.value !== 'number') {
+                } else {
+                  setDateRange(getDateRange({ days: option.value }));
+                }
+              }}
+              dropdownClassName='min-w-[170px] left-0'
+              options={durationFilterOptions}
+            />
+          </div>
 
           {isFetching && (
             <div className='my-auto ml-2'>
@@ -72,7 +94,7 @@ export const InflowOutflow = () => {
         </div>
 
         <div className={clsx('my-auto mt-4 text-3xl font-semibold 768:mt-0')}>
-          <span className='mr-1'>NGN</span>
+          <span className='mr-1'>₦</span>
           {formatAmount({ value: data?.totalBalance, decimalPlaces: 2 })}
         </div>
       </div>

@@ -14,7 +14,7 @@ export const AmountInput = ({
   label,
   className,
   note,
-  currency,
+  currency = '₦',
   setFieldValue,
   ...props
 }: Props) => {

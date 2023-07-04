@@ -11,12 +11,18 @@ type Props = {
   className?: string;
   exceptedId?: string;
   anchorPosition?: 'top' | 'bottom';
+  isTableAction?: boolean;
 };
 
 /**
  * Dropdown component
  * @param {function} dismiss - The function to be called when closing the dropdown
+ * @param wrapperId
  * @param {string} exceptedId- The ID of an element that when clicked on shouldn't trigger the dismiss action
+ * @param anchorPosition
+ * @param show
+ * @param children
+ * @param className
  * @returns {JSX.Element} The rendered Dropdown element.
  */
 export const Dropdown = ({
@@ -27,6 +33,7 @@ export const Dropdown = ({
   show,
   children,
   className,
+  isTableAction,
 }: PropsWithChildren<Props>) => {
   useDismissDropdown(wrapperId, dismiss, exceptedId);
 
@@ -53,11 +60,23 @@ export const Dropdown = ({
           },
         },
       }}
-      className={clsx(
-        'absolute z-[100] w-full overflow-hidden rounded-xl border border-neutral-300 p-0 shadow-lg',
-        anchorPosition === 'bottom' ? 'top-[100%] mt-2' : 'bottom-[100%] mb-2',
-        className
-      )}
+      className={
+        !isTableAction
+          ? clsx(
+              'absolute z-[100] w-full overflow-hidden rounded-xl border border-neutral-300 p-0 shadow-lg',
+              anchorPosition === 'bottom'
+                ? 'top-[100%] mt-2'
+                : 'bottom-[100%] mb-2',
+              className
+            )
+          : clsx(
+              'absolute z-[100] -mr-1 w-full overflow-hidden rounded-xl border border-neutral-300 p-0 shadow-lg',
+              anchorPosition === 'bottom'
+                ? 'top-[100%] -mt-5'
+                : 'bottom-[100%] -mb-5',
+              className
+            )
+      }
     >
       {children}
     </motion.div>

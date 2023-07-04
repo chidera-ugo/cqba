@@ -3,13 +3,25 @@ import { months } from 'utils/constants/months';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 
 dayjs.extend(advancedFormat);
-dayjs().format('Q Do k kk X x');
 
 export const formatDate = (
-  value: string,
+  value: string | number,
   type: 'full' | 'short' | 'time' | 'semi-full'
 ) => {
-  const d = dayjs(value);
+  let d;
+
+  if (typeof value === 'number') {
+    // Check if the value is a Unix timestamp
+    const isUnixTimestamp = value.toString().length === 10;
+    if (isUnixTimestamp) {
+      d = dayjs.unix(value as number);
+    } else {
+      d = dayjs(value as number);
+    }
+  } else {
+    d = dayjs(value);
+  }
+
   const hour12Hour = d.format('hh');
   const minutes2Digits = d.format('mm');
   const milliseconds = d.format('ss');

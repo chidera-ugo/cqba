@@ -3,7 +3,7 @@ import { CustomSelect } from 'components/form-elements/CustomSelect';
 import { SecondaryActionButton } from 'components/form-elements/CustomSelect/SecondaryActionButton';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { useGetAllEmployees } from 'hooks/api/employees/useGetAllEmployees';
-import { useGetDepartments } from 'hooks/api/employees/useGetDepartments';
+import { useGetAllDepartments } from 'hooks/api/departments/useGetAllDepartments';
 import { ISubAccount } from 'hooks/api/sub-accounts/useGetAllSubAccounts';
 import { useEffect } from 'react';
 import { sanitizeRecordToRemoveUndefinedAndNulls } from 'utils/sanitizers/sanitizeRecordToRemoveUndefinedAndNulls';
@@ -31,7 +31,7 @@ export const Form = ({
     isLoading: gettingDepartments,
     isError: failedToGetDepartments,
     data: departments,
-  } = useGetDepartments();
+  } = useGetAllDepartments();
 
   const {
     isLoading: gettingEmployees,

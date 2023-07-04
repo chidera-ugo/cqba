@@ -34,9 +34,7 @@ function PageFallback({ error, resetErrorBoundary }: any) {
 function HiddenFallback({ error }: any) {
   return (
     <div className='y-center my-auto h-10 w-10 rounded-lg bg-red-100 text-2xl font-bold text-red-500'>
-      <MoreInfo type='error' className='-top-1 right-12'>
-        {error.message}
-      </MoreInfo>
+      <MoreInfo className='-top-1 right-12'>{error.message}</MoreInfo>
     </div>
   );
 }

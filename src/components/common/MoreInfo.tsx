@@ -7,14 +7,9 @@ import { AnimatePresence, motion } from 'framer-motion';
 interface Props {
   smaller?: boolean;
   className?: string;
-  type?: 'error' | 'normal';
 }
 
-export const MoreInfo = ({
-  type = 'normal',
-  className,
-  children,
-}: PropsWithChildren<Props>) => {
+export const MoreInfo = ({ className, children }: PropsWithChildren<Props>) => {
   const { screenSize } = useAppContext().state;
   const [show, setShow] = useState(false);
 
@@ -32,13 +27,7 @@ export const MoreInfo = ({
       className={clsx(className, 'relative')}
     >
       <span className='relative my-auto ml-2 flex cursor-pointer align-middle'>
-        <div
-          className={clsx(
-            type === 'error' ? 'text-red-500' : 'text-neutral-500'
-          )}
-        >
-          <Info />
-        </div>
+        <Info />
       </span>
 
       <AnimatePresence>

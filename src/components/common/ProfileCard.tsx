@@ -1,16 +1,22 @@
+import { Avatar } from 'components/common/Avatar';
+
 interface Props {
   title: string;
   subTitle: string;
-  avatar: string;
+  avatar?: string;
+  getBackgroundColor: (char: string) => string;
 }
 
-export const ProfileCard = ({ title, subTitle, avatar: _ }: Props) => {
+export const ProfileCard = ({
+  title,
+  subTitle,
+  getBackgroundColor,
+  avatar,
+}: Props) => {
   return (
     <div className='x-between relative z-[25] w-full'>
-      <div className='flex'>
-        <div className='y-center mr-2.5 h-12 w-12 rounded-full bg-neutral-200 text-center text-xl font-bold'>
-          {title.charAt(0)}
-        </div>
+      <div className='flex gap-3'>
+        <Avatar {...{ getBackgroundColor, avatar, char: title.charAt(0) }} />
 
         <div className='my-auto text-left'>
           <div className='text-base font-semibold text-neutral-1000 line-clamp-1'>

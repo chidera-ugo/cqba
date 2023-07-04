@@ -1,4 +1,4 @@
-import { UpdateEmployeeForm } from 'components/forms/employess/UpdateEmployeeForm';
+import { UpdateEmployeeForm } from 'components/forms/employees/UpdateEmployeeForm';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { IEmployee } from 'hooks/api/employees/useGetAllEmployees';
 import { Dispatch, SetStateAction } from 'react';

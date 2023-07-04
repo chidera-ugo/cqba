@@ -1,4 +1,4 @@
-import { CreateDepartmentForm } from 'components/forms/employess/CreateDepartmentForm';
+import { CreateDepartmentForm } from 'components/forms/employees/CreateDepartmentForm';
 import { CentredModalWrapper } from 'components/modal/ModalWrapper';
 
 interface Props {

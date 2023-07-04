@@ -58,7 +58,7 @@ export const TooltipWrapper = ({
       anchorSelect={`#${anchorId}`}
       className='z-[1004] h-fit max-w-[240px] cursor-pointer 640:max-w-[320px]'
       style={{
-        backgroundColor: '#0076FF',
+        backgroundColor: '#1A44ED',
         borderRadius: '8px',
         padding: '10px 10px',
         opacity: 100,

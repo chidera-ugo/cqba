@@ -4,15 +4,15 @@ import { PaginatedResponse } from 'types/Table';
 import { generateUrlParamsFromObject } from 'utils/generators/generateUrlParamsFromObject';
 
 export interface IDepartment {
-  organizationId?: string;
-  userId?: string;
-  updatedAt?: number;
-  id?: string;
-  sKey?: string;
-  title?: string;
+  organizationId: string;
+  userId: string;
+  updatedAt: number;
+  id: string;
+  sKey: string;
+  title: string;
 }
 
-export function useGetDepartments(
+export function useGetAllDepartments(
   params?: {
     page: number;
     size: number;

@@ -34,9 +34,9 @@ export const DisplayValue = ({
 }: Props) => {
   return (
     <div className={clsx('my-auto', className)}>
-      <div className='text-neutral-480 flex'>
+      <div className='flex font-normal text-neutral-400'>
         {title && (
-          <div className={clsx('text-sm font-semibold', titleClassName)}>
+          <div className={clsx('text-sm font-medium', titleClassName)}>
             {title}
           </div>
         )}
@@ -45,7 +45,7 @@ export const DisplayValue = ({
 
       <div
         className={clsx(
-          'font-semibold 640:text-4xl',
+          'font-semibold 640:text-3xl',
           smallText ? 'text-lg' : 'mt-1 text-3xl'
         )}
       >

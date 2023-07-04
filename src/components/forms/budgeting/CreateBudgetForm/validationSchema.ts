@@ -8,6 +8,7 @@ export const validationSchema = object({
   dueDate: object().test('required', 'Please provide due date', (val: any) => {
     return !!val.value && !!val.calendarValue;
   }),
+  categoryId: string().required('Please select a category'),
   amount: string()
     .required('Please provide amount')
     .test('min', 'Must be at least NGN10', (value) =>

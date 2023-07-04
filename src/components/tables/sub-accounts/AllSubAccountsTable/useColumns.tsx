@@ -74,9 +74,8 @@ export const useColumns = ({ handleActionClick }: Args) => {
         enableColumnFilter: false,
         cell: ({ row, getValue, table }) => {
           const id = getValue() as any;
-          const isLastRow =
-            row.index > 4 &&
-            row.index === table.getRowModel().flatRows.length - 1;
+
+          const totalRows = table.getRowModel().flatRows.length;
 
           return (
             <TableAction
@@ -84,25 +83,23 @@ export const useColumns = ({ handleActionClick }: Args) => {
                 {
                   title: 'Edit Account',
                   icon: <Edit />,
-                  onClick: () =>
-                    handleActionClick(row.original, 'edit account'),
+                  onClick: () => handleActionClick(row.original, 'edit'),
                 },
                 {
                   title: 'Place on hold',
                   icon: <ClosedLock />,
-                  onClick: () =>
-                    handleActionClick(row.original, 'place account on hold'),
+                  onClick: () => handleActionClick(row.original, 'hold'),
                 },
                 {
                   title: 'Archive',
                   icon: <Archive />,
-                  onClick: () =>
-                    handleActionClick(row.original, 'archive account'),
+                  onClick: () => handleActionClick(row.original, 'archive'),
                 },
               ]}
+              index={row.index}
               {...{
                 id,
-                isLastRow,
+                totalRows,
               }}
             />
           );

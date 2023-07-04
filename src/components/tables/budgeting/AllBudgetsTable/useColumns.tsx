@@ -1,13 +1,32 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { Pill } from 'components/common/Pill';
+import { ProfileCard } from 'components/common/ProfileCard';
 import { TableCell } from 'components/core/Table/TableCell';
+import { CategoryPill } from 'components/modules/categories/DefaultCategories';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
+import { useGetColorByChar } from 'hooks/common/useGetColorByChar';
 import { useMemo } from 'react';
-import { formatDate } from 'utils/formatters/formatDate';
 
 export const useColumns = () => {
+  const { getColor } = useGetColorByChar();
+
   const columns = useMemo<ColumnDef<IBudget>[]>(
     () => [
+      {
+        header: 'Employee',
+        accessorKey: 'creator.firstName',
+        enableColumnFilter: false,
+        cell: ({ row }) => {
+          const { creator, departmentTitle } = row.original;
+
+          return (
+            <ProfileCard
+              getBackgroundColor={getColor}
+              title={`${creator?.firstName} ${creator?.lastName}`}
+              subTitle={`${departmentTitle} Department`}
+            />
+          );
+        },
+      },
       {
         header: 'Request',
         accessorKey: 'title',
@@ -15,28 +34,22 @@ export const useColumns = () => {
         cell: (props) => <TableCell {...props} />,
       },
       {
-        header: 'Created',
+        header: 'Date/Time',
         accessorKey: 'createdAt',
         enableColumnFilter: false,
-        cell: ({ getValue }) => {
-          return <div>{formatDate(getValue() as string, 'semi-full')}</div>;
-        },
+        cell: (props) => <TableCell isDate {...props} />,
       },
       {
-        header: 'Priority',
-        accessorKey: 'priority',
+        header: 'Category',
+        accessorKey: 'categoryTitle',
         enableColumnFilter: false,
         cell: ({ getValue }) => {
           const val = getValue() as string;
+
           return (
-            <Pill
-              config={{
-                failed: 'high',
-                pending: 'low',
-              }}
-              suffix='priority'
-              value={val}
-            />
+            <div className={'flex'}>
+              <CategoryPill category={val} {...{ getColor }} />
+            </div>
           );
         },
       },

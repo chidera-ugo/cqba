@@ -12,6 +12,13 @@ export const SignInForm = () => {
     onSuccess(res) {
       const { access_token, refresh_token } = res.tokens;
 
+      getCurrentUser!(access_token);
+
+      dispatch({
+        type: 'setIsInitializing',
+        payload: true,
+      });
+
       dispatch({
         type: 'saveTokens',
         payload: {
@@ -19,8 +26,6 @@ export const SignInForm = () => {
           refreshToken: refresh_token,
         },
       });
-
-      getCurrentUser!(access_token);
     },
   });
 

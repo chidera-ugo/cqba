@@ -153,15 +153,18 @@ export const Select = ({
         )}
       </div>
 
-      <div className='hidden-scrollbar relative mb-2 h-full overflow-hidden bg-white'>
+      <div className='hidden-scrollbar relative h-full overflow-hidden bg-white'>
         <div
           className={clsx(
-            'h-min bg-white 640:max-h-[400px] 640:pb-1',
+            'h-min bg-white 640:pb-1',
             !noSearch || options.length > 6
               ? dropdownInMobileView
                 ? 'max-h-[400px]'
                 : ''
               : '',
+            !filteredOptions?.length
+              ? '640:max-h-[100px]'
+              : '640:max-h-[400px]',
             noSearch && 'pt-1'
           )}
           style={{
@@ -174,9 +177,7 @@ export const Select = ({
         >
           {!filteredOptions?.length ? (
             <div className='y-center h-full'>
-              <p className='text-center'>
-                No {entity ?? 'item'} matched your search
-              </p>
+              <p className='text-center'>No {entity ?? 'item'} found</p>
             </div>
           ) : (
             <AutoSizer className='autosizer thin-scrollbar pb-10 pt-2'>
@@ -261,7 +262,7 @@ export const Select = ({
         </div>
       </div>
 
-      <div className='sticky bottom-0 left-0'>{children}</div>
+      <div className='bottom-0b sticky left-0 bg-white'>{children}</div>
     </>
   );
 };

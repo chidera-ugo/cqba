@@ -1,8 +1,9 @@
 import { Building } from 'components/illustrations/Building';
 import {
-  IDepartment,
-  useGetDepartments,
-} from 'hooks/api/employees/useGetDepartments';
+  ISubAccountsDepartment,
+  useGetSubAccountsByDepartment,
+} from 'hooks/api/sub-accounts/useGetSubAccountsByDepartment';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import {
   ColumnFiltersState,
@@ -17,11 +18,13 @@ interface Props {
   search?: string;
 }
 
-export const AllDepartmentsTable = ({ search }: Props) => {
+export const EmployeesDepartmentTable = ({ search }: Props) => {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
   });
+
+  const { push } = useRouter();
 
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -36,7 +39,7 @@ export const AllDepartmentsTable = ({ search }: Props) => {
     isError,
     data: res,
     isRefetching,
-  } = useGetDepartments({
+  } = useGetSubAccountsByDepartment({
     page: pagination.pageIndex,
     size: pagination.pageSize,
     search,
@@ -50,14 +53,15 @@ export const AllDepartmentsTable = ({ search }: Props) => {
     if (!!res) setData(res);
   }, [res]);
 
-  const [data, setData] = useState<PaginatedResponse<IDepartment> | undefined>(
-    res
-  );
+  const [data, setData] = useState<
+    PaginatedResponse<ISubAccountsDepartment> | undefined
+  >(res);
 
   return (
-    <Table<IDepartment>
-      title='sub accounts'
+    <Table<ISubAccountsDepartment>
+      title='departments'
       dontScrollToTopOnPageChange
+      onRowClick={(id) => push(`/employees/departments/${id}`)}
       accessor='id'
       mustHaveRange
       {...{
@@ -82,7 +86,7 @@ export const AllDepartmentsTable = ({ search }: Props) => {
         });
         setSorting([]);
       }}
-      emptyTableText='You have not added any sub accounts yet.'
+      emptyTableText='You have not added any departments yet.'
       emptyTableIcon={<Building />}
     />
   );

@@ -6,22 +6,22 @@ import { AppLayout } from 'components/layouts/AppLayout';
 import { SimpleInformation } from 'components/modules/common/SimpleInformation';
 import { KycSteps } from 'components/modules/kyc/KycSteps';
 import { ReviewAndSubmit } from 'components/modules/kyc/ReviewAndSubmit';
-import { useAppContext } from 'context/AppContext';
-import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
+import { Cross } from 'components/svgs/navigation/Exit';
+import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useCurrentAccountSetupStepUrl } from 'hooks/dashboard/kyc/useCurrentAccountSetupStepUrl';
+import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useKycSteps } from 'hooks/kyc/useKycSteps';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 export default function Kyc() {
-  const { user } = useAppContext().state;
-
   const { currentTab, isValidAccountSetupStep, goToNextAccountSetupStep } =
     useKycSteps();
 
   const { replace } = useRouter();
 
-  const { isVerified } = useAccountVerificationStatus();
+  const { isVerified } = useIsVerified();
 
   const { getCurrentAccountSetupStepUrl } = useCurrentAccountSetupStepUrl();
 
@@ -31,9 +31,11 @@ export default function Kyc() {
     replace(getCurrentAccountSetupStepUrl());
   }, [isValidAccountSetupStep]);
 
+  const { data } = useGetOrganizationInformation();
+
   if (isVerified)
     return (
-      <AppLayout title='Setup your account'>
+      <AppLayout title='Setup your account' hideSideNavigation>
         <div className='py-10'>
           <SimpleInformation
             title={<div className='text-xl'>Account Verified</div>}
@@ -53,11 +55,27 @@ export default function Kyc() {
     );
 
   return (
-    <AppLayout title='Get Started'>
+    <AppLayout
+      title='Get Started'
+      hideSideNavigation
+      headerSlot={
+        <Link href={'/'} className={'group flex'}>
+          <span
+            className={'my-auto mr-1 text-sm font-medium group-hover:underline'}
+          >
+            Skip for Later
+          </span>
+          <span className='my-auto'>
+            <Cross className={'h-5 w-5 text-primary-main'} />
+          </span>
+        </Link>
+      }
+    >
       <div className='hidden 768:block'>
-        <h5>Hi {user?.firstName}, Welcome to ChequeBase</h5>
+        <h5>Welcome to ChequeBase Activate {data?.businessName}</h5>
         <p className='mt-1 font-normal text-neutral-500'>
-          Let’s get you started with with managing your finances
+          Based on your business type, you will be required to submit the
+          documents below during the business activation process.
         </p>
       </div>
 
