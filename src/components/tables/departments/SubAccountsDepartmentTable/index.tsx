@@ -1,6 +1,8 @@
 import { Building } from 'components/illustrations/Building';
-import { IDepartment } from 'hooks/api/departments/useGetAllDepartments';
-import { useGetSubAccountsByDepartment } from 'hooks/api/sub-accounts/useGetSubAccountsByDepartment';
+import {
+  ISubAccountsDepartment,
+  useGetSubAccountsByDepartment,
+} from 'hooks/api/sub-accounts/useGetSubAccountsByDepartment';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import {
@@ -51,12 +53,12 @@ export const SubAccountsDepartmentTable = ({ search }: Props) => {
     if (!!res) setData(res);
   }, [res]);
 
-  const [data, setData] = useState<PaginatedResponse<IDepartment> | undefined>(
-    res
-  );
+  const [data, setData] = useState<
+    PaginatedResponse<ISubAccountsDepartment> | undefined
+  >(res);
 
   return (
-    <Table<IDepartment>
+    <Table<ISubAccountsDepartment>
       title='departments'
       dontScrollToTopOnPageChange
       onRowClick={(id) => push(`/sub-accounts/departments/${id}`)}

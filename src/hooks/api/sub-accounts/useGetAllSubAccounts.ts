@@ -26,6 +26,7 @@ export function useGetAllSubAccounts(
     size: number;
     search?: string;
     status?: string;
+    departmentId?: string;
   },
   options?: UseQueryOptions<any, any, any, string[]>
 ) {

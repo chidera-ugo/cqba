@@ -18,15 +18,12 @@ import { PaginatedResponse } from 'types/Table';
 import { useColumns } from './useColumns';
 import { Table } from 'components/core/Table';
 
-export type SubAccountAction =
-  | 'place account on hold'
-  | 'archive account'
-  | 'edit account'
-  | null;
+export type SubAccountAction = 'hold' | 'archive' | 'edit' | null;
 
 interface Props {
   reset?: () => void;
   search?: string;
+  departmentId?: string;
   filters?: Record<string, any>;
   setFilters?: Dispatch<SetStateAction<Record<string, string>>>;
   slot?: JSX.Element;
@@ -39,6 +36,7 @@ export const AllSubAccountsTable = ({
   filters,
   setFilters,
   onClickEditAccount,
+  departmentId,
 }: Props) => {
   const queryClient = useQueryClient();
 
@@ -64,7 +62,7 @@ export const AllSubAccountsTable = ({
 
   const { columns } = useColumns({
     handleActionClick(account, action) {
-      if (action === 'edit account') {
+      if (action === 'edit') {
         onClickEditAccount(account);
       } else {
         setAction(action);
@@ -93,6 +91,7 @@ export const AllSubAccountsTable = ({
     page: pagination.pageIndex,
     size: pagination.pageSize,
     status: filters?.['accountStatus'].value,
+    departmentId,
   });
 
   useEffect(() => {
@@ -116,20 +115,26 @@ export const AllSubAccountsTable = ({
     <>
       <Confirmation
         show={showConfirmation && !!subAccountToPerformActionOn && !!action}
-        title={<span className={'capitalize'}>{action}</span>}
+        title={
+          <span className={'capitalize'}>
+            {action === 'hold' ? `Place Account on Hold` : `Archive Account`}
+          </span>
+        }
         subTitle={
-          <span>
-            Are you sure you want to {action} -{' '}
-            {`"${subAccountToPerformActionOn?.accountHolderName}"`}
+          <span className={'mt-3 block'}>
+            Are you sure you want to proceed?
+            <span className='mt-1 block text-center font-bold'>
+              Account Holder: {subAccountToPerformActionOn?.accountHolderName}
+            </span>
           </span>
         }
         processingMessage={
-          action === 'archive account' ? 'Archiving' : 'Placing account on hold'
+          action === 'archive' ? 'Archiving' : 'Placing account on hold'
         }
         positive={() => {
-          if (action === 'archive account') {
+          if (action === 'archive') {
             archiveAccount(subAccountToPerformActionOn?.id);
-          } else if (action === 'place account on hold') {
+          } else if (action === 'hold') {
             placeAccountOnHold(subAccountToPerformActionOn?.id);
           }
         }}

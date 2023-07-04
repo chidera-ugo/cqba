@@ -26,7 +26,9 @@ export default function Budgeting() {
 
   const { query, replace } = useRouter();
 
-  const [currentTab, setCurrentTab] = useState<any>(null);
+  const [currentTab, setCurrentTab] = useState<{ name: string; value: string }>(
+    getFilterFromQueryParam()
+  );
 
   const preferences = getFromLocalStore('preferences');
 
@@ -50,6 +52,8 @@ export default function Budgeting() {
   );
 
   useEffect(() => {
+    if (!query['_t']) return;
+
     setCurrentTab(getFilterFromQueryParam());
   }, [query['_t']]);
 
@@ -60,11 +64,13 @@ export default function Budgeting() {
   function getFilterFromQueryParam() {
     const tab = getValidQueryParam(query['_t']);
 
+    if (!tab) return statusFilters[0]!;
+
     const existingStatus = statusFilters.find(({ value }) => value === tab);
 
     if (!existingStatus) {
       replace('/budgeting');
-      return statusFilters[0];
+      return statusFilters[0]!;
     }
 
     return existingStatus;

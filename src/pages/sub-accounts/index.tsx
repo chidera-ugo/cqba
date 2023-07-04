@@ -1,15 +1,12 @@
 import clsx from 'clsx';
 import { SearchInput } from 'components/form-elements/SearchInput';
-import { UpdateSubAccountForm } from 'components/forms/sub-accounts/UpdateSubAccountForm';
 import { AppLayout } from 'components/layouts/AppLayout';
-import { RightModalWrapper } from 'components/modal/ModalWrapper';
-import { CreateDepartment } from 'components/modules/employees/CreateDepartment';
-import { CreateEmployee } from 'components/modules/employees/CreateEmployee';
+import { ManageSubAccount } from 'components/modules/sub-accounts/ManageSubAccount';
 import { PlusCircle } from 'components/svgs/others/Plus';
 import { SubAccountsDepartmentTable } from 'components/tables/departments/SubAccountsDepartmentTable';
 import { AllSubAccountsTable } from 'components/tables/sub-accounts/AllSubAccountsTable';
-import { ISubAccount } from 'hooks/api/sub-accounts/useGetAllSubAccounts';
 import { useDebouncer } from 'hooks/common/useDebouncer';
+import { useManageSubAccount } from 'hooks/sub-accounts/useManageSubAccount';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -33,7 +30,9 @@ export default function SubAccounts() {
 
   const { query, replace } = useRouter();
 
-  const [currentTab, setCurrentTab] = useState<any>(null);
+  const [currentTab, setCurrentTab] = useState<{ name: string; value: string }>(
+    getFilterFromQueryParam()
+  );
 
   const [filters, setFilters] = useState<Record<string, any>>({
     accountStatus: accountTypeFilters[0],
@@ -41,31 +40,29 @@ export default function SubAccounts() {
 
   const [search, setSearch] = useState('');
 
-  const [accountToEdit, setAccountToEdit] = useState<ISubAccount | null>(null);
-
   const [debouncedSearch] = useDebouncer({
     value: search,
   });
 
-  const [modal, setModal] = useState<SubAccountModalsType>(null);
+  const { modal, setModal, closeModal, accountToEdit, setAccountToEdit } =
+    useManageSubAccount();
 
   useEffect(() => {
+    if (!query['_t']) return;
+
     setCurrentTab(getFilterFromQueryParam());
   }, [query['_t']]);
 
-  function closeModal() {
-    setModal(null);
-    setAccountToEdit(null);
-  }
-
   function getFilterFromQueryParam() {
     const tab = getValidQueryParam(query['_t']);
+
+    if (!tab) return tableTypeFilters[0]!;
 
     const existingStatus = tableTypeFilters.find(({ value }) => value === tab);
 
     if (!existingStatus) {
       replace('/sub-accounts');
-      return tableTypeFilters[0];
+      return tableTypeFilters[0]!;
     }
 
     return existingStatus;
@@ -157,38 +154,14 @@ export default function SubAccounts() {
         </div>
       </div>
 
-      <CreateDepartment
-        showModal={modal === 'department'}
-        closeModal={() => {
-          setModal('create');
-        }}
-      />
-
-      <CreateEmployee
+      <ManageSubAccount
         {...{
           setModal,
           modal,
-        }}
-        hideCreateDepartmentButton
-        closeModal={() => {
-          setModal('create');
+          closeModal,
+          accountToEdit,
         }}
       />
-
-      <RightModalWrapper
-        show={modal === 'create'}
-        title={`${accountToEdit ? 'Update' : 'Create'} Sub Account`}
-        closeModal={closeModal}
-        closeOnClickOutside
-        childrenClassname='py-0 640:px-8 px-4'
-      >
-        <UpdateSubAccountForm
-          onSuccess={closeModal}
-          currentSubAccount={accountToEdit}
-          addDepartment={() => setModal('department')}
-          addEmployee={() => setModal('employee')}
-        />
-      </RightModalWrapper>
 
       {currentTab?.value === 'accounts' ? (
         <AllSubAccountsTable

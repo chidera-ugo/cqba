@@ -1,10 +1,10 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { TableCell } from 'components/core/Table/TableCell';
-import { IDepartment } from 'hooks/api/departments/useGetAllDepartments';
+import { ISubAccountsDepartment } from 'hooks/api/sub-accounts/useGetSubAccountsByDepartment';
 import { useMemo } from 'react';
 
 export const useColumns = () => {
-  const columns = useMemo<ColumnDef<IDepartment>[]>(
+  const columns = useMemo<ColumnDef<ISubAccountsDepartment>[]>(
     () => [
       {
         header: 'Department',

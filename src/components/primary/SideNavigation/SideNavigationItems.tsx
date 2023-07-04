@@ -32,7 +32,7 @@ export const SideNavigationItems = () => {
             <div>
               {navigationItems[item]?.map(
                 ({ icon, title, id, url, showWhenUnverified, isRoot }) => {
-                  const route = url ?? convertToUrlString(title);
+                  const route = url ?? `/${convertToUrlString(title)}`;
 
                   if (showWhenUnverified && isVerified)
                     return <Fragment key={title}></Fragment>;
