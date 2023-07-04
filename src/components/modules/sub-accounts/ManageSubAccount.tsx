@@ -2,23 +2,14 @@ import { UpdateSubAccountForm } from 'components/forms/sub-accounts/UpdateSubAcc
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { CreateDepartment } from 'components/modules/employees/CreateDepartment';
 import { CreateEmployee } from 'components/modules/employees/CreateEmployee';
-import { ISubAccount } from 'hooks/api/sub-accounts/useGetAllSubAccounts';
-import { SubAccountModalsType } from 'pages/sub-accounts';
-import { Dispatch, SetStateAction } from 'react';
-
-interface Props {
-  accountToEdit: ISubAccount | null;
-  modal: SubAccountModalsType;
-  setModal: Dispatch<SetStateAction<SubAccountModalsType>>;
-  closeModal: () => void;
-}
+import { useManageSubAccount } from 'hooks/sub-accounts/useManageSubAccount';
 
 export const ManageSubAccount = ({
   modal,
-  closeModal,
   setModal,
   accountToEdit,
-}: Props) => {
+  closeModal,
+}: ReturnType<typeof useManageSubAccount>) => {
   return (
     <>
       <CreateDepartment

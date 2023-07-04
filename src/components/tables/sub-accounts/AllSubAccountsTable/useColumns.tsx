@@ -83,20 +83,17 @@ export const useColumns = ({ handleActionClick }: Args) => {
                 {
                   title: 'Edit Account',
                   icon: <Edit />,
-                  onClick: () =>
-                    handleActionClick(row.original, 'edit account'),
+                  onClick: () => handleActionClick(row.original, 'edit'),
                 },
                 {
                   title: 'Place on hold',
                   icon: <ClosedLock />,
-                  onClick: () =>
-                    handleActionClick(row.original, 'place account on hold'),
+                  onClick: () => handleActionClick(row.original, 'hold'),
                 },
                 {
                   title: 'Archive',
                   icon: <Archive />,
-                  onClick: () =>
-                    handleActionClick(row.original, 'archive account'),
+                  onClick: () => handleActionClick(row.original, 'archive'),
                 },
               ]}
               index={row.index}

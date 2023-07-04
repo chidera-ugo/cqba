@@ -11,11 +11,10 @@ import { Squares } from 'components/svgs/others/Squares';
 import { TableIcon } from 'components/svgs/others/Table';
 import { BudgetStatus } from 'enums/Budget';
 import { useDebouncer } from 'hooks/common/useDebouncer';
+import { useQueryParamManagedState } from 'hooks/dashboard/useQueryParamManagedState';
 import { getFromLocalStore, saveToLocalStore } from 'lib/localStore';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { getValidQueryParam } from 'utils/getters/getValidQueryParam';
+import { useState } from 'react';
 
 export default function Budgeting() {
   const statusFilters: { name: string; value: BudgetStatus }[] = [
@@ -23,12 +22,6 @@ export default function Budgeting() {
     { name: 'Approved', value: 'approved' },
     { name: 'Declined', value: 'declined' },
   ];
-
-  const { query, replace } = useRouter();
-
-  const [currentTab, setCurrentTab] = useState<{ name: string; value: string }>(
-    getFilterFromQueryParam()
-  );
 
   const preferences = getFromLocalStore('preferences');
 
@@ -51,29 +44,10 @@ export default function Budgeting() {
     preferences?.budgetingViewMode
   );
 
-  useEffect(() => {
-    if (!query['_t']) return;
-
-    setCurrentTab(getFilterFromQueryParam());
-  }, [query['_t']]);
+  const { currentTab } = useQueryParamManagedState(statusFilters, '/budgeting');
 
   function closeModal() {
     setModal(null);
-  }
-
-  function getFilterFromQueryParam() {
-    const tab = getValidQueryParam(query['_t']);
-
-    if (!tab) return statusFilters[0]!;
-
-    const existingStatus = statusFilters.find(({ value }) => value === tab);
-
-    if (!existingStatus) {
-      replace('/budgeting');
-      return statusFilters[0]!;
-    }
-
-    return existingStatus;
   }
 
   return (

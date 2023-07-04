@@ -149,6 +149,8 @@ export const AllSubAccountsTable = ({
         headerSlot={slot}
         dontScrollToTopOnPageChange
         onRowClick={(id) => {
+          // Todo: Handle clicking back after navigating from /departments/[id]
+
           push(`/sub-accounts/${id}`);
         }}
         accessor='id'

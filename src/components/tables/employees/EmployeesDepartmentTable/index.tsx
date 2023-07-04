@@ -18,7 +18,7 @@ interface Props {
   search?: string;
 }
 
-export const SubAccountsDepartmentTable = ({ search }: Props) => {
+export const EmployeesDepartmentTable = ({ search }: Props) => {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -61,7 +61,7 @@ export const SubAccountsDepartmentTable = ({ search }: Props) => {
     <Table<ISubAccountsDepartment>
       title='departments'
       dontScrollToTopOnPageChange
-      onRowClick={(id) => push(`/sub-accounts/departments/${id}`)}
+      onRowClick={(id) => push(`/employees/departments/${id}`)}
       accessor='id'
       mustHaveRange
       {...{

@@ -2,19 +2,19 @@ import clsx from 'clsx';
 import { SimpleDisplayValue } from 'components/common/SimpleDisplayValue';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
-import { ManageSubAccount } from 'components/modules/sub-accounts/ManageSubAccount';
-import { AllSubAccountsTable } from 'components/tables/sub-accounts/AllSubAccountsTable';
+import { ManageEmployee } from 'components/modules/employees/ManageEmployee';
+import { AllEmployeesTable } from 'components/tables/employees/AllEmployeesTable';
 import { useGetDepartmentById } from 'hooks/api/departments/useGetDepartmentById';
-import { useManageSubAccount } from 'hooks/sub-accounts/useManageSubAccount';
+import { useManageEmployee } from 'hooks/employees/useManageEmployee';
 import { useRouter } from 'next/router';
 import { getValidQueryParam } from 'utils/getters/getValidQueryParam';
 
-export const DepartmentInformation = () => {
+export const EmployeesDepartmentInformation = () => {
   const { query } = useRouter();
   const id = getValidQueryParam(query['id']);
 
-  const { modal, setModal, closeModal, accountToEdit, setAccountToEdit } =
-    useManageSubAccount();
+  const { currentEmployee, setCurrentEmployee, setModal, ...rest } =
+    useManageEmployee();
 
   const { isLoading, isError, data } = useGetDepartmentById(id, {
     enabled: !!id,
@@ -31,12 +31,8 @@ export const DepartmentInformation = () => {
     name: string;
     value: string | number;
     isAmount?: boolean;
+    disabled?: boolean;
   }[] = [
-    {
-      name: 'Account Balance',
-      value: 1348484.44,
-      isAmount: true,
-    },
     {
       name: 'Department',
       value: title,
@@ -55,7 +51,7 @@ export const DepartmentInformation = () => {
             <SimpleDisplayValue
               key={item.name}
               className={clsx(
-                'col-span-12 px-5 640:col-span-6 1180:col-span-4',
+                'col-span-12 px-5 640:col-span-6',
                 i > 0 && 'b-5 border-neutral-200 1180:border-l',
                 i === 0 ? 'my-5' : 'mb-5 640:mt-5'
               )}
@@ -65,21 +61,23 @@ export const DepartmentInformation = () => {
         })}
       </div>
 
-      <ManageSubAccount
+      <ManageEmployee
+        {...rest}
         {...{
+          setCurrentEmployee,
           setModal,
-          modal,
-          closeModal,
-          accountToEdit,
+          currentEmployee,
         }}
       />
 
       <div className='mt-5'>
-        <AllSubAccountsTable
-          departmentId={data?.id}
-          onClickEditAccount={(account) => {
-            setAccountToEdit(account);
-            setModal('create');
+        <AllEmployeesTable
+          {...{
+            onRowClick(employee) {
+              setCurrentEmployee(employee);
+              setModal('employee');
+            },
+            currentEmployee,
           }}
         />
       </div>

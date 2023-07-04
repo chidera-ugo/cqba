@@ -3,15 +3,14 @@ import { SearchInput } from 'components/form-elements/SearchInput';
 import { AppLayout } from 'components/layouts/AppLayout';
 import { ManageSubAccount } from 'components/modules/sub-accounts/ManageSubAccount';
 import { PlusCircle } from 'components/svgs/others/Plus';
-import { SubAccountsDepartmentTable } from 'components/tables/departments/SubAccountsDepartmentTable';
+import { SubAccountsDepartmentTable } from 'components/tables/sub-accounts/SubAccountsDepartmentTable';
 import { AllSubAccountsTable } from 'components/tables/sub-accounts/AllSubAccountsTable';
 import { useDebouncer } from 'hooks/common/useDebouncer';
+import { useQueryParamManagedState } from 'hooks/dashboard/useQueryParamManagedState';
 import { useManageSubAccount } from 'hooks/sub-accounts/useManageSubAccount';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Filter } from 'components/form-elements/Filter';
-import { getValidQueryParam } from 'utils/getters/getValidQueryParam';
 
 export type SubAccountModalsType = 'create' | 'department' | 'employee' | null;
 
@@ -28,12 +27,6 @@ export default function SubAccounts() {
     { name: 'Departments', value: 'departments' },
   ];
 
-  const { query, replace } = useRouter();
-
-  const [currentTab, setCurrentTab] = useState<{ name: string; value: string }>(
-    getFilterFromQueryParam()
-  );
-
   const [filters, setFilters] = useState<Record<string, any>>({
     accountStatus: accountTypeFilters[0],
   });
@@ -44,29 +37,12 @@ export default function SubAccounts() {
     value: search,
   });
 
-  const { modal, setModal, closeModal, accountToEdit, setAccountToEdit } =
-    useManageSubAccount();
+  const { currentTab } = useQueryParamManagedState(
+    tableTypeFilters,
+    '/sub-accounts'
+  );
 
-  useEffect(() => {
-    if (!query['_t']) return;
-
-    setCurrentTab(getFilterFromQueryParam());
-  }, [query['_t']]);
-
-  function getFilterFromQueryParam() {
-    const tab = getValidQueryParam(query['_t']);
-
-    if (!tab) return tableTypeFilters[0]!;
-
-    const existingStatus = tableTypeFilters.find(({ value }) => value === tab);
-
-    if (!existingStatus) {
-      replace('/sub-accounts');
-      return tableTypeFilters[0]!;
-    }
-
-    return existingStatus;
-  }
+  const { setAccountToEdit, setModal, ...rest } = useManageSubAccount();
 
   return (
     <AppLayout title='Sub Accounts'>
@@ -157,10 +133,9 @@ export default function SubAccounts() {
       <ManageSubAccount
         {...{
           setModal,
-          modal,
-          closeModal,
-          accountToEdit,
+          setAccountToEdit,
         }}
+        {...rest}
       />
 
       {currentTab?.value === 'accounts' ? (
