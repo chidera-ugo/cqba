@@ -4,20 +4,20 @@ import { PaginatedResponse } from 'types/Table';
 import { generateUrlParamsFromObject } from 'utils/generators/generateUrlParamsFromObject';
 
 export interface ISubAccount {
-  employeeId?: string;
-  departmentId?: string;
-  deparmentTitle?: string;
-  status?: string;
-  createdAt?: number;
-  sKey?: string;
-  balance?: number;
-  accountHolderId?: string;
-  organizationId?: string;
-  accountHolderEmail?: string;
-  userId?: string;
-  updatedAt?: number;
-  accountHolderName?: string;
-  id?: string;
+  employeeId: string;
+  departmentId: string;
+  departmentTitle: string;
+  status: string;
+  createdAt: number;
+  sKey: string;
+  balance: number;
+  accountHolderId: string;
+  organizationId: string;
+  accountHolderEmail: string;
+  userId: string;
+  updatedAt: number;
+  accountHolderName: string;
+  id: string;
 }
 
 export function useGetAllSubAccounts(

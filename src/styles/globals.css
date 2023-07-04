@@ -224,11 +224,11 @@
   }
 
   .blue-mpill {
-    @apply mpill bg-blue-300 text-blue-700;
+    @apply mpill bg-primary-main text-primary-main;
   }
 
   .blue-mpill-h {
-    @apply mpill bg-blue-300 text-blue-500 hover:bg-opacity-60;
+    @apply mpill bg-blue-300 text-primary-main hover:bg-opacity-60;
   }
 }
 

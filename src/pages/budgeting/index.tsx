@@ -9,22 +9,26 @@ import { CreateDepartment } from 'components/modules/employees/CreateDepartment'
 import { PlusCircle } from 'components/svgs/others/Plus';
 import { Squares } from 'components/svgs/others/Squares';
 import { TableIcon } from 'components/svgs/others/Table';
+import { BudgetStatus } from 'enums/Budget';
 import { useDebouncer } from 'hooks/common/useDebouncer';
 import { getFromLocalStore, saveToLocalStore } from 'lib/localStore';
-import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { getValidQueryParam } from 'utils/getters/getValidQueryParam';
 
 export default function Budgeting() {
-  const statusFilters = [
-    { name: 'Pending', value: 'pending' },
+  const statusFilters: { name: string; value: BudgetStatus }[] = [
+    { name: 'Pending', value: 'open' },
     { name: 'Approved', value: 'approved' },
-    { name: 'Declined', count: 'declined' },
+    { name: 'Declined', value: 'declined' },
   ];
 
-  const preferences = getFromLocalStore('preferences');
+  const { query, replace } = useRouter();
 
-  const [filters, setFilters] = useState<Record<string, any>>({
-    status: statusFilters[0],
-  });
+  const [currentTab, setCurrentTab] = useState<any>(null);
+
+  const preferences = getFromLocalStore('preferences');
 
   const [formRecoveryValues, setFormRecoveryValues] = useState<Record<
     string,
@@ -45,8 +49,25 @@ export default function Budgeting() {
     preferences?.budgetingViewMode
   );
 
+  useEffect(() => {
+    setCurrentTab(getFilterFromQueryParam());
+  }, [query['_t']]);
+
   function closeModal() {
     setModal(null);
+  }
+
+  function getFilterFromQueryParam() {
+    const tab = getValidQueryParam(query['_t']);
+
+    const existingStatus = statusFilters.find(({ value }) => value === tab);
+
+    if (!existingStatus) {
+      replace('/budgeting');
+      return statusFilters[0];
+    }
+
+    return existingStatus;
   }
 
   return (
@@ -55,14 +76,12 @@ export default function Budgeting() {
         <div className='gap-5 480:flex'>
           {statusFilters.map((item) => {
             const { name, value } = item;
-            const isActive = value === filters?.status?.value;
+            const isActive = value === currentTab?.value;
 
             return (
-              <button
+              <Link
                 key={name}
-                onClick={() => {
-                  setFilters((prev) => ({ ...prev, status: item }));
-                }}
+                href={`/budgeting?_t=${value}`}
                 className={clsx(
                   'relative mb-auto text-sm font-medium capitalize',
                   isActive && 'text-primary-main'
@@ -75,7 +94,7 @@ export default function Budgeting() {
                     <div className='h-1.5 w-1.5 rounded-full bg-primary-main'></div>
                   </div>
                 )}
-              </button>
+              </Link>
             );
           })}
         </div>
@@ -147,8 +166,9 @@ export default function Budgeting() {
       </RightModalWrapper>
 
       <AllBudgets
+        status={currentTab?.value}
         search={debouncedSearch}
-        {...{ viewMode, filters, setFilters }}
+        {...{ viewMode }}
       />
     </AppLayout>
   );

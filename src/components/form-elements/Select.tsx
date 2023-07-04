@@ -26,7 +26,15 @@ export const Select = ({
 }: Props) => {
   const options = !_options.length
     ? ['']
-    : [typeof _options[0] === 'string' ? '' : {}, ..._options];
+    : [
+        typeof _options[0] === 'string'
+          ? ''
+          : {
+              [trueValueKey]: '',
+              [displayValueKey ?? 'name']: '',
+            },
+        ..._options,
+      ];
 
   const [field, meta] = useField(props.name as string);
 
@@ -67,11 +75,10 @@ export const Select = ({
         {options.map((value: any) => {
           const isObject = displayValueKey && typeof value === 'object';
 
+          const val = isObject ? value[trueValueKey] : (value as string);
+
           return (
-            <option
-              key={isObject ? value[trueValueKey] : (value as string)}
-              value={isObject ? value[trueValueKey] : (value as string)}
-            >
+            <option key={val} value={val}>
               {isObject ? value[displayValueKey] : (value as string)}
             </option>
           );

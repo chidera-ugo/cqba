@@ -1,4 +1,5 @@
 import { UseQueryOptions } from '@tanstack/react-query';
+import { BudgetStatus } from 'enums/Budget';
 import { useTQuery } from 'hooks/api/useTQuery';
 import { PaginatedResponse } from 'types/Table';
 import { generateUrlParamsFromObject } from 'utils/generators/generateUrlParamsFromObject';
@@ -27,7 +28,7 @@ interface Creator {
 
 export interface IBudget {
   departmentId: string;
-  status: string;
+  status: BudgetStatus;
   priority: string;
   createdAt: string;
   sKey: string;

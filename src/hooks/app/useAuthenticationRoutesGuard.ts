@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 
 export const useAuthenticationRoutesGuard = () => {
   const { user, redirectUrl } = useAppContext().state;
+
   const { replace } = useRouter();
 
   const { isVerified } = useIsVerified();
@@ -14,6 +15,8 @@ export const useAuthenticationRoutesGuard = () => {
   useEffect(() => {
     // Redirect to saved url if http session is valid
     if (!user) return;
+
+    console.log({ url, redirectUrl });
 
     if (redirectUrl === 'no_redirect') {
       replace(url);

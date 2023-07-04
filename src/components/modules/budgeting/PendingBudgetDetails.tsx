@@ -27,6 +27,7 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
   });
 
   if (gettingBudget) return <IsLoading />;
+
   if (isError) return <IsError description={'Failed to get budget details'} />;
 
   return (
@@ -38,17 +39,17 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
       {data.status === 'open' && (
         <div className='mt-8 flex gap-4'>
           <button
-            onClick={() => mutate({ status: 'rejected' })}
-            className='dark-button h-11 w-full'
+            onClick={() => mutate({ status: 'declined' })}
+            className='dark-button h-11 w-full text-sm'
           >
-            Reject
+            Reject Budget
           </button>
 
           <button
             onClick={() => mutate({ status: 'approved' })}
-            className='primary-button h-11 w-full'
+            className='primary-button h-11 w-full text-sm'
           >
-            Approve
+            Approve Budget
           </button>
         </div>
       )}

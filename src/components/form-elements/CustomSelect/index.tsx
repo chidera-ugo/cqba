@@ -43,6 +43,14 @@ export const CustomSelect = (props: PropsWithChildren<Props>) => {
     }
   });
 
+  useDetectKeyPress('ArrowUp', () => {
+    const focusedElement = document.activeElement;
+
+    if (focusedElement?.getAttribute('name') === name) {
+      setShowList(false);
+    }
+  });
+
   useEffect(() => {
     const val = field.value;
 

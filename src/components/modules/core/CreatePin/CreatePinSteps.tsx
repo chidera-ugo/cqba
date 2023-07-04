@@ -24,17 +24,13 @@ export const CreatePinSteps = ({ closeModal }: Props) => {
 
   const { mutate, isLoading } = useCreatePin({
     onSuccess(res) {
-      getCurrentUser!(
-        {},
-        {
-          onSuccess() {
-            closeModal();
-            toast(<AppToast>{res.message}</AppToast>, {
-              type: 'success',
-            });
-          },
-        }
-      );
+      closeModal();
+
+      toast(<AppToast>{res.message}</AppToast>, {
+        type: 'success',
+      });
+
+      getCurrentUser!({});
     },
     onError(e) {
       handleError(e);

@@ -36,7 +36,8 @@ export const BudgetCard = ({
     <div
       className={clsx(
         'card y-between col-span-4 transition-colors',
-        !showFullDetails &&
+        status !== 'declined' &&
+          !showFullDetails &&
           'cursor-pointer hover:ring-4 hover:ring-primary-main hover:ring-opacity-20'
       )}
       key={id}
@@ -95,7 +96,7 @@ export const BudgetCard = ({
         {status === 'open' && (
           <div
             className={clsx(
-              'mt-5 border-t border-neutral-200 pt-3 text-left text-2xl font-semibold text-neutral-1000'
+              'mt-5 border-t border-neutral-200 pt-4 text-left text-2xl font-semibold text-neutral-1000'
             )}
           >
             {showFullDetails ? (

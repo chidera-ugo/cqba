@@ -181,14 +181,7 @@ export function Table<T>({
   const onlyRangeFilterPresent = checkIfOnlyRangeFilterIsPresent();
 
   const Pagination = () => {
-    if (
-      !pagination ||
-      !setPagination ||
-      res?.empty ||
-      isError ||
-      (isLoading && !res?.content.length)
-    )
-      return <></>;
+    if (!pagination || !setPagination) return <></>;
 
     return (
       <TablePagination
@@ -392,7 +385,7 @@ export function Table<T>({
         }}
       />
 
-      {!hidePagination && !minimal && <Pagination />}
+      {!hidePagination && !minimal && !!res?.content.length && <Pagination />}
     </div>
   );
 }

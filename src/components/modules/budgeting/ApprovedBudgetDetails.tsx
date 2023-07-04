@@ -1,22 +1,9 @@
-import { IsError } from 'components/data-states/IsError';
-import { IsLoading } from 'components/data-states/IsLoading';
 import { SimpleInformation } from 'components/modules/common/SimpleInformation';
-import { useGetBudgetById } from 'hooks/api/budgeting/useGetBudgetById';
-import { useQueryValidator } from 'hooks/common/useQueryValidator';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
 import { useRouter } from 'next/router';
 
-export const ApprovedBudgetDetails = () => {
-  const { getValidQuery } = useQueryValidator();
-
+export const ApprovedBudgetDetails = ({ data }: { data: IBudget }) => {
   const { replace } = useRouter();
-
-  const id = getValidQuery('budgetId');
-
-  const { isLoading, isError, data } = useGetBudgetById(id);
-
-  if (isLoading) return <IsLoading />;
-
-  if (isError) return <IsError description={'Failed to get budget details'} />;
 
   if (data?.status !== 'approved')
     return (
@@ -28,11 +15,11 @@ export const ApprovedBudgetDetails = () => {
           </span>
         }
         actionButton={{
-          action: () => replace('/budgeting'),
+          action: () => replace(`/budgeting?_t=${data.status}`),
           text: 'Go Back',
         }}
       />
     );
 
-  return <>{id}</>;
+  return <>{data.id}</>;
 };

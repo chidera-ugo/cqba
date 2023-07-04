@@ -6,13 +6,15 @@ import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { CreateDepartment } from 'components/modules/employees/CreateDepartment';
 import { CreateEmployee } from 'components/modules/employees/CreateEmployee';
 import { PlusCircle } from 'components/svgs/others/Plus';
-import { SubAccountsByDepartmentTable } from 'components/tables/departments/SubAccountsByDepartmentTable';
+import { SubAccountsDepartmentTable } from 'components/tables/departments/SubAccountsDepartmentTable';
 import { AllSubAccountsTable } from 'components/tables/sub-accounts/AllSubAccountsTable';
 import { ISubAccount } from 'hooks/api/sub-accounts/useGetAllSubAccounts';
 import { useDebouncer } from 'hooks/common/useDebouncer';
-import { useQueryValidator } from 'hooks/common/useQueryValidator';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Filter } from 'components/form-elements/Filter';
+import { getValidQueryParam } from 'utils/getters/getValidQueryParam';
 
 export type SubAccountModalsType = 'create' | 'department' | 'employee' | null;
 
@@ -29,22 +31,12 @@ export default function SubAccounts() {
     { name: 'Departments', value: 'departments' },
   ];
 
-  const { getValidQuery, replace } = useQueryValidator();
-  const currentTable = getValidQuery('_c');
+  const { query, replace } = useRouter();
 
-  useEffect(() => {
-    if (!currentTable) return;
-
-    if (currentTable !== 'accounts' && currentTable !== 'departments') return;
-
-    setFilters((prev) => ({ ...prev, currentTable }));
-
-    replace('/sub-accounts');
-  }, [currentTable]);
+  const [currentTab, setCurrentTab] = useState<any>(null);
 
   const [filters, setFilters] = useState<Record<string, any>>({
     accountStatus: accountTypeFilters[0],
-    currentTable: tableTypeFilters[0],
   });
 
   const [search, setSearch] = useState('');
@@ -57,9 +49,26 @@ export default function SubAccounts() {
 
   const [modal, setModal] = useState<SubAccountModalsType>(null);
 
+  useEffect(() => {
+    setCurrentTab(getFilterFromQueryParam());
+  }, [query['_t']]);
+
   function closeModal() {
     setModal(null);
     setAccountToEdit(null);
+  }
+
+  function getFilterFromQueryParam() {
+    const tab = getValidQueryParam(query['_t']);
+
+    const existingStatus = tableTypeFilters.find(({ value }) => value === tab);
+
+    if (!existingStatus) {
+      replace('/sub-accounts');
+      return tableTypeFilters[0];
+    }
+
+    return existingStatus;
   }
 
   return (
@@ -69,14 +78,12 @@ export default function SubAccounts() {
           <div className='hidden gap-5 1280:flex'>
             {tableTypeFilters.map((item) => {
               const { name, value } = item;
-              const isActive = value === filters.currentTable.value;
+              const isActive = value === currentTab?.value;
 
               return (
-                <button
+                <Link
                   key={name}
-                  onClick={() => {
-                    setFilters((prev) => ({ ...prev, currentTable: item }));
-                  }}
+                  href={`/sub-accounts?_t=${value}`}
                   className={clsx(
                     'relative mb-auto text-sm font-medium capitalize',
                     isActive && 'text-primary-main'
@@ -89,7 +96,7 @@ export default function SubAccounts() {
                       <div className='h-1.5 w-1.5 rounded-full bg-primary-main'></div>
                     </div>
                   )}
-                </button>
+                </Link>
               );
             })}
           </div>
@@ -108,17 +115,19 @@ export default function SubAccounts() {
 
           <div className='my-auto block h-5 w-[1px] bg-neutral-200 1280:hidden'></div>
 
-          <div className='my-auto flex w-full gap-2 360:w-1/2 690:w-fit 1280:mb-auto 1280:mt-0'>
-            <Filter
-              withChevron
-              filterKey='accountStatus'
-              id='sub-accounts-table-filter'
-              {...{ filters, setFilters }}
-              className='w-full 690:w-auto'
-              dropdownClassName='right-0 640:left-0 min-w-[180px]'
-              options={accountTypeFilters}
-            />
-          </div>
+          {currentTab?.value === 'accounts' && (
+            <div className='my-auto flex w-full gap-2 360:w-1/2 690:w-fit 1280:mb-auto 1280:mt-0'>
+              <Filter
+                withChevron
+                filterKey='accountStatus'
+                id='sub-accounts-table-filter'
+                {...{ filters, setFilters }}
+                className='w-full 690:w-auto'
+                dropdownClassName='right-0 640:left-0 min-w-[180px]'
+                options={accountTypeFilters}
+              />
+            </div>
+          )}
         </div>
 
         <div className='mt-4 gap-2 640:flex 768:mt-0'>
@@ -181,7 +190,7 @@ export default function SubAccounts() {
         />
       </RightModalWrapper>
 
-      {filters.currentTable.value === 'accounts' ? (
+      {currentTab?.value === 'accounts' ? (
         <AllSubAccountsTable
           {...{
             filters,
@@ -194,7 +203,7 @@ export default function SubAccounts() {
           }}
         />
       ) : (
-        <SubAccountsByDepartmentTable
+        <SubAccountsDepartmentTable
           {...{
             search: debouncedSearch,
           }}

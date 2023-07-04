@@ -89,6 +89,10 @@ function AppContextProvider({ children, ...props }: PropsWithChildren<any>) {
     }
   );
 
+  useEffect(() => {
+    console.log('hello world');
+  }, []);
+
   const tablet = useMediaQuery('(max-width: 1023px)');
   const miniTablet = useMediaQuery('(max-width: 767px)');
   const mobile = useMediaQuery('(max-width: 639px)');
@@ -126,8 +130,6 @@ function AppContextProvider({ children, ...props }: PropsWithChildren<any>) {
   }, [mobile, tablet, miniTablet]);
 
   async function initializeSession(token: string) {
-    if (!token) return dispatch({ type: 'setIsInitializing', payload: false });
-
     dispatch({ type: 'setIsInitializing', payload: true });
 
     getCurrentUser(token);

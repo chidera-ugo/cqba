@@ -5,7 +5,7 @@ export function useApproveOrRejectBudget(
   budgetId: string,
   options?: UseMutationOptions<any, unknown, void, unknown>
 ) {
-  return useTMutation<{ status: 'approved' | 'rejected' }, any>({
+  return useTMutation<{ status: 'approved' | 'declined' }, any>({
     method: 'patch',
     url: `/${budgetId}/approve-reject`,
     service: 'budgets',

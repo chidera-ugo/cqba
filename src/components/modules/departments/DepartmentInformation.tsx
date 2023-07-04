@@ -12,6 +12,7 @@ export const DepartmentInformation = () => {
   });
 
   if (isLoading) return <IsLoading />;
+
   if (isError)
     return <IsError description={'Failed to get account information'} />;
 

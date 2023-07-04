@@ -214,10 +214,10 @@ export const LargeRightModalWrapper = ({
 (CentredModalWrapper as FC<CenteredModalWrapperProps>).propTypes = {
   closeOnClickOutside: function (props, propName) {
     const error = () =>
-      `You must pass 'close' if you intend to use closeOnClickOutside`;
+      `You must pass 'closeModal' if you intend to use closeOnClickOutside`;
 
     if (typeof props[propName] === 'boolean') {
-      if (!props['close']) {
+      if (!props['closeModal']) {
         return new Error(error());
       }
     }

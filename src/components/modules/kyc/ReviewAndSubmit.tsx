@@ -6,6 +6,7 @@ import { DocumentReview } from 'components/illustrations/DocumentReview';
 import { SimpleInformation } from 'components/modules/common/SimpleInformation';
 import { useApplyForReview } from 'hooks/api/kyc/useApplyForReview';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 export const ReviewAndSubmit = () => {
@@ -92,6 +93,8 @@ export const ReviewAndSubmit = () => {
 };
 
 export const ApplicationUnderReview = () => {
+  const { push } = useRouter();
+
   return (
     <div className='py-10'>
       <SimpleInformation
@@ -102,6 +105,10 @@ export const ApplicationUnderReview = () => {
             notified once this process has been completed.`}
           </span>
         }
+        actionButton={{
+          text: 'Continue to Dashboard',
+          action: () => push('/'),
+        }}
         icon={<DocumentReview />}
       />
     </div>

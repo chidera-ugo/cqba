@@ -3,7 +3,7 @@ import { DepartmentInformation } from 'components/modules/departments/Department
 
 export default function DepartmentDetails() {
   return (
-    <AppLayout title='Department Details' back={'/sub-accounts?_c=department'}>
+    <AppLayout title='Department Details' back={'/sub-accounts?_t=departments'}>
       <DepartmentInformation />
     </AppLayout>
   );

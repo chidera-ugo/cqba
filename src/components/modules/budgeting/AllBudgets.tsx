@@ -14,15 +14,13 @@ import { PendingBudgetDetails } from './PendingBudgetDetails';
 
 interface Props {
   viewMode: ViewMode;
-  filters: Record<string, any>;
-  setFilters: Dispatch<SetStateAction<Record<string, string>>>;
   search: string;
+  status?: string;
 }
 
 export type BudgetListProps = {
   isLoading?: boolean;
   isRefetching?: boolean;
-  filters: Record<string, any>;
   emptyTableText: string;
   isError?: boolean;
   data: PaginatedResponse<IBudget> | undefined;
@@ -35,7 +33,7 @@ export type BudgetListProps = {
 
 export type ViewMode = 'table' | 'cards';
 
-export const AllBudgets = ({ viewMode, ...props }: Props) => {
+export const AllBudgets = ({ viewMode, status, ...props }: Props) => {
   const [showPinModal, setShowPinModal] = useState(false);
 
   const { push } = useRouter();
@@ -47,28 +45,19 @@ export const AllBudgets = ({ viewMode, ...props }: Props) => {
     pageSize: viewMode === 'cards' ? 9 : 10,
   });
 
-  useEffect(() => {
-    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-  }, [props.filters]);
-
   const {
     isLoading,
     isError,
     data: res,
-    refetch,
   } = useGetAllBudgets({
     page: pagination.pageIndex,
     size: pagination.pageSize,
-    // status: props.filters?.status?.value,
+    status,
   });
 
   useEffect(() => {
     if (!!res) setData(res);
   }, [res]);
-
-  useEffect(() => {
-    refetch();
-  }, [props.filters]);
 
   const [data, setData] = useState<PaginatedResponse<IBudget> | undefined>(res);
 
@@ -104,9 +93,11 @@ export const AllBudgets = ({ viewMode, ...props }: Props) => {
           emptyTableText='You have not received any requests yet.'
           {...{
             viewMode,
-            onItemClick(res) {
-              // if (res.status === 'approved')
-              return push(`/budgeting/${res.id}`);
+            onItemClick(res: IBudget) {
+              if (res.status === 'declined') return;
+
+              if (res.status === 'approved')
+                return push(`/budgeting/${res.id}`);
 
               setCurrentBudget(res);
             },
