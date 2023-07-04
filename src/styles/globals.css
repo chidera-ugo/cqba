@@ -8,14 +8,19 @@
 @layer base {
   html {
     scroll-behavior: smooth !important;
+    background-color: black;
   }
 
   body {
     @apply font-primary;
   }
 
-  body:has(.no-scroll) {
+  body:has(.disable-scrolling) {
     overflow: hidden !important;
+  }
+
+  #app-wrapper:has(#portal-presence) {
+    scale: 0.8;
   }
 
   h1 {

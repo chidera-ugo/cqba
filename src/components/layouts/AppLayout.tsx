@@ -44,11 +44,16 @@ export const AppLayout = ({
   if (!userExists) return <FullScreenLoader asPage />;
 
   return (
-    <>
+    <div
+      id={'app-wrapper'}
+      style={{
+        backgroundColor: 'white',
+      }}
+    >
       <PageHead title={title} />
       <CreatePin />
 
-      <div className='no-scroll 1024:flex'>
+      <div className='disable-scrolling 1024:flex'>
         {!hideSideNavigation && (!screenSize || screenSize?.['desktop']) ? (
           <div className='hidden w-[324px] 1024:block'>
             <SideNavigation />
@@ -104,6 +109,6 @@ export const AppLayout = ({
           </div>
         </main>
       </div>
-    </>
+    </div>
   );
 };

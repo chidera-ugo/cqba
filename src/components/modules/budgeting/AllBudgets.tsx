@@ -94,7 +94,7 @@ export const AllBudgets = ({ viewMode, status, ...props }: Props) => {
           {...{
             viewMode,
             onItemClick(res: IBudget) {
-              if (res.status === 'declined') return;
+              if (res.status === 'declined') return null;
 
               if (res.status === 'approved')
                 return push(`/budgeting/${res.id}`);

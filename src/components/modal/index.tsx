@@ -27,13 +27,40 @@ export const Modal = ({
     return () => clearTimeout(timeout);
   }, [grow]);
 
+  function resetZoomOut() {
+    const el = document.getElementById('__next');
+
+    if (el) {
+      el.style.transitionProperty = 'all';
+      el.style.transitionDuration = '0.4s';
+      el.style.transform = '';
+      el.style.borderRadius = '';
+      el.style.overflow = '';
+    }
+  }
+
+  function zoomOut() {
+    if (type !== 'right') return;
+
+    const el = document.getElementById('__next');
+
+    if (el) {
+      el.style.transitionProperty = 'all';
+      el.style.transitionDuration = '0.4s';
+      el.style.transform = 'scale(0.96)';
+      el.style.borderRadius = '12px';
+      el.style.overflow = 'hidden';
+    }
+  }
+
   return (
     <AnimatePresence initial={false}>
       {show && (
         <Portal>
           <div
+            id={'portal-presence'}
             className={clsx(
-              `no-scroll fixed inset-0 z-[1200] w-screen`,
+              `disable-scrolling fixed inset-0 z-[1200] w-screen`,
               type !== 'right' && type !== 'left' ? 'y-center' : ''
             )}
           >
@@ -58,6 +85,13 @@ export const Modal = ({
                 closeOnClickOutside && 'cursor-pointer',
                 white ? 'bg-white' : 'bg-black bg-opacity-60'
               )}
+              onAnimationStart={(variant) => {
+                if (variant === 'show') {
+                  zoomOut();
+                } else {
+                  resetZoomOut();
+                }
+              }}
             />
 
             <motion.div

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { motion } from 'framer-motion';
 import { PropsWithChildren } from 'react';
 import clsx from 'clsx';
@@ -14,17 +13,6 @@ type Props = {
   isTableAction?: boolean;
 };
 
-/**
- * Dropdown component
- * @param {function} dismiss - The function to be called when closing the dropdown
- * @param wrapperId
- * @param {string} exceptedId- The ID of an element that when clicked on shouldn't trigger the dismiss action
- * @param anchorPosition
- * @param show
- * @param children
- * @param className
- * @returns {JSX.Element} The rendered Dropdown element.
- */
 export const Dropdown = ({
   dismiss,
   wrapperId,

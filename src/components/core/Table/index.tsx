@@ -71,6 +71,10 @@ export type Props<T> = JSX.IntrinsicElements['table'] & {
   hidePagination?: boolean;
   minimal?: boolean;
   tableFiltersKeyValuePairs?: Record<string, any>;
+  shouldDisableClicking?: {
+    key: string;
+    value: string;
+  };
 };
 
 export function Table<T>({
@@ -111,6 +115,7 @@ export function Table<T>({
   emptyTableIcon,
   tableFiltersKeyValuePairs,
   minimal,
+  shouldDisableClicking,
 }: Props<T>) {
   const [columns] = useState<typeof defaultColumns>(() => [...defaultColumns]);
   const [rowSelection, setRowSelection] = useState({});
@@ -296,14 +301,21 @@ export function Table<T>({
                       textColor = getRowTextColor(row);
                     }
 
-                    const key = (row.original as any)[accessor];
+                    const originalRow = row.original as any;
+
+                    const key = originalRow[accessor];
+
+                    const canClick = !shouldDisableClicking
+                      ? !!onRowClick
+                      : originalRow[shouldDisableClicking.key] !==
+                        shouldDisableClicking.value;
 
                     return (
                       <tr
                         key={key}
                         className={clsx(
                           `group h-[71px] border-b border-gray-100 text-sm font-semibold`,
-                          onRowClick && 'cursor-pointer',
+                          canClick && 'cursor-pointer',
                           i % 2 !== 0 && 'bg-neutral-100',
                           textColor
                         )}
@@ -315,7 +327,7 @@ export function Table<T>({
                               valign={alignTop ? 'top' : 'middle'}
                               className={clsx(
                                 `my-auto max-w-[200px] py-3 pr-3 font-medium`,
-                                onRowClick && 'group-hover:bg-[#2A85FF10]',
+                                canClick && 'group-hover:bg-[#2A85FF10]',
                                 alignTop && 'h-16 pt-5',
                                 index === row.getVisibleCells().length - 1 &&
                                   'rounded-r-none',
@@ -330,7 +342,7 @@ export function Table<T>({
 
                                   // Checking is the element clicked is a sub-button on the row
                                   if (!el.classList.contains('cell-button')) {
-                                    if (onRowClick) {
+                                    if (canClick && onRowClick) {
                                       if (returnOriginalOnRowClick) {
                                         onRowClick(row.original);
                                       } else if (accessor) {
