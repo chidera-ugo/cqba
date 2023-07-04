@@ -1,4 +1,4 @@
-import { State, Action } from '.';
+import { Action, State } from 'context/AppContext/types';
 import { deleteFromLocalStore, saveToLocalStore } from 'lib/localStore';
 
 export function reducer(state: State, action: Action): State {

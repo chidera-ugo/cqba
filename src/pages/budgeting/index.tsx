@@ -20,7 +20,7 @@ export default function Budgeting() {
   const statusFilters: { name: string; value: BudgetStatus }[] = [
     { name: 'Pending', value: 'open' },
     { name: 'Approved', value: 'approved' },
-    { name: 'Declined', value: 'declined' },
+    { name: 'Rejected', value: 'declined' },
   ];
 
   const preferences = getFromLocalStore('preferences');

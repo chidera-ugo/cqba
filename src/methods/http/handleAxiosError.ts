@@ -1,4 +1,4 @@
-import { Tokens } from 'context/AppContext';
+import { Tokens } from 'context/AppContext/types';
 import { isHtmlResponse } from 'methods/http/isHtmlResponse';
 import { handleRefreshToken } from 'methods/http/handleRefreshToken';
 
@@ -11,7 +11,10 @@ export async function handleAxiosError(
 
   const statusCode = data?.statusCode;
 
-  if (isHtmlResponse(data)) return onError();
+  if (isHtmlResponse(data)) {
+    onError();
+    return Promise.reject(e);
+  }
 
   if (statusCode === 401 && !e.config.url.includes('/v1/auth/')) {
     const previousRequest = e.config;
@@ -21,7 +24,10 @@ export async function handleAxiosError(
 
       const data = await handleRefreshToken(onError);
 
-      if (!data.access_token || !data.refresh_token) return;
+      if (!data || !data?.access_token || !data?.refresh_token) {
+        onError();
+        return Promise.reject(e);
+      }
 
       onSuccess({
         accessToken: data.access_token,
@@ -33,7 +39,7 @@ export async function handleAxiosError(
       return previousRequest;
     } else {
       onError(e?.response?.data?.message);
-      return;
+      return Promise.reject(e);
     }
   }
 

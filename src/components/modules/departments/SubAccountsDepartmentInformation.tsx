@@ -69,6 +69,7 @@ export const SubAccountsDepartmentInformation = () => {
 
       <div className='mt-5'>
         <AllSubAccountsTable
+          fromSubAccountDepartments
           departmentId={data?.id}
           onClickEditAccount={(account) => {
             setAccountToEdit(account);

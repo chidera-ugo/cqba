@@ -4,7 +4,8 @@ import {
   UseMutationOptions,
   UseMutationResult,
 } from '@tanstack/react-query';
-import { Tokens } from 'context/AppContext';
+import { Tokens } from 'context/AppContext/types';
+import { deleteFromLocalStore } from 'lib/localStore';
 import { handleAxiosError } from 'methods/http/handleAxiosError';
 import { IUser } from 'types/Auth';
 
@@ -27,7 +28,9 @@ export function useGetCurrentUser(
   axiosInstance.interceptors.response.use(
     (response) => response,
     async (e) => {
-      const req = await handleAxiosError(e, retrieveNewTokens, () => null);
+      const req = await handleAxiosError(e, retrieveNewTokens, () => {
+        deleteFromLocalStore('tokens');
+      });
 
       try {
         const res = await axiosInstance(req);
