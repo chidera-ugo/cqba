@@ -66,32 +66,35 @@ export const Form = ({
 
     const _dob = !!dob ? dayjs(dob) : '';
 
-    setValues({
-      ...values,
-      dateOfBirth:
-        !!dob && !!_dob
-          ? {
-              value: _dob.toISOString(),
-              calendarValue: _dob.toDate(),
-            }
-          : ({} as DatePickerValue),
-      idFile: {
-        ...values.idFile,
-        webUrl: idImageUrl,
+    setValues(
+      {
+        ...values,
+        dateOfBirth:
+          !!dob && !!_dob
+            ? {
+                value: _dob.toISOString(),
+                calendarValue: _dob.toDate(),
+              }
+            : ({} as DatePickerValue),
+        idFile: {
+          ...values.idFile,
+          webUrl: idImageUrl,
+        },
+        politicalAffiliation: !politicalAffiliation
+          ? ''
+          : politicalAffiliation
+          ? 'Yes'
+          : 'No',
+        firstName: firstName ?? user?.firstName,
+        lastName: lastName ?? user?.lastName,
+        gender,
+        bvn,
+        idNumber,
+        phoneNumber: formatPhoneNumber(phone ?? user?.phone),
+        idType: formOfId,
       },
-      politicalAffiliation: !politicalAffiliation
-        ? ''
-        : politicalAffiliation
-        ? 'Yes'
-        : 'No',
-      firstName: firstName ?? user?.firstName,
-      lastName: lastName ?? user?.lastName,
-      gender,
-      bvn,
-      idNumber,
-      phoneNumber: formatPhoneNumber(phone ?? user?.phone),
-      idType: formOfId,
-    });
+      false
+    );
   }, [data, user]);
 
   if (isLoading) return <IsLoading />;

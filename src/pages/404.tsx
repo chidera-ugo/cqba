@@ -6,7 +6,7 @@ const NotFound = () => {
   return (
     <>
       <PageHead title='Page Not Found' />
-      <div className='y-center h-screen'>
+      <div className='y-center h-screen bg-white'>
         <Restrictor
           {...{
             title: <span>Page Not Found</span>,
@@ -23,27 +23,6 @@ const NotFound = () => {
 
 export default NotFound;
 
-export const AccessDenied = () => {
-  return (
-    <div className='y-center h-screen'>
-      <Restrictor
-        {...{
-          title: (
-            <span>
-              {`You Can't Access`} <br />
-              This Page
-            </span>
-          ),
-          action: {
-            link: '/',
-            text: 'Go Home',
-          },
-        }}
-      />
-    </div>
-  );
-};
-
 interface Props {
   action: () => void;
   message: string;
@@ -51,7 +30,7 @@ interface Props {
 
 export const FailedToLoadPage = ({ action, message }: Props) => {
   return (
-    <div className='y-center h-screen px-4'>
+    <div className='y-center h-screen bg-white px-4'>
       <Restrictor
         {...{
           title: <span>{`It's not you, it's us`}</span>,

@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { months } from 'utils/constants/months';
+import { months } from 'constants/months';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 
 dayjs.extend(advancedFormat);

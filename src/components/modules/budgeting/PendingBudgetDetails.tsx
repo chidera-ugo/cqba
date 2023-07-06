@@ -37,17 +37,17 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
       <BudgetCard {...data} {...{ getColor }} showFullDetails />
 
       {data.status === 'open' && (
-        <div className='mt-8 flex gap-4'>
+        <div className='mt-8 gap-3 640:flex'>
           <button
             onClick={() => mutate({ status: 'declined' })}
-            className='dark-button h-11 w-full text-sm'
+            className='dark-button block h-11 w-full text-sm 640:w-1/2'
           >
             Reject Budget
           </button>
 
           <button
             onClick={() => mutate({ status: 'approved' })}
-            className='primary-button h-11 w-full text-sm'
+            className='primary-button mt-3 block h-11 w-full text-sm 640:mt-0 640:w-1/2'
           >
             Approve Budget
           </button>

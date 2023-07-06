@@ -42,6 +42,7 @@ export const AllBudgetsCardView = ({
             ? res.content.map((budget) => {
                 return (
                   <BudgetCard
+                    className={'col-span-12 768:col-span-6 1340:col-span-4'}
                     {...{ onItemClick, getColor }}
                     {...budget}
                     key={budget.id}

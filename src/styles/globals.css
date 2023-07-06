@@ -39,6 +39,10 @@
     @apply text-lg font-semibold text-neutral-1000 640:text-xl;
   }
 
+  h6 {
+    @apply text-xl font-semibold text-neutral-1000;
+  }
+
   label {
     @apply mb-2 text-left text-sm font-medium text-neutral-700;
   }

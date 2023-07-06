@@ -43,7 +43,7 @@ export const Filter = <T extends Record<string, any>>({
           <div className='my-auto mr-2'>{icon ?? <Adjusters />}</div>
         )}
 
-        <div className='my-auto text-sm font-medium'>
+        <div className='my-auto flex-shrink-0 text-sm font-medium'>
           {filters[filterKey]?.['name']}
         </div>
 

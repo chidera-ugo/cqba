@@ -11,11 +11,13 @@ export const BudgetCard = ({
   onItemClick,
   showFullDetails,
   getColor,
+  className,
   ...budget
 }: IBudget & {
   showFullDetails?: boolean;
   onItemClick?: (res: any) => void;
   getColor: (char: string) => string;
+  className?: string;
 }) => {
   const {
     id,
@@ -35,7 +37,8 @@ export const BudgetCard = ({
   return (
     <div
       className={clsx(
-        'card y-between col-span-4 transition-colors',
+        className,
+        'card y-between p-3 transition-colors 640:p-5',
         status !== 'declined' &&
           !showFullDetails &&
           'cursor-pointer hover:ring-4 hover:ring-primary-main hover:ring-opacity-20'

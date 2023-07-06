@@ -65,16 +65,19 @@ export const Form = ({
       numberOfEmployees,
     } = sanitizeRecordToRemoveUndefinedAndNulls(organizationInformation);
 
-    setValues({
-      ...values,
-      businessName,
-      address: businessAddress,
-      companyType: industry,
-      expenses: averageMonthlyExpenses,
-      employees: numberOfEmployees,
-      city,
-      state,
-    });
+    setValues(
+      {
+        ...values,
+        businessName,
+        address: businessAddress,
+        companyType: industry,
+        expenses: averageMonthlyExpenses,
+        employees: numberOfEmployees,
+        city,
+        state,
+      },
+      false
+    );
   }, [organizationInformation]);
 
   function dismissSaveAndContinueTooltip() {

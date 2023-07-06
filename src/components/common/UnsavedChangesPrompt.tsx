@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Confirmation } from 'components/modals/Confirmation';
-import { isDev } from 'utils/constants/environmentVariables';
+import { isDev } from 'constants/environmentVariables';
 
 interface Props {
   hasUnsavedChanges: boolean;

@@ -86,6 +86,7 @@ export const RightModalWrapper = ({
         {!hideHeader && <Header {...props} />}
         <div className={clsx(childrenClassname ?? 'p-4 640:p-8')}>
           {children}
+          <div className='h-10'></div>
         </div>
       </div>
     </Modal>

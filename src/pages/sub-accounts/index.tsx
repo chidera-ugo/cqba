@@ -46,9 +46,9 @@ export default function SubAccounts() {
 
   return (
     <AppLayout title='Sub Accounts'>
-      <div className='my-5 block justify-between gap-2 640:my-7 768:flex'>
+      <div className='my-5 block justify-between gap-2 640:my-7 1180:flex'>
         <div className='flex gap-5'>
-          <div className='hidden gap-5 1280:flex'>
+          <div className='flex gap-5'>
             {tableTypeFilters.map((item) => {
               const { name, value } = item;
               const isActive = value === currentTab?.value;
@@ -65,7 +65,7 @@ export default function SubAccounts() {
                   <span>{name}</span>
 
                   {isActive && (
-                    <div className='x-center bottom-0 left-0 mt-2 w-full'>
+                    <div className='x-center bottom-0 left-0 mt-2 hidden w-full 1180:flex'>
                       <div className='h-1.5 w-1.5 rounded-full bg-primary-main'></div>
                     </div>
                   )}
@@ -74,22 +74,8 @@ export default function SubAccounts() {
             })}
           </div>
 
-          <div className='my-auto flex w-full gap-2 360:w-1/2 690:w-fit 1280:mb-auto 1280:hidden'>
-            <Filter
-              withChevron
-              filterKey='currentTable'
-              id='sub-accounts-current-table-filter'
-              {...{ filters, setFilters }}
-              className='w-full 690:w-auto'
-              dropdownClassName='left-0 min-w-[180px]'
-              options={tableTypeFilters}
-            />
-          </div>
-
-          <div className='my-auto block h-5 w-[1px] bg-neutral-200 1280:hidden'></div>
-
           {currentTab?.value === 'accounts' && (
-            <div className='my-auto flex w-full gap-2 360:w-1/2 690:w-fit 1280:mb-auto 1280:mt-0'>
+            <div className='my-auto mb-auto mt-0 flex w-fit gap-2'>
               <Filter
                 withChevron
                 filterKey='accountStatus'
@@ -103,7 +89,7 @@ export default function SubAccounts() {
           )}
         </div>
 
-        <div className='mt-4 gap-2 640:flex 768:mt-0'>
+        <div className='mt-5 gap-2 640:flex 1180:mt-0'>
           <SearchInput
             placeholder='Search sub accounts'
             value={search}

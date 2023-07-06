@@ -45,13 +45,16 @@ export const Form = ({
         currentEmployee ?? (formRecoveryValues as typeof initialValues)
       );
 
-    setValues({
-      ...values,
-      firstName,
-      lastName,
-      email,
-      departmentId,
-    });
+    setValues(
+      {
+        ...values,
+        firstName,
+        lastName,
+        email,
+        departmentId,
+      },
+      false
+    );
   }, [currentEmployee, formRecoveryValues]);
 
   const {

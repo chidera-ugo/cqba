@@ -45,7 +45,7 @@ export default function App({ Component, pageProps }: AppProps) {
   );
 
   return (
-    <>
+    <div className={'min-h-screen bg-white'}>
       <ToastContainer
         position={'top-center'}
         autoClose={3000}
@@ -78,6 +78,6 @@ export default function App({ Component, pageProps }: AppProps) {
           </AppContextProvider>
         </QueryClientProvider>
       </AppErrorBoundary>
-    </>
+    </div>
   );
 }

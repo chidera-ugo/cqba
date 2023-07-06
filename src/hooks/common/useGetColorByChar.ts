@@ -1,4 +1,4 @@
-import { alphabets } from 'utils/constants/alphabets';
+import { alphabets } from 'constants/alphabets';
 
 export const useGetColorByChar = () => {
   const colors = [

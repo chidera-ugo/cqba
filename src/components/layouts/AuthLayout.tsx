@@ -14,7 +14,7 @@ export const AuthLayout = ({ children, title }: PropsWithChildren<Props>) => {
   if (userExists) return <FullScreenLoader id='auth-layout' asPage />;
 
   return (
-    <>
+    <div className={'bg-white'}>
       <PageHead title={title} />
 
       <AuthHeader />
@@ -26,6 +26,6 @@ export const AuthLayout = ({ children, title }: PropsWithChildren<Props>) => {
       >
         {children}
       </main>
-    </>
+    </div>
   );
 };

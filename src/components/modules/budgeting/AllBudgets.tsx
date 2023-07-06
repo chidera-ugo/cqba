@@ -77,7 +77,6 @@ export const AllBudgets = ({ viewMode, status, ...props }: Props) => {
         }
         closeModal={closeModal}
         closeOnClickOutside
-        childrenClassname='p-8'
       >
         {currentBudget && (
           <AppErrorBoundary>

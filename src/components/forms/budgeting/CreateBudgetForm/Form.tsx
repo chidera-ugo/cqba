@@ -53,16 +53,19 @@ export const Form = ({
       formRecoveryValues as typeof initialValues
     );
 
-    setValues({
-      ...values,
-      categoryId,
-      departmentId,
-      dueDate: dueDate as unknown as DatePickerValue,
-      description,
-      amount,
-      title,
-      priority,
-    });
+    setValues(
+      {
+        ...values,
+        categoryId,
+        departmentId,
+        dueDate: dueDate as unknown as DatePickerValue,
+        description,
+        amount,
+        title,
+        priority,
+      },
+      false
+    );
   }, [formRecoveryValues]);
 
   const { isLoading, isError, data } = useGetAllCategories();
