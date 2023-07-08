@@ -154,7 +154,7 @@ export default function Budgeting() {
         <AllBudgets
           status={currentTab?.value}
           search={debouncedSearch}
-          {...{ viewMode }}
+          {...{ viewMode, currentTab }}
         />
       </div>
     </AppLayout>

@@ -16,6 +16,7 @@ interface Props {
   viewMode: ViewMode;
   search: string;
   status?: string;
+  currentTab?: { name: string; value: string };
 }
 
 export type BudgetListProps = {
@@ -33,10 +34,15 @@ export type BudgetListProps = {
 
 export type ViewMode = 'table' | 'cards';
 
-export const AllBudgets = ({ viewMode, status, ...props }: Props) => {
+export const AllBudgets = ({
+  viewMode,
+  currentTab,
+  status,
+  ...props
+}: Props) => {
   const [showPinModal, setShowPinModal] = useState(false);
 
-  const { push, query } = useRouter();
+  const { push } = useRouter();
 
   const [currentBudget, setCurrentBudget] = useState<IBudget | null>(null);
 
@@ -57,12 +63,12 @@ export const AllBudgets = ({ viewMode, status, ...props }: Props) => {
   });
 
   useEffect(() => {
-    if (!query['_t']) return;
+    if (!currentTab) return;
 
-    if (!res) setData(undefined);
+    if (!res) return setData(undefined);
 
     setData(res);
-  }, [res, query['_t']]);
+  }, [res, currentTab]);
 
   const [data, setData] = useState<PaginatedResponse<IBudget> | undefined>(res);
 
