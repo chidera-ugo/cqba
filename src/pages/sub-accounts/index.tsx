@@ -45,8 +45,8 @@ export default function SubAccounts() {
   const { setAccountToEdit, setModal, ...rest } = useManageSubAccount();
 
   return (
-    <AppLayout title='Sub Accounts'>
-      <div className='my-5 block justify-between gap-2 640:my-7 1180:flex'>
+    <AppLayout title='Sub Accounts' childrenClassName={'mb-7'}>
+      <div className='sticky top-16 left-0 z-[800] mb-5 justify-between gap-2 border-b border-neutral-200 bg-white bg-opacity-80 px-3 py-5 backdrop-blur-md 640:mb-7 640:px-8 1024:top-20 1180:flex'>
         <div className='flex gap-5'>
           <div className='flex gap-5'>
             {tableTypeFilters.map((item) => {
@@ -124,25 +124,27 @@ export default function SubAccounts() {
         {...rest}
       />
 
-      {currentTab?.value === 'accounts' ? (
-        <AllSubAccountsTable
-          {...{
-            filters,
-            setFilters,
-            search: debouncedSearch,
-          }}
-          onClickEditAccount={(account) => {
-            setAccountToEdit(account);
-            setModal('create');
-          }}
-        />
-      ) : (
-        <SubAccountsDepartmentTable
-          {...{
-            search: debouncedSearch,
-          }}
-        />
-      )}
+      <div className={'px-3 640:px-8'}>
+        {currentTab?.value === 'accounts' ? (
+          <AllSubAccountsTable
+            {...{
+              filters,
+              setFilters,
+              search: debouncedSearch,
+            }}
+            onClickEditAccount={(account) => {
+              setAccountToEdit(account);
+              setModal('create');
+            }}
+          />
+        ) : (
+          <SubAccountsDepartmentTable
+            {...{
+              search: debouncedSearch,
+            }}
+          />
+        )}
+      </div>
     </AppLayout>
   );
 }

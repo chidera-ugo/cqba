@@ -34,8 +34,8 @@ export default function Employees() {
     useManageEmployee();
 
   return (
-    <AppLayout title='Employees'>
-      <div className='my-5 justify-between gap-2 640:my-7 690:flex'>
+    <AppLayout title='Employees' childrenClassName={'mb-7'}>
+      <div className='sticky top-16 left-0 z-[800] mb-5 justify-between gap-2 border-b border-neutral-200 bg-white bg-opacity-80 px-3 py-5 backdrop-blur-md 640:mb-7 640:px-8 1024:top-20 1180:flex'>
         <div className='gap-5 360:flex'>
           <div className='flex gap-5'>
             {tableTypeFilters.map((item) => {
@@ -100,24 +100,26 @@ export default function Employees() {
         }}
       />
 
-      {currentTab?.value === 'employees' ? (
-        <AllEmployeesTable
-          {...{
-            search: debouncedSearch,
-            onRowClick(employee) {
-              setCurrentEmployee(employee);
-              setModal('employee');
-            },
-            currentEmployee,
-          }}
-        />
-      ) : (
-        <EmployeesDepartmentTable
-          {...{
-            search: debouncedSearch,
-          }}
-        />
-      )}
+      <div className={'px-3 640:px-8'}>
+        {currentTab?.value === 'employees' ? (
+          <AllEmployeesTable
+            {...{
+              search: debouncedSearch,
+              onRowClick(employee) {
+                setCurrentEmployee(employee);
+                setModal('employee');
+              },
+              currentEmployee,
+            }}
+          />
+        ) : (
+          <EmployeesDepartmentTable
+            {...{
+              search: debouncedSearch,
+            }}
+          />
+        )}
+      </div>
     </AppLayout>
   );
 }
