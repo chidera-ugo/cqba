@@ -51,8 +51,8 @@ export default function Budgeting() {
   }
 
   return (
-    <AppLayout title='Budgeting'>
-      <div className='my-5 justify-between gap-2 640:my-7 1180:flex'>
+    <AppLayout title='Budgeting' childrenClassName={'mb-7'}>
+      <div className='sticky top-16 left-0 z-[800] mb-5 justify-between gap-2 border-b border-neutral-200 bg-white bg-opacity-80 px-3 py-5 backdrop-blur-md 640:mb-7 640:px-8 1024:top-20 1180:flex'>
         <div className='flex gap-5'>
           {statusFilters.map((item) => {
             const { name, value } = item;
@@ -103,7 +103,10 @@ export default function Budgeting() {
             </button>
 
             <button
-              onClick={() => setModal('budget')}
+              onClick={() => {
+                setFormRecoveryValues(null);
+                setModal('budget');
+              }}
               className='dark-button x-center flex h-11 w-full rounded-full px-4 480:w-auto'
             >
               <span className='my-auto mr-2'>Create budget</span>
@@ -147,11 +150,13 @@ export default function Budgeting() {
         />
       </RightModalWrapper>
 
-      <AllBudgets
-        status={currentTab?.value}
-        search={debouncedSearch}
-        {...{ viewMode }}
-      />
+      <div className={'px-3 640:px-8'}>
+        <AllBudgets
+          status={currentTab?.value}
+          search={debouncedSearch}
+          {...{ viewMode }}
+        />
+      </div>
     </AppLayout>
   );
 }

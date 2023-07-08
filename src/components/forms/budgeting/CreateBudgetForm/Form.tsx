@@ -68,17 +68,18 @@ export const Form = ({
     );
   }, [formRecoveryValues]);
 
-  const { isLoading, isError, data } = useGetAllCategories();
+  const { isLoading, isError, data, isRefetching } = useGetAllCategories();
 
   const {
     isLoading: gettingDepartments,
     isError: failedToGetDepartments,
+    isRefetching: refetchingDepartments,
     data: departments,
   } = useGetAllDepartments();
 
   return (
     <FormikForm onSubmit={handleSubmit}>
-      <Input label='Budget Title' name='title' />
+      <Input label='Budget Title' name='title' autoFocus />
       <TextArea label='Description' name='description' />
 
       <div className='gap-4 880:flex'>
@@ -107,6 +108,7 @@ export const Form = ({
             options: data?.content ?? [],
             isError,
             isLoading,
+            isRefetching,
           }}
         />
       </AppErrorBoundary>
@@ -141,6 +143,8 @@ export const Form = ({
             options: departments?.content ?? [],
           }}
           isLoading={gettingDepartments}
+          isRefetching={refetchingDepartments}
+          next={'amount'}
           isError={failedToGetDepartments}
         >
           {addDepartment && (

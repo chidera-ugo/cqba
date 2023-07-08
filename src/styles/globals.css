@@ -192,6 +192,10 @@
     @apply pill bg-success-600 text-white;
   }
 
+  .yellow-pill {
+    @apply pill bg-yellow-500 text-white;
+  }
+
   .blue-pill {
     @apply pill bg-primary-main bg-opacity-20 text-[10px] font-semibold uppercase text-primary-main !important;
   }

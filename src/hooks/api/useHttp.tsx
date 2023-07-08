@@ -3,7 +3,6 @@ import { AppToast } from 'components/primary/AppToast';
 import { useAppContext } from 'context/AppContext';
 import { useDestroySession } from 'hooks/app/useDestroySession';
 import { OutgoingHttpHeaders } from 'http2';
-import { getFromLocalStore } from 'lib/localStore';
 import { handleAxiosError } from 'methods/http/handleAxiosError';
 import { toast } from 'react-toastify';
 
@@ -53,10 +52,10 @@ export default function useHttp({
   config?: AxiosRequestConfig<any>;
   headers?: OutgoingHttpHeaders;
 }): AxiosInstance {
-  const { dispatch } = useAppContext();
+  const { dispatch, state } = useAppContext();
   const { destroySession } = useDestroySession();
 
-  const tokens = getFromLocalStore('tokens');
+  const tokens = state.tokens;
 
   const axiosInstance = axios.create({
     headers: {

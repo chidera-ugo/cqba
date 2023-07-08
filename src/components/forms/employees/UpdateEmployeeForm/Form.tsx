@@ -37,10 +37,17 @@ export const Form = ({
 
   useScrollToFormError(errors, submitCount);
 
+  const {
+    isLoading: gettingDepartments,
+    isError: failedToGetDepartments,
+    isRefetching: refetchingDepartments,
+    data: departments,
+  } = useGetAllDepartments();
+
   useEffect(() => {
     if (!currentEmployee && !formRecoveryValues) return;
 
-    const { firstName, lastName, email, departmentId } =
+    const { firstName, lastName, email } =
       sanitizeRecordToRemoveUndefinedAndNulls(
         currentEmployee ?? (formRecoveryValues as typeof initialValues)
       );
@@ -51,17 +58,19 @@ export const Form = ({
         firstName,
         lastName,
         email,
-        departmentId,
       },
       false
     );
   }, [currentEmployee, formRecoveryValues]);
 
-  const {
-    isLoading: gettingDepartments,
-    isError: failedToGetDepartments,
-    data: departments,
-  } = useGetAllDepartments();
+  useEffect(() => {
+    if (!currentEmployee || !departments) return;
+
+    const { departmentId } =
+      sanitizeRecordToRemoveUndefinedAndNulls(currentEmployee);
+
+    setFieldValue('departmentId', departmentId, false);
+  }, [currentEmployee, departments]);
 
   return (
     <FormikForm onSubmit={handleSubmit}>
@@ -84,6 +93,7 @@ export const Form = ({
             options: departments?.content ?? [],
           }}
           isLoading={gettingDepartments}
+          isRefetching={refetchingDepartments}
           isError={failedToGetDepartments}
         >
           {addDepartment && (

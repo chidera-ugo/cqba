@@ -36,7 +36,7 @@ export type ViewMode = 'table' | 'cards';
 export const AllBudgets = ({ viewMode, status, ...props }: Props) => {
   const [showPinModal, setShowPinModal] = useState(false);
 
-  const { push } = useRouter();
+  const { push, query } = useRouter();
 
   const [currentBudget, setCurrentBudget] = useState<IBudget | null>(null);
 
@@ -49,6 +49,7 @@ export const AllBudgets = ({ viewMode, status, ...props }: Props) => {
     isLoading,
     isError,
     data: res,
+    isRefetching,
   } = useGetAllBudgets({
     page: pagination.pageIndex,
     size: pagination.pageSize,
@@ -56,8 +57,12 @@ export const AllBudgets = ({ viewMode, status, ...props }: Props) => {
   });
 
   useEffect(() => {
-    if (!!res) setData(res);
-  }, [res]);
+    if (!query['_t']) return;
+
+    if (!res) setData(undefined);
+
+    setData(res);
+  }, [res, query['_t']]);
 
   const [data, setData] = useState<PaginatedResponse<IBudget> | undefined>(res);
 
@@ -103,6 +108,7 @@ export const AllBudgets = ({ viewMode, status, ...props }: Props) => {
             data,
             isLoading,
             isError,
+            isRefetching,
             pagination,
             setPagination,
           }}

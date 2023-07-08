@@ -21,6 +21,7 @@ export interface Props {
   requiresVerification?: boolean;
   back?: string;
   hideSideNavigation?: boolean;
+  childrenClassName?: string;
 }
 
 export const AppLayout = ({
@@ -30,6 +31,7 @@ export const AppLayout = ({
   back,
   requiresVerification,
   hideSideNavigation,
+  childrenClassName,
 }: PropsWithChildren<Props>) => {
   const { userExists } = useProtectedRoutesGuard();
 
@@ -44,70 +46,72 @@ export const AppLayout = ({
   if (!userExists) return <FullScreenLoader asPage />;
 
   return (
-    <div
-      id={'app-wrapper'}
-      style={{
-        backgroundColor: 'white',
-      }}
-    >
-      <PageHead title={title} />
-      <CreatePin />
+    <div className={'min-w-screen min-h-screen bg-black'}>
+      <div
+        id={'app_wrapper'}
+        style={{
+          backgroundColor: 'white',
+        }}
+      >
+        <PageHead title={title} />
+        <CreatePin />
 
-      <div className='disable-scrolling 1024:flex'>
-        {!hideSideNavigation && (!screenSize || screenSize?.['desktop']) ? (
-          <div className='hidden w-[324px] 1024:block'>
-            <SideNavigation />
-          </div>
-        ) : null}
+        <div className='disable-scrolling 1024:flex'>
+          {!hideSideNavigation && (!screenSize || screenSize?.['desktop']) ? (
+            <div className='hidden w-[324px] 1024:block'>
+              <SideNavigation />
+            </div>
+          ) : null}
 
-        <main
-          className={clsx(
-            'h-screen overflow-y-auto',
-            hideSideNavigation ? 'w-full' : '1024:app-layout-desktop-width'
-          )}
-        >
-          <AppHeader {...{ back, title }}>{headerSlot}</AppHeader>
+          <main
+            className={clsx(
+              'h-screen overflow-y-auto',
+              hideSideNavigation ? 'w-full' : '1024:app-layout-desktop-width'
+            )}
+          >
+            <AppHeader {...{ back, title }}>{headerSlot}</AppHeader>
 
-          {!isVerified && !pathname.includes('/kyc') && (
-            <div className='x-between block bg-warning-600 p-4 text-white 690:flex 690:p-6'>
-              <div className='flex'>
-                <span className={'mt-1 mr-2 hidden 690:block'}>
-                  <LineInfo />
-                </span>
+            {!isVerified && !pathname.includes('/kyc') && (
+              <div className='x-between block bg-warning-600 p-4 text-white 690:flex 690:p-6'>
+                <div className='flex'>
+                  <span className={'mt-1 mr-2 hidden 690:block'}>
+                    <LineInfo />
+                  </span>
 
-                <div>
-                  <h6
-                    className={'text-base font-semibold text-white'}
-                  >{`You're currently in test mode`}</h6>
-                  <p className={'mt-1 text-sm text-white'}>
-                    Activate your business to start using Chequebase in live
-                    mode
-                  </p>
+                  <div>
+                    <h6
+                      className={'text-base font-semibold text-white'}
+                    >{`You're currently in test mode`}</h6>
+                    <p className={'mt-1 text-sm text-white'}>
+                      Activate your business to start using Chequebase in live
+                      mode
+                    </p>
+                  </div>
+                </div>
+
+                <div className='mt-4 flex 690:mt-0'>
+                  <Link
+                    href={getCurrentAccountSetupStepUrl()}
+                    className='light-button x-center h-10 border-none px-3 text-sm text-black 690:h-12 690:px-5'
+                  >
+                    <span className={'my-auto mr-1'}>Activate Business</span>
+                    <span className={'my-auto'}>
+                      <Right />
+                    </span>
+                  </Link>
                 </div>
               </div>
-
-              <div className='mt-4 flex 690:mt-0'>
-                <Link
-                  href={getCurrentAccountSetupStepUrl()}
-                  className='light-button x-center h-10 border-none px-3 text-sm text-black 690:h-12 690:px-5'
-                >
-                  <span className={'my-auto mr-1'}>Activate Business</span>
-                  <span className={'my-auto'}>
-                    <Right />
-                  </span>
-                </Link>
-              </div>
-            </div>
-          )}
-
-          <div className='app-container my-7'>
-            {requiresVerification && !isVerified ? (
-              <VerifyYourAccount />
-            ) : (
-              children
             )}
-          </div>
-        </main>
+
+            <div className={clsx(childrenClassName ?? 'app-container my-7')}>
+              {requiresVerification && !isVerified ? (
+                <VerifyYourAccount />
+              ) : (
+                children
+              )}
+            </div>
+          </main>
+        </div>
       </div>
     </div>
   );

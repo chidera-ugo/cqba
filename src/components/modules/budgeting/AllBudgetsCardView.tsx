@@ -34,6 +34,7 @@ export const AllBudgetsCardView = ({
 
       <div
         className={clsx(
+          'mb-6',
           !showData && `rounded-[10px] border border-neutral-200 bg-white`
         )}
       >

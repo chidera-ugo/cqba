@@ -25,7 +25,7 @@ export const CreateEmployee = ({
   return (
     <RightModalWrapper
       show={modal === 'employee'}
-      title='Add Employee'
+      title={currentEmployee ? 'Update Employee' : 'Add Employee'}
       closeModal={closeModal}
       closeOnClickOutside
       childrenClassname='py-0 640:px-8 px-4'

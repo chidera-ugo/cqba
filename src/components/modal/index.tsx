@@ -28,13 +28,14 @@ export const Modal = ({
   }, [grow]);
 
   function resetZoomOut() {
-    const el = document.getElementById('__next');
+    if (type !== 'right') return;
+
+    const el = document.getElementById('app_wrapper');
 
     if (el) {
       el.style.transitionProperty = 'all';
       el.style.transitionDuration = '0.4s';
       el.style.transform = '';
-      el.style.borderRadius = '';
       el.style.overflow = '';
     }
   }
@@ -42,13 +43,12 @@ export const Modal = ({
   function zoomOut() {
     if (type !== 'right') return;
 
-    const el = document.getElementById('__next');
+    const el = document.getElementById('app_wrapper');
 
     if (el) {
       el.style.transitionProperty = 'all';
       el.style.transitionDuration = '0.4s';
       el.style.transform = 'scale(0.96)';
-      el.style.borderRadius = '12px';
       el.style.overflow = 'hidden';
     }
   }

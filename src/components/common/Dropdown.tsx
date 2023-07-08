@@ -11,6 +11,7 @@ type Props = {
   exceptedId?: string;
   anchorPosition?: 'top' | 'bottom';
   isTableAction?: boolean;
+  marginClassname?: string;
 };
 
 export const Dropdown = ({
@@ -21,6 +22,7 @@ export const Dropdown = ({
   show,
   children,
   className,
+  marginClassname,
   isTableAction,
 }: PropsWithChildren<Props>) => {
   useDismissDropdown(wrapperId, dismiss, exceptedId);
@@ -60,9 +62,10 @@ export const Dropdown = ({
           : clsx(
               'absolute z-[100] -mr-1 w-full overflow-hidden rounded-xl border border-neutral-300 p-0 shadow-lg',
               anchorPosition === 'bottom'
-                ? 'top-[100%] -mt-5'
+                ? 'top-[100%]'
                 : 'bottom-[100%] -mb-5',
-              className
+              className,
+              marginClassname ?? '-mt-5'
             )
       }
     >

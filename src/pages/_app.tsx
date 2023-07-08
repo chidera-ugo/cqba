@@ -59,7 +59,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
           return clsx(
             classes ? classes : 'bg-white shadow-lg border border-neutral-300',
-            'relative toastifier flex p-1 rounded-xl mt-2 z-[1200] w-full justify-between overflow-hidden cursor-pointer'
+            'relative toastifier flex p-1 rounded-xl mt-2 z-[2200] w-full justify-between overflow-hidden cursor-pointer'
           );
         }}
         bodyClassName='p-2'

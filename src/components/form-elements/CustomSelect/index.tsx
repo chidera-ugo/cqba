@@ -19,12 +19,21 @@ export type Props = JSX.IntrinsicElements['input'] &
     dropdownClassname?: string;
     asModal?: boolean;
     isLoading?: boolean;
+    isRefetching?: boolean;
     isError?: boolean;
   };
 
 export const CustomSelect = (props: PropsWithChildren<Props>) => {
-  const { className, isError, isLoading, label, name, setFieldValue, next } =
-    props;
+  const {
+    className,
+    isRefetching,
+    isError,
+    isLoading,
+    label,
+    name,
+    setFieldValue,
+    next,
+  } = props;
 
   const [field, meta] = useField(name as string);
   const { submitCount } = useFormikContext();
@@ -156,16 +165,20 @@ export const CustomSelect = (props: PropsWithChildren<Props>) => {
           />
 
           <div className='smooth y-center absolute right-0 top-0 inline-block h-full w-11 text-neutral-500 hover:text-primary-700'>
-            <span
-              className={clsx(
-                'x-center y-center mx-auto h-full w-full transform duration-200',
-                showList ? 'rotate-180' : 'rotate-0'
-              )}
-            >
-              <div className='x-center w-full'>
-                <ChevronDown />
-              </div>
-            </span>
+            {isRefetching ? (
+              <Spinner className={'my-auto mx-auto h-full text-primary-main'} />
+            ) : (
+              <span
+                className={clsx(
+                  'x-center y-center mx-auto h-full w-full transform duration-200',
+                  showList ? 'rotate-180' : 'rotate-0'
+                )}
+              >
+                <div className='x-center w-full'>
+                  <ChevronDown />
+                </div>
+              </span>
+            )}
           </div>
         </div>
 

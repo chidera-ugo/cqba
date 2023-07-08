@@ -6,18 +6,21 @@ interface Props {
     pending?: string;
     failed?: string;
   };
+  solid?: boolean;
   value: string;
   suffix?: string;
 }
 
-export const Pill = ({ value, suffix, config }: Props) => {
+export const Pill = ({ value, solid, suffix, config }: Props) => {
+  const val = value.toLowerCase();
+
   const getPillColor = () => {
-    if (value === config.success) {
-      return 'green-alt-pill';
-    } else if (value === config.pending) {
-      return 'yellow-alt-pill';
-    } else if (value === config.failed) {
-      return 'red-alt-pill';
+    if (val === config.success) {
+      return solid ? 'green-pill' : 'green-alt-pill';
+    } else if (val === config.pending) {
+      return solid ? 'yellow-pill' : 'yellow-alt-pill';
+    } else if (val === config.failed) {
+      return solid ? 'red-pill' : 'red-alt-pill';
     } else return 'gray-alt-pill';
   };
 
