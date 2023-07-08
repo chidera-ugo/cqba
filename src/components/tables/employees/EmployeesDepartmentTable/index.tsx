@@ -1,8 +1,6 @@
 import { Building } from 'components/illustrations/Building';
-import {
-  ISubAccountsDepartment,
-  useGetSubAccountsByDepartment,
-} from 'hooks/api/sub-accounts/useGetSubAccountsByDepartment';
+import { useGetEmployeesByDepartment } from 'hooks/api/employees/useGetEmployeesByDepartment';
+import { ISubAccountsDepartment } from 'hooks/api/sub-accounts/useGetSubAccountsByDepartment';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import {
@@ -39,7 +37,7 @@ export const EmployeesDepartmentTable = ({ search }: Props) => {
     isError,
     data: res,
     isRefetching,
-  } = useGetSubAccountsByDepartment({
+  } = useGetEmployeesByDepartment({
     page: pagination.pageIndex,
     size: pagination.pageSize,
     search,
