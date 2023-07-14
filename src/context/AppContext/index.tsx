@@ -1,8 +1,6 @@
-import { UseMutateFunction } from '@tanstack/react-query';
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
-import { Action, State } from 'context/AppContext/types';
+import { Action, State, StoreApi } from 'context/AppContext/types';
 import {
-  Dispatch,
   PropsWithChildren,
   Reducer,
   createContext,
@@ -11,7 +9,6 @@ import {
   useMemo,
   useReducer,
 } from 'react';
-import { IUser } from 'types/Auth';
 import useMediaQuery from 'hooks/common/useMediaQuery';
 import { useGetCurrentUser } from 'hooks/api/auth/useGetCurrentUser';
 import { reducer } from 'context/AppContext/methods';
@@ -23,12 +20,6 @@ const initialState: State = {
   isInitializing: true,
   screenSize: null,
   tokens: null,
-};
-
-type StoreApi = {
-  state: State;
-  dispatch: Dispatch<Action>;
-  getCurrentUser?: UseMutateFunction<IUser, unknown, any, unknown>;
 };
 
 const AppContext = createContext<StoreApi>({
@@ -54,7 +45,7 @@ function AppContextProvider({ children, ...props }: PropsWithChildren<any>) {
           return;
         }
 
-        dispatch({ type: 'saveCurrentUser', payload: data });
+        dispatch({ type: 'setCurrentUser', payload: data });
       },
       onError() {
         dispatch({ type: 'setIsInitializing', payload: false });

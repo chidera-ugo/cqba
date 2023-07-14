@@ -43,10 +43,10 @@ export const UpdateBusinessDocumentionForm = () => {
 
         mutate({
           bnNumber,
-          bnNumberImageUrl: bnDocumentFile?.file?.name,
+          bnNumberImageUrl: bnDocumentFile.file.name,
           utilityBillType,
           taxIdNumber: tin,
-          utilityBillImageUrl: utilityBillFile?.file?.name,
+          utilityBillImageUrl: utilityBillFile.file.name,
         });
       }}
       validateOnBlur={false}

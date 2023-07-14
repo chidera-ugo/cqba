@@ -3,11 +3,11 @@ import { useAppContext } from 'context/AppContext';
 import { useTMutation } from 'hooks/api/useTMutation';
 
 export interface UpdateOrganizationDocumentsDto {
-  bnNumber?: string;
-  taxIdNumber?: string;
-  utilityBillType?: string;
-  utilityBillImageUrl?: string;
-  bnNumberImageUrl?: string;
+  bnNumber: string;
+  taxIdNumber: string;
+  utilityBillType: string;
+  utilityBillImageUrl: string;
+  bnNumberImageUrl: string;
 }
 
 export function useUpdateOrganizationDocuments(

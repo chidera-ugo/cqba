@@ -266,6 +266,26 @@
   background: #d3d1cb;
 }
 
+.x-thin-scrollbar::-webkit-scrollbar {
+  width: auto;
+  height: 4px;
+  overflow: overlay;
+}
+
+.x-thin-scrollbar::-webkit-scrollbar,
+.x-thin-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.x-thin-scrollbar::-webkit-scrollbar-thumb {
+  background: #cacaca;
+  border-radius: 50px;
+}
+
+.x-thin-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #d3d1cb;
+}
+
 /* HIDDEN SCROLL BAR */
 .hidden-scrollbar::-webkit-scrollbar {
   display: none !important;

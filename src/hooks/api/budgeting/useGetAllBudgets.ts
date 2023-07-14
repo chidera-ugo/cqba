@@ -5,25 +5,25 @@ import { PaginatedResponse } from 'types/Table';
 import { generateUrlParamsFromObject } from 'utils/generators/generateUrlParamsFromObject';
 
 interface Creator {
-  lastName?: string;
-  roles?: string[];
-  organizationId?: string;
-  createdAt?: number;
-  firstName?: string;
-  emailVerified?: boolean;
-  password?: string;
-  GSI1sKey?: string;
-  GSI1pKey?: string;
-  pinSet?: boolean;
-  hashRt?: string;
-  phone?: string;
-  emailVerifyCode?: string;
-  kybStatus?: string;
-  sKey?: string;
-  id?: string;
-  email?: string;
-  status?: string;
-  updatedAt?: number;
+  lastName: string;
+  roles: string[];
+  organizationId: string;
+  createdAt: number;
+  firstName: string;
+  emailVerified: boolean;
+  password: string;
+  GSI1sKey: string;
+  GSI1pKey: string;
+  pinSet: boolean;
+  hashRt: string;
+  phone: string;
+  emailVerifyCode: string;
+  kybStatus: string;
+  sKey: string;
+  id: string;
+  email: string;
+  status: string;
+  updatedAt: number;
 }
 
 export interface IBudget {
@@ -37,7 +37,7 @@ export interface IBudget {
   userId: string;
   updatedAt: string;
   amount: string;
-  creator?: Creator;
+  creator: Creator;
   categoryTitle: string;
   departmentTitle: string;
   description: string;

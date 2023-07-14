@@ -33,22 +33,14 @@ export const UpdateOwnerInformationForm = () => {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={({
-        phoneNumber,
-        dateOfBirth,
-        politicalAffiliation,
-        idFile,
-        idType,
-
-        ...values
-      }) => {
+      onSubmit={({ phoneNumber, dateOfBirth, idFile, idType, ...values }) => {
         setHasUnsavedChanges(false);
 
         mutate({
           ...values,
           phone: appendCountryCode(phoneNumber),
-          dob: dateOfBirth?.calendarValue?.toISOString(),
-          politicalAffiliation: politicalAffiliation === 'Yes',
+          dob: String(dateOfBirth.calendarValue?.toISOString()),
+          politicalAffiliation: false,
           formOfId: idType,
           idImageUrl: idFile?.file?.name,
         });

@@ -1,18 +1,22 @@
+import logo from '/public/logos/main-logo.svg';
 import clsx from 'clsx';
 import { MobileMenu } from 'components/primary/MobileMenu';
 import { PointerLeft } from 'components/svgs/navigation/Arrows';
+import Image from 'next/image';
 import Link from 'next/link';
 import { PropsWithChildren } from 'react';
 
 interface Props {
   title?: string;
   back?: string;
+  hideSideNavigation?: boolean;
 }
 
 export const AppHeader = ({
   title,
   back,
   children,
+  hideSideNavigation,
 }: PropsWithChildren<Props>) => {
   return (
     <header
@@ -31,6 +35,17 @@ export const AppHeader = ({
               Back
             </span>
           </Link>
+        ) : hideSideNavigation ? (
+          <div className='flex'>
+            <Link href='/' className='my-auto'>
+              <Image
+                src={logo}
+                priority
+                alt='chequebase-logo'
+                className='my-auto w-[160px] object-contain'
+              />
+            </Link>
+          </div>
         ) : (
           <div className='my-auto text-xl font-semibold text-neutral-1000 640:text-2xl'>
             {title}

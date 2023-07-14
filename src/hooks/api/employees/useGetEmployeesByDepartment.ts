@@ -4,15 +4,15 @@ import { PaginatedResponse } from 'types/Table';
 import { generateUrlParamsFromObject } from 'utils/generators/generateUrlParamsFromObject';
 
 export interface ISubAccountsDepartment {
-  organizationId?: string;
-  userId?: string;
-  updatedAt?: number;
-  createdAt?: number;
-  id?: string;
-  sKey?: string;
-  title?: string;
-  employeeCount?: number;
-  activeBudgetCount?: number;
+  organizationId: string;
+  userId: string;
+  updatedAt: number;
+  createdAt: number;
+  id: string;
+  sKey: string;
+  title: string;
+  employeeCount: number;
+  activeBudgetCount: number;
 }
 
 export function useGetEmployeesByDepartment(

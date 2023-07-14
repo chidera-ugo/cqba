@@ -69,20 +69,29 @@ export const AppLayout = ({
               hideSideNavigation ? 'w-full' : '1024:app-layout-desktop-width'
             )}
           >
-            <AppHeader {...{ back, title }}>{headerSlot}</AppHeader>
+            <AppHeader
+              {...{
+                back,
+                hideSideNavigation,
+
+                title,
+              }}
+            >
+              {headerSlot}
+            </AppHeader>
 
             {!isVerified && !pathname.includes('/kyc') && (
               <div className='x-between block bg-warning-600 p-4 text-white 690:flex 690:p-6'>
                 <div className='flex'>
-                  <span className={'mt-1 mr-2 hidden 690:block'}>
+                  <span className={'mt-1 mr-2 hidden 640:mr-3 690:block'}>
                     <LineInfo />
                   </span>
 
                   <div>
                     <h6
-                      className={'text-base font-semibold text-white'}
+                      className={'text-base font-medium text-white'}
                     >{`You're currently in test mode`}</h6>
-                    <p className={'mt-1 text-sm text-white'}>
+                    <p className={'mt-2 text-sm text-white'}>
                       Activate your business to start using Chequebase in live
                       mode
                     </p>

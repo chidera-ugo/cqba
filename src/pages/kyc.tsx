@@ -7,7 +7,6 @@ import { SimpleInformation } from 'components/modules/common/SimpleInformation';
 import { KycSteps } from 'components/modules/kyc/KycSteps';
 import { ReviewAndSubmit } from 'components/modules/kyc/ReviewAndSubmit';
 import { Cross } from 'components/svgs/navigation/Exit';
-import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useCurrentAccountSetupStepUrl } from 'hooks/dashboard/kyc/useCurrentAccountSetupStepUrl';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useKycSteps } from 'hooks/kyc/useKycSteps';
@@ -30,8 +29,6 @@ export default function Kyc() {
 
     replace(getCurrentAccountSetupStepUrl());
   }, [isValidAccountSetupStep]);
-
-  const { data } = useGetOrganizationInformation();
 
   if (isVerified)
     return (
@@ -72,10 +69,10 @@ export default function Kyc() {
       }
     >
       <div className='hidden 768:block'>
-        <h5>Welcome to ChequeBase Activate {data?.businessName}</h5>
+        <h5>Activate your account</h5>
         <p className='mt-1 font-normal text-neutral-500'>
           Based on your business type, you will be required to submit the
-          documents below during the business activation process.
+          documents below during the business activation process.{' '}
         </p>
       </div>
 

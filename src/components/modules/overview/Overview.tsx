@@ -40,18 +40,6 @@ export const Overview = () => {
       value: data?.requestsCount,
       isAmount: true,
     },
-    {
-      name: 'Active budgets',
-      value: data?.activeBudgetCount,
-    },
-    {
-      name: 'No of sub-accounts',
-      value: data?.subAccountsCount,
-    },
-    {
-      name: 'Total requests',
-      value: data?.requestsCount,
-    },
   ];
 
   return (
@@ -60,10 +48,8 @@ export const Overview = () => {
         return (
           <div
             className={clsx(
-              'card y-center py-4',
-              i === 0 && 'bg-primary-main text-white',
-              i > 2 && 'hidden 640:flex',
-              'col-span-12 640:col-span-6 1280:col-span-4'
+              'card y-center col-span-12 py-4 640:col-span-6 1280:col-span-4',
+              i === 0 && 'bg-primary-main text-white'
             )}
             key={name}
           >
@@ -101,13 +87,11 @@ export const Overview = () => {
 const IsLoadingIsError = ({ type }: { type: 'loading' | 'error' }) => {
   return (
     <div className='grid grid-cols-12 gap-5'>
-      {generatePlaceholderArray(6).map((id, i) => {
+      {generatePlaceholderArray(3).map((id) => {
         return (
           <div
             className={clsx(
-              'card y-center h-[94px] 640:h-[106px]',
-              i > 2 && 'hidden 640:flex',
-              'col-span-12 640:col-span-6 1280:col-span-4'
+              'card y-center col-span-12 h-[94px] 640:col-span-6 640:h-[106px] 1280:col-span-4'
             )}
             key={id}
           >

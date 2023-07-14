@@ -7,6 +7,7 @@ export function generateTableEntries<T>(
   limit?: number
 ): { data: PaginatedResponse<T> } {
   const entries: T[] = [];
+
   for (let i = 0; limit ? i < limit : i < 0; i++) {
     const entry = {
       ...sampleEntry,

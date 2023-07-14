@@ -1,3 +1,4 @@
+import { CustomTooltip } from 'components/charts/CustomChartTooltip';
 import dayjs from 'dayjs';
 import { useMemo } from 'react';
 import {
@@ -8,8 +9,8 @@ import {
   Area,
   AreaChart,
 } from 'recharts';
-import { formatAmount } from 'utils/formatters/formatAmount';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
+import { formatAmount } from 'utils/formatters/formatAmount';
 
 dayjs.extend(advancedFormat);
 dayjs().format('Do');
@@ -22,7 +23,7 @@ type Series = { primary: string; secondary: any }[];
 
 type Data = { primary: any; secondary: any };
 
-export const InflowOutflowChart = ({ chartData }: Props) => {
+export const AnalyticsChart = ({ chartData }: Props) => {
   const data: Data[] = useMemo(
     () =>
       chartData.map((item) => ({
@@ -31,22 +32,6 @@ export const InflowOutflowChart = ({ chartData }: Props) => {
       })),
     [chartData]
   );
-
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className='rounded-lg bg-neutral-1000 p-2 text-white'>
-          <div className='text-xs'>{label}</div>
-          <div className='mt-1 text-sm font-semibold'>
-            ₦
-            {formatAmount({ value: payload[0].value * 1048, decimalPlaces: 0 })}
-          </div>
-        </div>
-      );
-    }
-
-    return null;
-  };
 
   return (
     <ResponsiveContainer width='100%' height='100%'>
@@ -61,7 +46,16 @@ export const InflowOutflowChart = ({ chartData }: Props) => {
           bottom: 5,
         }}
       >
-        <Tooltip content={<CustomTooltip />} />
+        <Tooltip
+          content={
+            <CustomTooltip
+              formatValue={(value: number) =>
+                `₦${formatAmount({ value: value * 1048, decimalPlaces: 0 })}`
+              }
+            />
+          }
+        />
+
         <CartesianGrid horizontal vertical={false} strokeDasharray='3 3' />
 
         <XAxis fontSize={11} dataKey='primary' />

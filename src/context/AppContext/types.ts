@@ -1,3 +1,5 @@
+import { UseMutateFunction } from '@tanstack/react-query';
+import { Dispatch } from 'react';
 import { IUser } from 'types/Auth';
 
 export interface State {
@@ -20,10 +22,16 @@ export type Action =
   | { type: 'accessToken'; payload: string }
   | { type: 'saveTokens'; payload: Tokens }
   | { type: 'removeTokens' }
-  | { type: 'saveCurrentUser'; payload: IUser }
+  | { type: 'setCurrentUser'; payload: IUser }
   | { type: 'signout' };
 
 export interface Tokens {
   accessToken: string;
   refreshToken: string;
 }
+
+export type StoreApi = {
+  state: State;
+  dispatch: Dispatch<Action>;
+  getCurrentUser?: UseMutateFunction<IUser, unknown, any, unknown>;
+};
