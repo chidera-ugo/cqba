@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { DisplayValue } from 'components/common/DisplayValue';
 import { useCopyToClipboard } from 'hooks/common/useCopyToClipboard';
 import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 
@@ -18,33 +17,53 @@ export const BankTransfer = () => {
   if (isLoading) return <IsLoadingIsError isLoading />;
   if (isError || !data) return <IsLoadingIsError />;
 
+  const accountDetails = [
+    {
+      name: 'Account Name',
+      value: data.accountName,
+    },
+    {
+      name: 'Account Number',
+      value: data.accountNumber,
+      canCopy: true,
+    },
+    {
+      name: 'Bank Name',
+      value: data.bankName,
+    },
+  ];
+
   return (
     <>
-      <div className='card p-0'>
-        <div className='border-b border-neutral-200 p-8'>
-          <DisplayValue value={data?.accountNumber} title='Account Number' />
+      {!data?.accountNumber ? null : (
+        <div className='w-full rounded-xl border border-neutral-300 bg-neutral-50 p-5'>
+          {accountDetails.map(({ name, canCopy, value }) => {
+            return (
+              <div
+                key={name}
+                className={clsx('x-between gap-4 py-2')}
+                onClick={
+                  !canCopy
+                    ? undefined
+                    : () => copyToClipboard(value, `Copied ${name}`)
+                }
+              >
+                <span className='my-auto flex-shrink-0 text-sm text-neutral-400'>
+                  {name}
+                </span>
+                <span
+                  className={clsx(
+                    'text-right font-medium text-neutral-1000',
+                    canCopy && 'cursor-pointer hover:underline'
+                  )}
+                >
+                  {value ? value : '---'}
+                </span>
+              </div>
+            );
+          })}
         </div>
-
-        <div className='p-8'>
-          <DisplayValue value={data?.bankName} title='Bank Name' smallText />
-
-          <DisplayValue
-            className='mt-5'
-            value={data?.accountName}
-            title='Account Name'
-            smallText
-          />
-        </div>
-      </div>
-
-      <button
-        onClick={() =>
-          copyToClipboard(data!.accountNumber, 'Copied account number')
-        }
-        className='secondary-button mt-7 h-12 w-full'
-      >
-        Copy account number
-      </button>
+      )}
     </>
   );
 };
