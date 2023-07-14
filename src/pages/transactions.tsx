@@ -25,12 +25,22 @@ export default function Transactions() {
   return (
     <AppLayout title='Transactions'>
       <div className='my-5 justify-between gap-2 640:my-7 880:flex'>
-        <div className='gap-2 480:flex'>
+        <SearchInput
+          placeholder='Search transactions'
+          value={search}
+          className='w-full 640:w-[300px]'
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
+          clear={() => setSearch('')}
+        />
+
+        <div className='mt-3 flex gap-2 880:mt-0'>
           <div className='flex gap-2'></div>
 
           <button
             onClick={() => setShowModal(true)}
-            className='secondary-button x-center mt-3 flex h-11 w-full flex-shrink-0 rounded-full px-4 480:mt-0 480:w-auto'
+            className='secondary-button x-center flex h-11 w-full rounded-full px-4 480:w-auto'
           >
             <span className='my-auto mr-2'>Generate statement</span>
             <span className='my-auto'>
@@ -38,16 +48,6 @@ export default function Transactions() {
             </span>
           </button>
         </div>
-
-        <SearchInput
-          placeholder='Search transactions'
-          value={search}
-          className='mt-3 w-full 640:w-[300px] 880:mt-0'
-          onChange={(e) => {
-            setSearch(e.target.value);
-          }}
-          clear={() => setSearch('')}
-        />
       </div>
 
       <RightModalWrapper
