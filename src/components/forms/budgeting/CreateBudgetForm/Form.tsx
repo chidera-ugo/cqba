@@ -101,7 +101,7 @@ export const Form = ({
           id={'create-budget-select-categories'}
           label='Category'
           name='categoryId'
-          displayValueKey='title'
+          displayValueKey='planName'
           trueValueKey='id'
           {...{
             setFieldValue,
@@ -136,7 +136,7 @@ export const Form = ({
           id={'create-budget-select-department'}
           label='Department (Optional)'
           name='departmentId'
-          displayValueKey='title'
+          displayValueKey='planName'
           trueValueKey='id'
           {...{
             setFieldValue,

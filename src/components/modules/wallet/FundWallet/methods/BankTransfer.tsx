@@ -70,45 +70,47 @@ export const BankTransfer = () => {
 
 const IsLoadingIsError = ({ isLoading }: { isLoading?: boolean }) => {
   return (
-    <div className='card p-0'>
-      <div className='border-b border-neutral-200 p-7'>
+    <div className='card'>
+      <div className='x-between'>
         <div
           className={clsx(
-            'h-5 w-[40%]',
+            'my-auto h-5 w-[30%]',
             isLoading ? 'skeleton' : 'skeleton-error'
           )}
         ></div>
         <div
           className={clsx(
-            'mt-4 h-10 w-[80%]',
+            'my-auto h-6 w-[40%]',
             isLoading ? 'skeleton' : 'skeleton-error'
           )}
         ></div>
       </div>
 
-      <div className='p-7'>
+      <div className='x-between mt-6'>
         <div
           className={clsx(
-            'h-5 w-[40%]',
+            'my-auto h-5 w-[30%]',
             isLoading ? 'skeleton' : 'skeleton-error'
           )}
         ></div>
         <div
           className={clsx(
-            'mt-4 h-6 w-[70%]',
+            'my-auto h-6 w-[40%]',
             isLoading ? 'skeleton' : 'skeleton-error'
           )}
         ></div>
+      </div>
 
+      <div className='x-between mt-6'>
         <div
           className={clsx(
-            'mt-10 h-5 w-[40%]',
+            'my-auto h-5 w-[30%]',
             isLoading ? 'skeleton' : 'skeleton-error'
           )}
         ></div>
         <div
           className={clsx(
-            'mt-4 h-6 w-[70%]',
+            'my-auto h-6 w-[40%]',
             isLoading ? 'skeleton' : 'skeleton-error'
           )}
         ></div>

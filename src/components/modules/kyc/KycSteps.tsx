@@ -46,7 +46,7 @@ export const KycSteps = () => {
           minimalist
           dropdownClassname='mt-2 bg-white'
           trueValueKey='id'
-          displayValueKey='name'
+          displayValueKey='planName'
           convertOptionsToObjectArray
           dropdownInMobileView
           id='agnostic-select-kyc-steps'

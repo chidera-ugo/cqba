@@ -86,7 +86,7 @@ export const Form = ({
           id={'update-employee-select-department'}
           label='Department'
           name='departmentId'
-          displayValueKey='title'
+          displayValueKey='planName'
           trueValueKey='id'
           {...{
             setFieldValue,

@@ -112,7 +112,11 @@ export const AppLayout = ({
               </div>
             )}
 
-            <div className={clsx(childrenClassName ?? 'app-container my-7')}>
+            <div
+              className={clsx(
+                childrenClassName ?? 'app-container my-5 640:my-7'
+              )}
+            >
               {requiresVerification && !isVerified ? (
                 <VerifyYourAccount />
               ) : (
