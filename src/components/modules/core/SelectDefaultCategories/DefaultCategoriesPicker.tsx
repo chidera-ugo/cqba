@@ -22,7 +22,9 @@ export const DefaultCategoriesPicker = ({ data, setSelected }: Props) => {
   const { getColor } = useGetColorByChar();
 
   const hoveredItem = useRef<string>('');
-  const _selected = useRef<string[]>([]);
+  const selectedItems = useRef<string[]>([]);
+  const svgWidth = useRef(400);
+  const svgHeight = useRef(400);
 
   useEffect(() => {
     const width = 400,
@@ -35,8 +37,10 @@ export const DefaultCategoriesPicker = ({ data, setSelected }: Props) => {
       return { radius, name: title, id, color, length: title.length };
     }) as any;
 
+    const strength = data.length * -6.67 + 283;
+
     d3.forceSimulation(nodes)
-      .force('charge', d3.forceManyBody().strength(50))
+      .force('charge', d3.forceManyBody().strength(strength))
       .force('center', d3.forceCenter(width / 2, height / 2))
       .force(
         'collision',
@@ -44,9 +48,51 @@ export const DefaultCategoriesPicker = ({ data, setSelected }: Props) => {
           return d.radius + 3;
         })
       )
-      .on('tick', update);
+      .on('tick', updateShapes);
 
-    function updateNodes() {
+    function handleShapeZoom(e: any) {
+      d3.select('#d3_svg_body .circles').attr('transform', e.transform);
+    }
+
+    function handleTextZoom(e: any) {
+      d3.select('#d3_svg_body .texts').attr('transform', e.transform);
+    }
+
+    function initZoom() {
+      const svg = d3.select('#d3_svg_body');
+      const svgNode = svg.node() as any;
+      const svgWidthWithPadding = svgWidth.current + 40;
+      const svgHeightWithPadding = svgHeight.current + 40;
+
+      const zoom = d3
+        .zoom()
+        .scaleExtent([1, 1]) // disable zoom
+        .translateExtent([
+          [
+            -(svgWidthWithPadding - svgNode.clientWidth),
+            -(svgHeightWithPadding - svgNode.clientHeight),
+          ],
+          [svgWidthWithPadding, svgHeightWithPadding],
+        ])
+        .on('zoom', (e) => {
+          handleShapeZoom(e);
+          handleTextZoom(e);
+        });
+
+      d3.select('#d3_svg_body').call(zoom as any);
+    }
+
+    function getTrueBounds() {
+      const svg = d3.select('#d3_svg_body'); // Assuming you have an SVG container with the "svg" selector
+      const svgNode = svg.node() as any;
+      const boundingBox = svgNode?.getBBox();
+      svgWidth.current = boundingBox.width;
+      svgHeight.current = boundingBox.height;
+
+      initZoom();
+    }
+
+    function updateTexts() {
       d3.select('#d3_svg_body .texts')
         .selectAll('text')
         .data(nodes)
@@ -70,7 +116,7 @@ export const DefaultCategoriesPicker = ({ data, setSelected }: Props) => {
         });
     }
 
-    function update() {
+    function updateShapes() {
       d3.select('#d3_svg_body .circles')
         .selectAll('circle')
         .data(nodes)
@@ -88,54 +134,55 @@ export const DefaultCategoriesPicker = ({ data, setSelected }: Props) => {
           return `${color}${hoveredItem.current === id ? '30' : '20'}`;
         })
         .style('stroke-width', ({ id }) => {
-          return _selected.current.includes(id) ? '1px' : '';
+          return selectedItems.current.includes(id) ? '1px' : '';
         })
         .style('stroke', ({ color, id }) => {
-          return _selected.current.includes(id) ? color : '';
+          return selectedItems.current.includes(id) ? color : '';
         })
         .text(function (d) {
           return d.name;
         })
         .on('mouseover', function (_, d) {
           hoveredItem.current = d.id;
-          update();
+          updateShapes();
         })
         .on('mouseout', function () {
           hoveredItem.current = '';
-          update();
+          updateShapes();
         })
         .on('click', function (_, { id }) {
           let val;
-          const prev = _selected.current;
+          const prev = selectedItems.current;
 
           if (prev.includes(id)) {
             val = prev.filter((item) => item !== id);
-            _selected.current = val;
+            selectedItems.current = val;
           } else {
             val = [...prev, id];
-            _selected.current = val;
+            selectedItems.current = val;
           }
 
           setSelected(val);
 
-          update();
+          updateShapes();
         });
 
-      updateNodes();
+      updateTexts();
+      getTrueBounds();
     }
   }, []);
 
   return (
-    <div className={'thin-x-scrollbar overflow-x-auto'}>
-      <svg
-        width='400'
-        height='400'
-        className={'no-highlight mx-auto text-xs font-medium'}
-        id={'d3_svg_body'}
-      >
-        <g className='circles cursor-pointer'></g>
-        <g className='texts'></g>
-      </svg>
-    </div>
+    <svg
+      width='100%'
+      height='400'
+      className={
+        'no-highlight mx-auto rounded-xl border border-neutral-200 text-xs font-medium'
+      }
+      id={'d3_svg_body'}
+    >
+      <g className='circles cursor-pointer'></g>
+      <g className='texts'></g>
+    </svg>
   );
 };

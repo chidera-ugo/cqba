@@ -19,7 +19,7 @@ export const useGetColorByChar = () => {
 
   function getColor(char: string | number) {
     if (typeof char === 'number') {
-      return colors[char] ?? colors[0]!;
+      return colors[char] ?? colors[char % colors.length]!;
     }
 
     return (

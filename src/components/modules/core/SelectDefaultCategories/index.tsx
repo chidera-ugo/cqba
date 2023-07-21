@@ -49,6 +49,7 @@ export const SelectDefaultCategories = () => {
     <>
       <CentredModalWrapper
         show={showModal}
+        undraggable
         className='max-h-[80vh] overflow-y-auto bg-white py-6'
       >
         <h3
@@ -59,14 +60,16 @@ export const SelectDefaultCategories = () => {
           Manage expenses the easy way, select your top spend category
         </h3>
 
-        {!!data?.length && (
-          <DefaultCategoriesPicker
-            {...{
-              data,
-              setSelected,
-            }}
-          />
-        )}
+        <div className='h-auto min-h-[400px] w-full cursor-grab p-5 640:min-w-[400px]'>
+          {!!data?.length && (
+            <DefaultCategoriesPicker
+              {...{
+                data,
+                setSelected,
+              }}
+            />
+          )}
+        </div>
 
         <div className='x-center'>
           <SubmitButton
