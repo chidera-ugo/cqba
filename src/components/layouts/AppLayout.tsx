@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
 import { CreatePin } from 'components/modules/core/CreatePin';
+import { SelectDefaultCategories } from 'components/modules/core/SelectDefaultCategories';
 import { VerifyYourAccount } from 'components/modules/kyc/VerifyYourAccount';
 import { PageHead } from 'components/primary/PageHead';
 import { Right } from 'components/svgs/navigation/Arrows';
@@ -55,6 +56,7 @@ export const AppLayout = ({
       >
         <PageHead title={title} />
         <CreatePin />
+        <SelectDefaultCategories />
 
         <div className='disable-scrolling 1024:flex'>
           {!hideSideNavigation && (!screenSize || screenSize?.['desktop']) ? (

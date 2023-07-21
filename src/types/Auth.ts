@@ -16,4 +16,5 @@ export interface IUser {
   id?: string;
   phone?: string;
   pinSet?: boolean;
+  categoriesSet?: boolean;
 }

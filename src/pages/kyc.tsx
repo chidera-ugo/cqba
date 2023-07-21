@@ -30,7 +30,7 @@ export default function Kyc() {
     replace(getCurrentAccountSetupStepUrl());
   }, [isValidAccountSetupStep]);
 
-  if (isVerified)
+  if (!isVerified)
     return (
       <AppLayout title='Setup your account' hideSideNavigation>
         <div className='py-10'>
