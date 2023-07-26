@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { CrossOutline } from 'components/svgs/navigation/Exit';
+import { CrossSubtract } from 'components/svgs/navigation/Exit';
 
 export type HeaderProps = {
   title?: string;
@@ -11,15 +11,15 @@ export type HeaderProps = {
 export const Header = ({ title, slot, closeModal }: HeaderProps) => {
   return (
     <div className='sticky top-0 z-[910]'>
-      <div className='x-between h-14 border-b border-neutral-200 bg-white px-4 640:h-16 640:px-8'>
+      <div className='x-between h-16 border-b border-neutral-200 bg-white px-4 640:h-16 640:px-8 1024:h-20'>
         <div className='my-auto text-lg font-semibold 640:text-xl'>{title}</div>
 
         {closeModal && (
           <button
             onClick={() => closeModal()}
-            className='x-center my-auto -mr-2 p-2'
+            className='x-center my-auto -mr-2 p-2 text-[#9EA5AD] hover:text-red-500'
           >
-            <CrossOutline />
+            <CrossSubtract />
           </button>
         )}
       </div>

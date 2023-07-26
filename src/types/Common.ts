@@ -1,7 +1,7 @@
 export interface IFile {
-  file?: File;
+  file: File;
   url?: string;
-  base64Url?: string;
+  base64Url: string;
   webUrl?: string;
   id: string;
 }

@@ -3,9 +3,11 @@ import {
   UseMutationOptions,
   UseMutationResult,
 } from '@tanstack/react-query';
-import useHttp, { Service, Method, urlModifier } from 'hooks/api/useHttp';
 import { useHandleError } from 'hooks/api/useHandleError';
 import { AxiosRequestConfig } from 'axios';
+import useHttp from 'hooks/api/useHttp';
+import { urlModifier } from 'hooks/api/useHttp/methods';
+import { Method, Service } from 'hooks/api/useHttp/types';
 import { generateUrlParamsFromObject } from 'utils/generators/generateUrlParamsFromObject';
 
 type Args<Res> = {

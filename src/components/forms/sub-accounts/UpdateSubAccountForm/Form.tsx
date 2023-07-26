@@ -70,7 +70,7 @@ export const Form = ({
           id={'select-department'}
           label='Department'
           name='departmentId'
-          displayValueKey='title'
+          displayValueKey='planName'
           trueValueKey='id'
           {...{
             setFieldValue,
@@ -94,7 +94,7 @@ export const Form = ({
             id={'select-employee'}
             label='Employee'
             name='employeeId'
-            displayValueKey='name'
+            displayValueKey='planName'
             trueValueKey='id'
             {...{
               setFieldValue,

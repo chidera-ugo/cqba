@@ -3,8 +3,9 @@ import {
   UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query';
-import useHttp, { Method } from 'hooks/api/useHttp';
-import { Service, urlModifier } from './useHttp';
+import useHttp from 'hooks/api/useHttp';
+import { urlModifier } from 'hooks/api/useHttp/methods';
+import { Method, Service } from 'hooks/api/useHttp/types';
 
 export type TQueryArgs<Res> = {
   queryKey: string[];

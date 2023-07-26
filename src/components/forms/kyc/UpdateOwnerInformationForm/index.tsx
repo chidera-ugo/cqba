@@ -21,7 +21,8 @@ export const UpdateOwnerInformationForm = () => {
   const { isLoading, mutate } = useUpdateOwnerInformation({
     onSuccess() {
       queryClient.invalidateQueries(['organization-information']);
-      replace('/kyc?tab=business-documentation').then(() => {
+
+      replace('/kyc?tab=business-documentation&showSteps=true').then(() => {
         toast(<AppToast>Update successful</AppToast>, { type: 'success' });
       });
     },
@@ -33,22 +34,14 @@ export const UpdateOwnerInformationForm = () => {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={({
-        phoneNumber,
-        dateOfBirth,
-        politicalAffiliation,
-        idFile,
-        idType,
-
-        ...values
-      }) => {
+      onSubmit={({ phoneNumber, dateOfBirth, idFile, idType, ...values }) => {
         setHasUnsavedChanges(false);
 
         mutate({
           ...values,
           phone: appendCountryCode(phoneNumber),
-          dob: dateOfBirth?.calendarValue?.toISOString(),
-          politicalAffiliation: politicalAffiliation === 'Yes',
+          dob: String(dateOfBirth.calendarValue?.toISOString()),
+          politicalAffiliation: false,
           formOfId: idType,
           idImageUrl: idFile?.file?.name,
         });

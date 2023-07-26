@@ -23,7 +23,7 @@ export function reducer(state: State, action: Action): State {
       deleteFromLocalStore('tokens');
       return { ...state, tokens: null };
     }
-    case 'saveCurrentUser': {
+    case 'setCurrentUser': {
       return {
         ...state,
         user: action.payload,

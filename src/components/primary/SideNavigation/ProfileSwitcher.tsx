@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import { Dropdown } from 'components/common/Dropdown';
 import { ChevronDown } from 'components/svgs/navigation/Chevrons';
 import { Exit } from 'components/svgs/navigation/Exit';
-import { PlusCircle } from 'components/svgs/others/Plus';
 import { useAppContext } from 'context/AppContext';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useDestroySession } from 'hooks/app/useDestroySession';
@@ -57,18 +56,7 @@ export const ProfileSwitcher = ({ mobile }: { mobile?: boolean }) => {
           dismiss={() => setShowDropdown(false)}
           wrapperId={id}
         >
-          <p className='text-xs font-medium text-neutral-600'>Switch Profile</p>
-
-          <button className='x-between group mt-5 w-full'>
-            <span className='my-auto text-sm font-semibold text-neutral-1000 group-hover:underline'>
-              Add business
-            </span>
-            <span className='my-auto'>
-              <PlusCircle />
-            </span>
-          </button>
-
-          <button onClick={() => destroySession()} className='mt-4 flex w-full'>
+          <button onClick={() => destroySession()} className='flex w-full'>
             <span className='my-auto mr-2'>
               <Exit />
             </span>

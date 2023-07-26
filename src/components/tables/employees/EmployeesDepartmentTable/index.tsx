@@ -43,6 +43,10 @@ export const EmployeesDepartmentTable = ({ search }: Props) => {
     search,
   });
 
+  const [data, setData] = useState<
+    PaginatedResponse<ISubAccountsDepartment> | undefined
+  >(res);
+
   useEffect(() => {
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
   }, [columnFilters]);
@@ -50,10 +54,6 @@ export const EmployeesDepartmentTable = ({ search }: Props) => {
   useEffect(() => {
     if (!!res) setData(res);
   }, [res]);
-
-  const [data, setData] = useState<
-    PaginatedResponse<ISubAccountsDepartment> | undefined
-  >(res);
 
   return (
     <Table<ISubAccountsDepartment>

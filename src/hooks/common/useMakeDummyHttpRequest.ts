@@ -91,6 +91,7 @@ export const useMakeDummyHttpRequest = <T>({
 
   return {
     isLoading,
+    isFetching: isLoading,
     mutate,
     data,
     isError: false,

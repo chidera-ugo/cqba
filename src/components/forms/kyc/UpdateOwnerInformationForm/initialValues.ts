@@ -10,5 +10,4 @@ export const initialValues = {
   idNumber: '',
   bvn: '',
   idFile: {} as IFile,
-  politicalAffiliation: '',
 };

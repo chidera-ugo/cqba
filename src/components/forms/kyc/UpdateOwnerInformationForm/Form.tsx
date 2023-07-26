@@ -17,7 +17,6 @@ import { PhoneNumberInput } from 'components/form-elements/PhoneNumberInput';
 import { DatePicker } from 'components/form-elements/DatePicker';
 import dayjs from 'dayjs';
 import { FileInput } from 'components/form-elements/FileInput';
-import { RadioInput } from 'components/form-elements/RadioInput';
 
 interface Props {
   formikProps: FormikProps<typeof initialValues>;
@@ -61,7 +60,6 @@ export const Form = ({
       lastName,
       idNumber,
       gender,
-      politicalAffiliation,
     } = sanitizeRecordToRemoveUndefinedAndNulls(data);
 
     const _dob = !!dob ? dayjs(dob) : '';
@@ -80,11 +78,6 @@ export const Form = ({
           ...values.idFile,
           webUrl: idImageUrl,
         },
-        politicalAffiliation: !politicalAffiliation
-          ? ''
-          : politicalAffiliation
-          ? 'Yes'
-          : 'No',
         firstName: firstName ?? user?.firstName,
         lastName: lastName ?? user?.lastName,
         gender,
@@ -190,19 +183,7 @@ export const Form = ({
         getFile={(id) => v[id]}
       />
 
-      <p className='mt-8 font-normal text-neutral-400'>
-        Have you or anyone associated with you ever held a political office in
-        any country?
-      </p>
-
-      <RadioInput
-        options={['Yes', 'No']}
-        className='mt-5'
-        setValue={(val) => setFieldValue('politicalAffiliation', val)}
-        name='politicalAffiliation'
-      />
-
-      <div className='relative mt-10 flex pb-8'>
+      <div className='relative mt-5 flex pb-8'>
         <SubmitButton
           submitting={processing}
           className='outline-button min-w-[200px]'

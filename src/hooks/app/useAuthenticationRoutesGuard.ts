@@ -26,7 +26,7 @@ export const useAuthenticationRoutesGuard = () => {
       return;
     }
 
-    replace(redirectUrl ? redirectUrl : url);
+    replace(!!redirectUrl ? redirectUrl : url);
   }, [user]);
 
   return {

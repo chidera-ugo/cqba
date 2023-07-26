@@ -7,7 +7,6 @@ import {
 import { PaginatedResponse } from 'types/Table';
 
 import { useColumns } from './useColumns';
-import { useRouter } from 'next/router';
 import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 import { generateTableEntries } from 'utils/generators/generateTableEntries';
 import { Table } from 'components/core/Table';
@@ -29,8 +28,6 @@ export const AllTransactionsTable = ({
   setFilters,
   search,
 }: Props) => {
-  const { push } = useRouter();
-
   const [currentTransaction, setCurrentTransaction] = useState<any | null>(
     null
   );
@@ -78,11 +75,8 @@ export const AllTransactionsTable = ({
 
   const { columns } = useColumns();
 
-  function close() {
+  function closeModal() {
     setCurrentTransaction(null);
-    push('/wallet', undefined, {
-      scroll: false,
-    });
   }
 
   return (
@@ -90,7 +84,7 @@ export const AllTransactionsTable = ({
       <RightModalWrapper
         title='Transaction details'
         show={!!currentTransaction}
-        {...{ close }}
+        {...{ closeModal }}
         closeOnClickOutside
         childrenClassname='p-0'
       >

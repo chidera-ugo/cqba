@@ -2,7 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
 import { CheckInput } from 'components/form-elements/CheckInput';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
-import { DocumentReview } from 'components/illustrations/DocumentReview';
+import { Clock } from 'components/illustrations/Clock';
 import { SimpleInformation } from 'components/modules/common/SimpleInformation';
 import { useApplyForReview } from 'hooks/api/kyc/useApplyForReview';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
@@ -109,7 +109,7 @@ export const ApplicationUnderReview = () => {
           text: 'Continue to Dashboard',
           action: () => push('/'),
         }}
-        icon={<DocumentReview />}
+        icon={<Clock />}
       />
     </div>
   );

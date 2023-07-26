@@ -9,14 +9,9 @@ import { Dispatch, SetStateAction } from 'react';
 interface Props {
   close: () => void;
   setModalTitle: Dispatch<SetStateAction<string>>;
-  hideMethodSwitchTabs: () => void;
 }
 
-export const SubAccounts = ({
-  setModalTitle,
-  hideMethodSwitchTabs,
-  close,
-}: Props) => {
+export const SubAccounts = ({ setModalTitle, close }: Props) => {
   const { isLoading, isError, data } = useMakeDummyHttpRequest({
     method: 'get',
     res: subAccounts,
@@ -25,7 +20,6 @@ export const SubAccounts = ({
   const transact = useTransact({
     transactionType: 'other-banks-transfer',
     actionOnAuthorize() {
-      hideMethodSwitchTabs();
       setModalTitle('Authorize transaction');
     },
   });
