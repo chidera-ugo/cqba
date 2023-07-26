@@ -37,28 +37,40 @@ export const Form = ({
 
   useScrollToFormError(errors, submitCount);
 
+  const {
+    isLoading: gettingDepartments,
+    isError: failedToGetDepartments,
+    isRefetching: refetchingDepartments,
+    data: departments,
+  } = useGetAllDepartments();
+
   useEffect(() => {
     if (!currentEmployee && !formRecoveryValues) return;
 
-    const { firstName, lastName, email, departmentId } =
+    const { firstName, lastName, email } =
       sanitizeRecordToRemoveUndefinedAndNulls(
         currentEmployee ?? (formRecoveryValues as typeof initialValues)
       );
 
-    setValues({
-      ...values,
-      firstName,
-      lastName,
-      email,
-      departmentId,
-    });
+    setValues(
+      {
+        ...values,
+        firstName,
+        lastName,
+        email,
+      },
+      false
+    );
   }, [currentEmployee, formRecoveryValues]);
 
-  const {
-    isLoading: gettingDepartments,
-    isError: failedToGetDepartments,
-    data: departments,
-  } = useGetAllDepartments();
+  useEffect(() => {
+    if (!currentEmployee || !departments) return;
+
+    const { departmentId } =
+      sanitizeRecordToRemoveUndefinedAndNulls(currentEmployee);
+
+    setFieldValue('departmentId', departmentId, false);
+  }, [currentEmployee, departments]);
 
   return (
     <FormikForm onSubmit={handleSubmit}>
@@ -74,13 +86,14 @@ export const Form = ({
           id={'update-employee-select-department'}
           label='Department'
           name='departmentId'
-          displayValueKey='title'
+          displayValueKey='planName'
           trueValueKey='id'
           {...{
             setFieldValue,
             options: departments?.content ?? [],
           }}
           isLoading={gettingDepartments}
+          isRefetching={refetchingDepartments}
           isError={failedToGetDepartments}
         >
           {addDepartment && (

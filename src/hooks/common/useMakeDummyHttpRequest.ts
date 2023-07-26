@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 
 type Options = {
   onSuccess?: (res: any) => void;
-  onError?: () => void;
+  onError?: (e?: any) => void;
 };
 
 export const useMakeDummyHttpRequest = <T>({
@@ -16,7 +16,7 @@ export const useMakeDummyHttpRequest = <T>({
   res?: T;
   duration?: number;
 } & Options) => {
-  const [isLoading, setIsLoading] = useState(method === 'get' ? true : false);
+  const [isLoading, setIsLoading] = useState(method === 'get');
   const [hasErrored, setHasErrored] = useState(false);
   const [data, setData] = useState<typeof res | null>(null);
   const mutateTimeout = useRef<any>();
@@ -91,6 +91,7 @@ export const useMakeDummyHttpRequest = <T>({
 
   return {
     isLoading,
+    isFetching: isLoading,
     mutate,
     data,
     isError: false,

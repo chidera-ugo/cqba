@@ -8,14 +8,19 @@
 @layer base {
   html {
     scroll-behavior: smooth !important;
+    background-color: black;
   }
 
   body {
     @apply font-primary;
   }
 
-  body:has(.no-scroll) {
+  body:has(.disable-scrolling) {
     overflow: hidden !important;
+  }
+
+  #app-wrapper:has(#portal-presence) {
+    scale: 0.8;
   }
 
   h1 {
@@ -32,6 +37,10 @@
 
   h5 {
     @apply text-lg font-semibold text-neutral-1000 640:text-xl;
+  }
+
+  h6 {
+    @apply text-xl font-semibold text-neutral-1000;
   }
 
   label {
@@ -183,6 +192,10 @@
     @apply pill bg-success-600 text-white;
   }
 
+  .yellow-pill {
+    @apply pill bg-yellow-500 text-white;
+  }
+
   .blue-pill {
     @apply pill bg-primary-main bg-opacity-20 text-[10px] font-semibold uppercase text-primary-main !important;
   }
@@ -253,6 +266,26 @@
   background: #d3d1cb;
 }
 
+.x-thin-scrollbar::-webkit-scrollbar {
+  width: auto;
+  height: 4px;
+  overflow: overlay;
+}
+
+.x-thin-scrollbar::-webkit-scrollbar,
+.x-thin-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.x-thin-scrollbar::-webkit-scrollbar-thumb {
+  background: #cacaca;
+  border-radius: 50px;
+}
+
+.x-thin-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #d3d1cb;
+}
+
 /* HIDDEN SCROLL BAR */
 .hidden-scrollbar::-webkit-scrollbar {
   display: none !important;
@@ -283,3 +316,5 @@
     padding: 16px !important;
   }
 }
+
+/* D3 STYLES */

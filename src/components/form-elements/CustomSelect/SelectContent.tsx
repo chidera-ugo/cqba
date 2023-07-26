@@ -60,7 +60,7 @@ export const SelectContent = ({
         <CentredModalWrapper
           {...{
             show: showList,
-            close() {
+            closeModal() {
               setShowList(false);
             },
           }}

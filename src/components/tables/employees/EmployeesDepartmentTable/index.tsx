@@ -1,8 +1,6 @@
 import { Building } from 'components/illustrations/Building';
-import {
-  ISubAccountsDepartment,
-  useGetSubAccountsByDepartment,
-} from 'hooks/api/sub-accounts/useGetSubAccountsByDepartment';
+import { useGetEmployeesByDepartment } from 'hooks/api/employees/useGetEmployeesByDepartment';
+import { ISubAccountsDepartment } from 'hooks/api/sub-accounts/useGetSubAccountsByDepartment';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import {
@@ -39,11 +37,15 @@ export const EmployeesDepartmentTable = ({ search }: Props) => {
     isError,
     data: res,
     isRefetching,
-  } = useGetSubAccountsByDepartment({
+  } = useGetEmployeesByDepartment({
     page: pagination.pageIndex,
     size: pagination.pageSize,
     search,
   });
+
+  const [data, setData] = useState<
+    PaginatedResponse<ISubAccountsDepartment> | undefined
+  >(res);
 
   useEffect(() => {
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
@@ -52,10 +54,6 @@ export const EmployeesDepartmentTable = ({ search }: Props) => {
   useEffect(() => {
     if (!!res) setData(res);
   }, [res]);
-
-  const [data, setData] = useState<
-    PaginatedResponse<ISubAccountsDepartment> | undefined
-  >(res);
 
   return (
     <Table<ISubAccountsDepartment>

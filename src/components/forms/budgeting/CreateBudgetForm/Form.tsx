@@ -53,29 +53,33 @@ export const Form = ({
       formRecoveryValues as typeof initialValues
     );
 
-    setValues({
-      ...values,
-      categoryId,
-      departmentId,
-      dueDate: dueDate as unknown as DatePickerValue,
-      description,
-      amount,
-      title,
-      priority,
-    });
+    setValues(
+      {
+        ...values,
+        categoryId,
+        departmentId,
+        dueDate: dueDate as unknown as DatePickerValue,
+        description,
+        amount,
+        title,
+        priority,
+      },
+      false
+    );
   }, [formRecoveryValues]);
 
-  const { isLoading, isError, data } = useGetAllCategories();
+  const { isLoading, isError, data, isRefetching } = useGetAllCategories();
 
   const {
     isLoading: gettingDepartments,
     isError: failedToGetDepartments,
+    isRefetching: refetchingDepartments,
     data: departments,
   } = useGetAllDepartments();
 
   return (
     <FormikForm onSubmit={handleSubmit}>
-      <Input label='Budget Title' name='title' />
+      <Input label='Budget Title' name='title' autoFocus />
       <TextArea label='Description' name='description' />
 
       <div className='gap-4 880:flex'>
@@ -97,13 +101,14 @@ export const Form = ({
           id={'create-budget-select-categories'}
           label='Category'
           name='categoryId'
-          displayValueKey='title'
+          displayValueKey='planName'
           trueValueKey='id'
           {...{
             setFieldValue,
             options: data?.content ?? [],
             isError,
             isLoading,
+            isRefetching,
           }}
         />
       </AppErrorBoundary>
@@ -131,13 +136,15 @@ export const Form = ({
           id={'create-budget-select-department'}
           label='Department (Optional)'
           name='departmentId'
-          displayValueKey='title'
+          displayValueKey='planName'
           trueValueKey='id'
           {...{
             setFieldValue,
             options: departments?.content ?? [],
           }}
           isLoading={gettingDepartments}
+          isRefetching={refetchingDepartments}
+          next={'amount'}
           isError={failedToGetDepartments}
         >
           {addDepartment && (

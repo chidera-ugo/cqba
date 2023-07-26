@@ -1,6 +1,7 @@
 import { AppLayout } from 'components/layouts/AppLayout';
-import { InflowOutflow } from 'components/modules/overview/InflowOutflow';
+import { Analytics } from 'components/modules/overview/Analytics';
 import { Overview } from 'components/modules/overview/Overview';
+import { TopCategories } from 'components/modules/overview/TopCategories';
 import { useAppContext } from 'context/AppContext';
 
 export default function Home() {
@@ -16,8 +17,14 @@ export default function Home() {
         <Overview />
       </div>
 
-      <div className='mt-5'>
-        <InflowOutflow />
+      <div className='mt-5  grid-cols-12 gap-5 1280:grid'>
+        <div className='col-span-8'>
+          <Analytics />
+        </div>
+
+        <div className='col-span-4 mt-5 1280:mt-0'>
+          <TopCategories />
+        </div>
       </div>
     </AppLayout>
   );

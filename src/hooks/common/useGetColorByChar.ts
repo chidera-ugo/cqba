@@ -1,4 +1,4 @@
-import { alphabets } from 'utils/constants/alphabets';
+import { alphabets } from 'constants/alphabets';
 
 export const useGetColorByChar = () => {
   const colors = [
@@ -17,7 +17,11 @@ export const useGetColorByChar = () => {
     charsArr.push(alphabets.slice(i, i + colors.length).join(''));
   }
 
-  function getColor(char: string) {
+  function getColor(char: string | number) {
+    if (typeof char === 'number') {
+      return colors[char] ?? colors[char % colors.length]!;
+    }
+
     return (
       colors[
         charsArr[

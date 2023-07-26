@@ -16,8 +16,8 @@ export const WalletOverview = () => {
   if (isError || !data) return <IsLoadingIsError />;
 
   return (
-    <div className='768:card w-full gap-8 768:flex 768:w-fit'>
-      <div className='y-center card w-full 768:w-auto 768:border-none 768:p-0'>
+    <div className='w-full justify-between gap-8 768:flex'>
+      <div className='y-center w-full 768:w-auto 768:p-0'>
         <div className='my-auto'>
           <DisplayValue
             value={data?.balance}
@@ -38,8 +38,8 @@ export const WalletOverview = () => {
 
 const IsLoadingIsError = ({ isLoading }: { isLoading?: boolean }) => {
   return (
-    <div className='768:card w-full gap-8 768:flex 768:w-auto'>
-      <div className='y-center card w-full 768:w-[300px] 768:border-none 768:p-0'>
+    <div className='x-between w-full gap-8 768:flex'>
+      <div className='y-center card w-full 768:w-[240px] 768:border-none 768:p-0'>
         <div className='my-auto'>
           <div
             className={clsx(
@@ -49,7 +49,7 @@ const IsLoadingIsError = ({ isLoading }: { isLoading?: boolean }) => {
           ></div>
           <div
             className={clsx(
-              'mt-5 h-8 w-full',
+              'mt-2 h-8 w-full',
               isLoading ? 'skeleton' : 'skeleton-error'
             )}
           ></div>

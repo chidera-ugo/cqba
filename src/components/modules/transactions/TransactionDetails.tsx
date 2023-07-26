@@ -1,4 +1,6 @@
+import clsx from 'clsx';
 import { Pill } from 'components/common/Pill';
+import { ShareIcon } from 'components/svgs/others/ShareIcon';
 import { Home } from 'components/svgs/wallet/Icons_FundWallet';
 import { useRef } from 'react';
 import { formatAmount } from 'utils/formatters/formatAmount';
@@ -87,7 +89,7 @@ export const TransactionDetails = ({ transaction }: Props) => {
   return (
     <>
       <div ref={ref} className='p-5'>
-        <div className='y-center rounded-2xl bg-neutral-100 p-5'>
+        <div className='y-center rounded-2xl bg-neutral-100 p-7'>
           <div className='x-center'>
             <span className='y-center h-10 w-10 rounded-full bg-[#BDE6FC59] text-primary-main 640:h-12 640:w-12'>
               <div className='mx-auto'>
@@ -97,24 +99,27 @@ export const TransactionDetails = ({ transaction }: Props) => {
           </div>
 
           <div className='text-center'>
-            <div className='mt-2 font-normal text-neutral-500'>
+            <div className='mt-4 font-normal text-neutral-500'>
               You sent {accountName}
             </div>
-            <div className='text-2xl font-semibold text-neutral-980 640:text-3xl'>
+            <div className='mt-1 text-2xl font-semibold text-neutral-980 640:text-3xl'>
               NGN {formatAmount({ value: amount, decimalPlaces: 2 })}
             </div>
           </div>
         </div>
 
-        <div className='mt-8'>
-          {transactionDetails.map(({ name, value }) => {
+        <div className='mt-8 rounded-xl border border-neutral-200 px-5 py-2'>
+          {transactionDetails.map(({ name, value }, i) => {
             return (
               <div
                 key={name}
-                className='x-between h-14 border-t border-gray-100'
+                className={clsx(
+                  'x-between h-14',
+                  i > 0 && 'border-t border-gray-100'
+                )}
               >
-                <div className='my-auto text-neutral-400'>{name}</div>
-                <div className='my-auto capitalize text-neutral-980'>
+                <div className='my-auto text-sm text-neutral-400'>{name}</div>
+                <div className='my-auto text-sm capitalize text-neutral-980'>
                   {value}
                 </div>
               </div>
@@ -123,14 +128,17 @@ export const TransactionDetails = ({ transaction }: Props) => {
         </div>
       </div>
 
-      <div className='p-5 pt-0'>
+      <div className='x-center p-5 pt-0'>
         <SubmitButton
           submitting={processing}
           type='button'
           onClick={handleShareReceipt}
-          className='secondary-button mt-8 h-12 w-full'
+          className='secondary-button x-center mt-8 h-10 w-[160px] px-4'
         >
-          Share Receipt
+          <span className='my-auto'>Share Receipt</span>
+          <span className='my-auto ml-2'>
+            <ShareIcon />
+          </span>
         </SubmitButton>
       </div>
     </>

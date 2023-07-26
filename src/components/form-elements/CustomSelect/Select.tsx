@@ -117,7 +117,7 @@ export const Select = ({
 
             <div className='x-center col-span-8 mx-auto my-auto'>
               <h5 className='font-semibold'>
-                Select {entity ? entity : 'provider'}
+                Select {entity ? entity : 'option'}
               </h5>
             </div>
 
@@ -262,7 +262,7 @@ export const Select = ({
         </div>
       </div>
 
-      <div className='bottom-0b sticky left-0 bg-white'>{children}</div>
+      <div className='sticky bottom-0 left-0 bg-white'>{children}</div>
     </>
   );
 };

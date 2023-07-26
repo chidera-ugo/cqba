@@ -28,6 +28,7 @@ interface Props {
   setFilters?: Dispatch<SetStateAction<Record<string, string>>>;
   slot?: JSX.Element;
   onClickEditAccount: (action: ISubAccount) => void;
+  fromSubAccountDepartments?: boolean;
 }
 
 export const AllSubAccountsTable = ({
@@ -37,6 +38,7 @@ export const AllSubAccountsTable = ({
   setFilters,
   onClickEditAccount,
   departmentId,
+  fromSubAccountDepartments,
 }: Props) => {
   const queryClient = useQueryClient();
 
@@ -149,9 +151,11 @@ export const AllSubAccountsTable = ({
         headerSlot={slot}
         dontScrollToTopOnPageChange
         onRowClick={(id) => {
-          // Todo: Handle clicking back after navigating from /departments/[id]
-
-          push(`/sub-accounts/${id}`);
+          push(
+            `/sub-accounts/${id}${
+              fromSubAccountDepartments ? '?_f=departments' : ''
+            }`
+          );
         }}
         accessor='id'
         mustHaveRange

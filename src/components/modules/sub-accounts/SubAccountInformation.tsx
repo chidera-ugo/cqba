@@ -1,25 +1,9 @@
 import clsx from 'clsx';
 import { SimpleDisplayValue } from 'components/common/SimpleDisplayValue';
-import { IsError } from 'components/data-states/IsError';
-import { IsLoading } from 'components/data-states/IsLoading';
-import { useGetSubAccountById } from 'hooks/api/sub-accounts/useGetSubAccountById';
-import { useRouter } from 'next/router';
+import { ISubAccount } from 'hooks/api/sub-accounts/useGetAllSubAccounts';
 import { generateUUID } from 'utils/generators/generateUUID';
-import { getValidQueryParam } from 'utils/getters/getValidQueryParam';
 
-export const SubAccountInformation = () => {
-  const { query } = useRouter();
-  const id = getValidQueryParam(query['id']);
-
-  const { isLoading, isError, data } = useGetSubAccountById(id, {
-    enabled: !!id,
-  });
-
-  if (isLoading) return <IsLoading />;
-
-  if (isError)
-    return <IsError description={'Failed to get account information'} />;
-
+export const SubAccountInformation = ({ data }: { data: ISubAccount }) => {
   const {
     accountHolderName,
     createdAt,

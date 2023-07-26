@@ -1,7 +1,6 @@
-import { UseMutateFunction } from '@tanstack/react-query';
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
+import { Action, State, StoreApi } from 'context/AppContext/types';
 import {
-  Dispatch,
   PropsWithChildren,
   Reducer,
   createContext,
@@ -10,39 +9,10 @@ import {
   useMemo,
   useReducer,
 } from 'react';
-import { IUser } from 'types/Auth';
 import useMediaQuery from 'hooks/common/useMediaQuery';
 import { useGetCurrentUser } from 'hooks/api/auth/useGetCurrentUser';
-import { reducer } from 'context/AppContext/appContextMethods';
+import { reducer } from 'context/AppContext/methods';
 import { getFromLocalStore } from 'lib/localStore';
-
-export interface State {
-  isInitializing: boolean;
-  user: IUser | null;
-  redirectUrl: string;
-  tokens: Tokens | null;
-  screenSize: {
-    tablet: boolean;
-    miniTablet: boolean;
-    mobile: boolean;
-    desktop: boolean;
-  } | null;
-}
-
-export type Action =
-  | { type: 'setRedirectUrl'; payload: string }
-  | { type: 'setIsInitializing'; payload: boolean }
-  | { type: 'setScreenSize'; payload: State['screenSize'] }
-  | { type: 'accessToken'; payload: string }
-  | { type: 'saveTokens'; payload: Tokens }
-  | { type: 'removeTokens' }
-  | { type: 'saveCurrentUser'; payload: IUser }
-  | { type: 'signout' };
-
-export interface Tokens {
-  accessToken: string;
-  refreshToken: string;
-}
 
 const initialState: State = {
   user: null,
@@ -50,12 +20,6 @@ const initialState: State = {
   isInitializing: true,
   screenSize: null,
   tokens: null,
-};
-
-type StoreApi = {
-  state: State;
-  dispatch: Dispatch<Action>;
-  getCurrentUser?: UseMutateFunction<IUser, unknown, any, unknown>;
 };
 
 const AppContext = createContext<StoreApi>({
@@ -81,17 +45,13 @@ function AppContextProvider({ children, ...props }: PropsWithChildren<any>) {
           return;
         }
 
-        dispatch({ type: 'saveCurrentUser', payload: data });
+        dispatch({ type: 'setCurrentUser', payload: data });
       },
       onError() {
         dispatch({ type: 'setIsInitializing', payload: false });
       },
     }
   );
-
-  useEffect(() => {
-    console.log('hello world');
-  }, []);
 
   const tablet = useMediaQuery('(max-width: 1023px)');
   const miniTablet = useMediaQuery('(max-width: 767px)');

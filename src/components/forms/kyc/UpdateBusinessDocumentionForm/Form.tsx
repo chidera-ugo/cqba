@@ -50,20 +50,23 @@ export const Form = ({
       taxIdNumber,
     } = sanitizeRecordToRemoveUndefinedAndNulls(data);
 
-    setValues({
-      ...values,
-      tin: taxIdNumber,
-      bnNumber,
-      bnDocumentFile: {
-        ...values.bnDocumentFile,
-        webUrl: bnNumberImageUrl,
+    setValues(
+      {
+        ...values,
+        tin: taxIdNumber,
+        bnNumber,
+        bnDocumentFile: {
+          ...values.bnDocumentFile,
+          webUrl: bnNumberImageUrl,
+        },
+        utilityBillFile: {
+          ...values.utilityBillFile,
+          webUrl: utilityBillImageUrl,
+        },
+        utilityBillType,
       },
-      utilityBillFile: {
-        ...values.utilityBillFile,
-        webUrl: utilityBillImageUrl,
-      },
-      utilityBillType,
-    });
+      false
+    );
   }, [data]);
 
   if (isLoading) return <IsLoading />;

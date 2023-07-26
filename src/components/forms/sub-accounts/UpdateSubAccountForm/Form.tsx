@@ -30,12 +30,14 @@ export const Form = ({
   const {
     isLoading: gettingDepartments,
     isError: failedToGetDepartments,
+    isRefetching: refetchingDepartments,
     data: departments,
   } = useGetAllDepartments();
 
   const {
     isLoading: gettingEmployees,
     isError: failedToGetEmployees,
+    isRefetching: refetchingEmployees,
     data: employees,
   } = useGetAllEmployees({
     page: 0,
@@ -68,13 +70,14 @@ export const Form = ({
           id={'select-department'}
           label='Department'
           name='departmentId'
-          displayValueKey='title'
+          displayValueKey='planName'
           trueValueKey='id'
           {...{
             setFieldValue,
             options: departments?.content ?? [],
           }}
           isLoading={gettingDepartments}
+          isRefetching={refetchingDepartments}
           isError={failedToGetDepartments}
         >
           <SecondaryActionButton
@@ -91,7 +94,7 @@ export const Form = ({
             id={'select-employee'}
             label='Employee'
             name='employeeId'
-            displayValueKey='name'
+            displayValueKey='planName'
             trueValueKey='id'
             {...{
               setFieldValue,
@@ -102,6 +105,7 @@ export const Form = ({
                 })) ?? [],
             }}
             isLoading={gettingEmployees}
+            isRefetching={refetchingEmployees}
             isError={failedToGetEmployees}
           >
             <SecondaryActionButton

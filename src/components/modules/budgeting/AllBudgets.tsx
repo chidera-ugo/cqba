@@ -16,6 +16,7 @@ interface Props {
   viewMode: ViewMode;
   search: string;
   status?: string;
+  currentTab?: { name: string; value: string };
 }
 
 export type BudgetListProps = {
@@ -33,7 +34,12 @@ export type BudgetListProps = {
 
 export type ViewMode = 'table' | 'cards';
 
-export const AllBudgets = ({ viewMode, status, ...props }: Props) => {
+export const AllBudgets = ({
+  viewMode,
+  currentTab,
+  status,
+  ...props
+}: Props) => {
   const [showPinModal, setShowPinModal] = useState(false);
 
   const { push } = useRouter();
@@ -49,6 +55,7 @@ export const AllBudgets = ({ viewMode, status, ...props }: Props) => {
     isLoading,
     isError,
     data: res,
+    isRefetching,
   } = useGetAllBudgets({
     page: pagination.pageIndex,
     size: pagination.pageSize,
@@ -56,8 +63,12 @@ export const AllBudgets = ({ viewMode, status, ...props }: Props) => {
   });
 
   useEffect(() => {
-    if (!!res) setData(res);
-  }, [res]);
+    if (!currentTab) return;
+
+    if (!res) return setData(undefined);
+
+    setData(res);
+  }, [res, currentTab]);
 
   const [data, setData] = useState<PaginatedResponse<IBudget> | undefined>(res);
 
@@ -77,7 +88,6 @@ export const AllBudgets = ({ viewMode, status, ...props }: Props) => {
         }
         closeModal={closeModal}
         closeOnClickOutside
-        childrenClassname='p-8'
       >
         {currentBudget && (
           <AppErrorBoundary>
@@ -94,7 +104,7 @@ export const AllBudgets = ({ viewMode, status, ...props }: Props) => {
           {...{
             viewMode,
             onItemClick(res: IBudget) {
-              if (res.status === 'declined') return;
+              if (res.status === 'declined') return null;
 
               if (res.status === 'approved')
                 return push(`/budgeting/${res.id}`);
@@ -104,6 +114,7 @@ export const AllBudgets = ({ viewMode, status, ...props }: Props) => {
             data,
             isLoading,
             isError,
+            isRefetching,
             pagination,
             setPagination,
           }}

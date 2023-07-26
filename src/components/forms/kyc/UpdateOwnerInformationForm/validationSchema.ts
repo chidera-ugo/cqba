@@ -25,5 +25,4 @@ export const validationSchema = object({
     'Please upload a copy of your ID',
     (val) => validateFile(val)
   ),
-  politicalAffiliation: string().required('Please select an option'),
 });

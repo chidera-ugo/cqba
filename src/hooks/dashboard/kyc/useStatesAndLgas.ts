@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { statesAndLgas } from 'utils/constants/states-and-lgas';
+import { statesAndLgas } from 'constants/states-and-lgas';
 import { handleSort } from 'utils/handlers/handleSort';
 
 export const useStatesAndLgas = ({ state = 'Lagos' }: { state: string }) => {

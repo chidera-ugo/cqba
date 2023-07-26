@@ -3,11 +3,11 @@ import { useTQuery } from 'hooks/api/useTQuery';
 import { PaginatedResponse } from 'types/Table';
 
 export interface ICategory {
-  organizationId?: string;
-  userId?: string;
-  updatedAt?: number;
+  organizationId: string;
+  userId: string;
+  updatedAt: number;
   id: string;
-  sKey?: string;
+  sKey: string;
   title: string;
 }
 

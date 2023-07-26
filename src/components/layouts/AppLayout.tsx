@@ -1,10 +1,12 @@
 import clsx from 'clsx';
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
 import { CreatePin } from 'components/modules/core/CreatePin';
+import { SelectDefaultCategories } from 'components/modules/core/SelectDefaultCategories';
 import { VerifyYourAccount } from 'components/modules/kyc/VerifyYourAccount';
 import { PageHead } from 'components/primary/PageHead';
 import { Right } from 'components/svgs/navigation/Arrows';
 import { LineInfo } from 'components/svgs/others/Info';
+import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import { useCurrentAccountSetupStepUrl } from 'hooks/dashboard/kyc/useCurrentAccountSetupStepUrl';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import Link from 'next/link';
@@ -21,6 +23,7 @@ export interface Props {
   requiresVerification?: boolean;
   back?: string;
   hideSideNavigation?: boolean;
+  childrenClassName?: string;
 }
 
 export const AppLayout = ({
@@ -30,6 +33,7 @@ export const AppLayout = ({
   back,
   requiresVerification,
   hideSideNavigation,
+  childrenClassName,
 }: PropsWithChildren<Props>) => {
   const { userExists } = useProtectedRoutesGuard();
 
@@ -41,69 +45,95 @@ export const AppLayout = ({
 
   const { getCurrentAccountSetupStepUrl } = useCurrentAccountSetupStepUrl();
 
+  const { isUnderReview } = useAccountVerificationStatus();
+
   if (!userExists) return <FullScreenLoader asPage />;
 
   return (
-    <>
-      <PageHead title={title} />
-      <CreatePin />
+    <div className={'min-w-screen min-h-screen bg-black'}>
+      <div
+        id={'app_wrapper'}
+        style={{
+          backgroundColor: 'white',
+        }}
+      >
+        <PageHead title={title} />
+        <CreatePin />
+        <SelectDefaultCategories />
 
-      <div className='no-scroll 1024:flex'>
-        {!hideSideNavigation && (!screenSize || screenSize?.['desktop']) ? (
-          <div className='hidden w-[324px] 1024:block'>
-            <SideNavigation />
-          </div>
-        ) : null}
-
-        <main
-          className={clsx(
-            'h-screen overflow-y-auto',
-            hideSideNavigation ? 'w-full' : '1024:app-layout-desktop-width'
-          )}
-        >
-          <AppHeader {...{ back, title }}>{headerSlot}</AppHeader>
-
-          {!isVerified && !pathname.includes('/kyc') && (
-            <div className='x-between block bg-warning-600 p-4 text-white 690:flex 690:p-6'>
-              <div className='flex'>
-                <span className={'mt-1 mr-2 hidden 690:block'}>
-                  <LineInfo />
-                </span>
-
-                <div>
-                  <h6
-                    className={'text-base font-semibold text-white'}
-                  >{`You're currently in test mode`}</h6>
-                  <p className={'mt-1 text-sm text-white'}>
-                    Activate your business to start using Chequebase in live
-                    mode
-                  </p>
-                </div>
-              </div>
-
-              <div className='mt-4 flex 690:mt-0'>
-                <Link
-                  href={getCurrentAccountSetupStepUrl()}
-                  className='light-button x-center h-10 border-none px-3 text-sm text-black 690:h-12 690:px-5'
-                >
-                  <span className={'my-auto mr-1'}>Activate Business</span>
-                  <span className={'my-auto'}>
-                    <Right />
-                  </span>
-                </Link>
-              </div>
+        <div className='disable-scrolling 1024:flex'>
+          {!hideSideNavigation && (!screenSize || screenSize?.['desktop']) ? (
+            <div className='hidden w-[324px] 1024:block'>
+              <SideNavigation />
             </div>
-          )}
+          ) : null}
 
-          <div className='app-container my-7'>
-            {requiresVerification && !isVerified ? (
-              <VerifyYourAccount />
-            ) : (
-              children
+          <main
+            className={clsx(
+              'h-screen overflow-y-auto',
+              hideSideNavigation ? 'w-full' : '1024:app-layout-desktop-width'
             )}
-          </div>
-        </main>
+          >
+            <AppHeader
+              {...{
+                back,
+                hideSideNavigation,
+
+                title,
+              }}
+            >
+              {headerSlot}
+            </AppHeader>
+
+            {!isVerified && !pathname.includes('/kyc') && (
+              <div className='x-between block bg-warning-600 p-4 text-white 690:flex 690:p-6'>
+                <div className='flex'>
+                  <span className={'mt-1 mr-2 hidden 640:mr-3 690:block'}>
+                    <LineInfo />
+                  </span>
+
+                  <div>
+                    <h6
+                      className={'text-base font-medium text-white'}
+                    >{`You're currently in test mode`}</h6>
+                    <p className={'mt-2 text-sm text-white'}>
+                      {isUnderReview
+                        ? `We're reviewing your application, this may take a while. You will be notified once this process has been completed.`
+                        : 'Activate your business to start using Chequebase in live mode'}
+                    </p>
+                  </div>
+                </div>
+
+                {!isUnderReview && (
+                  <div className='mt-4 flex 690:mt-0'>
+                    <Link
+                      href={getCurrentAccountSetupStepUrl()}
+                      className='light-button x-center h-10 border-none px-3 text-sm text-black 690:h-12 690:px-5'
+                    >
+                      <span className={'my-auto mr-1'}>Activate Business</span>
+                      <span className={'my-auto'}>
+                        <Right />
+                      </span>
+                    </Link>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div
+              className={clsx(
+                childrenClassName ?? 'app-container my-5 640:my-7'
+              )}
+            >
+              {requiresVerification && !isVerified ? (
+                <VerifyYourAccount />
+              ) : (
+                children
+              )}
+            </div>
+          </main>
+        </div>
       </div>
-    </>
+    </div>
   );
 };

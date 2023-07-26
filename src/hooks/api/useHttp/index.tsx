@@ -3,48 +3,10 @@ import { AppToast } from 'components/primary/AppToast';
 import { useAppContext } from 'context/AppContext';
 import { useDestroySession } from 'hooks/app/useDestroySession';
 import { OutgoingHttpHeaders } from 'http2';
-import { getFromLocalStore } from 'lib/localStore';
 import { handleAxiosError } from 'methods/http/handleAxiosError';
 import { toast } from 'react-toastify';
 
-export type Method = 'get' | 'post' | 'put' | 'delete' | 'patch';
-export type Service =
-  | 'auth'
-  | 'organizations'
-  | 'departments'
-  | 'transactions'
-  | 'employees'
-  | 'dashboard'
-  | 'sub-accounts'
-  | 'category'
-  | 'budgets';
-
 export const baseURL = process.env.NEXT_PUBLIC_API_URL;
-
-export function urlModifier(url?: Service) {
-  switch (url) {
-    case 'dashboard':
-      return '/v1/dashboard';
-    case 'employees':
-      return '/v1/employee';
-    case 'organizations':
-      return '/v1/organizations';
-    case 'transactions':
-      return '/v1/transactions';
-    case 'auth':
-      return '/v1/auth';
-    case 'departments':
-      return '/v1/departments';
-    case 'budgets':
-      return '/v1/budgets';
-    case 'category':
-      return '/v1/category';
-    case 'sub-accounts':
-      return '/v1/sub-accounts';
-    default:
-      return '/';
-  }
-}
 
 export default function useHttp({
   config,
@@ -53,21 +15,11 @@ export default function useHttp({
   config?: AxiosRequestConfig<any>;
   headers?: OutgoingHttpHeaders;
 }): AxiosInstance {
-  const { dispatch } = useAppContext();
+  const { dispatch, state } = useAppContext();
+
   const { destroySession } = useDestroySession();
 
-  const tokens = getFromLocalStore('tokens');
-
-  const axiosInstance = axios.create({
-    headers: {
-      Accept: 'application/json',
-      Authorization: tokens?.accessToken ? `Bearer ${tokens.accessToken}` : '',
-    },
-    baseURL,
-    withCredentials: process.env.WITH_CREDENTIALS === 'positive',
-    timeout: 60 * 1000,
-    ...config,
-  });
+  const tokens = state.tokens;
 
   const serviceUnavailableMessage =
     'Service unavailable, please contact support';
@@ -84,6 +36,17 @@ export default function useHttp({
     });
   }
 
+  const axiosInstance = axios.create({
+    headers: {
+      Accept: 'application/json',
+      Authorization: tokens?.accessToken ? `Bearer ${tokens.accessToken}` : '',
+    },
+    baseURL,
+    withCredentials: process.env.WITH_CREDENTIALS === 'positive',
+    timeout: 60 * 1000,
+    ...config,
+  });
+
   axiosInstance.interceptors.response.use(
     (response) => response,
     async (e) => {
@@ -95,13 +58,12 @@ export default function useHttp({
         terminateSession
       );
 
-      return await axiosInstance(req);
+      return axiosInstance(req);
     }
   );
 
   const headersConfig: Record<string, string> = {
     'Content-Type': 'application/json',
-    'X-CHANNEL': 'BUSINESS_WEB',
     ...headers,
   };
 

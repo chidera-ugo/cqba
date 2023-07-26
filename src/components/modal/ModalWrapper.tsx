@@ -86,6 +86,7 @@ export const RightModalWrapper = ({
         {!hideHeader && <Header {...props} />}
         <div className={clsx(childrenClassname ?? 'p-4 640:p-8')}>
           {children}
+          <div className='h-10'></div>
         </div>
       </div>
     </Modal>
@@ -148,15 +149,15 @@ export const CentredModalWrapper = ({
           setDuration(0.2);
         }}
         className={clsx(
-          `relative mt-auto h-auto w-full min-w-full overflow-clip overflow-y-auto overflow-x-hidden 640:my-4 640:min-h-min 640:w-auto 640:min-w-[450px] 640:rounded-b-2xl`,
-          withGutter ? 'rounded-2xl' : 'rounded-t-2xl rounded-b-none',
+          `relative mt-auto h-auto w-full min-w-full overflow-clip overflow-y-auto overflow-x-hidden 640:my-4 640:min-h-min 640:w-auto 640:min-w-[450px] 640:rounded-b-xl`,
+          withGutter ? 'rounded-xl' : 'rounded-t-xl rounded-b-none',
           '560:min-w-[466px]',
           backgroundClassname ?? defaultBackgroundClassname,
           fullscreen &&
-            'h-max min-h-screen overflow-hidden rounded-t-none 640:max-h-[80%] 640:rounded-t-2xl'
+            'h-max min-h-screen overflow-hidden rounded-t-none 640:max-h-[80%] 640:rounded-t-xl'
         )}
       >
-        <div className='sticky top-0 left-0 z-[1200] rounded-t-2xl'>
+        <div className='sticky top-0 left-0 z-[1200] rounded-t-xl'>
           {!hideHeader && props.closeModal && (
             <div className='x-between bg-white p-4'>
               <h5>{props.title}</h5>

@@ -16,6 +16,10 @@ export const AllBudgetsTable = ({ onItemClick, ...props }: BudgetListProps) => {
     <Table<IBudget>
       dontScrollToTopOnPageChange
       onRowClick={onItemClick}
+      shouldDisableClicking={{
+        key: 'status',
+        value: 'declined',
+      }}
       returnOriginalOnRowClick
       accessor='id'
       mustHaveRange

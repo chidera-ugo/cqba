@@ -1,19 +1,10 @@
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
-import {
-  FundAccountMethod,
-  FundWalletMethodSelector,
-} from 'components/modules/wallet/FundWallet/FundWalletMethodSelector';
+import { BankTransfer } from 'components/modules/wallet/FundWallet/methods/BankTransfer';
 import { Inbound } from 'components/svgs/navigation/Arrows';
 import { useState } from 'react';
-import { Card } from 'components/svgs/dashboard/Icons_NavigationItems';
-import { Home, Wallet } from 'components/svgs/wallet/Icons_FundWallet';
-import { FundWalletMethods } from 'components/modules/wallet/FundWallet/FundWalletMethods';
 
 export const FundWallet = () => {
   const [showModal, setShowModal] = useState(false);
-  const [currentMethod, setCurrentMethod] = useState<FundAccountMethod | null>(
-    null
-  );
 
   return (
     <>
@@ -21,21 +12,13 @@ export const FundWallet = () => {
         {...{
           show: showModal,
           closeModal() {
-            if (currentMethod) {
-              setCurrentMethod(null);
-            } else {
-              setShowModal(false);
-            }
+            setShowModal(false);
           },
         }}
         closeOnClickOutside
-        title={currentMethod?.title ?? 'Fund wallet'}
+        title={'Bank Transfer'}
       >
-        {currentMethod ? (
-          <FundWalletMethods {...{ currentMethod }} />
-        ) : (
-          <FundWalletMethodSelector {...{ setCurrentMethod, methods }} />
-        )}
+        <BankTransfer />
       </RightModalWrapper>
 
       <button
@@ -50,25 +33,3 @@ export const FundWallet = () => {
     </>
   );
 };
-
-export const methods: FundAccountMethod[] = [
-  {
-    icon: <Home />,
-    title: 'Bank transfer',
-    description: 'Make direct transfer to your account',
-    enabled: true,
-    id: 'bank-transfer',
-  },
-  {
-    icon: <Card />,
-    title: 'Fund with debit card',
-    description: 'Connect your card to fund',
-    id: 'debit-card',
-  },
-  {
-    icon: <Wallet />,
-    title: 'Fund direct from bank account',
-    description: 'Make a direct bank debit',
-    id: 'bank-account',
-  },
-];

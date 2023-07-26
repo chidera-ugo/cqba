@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { motion } from 'framer-motion';
 import { PropsWithChildren } from 'react';
 import clsx from 'clsx';
@@ -12,19 +11,9 @@ type Props = {
   exceptedId?: string;
   anchorPosition?: 'top' | 'bottom';
   isTableAction?: boolean;
+  marginClassname?: string;
 };
 
-/**
- * Dropdown component
- * @param {function} dismiss - The function to be called when closing the dropdown
- * @param wrapperId
- * @param {string} exceptedId- The ID of an element that when clicked on shouldn't trigger the dismiss action
- * @param anchorPosition
- * @param show
- * @param children
- * @param className
- * @returns {JSX.Element} The rendered Dropdown element.
- */
 export const Dropdown = ({
   dismiss,
   wrapperId,
@@ -33,6 +22,7 @@ export const Dropdown = ({
   show,
   children,
   className,
+  marginClassname,
   isTableAction,
 }: PropsWithChildren<Props>) => {
   useDismissDropdown(wrapperId, dismiss, exceptedId);
@@ -72,9 +62,10 @@ export const Dropdown = ({
           : clsx(
               'absolute z-[100] -mr-1 w-full overflow-hidden rounded-xl border border-neutral-300 p-0 shadow-lg',
               anchorPosition === 'bottom'
-                ? 'top-[100%] -mt-5'
+                ? 'top-[100%]'
                 : 'bottom-[100%] -mb-5',
-              className
+              className,
+              marginClassname ?? '-mt-5'
             )
       }
     >

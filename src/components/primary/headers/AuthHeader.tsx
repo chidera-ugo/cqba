@@ -28,7 +28,7 @@ export const AuthHeader = () => {
             href='https://chequebase.io'
             target='_blank'
             rel='noreferrer noopenner'
-            className='text-button flex text-sm'
+            className='text-button flex text-sm font-medium text-black'
           >
             <span className='my-auto mr-2'>Visit Website</span>
             <span className='my-auto'>

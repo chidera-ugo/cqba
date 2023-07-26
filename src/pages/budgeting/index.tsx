@@ -20,7 +20,7 @@ export default function Budgeting() {
   const statusFilters: { name: string; value: BudgetStatus }[] = [
     { name: 'Pending', value: 'open' },
     { name: 'Approved', value: 'approved' },
-    { name: 'Declined', value: 'declined' },
+    { name: 'Rejected', value: 'declined' },
   ];
 
   const preferences = getFromLocalStore('preferences');
@@ -51,9 +51,9 @@ export default function Budgeting() {
   }
 
   return (
-    <AppLayout title='Budgeting'>
-      <div className='my-5 justify-between gap-2 640:my-7 880:flex'>
-        <div className='gap-5 480:flex'>
+    <AppLayout title='Budgeting' childrenClassName={'mb-7'}>
+      <div className='sticky top-16 left-0 z-[800] mb-5 justify-between gap-2 border-b border-neutral-200 bg-white bg-opacity-80 px-3 py-5 backdrop-blur-md 640:mb-7 640:px-8 1024:top-20 1180:flex'>
+        <div className='flex gap-5'>
           {statusFilters.map((item) => {
             const { name, value } = item;
             const isActive = value === currentTab?.value;
@@ -70,7 +70,7 @@ export default function Budgeting() {
                 <span>{name}</span>
 
                 {isActive && (
-                  <div className='x-center bottom-0 left-0 mt-2 w-full'>
+                  <div className='x-center bottom-0 left-0 mt-2 hidden w-full 1180:flex'>
                     <div className='h-1.5 w-1.5 rounded-full bg-primary-main'></div>
                   </div>
                 )}
@@ -79,37 +79,42 @@ export default function Budgeting() {
           })}
         </div>
 
-        <div className='my-auto flex gap-2'>
+        <div className='my-auto mt-5 gap-2 640:flex 1180:mt-0'>
           <SearchInput
             placeholder='Search budgets'
             value={search}
-            className='mt-3 w-full 640:w-[300px] 880:mt-0'
+            className='w-full 640:w-[300px]'
             onChange={(e) => {
               setSearch(e.target.value);
             }}
             clear={() => setSearch('')}
           />
 
-          <button
-            onClick={() => {
-              const val = viewMode === 'cards' ? 'table' : 'cards';
-              saveToLocalStore('preferences', { budgetingViewMode: val });
-              setViewMode(val);
-            }}
-            className='secondary-button h-11 px-5'
-          >
-            {viewMode === 'cards' ? <Squares /> : <TableIcon />}
-          </button>
+          <div className='mt-4 flex gap-2 640:mt-0'>
+            <button
+              onClick={() => {
+                const val = viewMode === 'cards' ? 'table' : 'cards';
+                saveToLocalStore('preferences', { budgetingViewMode: val });
+                setViewMode(val);
+              }}
+              className='secondary-button h-11 px-5'
+            >
+              {viewMode === 'cards' ? <Squares /> : <TableIcon />}
+            </button>
 
-          <button
-            onClick={() => setModal('budget')}
-            className='dark-button x-center mt-3 flex h-11 w-full flex-shrink-0 rounded-full px-4 480:mt-0 480:w-auto'
-          >
-            <span className='my-auto mr-2'>Create budget</span>
-            <span className='my-auto'>
-              <PlusCircle />
-            </span>
-          </button>
+            <button
+              onClick={() => {
+                setFormRecoveryValues(null);
+                setModal('budget');
+              }}
+              className='dark-button x-center flex h-11 w-full rounded-full px-4 480:w-auto'
+            >
+              <span className='my-auto mr-2'>Create budget</span>
+              <span className='my-auto'>
+                <PlusCircle />
+              </span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -145,11 +150,13 @@ export default function Budgeting() {
         />
       </RightModalWrapper>
 
-      <AllBudgets
-        status={currentTab?.value}
-        search={debouncedSearch}
-        {...{ viewMode }}
-      />
+      <div className={'px-3 640:px-8'}>
+        <AllBudgets
+          status={currentTab?.value}
+          search={debouncedSearch}
+          {...{ viewMode, currentTab }}
+        />
+      </div>
     </AppLayout>
   );
 }

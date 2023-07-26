@@ -8,7 +8,7 @@ interface InflowOutflowRes {
   totalBalance: number;
 }
 
-export function useGetInflowOutflowChart(
+export function useGetAnalyticsChart(
   params: {
     type: string;
     duration: 'YEARLY' | 'MONTHLY' | 'WEEKLY' | 'DAILY';
@@ -30,6 +30,11 @@ export function useGetInflowOutflowChart(
     queryKey: ['inflow-outflow-chart', _params],
     url: `/balance-volume${_params}`,
     service: 'transactions',
-    options,
+    options: {
+      ...options,
+      meta: {
+        silent: true,
+      },
+    },
   });
 }
