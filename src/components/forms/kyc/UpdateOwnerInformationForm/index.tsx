@@ -21,7 +21,8 @@ export const UpdateOwnerInformationForm = () => {
   const { isLoading, mutate } = useUpdateOwnerInformation({
     onSuccess() {
       queryClient.invalidateQueries(['organization-information']);
-      replace('/kyc?tab=business-documentation').then(() => {
+
+      replace('/kyc?tab=business-documentation&showSteps=true').then(() => {
         toast(<AppToast>Update successful</AppToast>, { type: 'success' });
       });
     },

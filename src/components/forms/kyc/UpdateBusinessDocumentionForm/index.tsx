@@ -20,7 +20,8 @@ export const UpdateBusinessDocumentionForm = () => {
   const { isLoading, mutate } = useUpdateOrganizationDocuments({
     onSuccess() {
       queryClient.invalidateQueries(['organization-information']);
-      replace('/kyc?tab=review-and-submit').then(() => {
+
+      replace('/kyc?tab=review-and-submit&showSteps=true').then(() => {
         toast(<AppToast>Update successful</AppToast>, { type: 'success' });
       });
     },

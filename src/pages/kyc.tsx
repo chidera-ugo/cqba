@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { UpdateBusinessDocumentionForm } from 'components/forms/kyc/UpdateBusinessDocumentionForm';
 import { UpdateCompanyInformationForm } from 'components/forms/kyc/UpdateCompanyInformationForm';
 import { UpdateOwnerInformationForm } from 'components/forms/kyc/UpdateOwnerInformationForm';
@@ -18,7 +19,7 @@ export default function Kyc() {
   const { currentTab, isValidAccountSetupStep, goToNextAccountSetupStep } =
     useKycSteps();
 
-  const { replace } = useRouter();
+  const { replace, query } = useRouter();
 
   const { isVerified } = useIsVerified();
 
@@ -30,7 +31,7 @@ export default function Kyc() {
     replace(getCurrentAccountSetupStepUrl());
   }, [isValidAccountSetupStep]);
 
-  if (!isVerified)
+  if (isVerified)
     return (
       <AppLayout title='Setup your account' hideSideNavigation>
         <div className='py-10'>
@@ -56,7 +57,7 @@ export default function Kyc() {
       title='Get Started'
       hideSideNavigation
       headerSlot={
-        <Link href={'/'} className={'group flex'}>
+        <Link href={'/'} className={'group hidden 1024:flex'}>
           <span
             className={'my-auto mr-1 text-sm font-medium group-hover:underline'}
           >
@@ -68,7 +69,11 @@ export default function Kyc() {
         </Link>
       }
     >
-      <div className='hidden 768:block'>
+      <div
+        className={clsx(
+          query['showSteps'] === 'true' ? 'block' : 'hidden 768:block'
+        )}
+      >
         <h5>Activate your account</h5>
         <p className='mt-1 font-normal text-neutral-500'>
           Based on your business type, you will be required to submit the
@@ -76,16 +81,32 @@ export default function Kyc() {
         </p>
       </div>
 
-      <div className='768:kyc-layout-height mt-7 grid-cols-12 rounded-xl border-neutral-200 768:grid 768:border'>
-        <div className='col-span-5 border-neutral-200 768:m-5 768:mr-0 768:border-r 1200:col-span-4'>
-          <div className='mx-auto max-w-[540px]'>
-            <h5>Setup Guide</h5>
-            <KycSteps />
+      <div
+        className={clsx(
+          '768:kyc-layout-height mt-7 grid-cols-12 rounded-xl border-neutral-200 768:grid 768:border'
+        )}
+      >
+        <div className='m-0 border-neutral-200 768:col-span-5 768:m-5 768:mr-0 768:border-r 1200:col-span-4'>
+          <div className='mx-auto 768:max-w-[540px]'>
+            <h5 className={'hidden 768:block'}>Setup Guide</h5>
+
+            <div
+              className={clsx(
+                query['showSteps'] === 'true' ? 'block' : 'hidden 768:block'
+              )}
+            >
+              <KycSteps />
+            </div>
           </div>
         </div>
 
-        <div className='thin-scrollbar col-span-7 mt-5 overflow-y-auto 768:mt-0 1200:col-span-8'>
-          <div className='mx-auto h-full max-w-[540px] py-5 px-1 768:px-8'>
+        <div
+          className={clsx(
+            query['showSteps'] === 'true' && 'hidden 768:block',
+            'thin-scrollbar col-span-7 overflow-y-auto 768:mt-0 1200:col-span-8'
+          )}
+        >
+          <div className='mx-auto h-full max-w-[540px] px-1 768:py-5 768:px-8'>
             {currentTab === 'review-and-submit' ? (
               <ReviewAndSubmit />
             ) : currentTab === 'business-documentation' ? (

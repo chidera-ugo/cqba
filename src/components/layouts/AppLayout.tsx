@@ -6,6 +6,7 @@ import { VerifyYourAccount } from 'components/modules/kyc/VerifyYourAccount';
 import { PageHead } from 'components/primary/PageHead';
 import { Right } from 'components/svgs/navigation/Arrows';
 import { LineInfo } from 'components/svgs/others/Info';
+import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import { useCurrentAccountSetupStepUrl } from 'hooks/dashboard/kyc/useCurrentAccountSetupStepUrl';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import Link from 'next/link';
@@ -43,6 +44,8 @@ export const AppLayout = ({
   const { isVerified } = useIsVerified();
 
   const { getCurrentAccountSetupStepUrl } = useCurrentAccountSetupStepUrl();
+
+  const { isUnderReview } = useAccountVerificationStatus();
 
   if (!userExists) return <FullScreenLoader asPage />;
 
@@ -94,23 +97,26 @@ export const AppLayout = ({
                       className={'text-base font-medium text-white'}
                     >{`You're currently in test mode`}</h6>
                     <p className={'mt-2 text-sm text-white'}>
-                      Activate your business to start using Chequebase in live
-                      mode
+                      {isUnderReview
+                        ? `We're reviewing your application, this may take a while. You will be notified once this process has been completed.`
+                        : 'Activate your business to start using Chequebase in live mode'}
                     </p>
                   </div>
                 </div>
 
-                <div className='mt-4 flex 690:mt-0'>
-                  <Link
-                    href={getCurrentAccountSetupStepUrl()}
-                    className='light-button x-center h-10 border-none px-3 text-sm text-black 690:h-12 690:px-5'
-                  >
-                    <span className={'my-auto mr-1'}>Activate Business</span>
-                    <span className={'my-auto'}>
-                      <Right />
-                    </span>
-                  </Link>
-                </div>
+                {!isUnderReview && (
+                  <div className='mt-4 flex 690:mt-0'>
+                    <Link
+                      href={getCurrentAccountSetupStepUrl()}
+                      className='light-button x-center h-10 border-none px-3 text-sm text-black 690:h-12 690:px-5'
+                    >
+                      <span className={'my-auto mr-1'}>Activate Business</span>
+                      <span className={'my-auto'}>
+                        <Right />
+                      </span>
+                    </Link>
+                  </div>
+                )}
               </div>
             )}
 
