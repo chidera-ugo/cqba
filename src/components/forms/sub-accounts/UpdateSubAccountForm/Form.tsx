@@ -63,6 +63,8 @@ export const Form = ({
     setFieldValue('employeeId', employeeId);
   }, [currentSubAccount, employees, values.departmentId]);
 
+  console.log(departments);
+
   return (
     <FormikForm onSubmit={handleSubmit}>
       <AppErrorBoundary>
@@ -70,7 +72,7 @@ export const Form = ({
           id={'select-department'}
           label='Department'
           name='departmentId'
-          displayValueKey='planName'
+          displayValueKey='title'
           trueValueKey='id'
           {...{
             setFieldValue,
@@ -94,7 +96,7 @@ export const Form = ({
             id={'select-employee'}
             label='Employee'
             name='employeeId'
-            displayValueKey='planName'
+            displayValueKey='name'
             trueValueKey='id'
             {...{
               setFieldValue,

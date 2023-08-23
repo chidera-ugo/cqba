@@ -16,6 +16,7 @@ export const Form = ({ processing, formikProps }: Props) => {
   return (
     <FormikForm onSubmit={handleSubmit} className='mt-7'>
       <Input
+        autoFocus
         label='Email Address'
         name='email'
         autoComplete='username'

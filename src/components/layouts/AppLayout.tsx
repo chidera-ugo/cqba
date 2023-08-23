@@ -58,7 +58,9 @@ export const AppLayout = ({
         }}
       >
         <PageHead title={title} />
+
         <CreatePin />
+
         <SelectDefaultCategories />
 
         <div className='disable-scrolling 1024:flex'>

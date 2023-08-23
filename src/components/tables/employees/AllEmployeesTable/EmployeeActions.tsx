@@ -1,4 +1,8 @@
-import { Bin, OpenLock } from 'components/svgs/Icons_TableActions';
+import {
+  Bin,
+  OpenLock,
+  ClosedLockOutline,
+} from 'components/svgs/Icons_TableActions';
 import { IEmployee } from 'hooks/api/employees/useGetAllEmployees';
 
 interface Props {
@@ -6,17 +10,19 @@ interface Props {
   handleActionClick: (action: EmployeeAction) => void;
 }
 
-export type EmployeeAction = 'delete' | 'block' | null;
+export type EmployeeAction = 'delete' | 'block' | 'unblock' | null;
 
-export const EmployeeActions = ({ handleActionClick }: Props) => {
+export const EmployeeActions = ({ handleActionClick, employee }: Props) => {
   return (
     <div className={'flex gap-5'}>
       <button
-        onClick={() => handleActionClick('block')}
+        onClick={() =>
+          handleActionClick(employee.status === 'blocked' ? 'unblock' : 'block')
+        }
         type={'button'}
-        className={'y-center cell-button p-1'}
+        className={'y-center cell-button p-1 text-primary-main'}
       >
-        <OpenLock />
+        {employee.status === 'blocked' ? <ClosedLockOutline /> : <OpenLock />}
       </button>
 
       <button

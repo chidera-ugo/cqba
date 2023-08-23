@@ -7,6 +7,7 @@ import {
   IEmployee,
   useGetAllEmployees,
 } from 'hooks/api/employees/useGetAllEmployees';
+import { useUnblockEmployee } from 'hooks/api/employees/useUnblockEmployee';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import {
   ColumnFiltersState,
@@ -67,6 +68,11 @@ export const AllEmployeesTable = ({
       onSuccess,
     });
 
+  const { mutate: unblockEmployee, isLoading: unblockingEmployee } =
+    useUnblockEmployee(employeeToPerformActionOn?.id, {
+      onSuccess,
+    });
+
   const { mutate: deleteEmployee, isLoading: deletingEmployee } =
     useDeleteEmployee(employeeToPerformActionOn?.id, {
       onSuccess,
@@ -112,15 +118,25 @@ export const AllEmployeesTable = ({
             {employeeToPerformActionOn?.lastName}?
           </span>
         }
-        processingMessage={action === 'block' ? 'Blocking' : 'Deleting'}
+        processingMessage={
+          action === 'block'
+            ? 'Blocking'
+            : action === 'unblock'
+            ? 'Unblocking'
+            : 'Deleting'
+        }
         positive={() => {
-          if (action === 'block') {
-            blockEmployee(employeeToPerformActionOn?.id);
+          const id = employeeToPerformActionOn?.id;
+
+          if (action === 'unblock') {
+            unblockEmployee(id);
+          } else if (action === 'block') {
+            blockEmployee(id);
           } else if (action === 'delete') {
-            deleteEmployee(employeeToPerformActionOn?.id);
+            deleteEmployee(id);
           }
         }}
-        processing={deletingEmployee || blockingEmployee}
+        processing={deletingEmployee || blockingEmployee || unblockingEmployee}
         negative={() => {
           setShowConfirmation(false);
         }}

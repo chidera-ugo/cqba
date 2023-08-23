@@ -17,7 +17,12 @@ export const Form = ({ processing, formikProps }: Props) => {
   return (
     <FormikForm onSubmit={handleSubmit} className='mt-7'>
       <div className='gap-4 880:flex'>
-        <Input label='First Name' name='firstName' className='w-full' />
+        <Input
+          autoFocus
+          label='First Name'
+          name='firstName'
+          className='w-full'
+        />
         <Input label='Last Name' name='lastName' className='w-full' />
       </div>
 
