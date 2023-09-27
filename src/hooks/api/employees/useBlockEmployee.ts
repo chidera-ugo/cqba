@@ -7,7 +7,7 @@ export function useBlockEmployee(
 ) {
   return useTMutation({
     method: 'patch',
-    url: `/${employeeId}`,
+    url: `/${employeeId}/block`,
     service: 'employees',
     options,
   });

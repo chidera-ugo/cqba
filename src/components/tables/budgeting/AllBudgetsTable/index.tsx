@@ -14,6 +14,7 @@ export const AllBudgetsTable = ({ onItemClick, ...props }: BudgetListProps) => {
 
   return (
     <Table<IBudget>
+      hideFetchingToast
       dontScrollToTopOnPageChange
       onRowClick={onItemClick}
       shouldDisableClicking={{

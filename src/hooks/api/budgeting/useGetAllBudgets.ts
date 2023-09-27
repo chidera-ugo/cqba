@@ -4,9 +4,31 @@ import { useTQuery } from 'hooks/api/useTQuery';
 import { PaginatedResponse } from 'types/Table';
 import { generateUrlParamsFromObject } from 'utils/generators/generateUrlParamsFromObject';
 
-interface Creator {
+export interface IBudget {
+  departmentId: string;
+  creator: Creator;
+  currentBalance: number;
+  status: string;
+  categoryTitle: string;
+  createdAt: number;
+  priority: string;
+  sKey: string;
+  deadline: string;
+  departmentTitle: string;
+  initialBalance: number;
+  categoryId: string;
+  organizationId: string;
+  updatedAt: number;
+  amount: string;
+  description: string;
+  id: string;
+  title: string;
+}
+
+export interface Creator {
   lastName: string;
   roles: string[];
+  defaultCategoryIds: string[];
   organizationId: string;
   createdAt: number;
   firstName: string;
@@ -24,25 +46,6 @@ interface Creator {
   email: string;
   status: string;
   updatedAt: number;
-}
-
-export interface IBudget {
-  departmentId: string;
-  status: BudgetStatus;
-  priority: string;
-  createdAt: string;
-  sKey: string;
-  deadline: string;
-  organizationId: string;
-  userId: string;
-  updatedAt: string;
-  amount: string;
-  creator: Creator;
-  categoryTitle: string;
-  departmentTitle: string;
-  description: string;
-  id: string;
-  title: string;
 }
 
 export function useGetAllBudgets(

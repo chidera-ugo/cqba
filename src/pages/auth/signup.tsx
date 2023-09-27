@@ -46,7 +46,21 @@ export default function Signup() {
               action: () => mutate({ email: newUser.email }),
               text: 'Resend Verification Link',
             }}
+            slot={
+
+                <div className='mt-4 mx-auto text-left text-sm text-neutral-600'>
+                    {`Already verified your account?`}
+                    <Link
+                        href='/auth/signin'
+                        className='text-button ml-1 text-left font-medium'
+                    >
+                        Sign In
+                    </Link>
+                </div>
+            }
           />
+
+
         ) : (
           <>
             <h4>Create a free account</h4>

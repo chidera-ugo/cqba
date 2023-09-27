@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { SearchInput } from 'components/form-elements/SearchInput';
 import { AppLayout } from 'components/layouts/AppLayout';
 import { ManageEmployee } from 'components/modules/employees/ManageEmployee';
-import { PlusCircle } from 'components/svgs/others/Plus';
+import { SimplePlus } from 'components/svgs/others/Plus';
 import { AllEmployeesTable } from 'components/tables/employees/AllEmployeesTable';
 import { EmployeesDepartmentTable } from 'components/tables/employees/EmployeesDepartmentTable';
 import { useDebouncer } from 'hooks/common/useDebouncer';
@@ -84,7 +84,7 @@ export default function Employees() {
             >
               <span className={'my-auto mr-2'}>Add Employee</span>
               <span className={'my-auto'}>
-                <PlusCircle />
+                <SimplePlus />
               </span>
             </button>
           </div>
@@ -110,6 +110,9 @@ export default function Employees() {
                 setModal('employee');
               },
               currentEmployee,
+            }}
+            createEmployee={() => {
+              setModal('employee');
             }}
           />
         ) : (

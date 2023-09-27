@@ -75,6 +75,7 @@ export type Props<T> = JSX.IntrinsicElements['table'] & {
     key: string;
     value: string;
   };
+  hideFetchingToast?: boolean;
 };
 
 export function Table<T>({
@@ -85,6 +86,7 @@ export function Table<T>({
   onRowClick,
   title,
   canNotShowData,
+  hideFetchingToast,
   alignTop,
   pagination,
   setPagination,
@@ -208,7 +210,11 @@ export function Table<T>({
       )}
     >
       <SimpleToast
-        show={(!!isLoading || !!isRefetching) && !!res?.content.length}
+        show={
+          !hideFetchingToast &&
+          (!!isLoading || !!isRefetching) &&
+          !!res?.content.length
+        }
         className='left-0 top-32 1180:left-[122px]'
       >
         <div className='flex py-2'>

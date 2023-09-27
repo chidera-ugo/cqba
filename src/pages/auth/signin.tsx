@@ -4,6 +4,8 @@ import { AuthLayout } from 'components/layouts/AuthLayout';
 import Link from 'next/link';
 
 export default function Signin() {
+  // Todo: Test redirect on signin
+
   return (
     <AuthLayout title='Signin'>
       <div className={clsx('auth-container mx-auto py-8 640:py-[93px]')}>

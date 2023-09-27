@@ -4,9 +4,7 @@ import {
   Card,
   Code,
   Cog,
-  Columns,
   Home,
-  OpenEnvelope,
   PieChart,
   Refund,
   Users,
@@ -48,27 +46,23 @@ export const useNavigationItems = () => {
     ],
     'Spend Management': [
       {
-        icon: <Card />,
-        title: 'Cards',
-      },
-      {
         icon: <PieChart />,
         title: 'Budgeting',
-      },
-      {
-        icon: <Columns />,
-        title: 'Sub Accounts',
       },
       {
         icon: <Refund />,
         title: 'Reimbursement',
       },
+      {
+        icon: <PieChart />,
+        title: 'Analytics',
+      },
+      {
+        icon: <Card />,
+        title: 'Cards',
+      },
     ],
     Others: [
-      {
-        icon: <OpenEnvelope />,
-        title: 'Notifications',
-      },
       {
         icon: <Users />,
         title: 'Employees',

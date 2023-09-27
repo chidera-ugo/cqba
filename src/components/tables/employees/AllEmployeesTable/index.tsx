@@ -1,5 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { Confirmation } from 'components/modals/Confirmation';
+import { SimplePlus } from 'components/svgs/others/Plus';
 import { EmployeeAction } from 'components/tables/employees/AllEmployeesTable/EmployeeActions';
 import { useBlockEmployee } from 'hooks/api/employees/useBlockEmployee';
 import { useDeleteEmployee } from 'hooks/api/employees/useDeleteEmployee';
@@ -8,6 +9,7 @@ import {
   useGetAllEmployees,
 } from 'hooks/api/employees/useGetAllEmployees';
 import { useUnblockEmployee } from 'hooks/api/employees/useUnblockEmployee';
+import Image from 'next/image';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import {
   ColumnFiltersState,
@@ -17,6 +19,7 @@ import {
 import { PaginatedResponse } from 'types/Table';
 import { useColumns } from './useColumns';
 import { Table } from 'components/core/Table';
+import employees from '/public/mockups/employees.png';
 
 interface Props {
   reset?: () => void;
@@ -26,6 +29,7 @@ interface Props {
   slot?: JSX.Element;
   currentEmployee: IEmployee | null;
   onRowClick: Dispatch<SetStateAction<IEmployee | null>>;
+  createEmployee?: () => void;
 }
 
 export const AllEmployeesTable = ({
@@ -34,6 +38,7 @@ export const AllEmployeesTable = ({
   filters,
   setFilters,
   onRowClick,
+  createEmployee,
 }: Props) => {
   const queryClient = useQueryClient();
 
@@ -105,6 +110,44 @@ export const AllEmployeesTable = ({
     queryClient.invalidateQueries(['employees']);
     setShowConfirmation(false);
   }
+
+  if (!data?.empty)
+    return (
+      <div className='min-h-[480px] grid-cols-10 overflow-hidden rounded-2xl bg-neutral-100 640:grid'>
+        <div className='col-span-6 my-auto h-full p-7 640:p-12 1280:col-span-5'>
+          <div className='y-center h-full'>
+            <h4 className='text-2xl 640:text-4xl'>Invite Employee</h4>
+
+            <p className='mt-4 font-light leading-6 text-neutral-600'>
+              Building a strong team is essential for business success. Invite
+              new employees to collaborate and manage your finances effectively
+            </p>
+
+            <div className='flex'>
+              <button
+                onClick={createEmployee}
+                className='dark-button x-center mt-4 flex h-11 w-full rounded-full px-4 480:w-auto'
+              >
+                <span className='my-auto mr-2'>Add Employee</span>
+                <span className='my-auto'>
+                  <SimplePlus />
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className='relative col-span-4 640:pt-12 1280:col-span-5'>
+          <div className='x-center bottom-0 -right-24 w-full 640:absolute 1280:right-0'>
+            <Image
+              src={employees}
+              alt='card-mockup'
+              className='mx-auto -mb-20 mt-auto min-w-[500px] max-w-[500px]'
+            />
+          </div>
+        </div>
+      </div>
+    );
 
   return (
     <>

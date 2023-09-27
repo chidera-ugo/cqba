@@ -9,6 +9,7 @@ import { useDebouncer } from 'hooks/common/useDebouncer';
 import { useQueryParamManagedState } from 'hooks/dashboard/useQueryParamManagedState';
 import { useManageSubAccount } from 'hooks/sub-accounts/useManageSubAccount';
 import Link from 'next/link';
+import NotFound from 'pages/404';
 import { useState } from 'react';
 import { Filter } from 'components/form-elements/Filter';
 
@@ -43,6 +44,8 @@ export default function SubAccounts() {
   );
 
   const { setAccountToEdit, setModal, ...rest } = useManageSubAccount();
+
+  if (!false) return <NotFound />;
 
   return (
     <AppLayout title='Sub Accounts' childrenClassName={'mb-7'}>
