@@ -1,5 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
+import { SimpleToast } from 'components/common/SimpleToast';
 import { Confirmation } from 'components/modals/Confirmation';
+import { Spinner } from 'components/svgs/dashboard/Spinner';
 import { SimplePlus } from 'components/svgs/others/Plus';
 import { EmployeeAction } from 'components/tables/employees/AllEmployeesTable/EmployeeActions';
 import { useBlockEmployee } from 'hooks/api/employees/useBlockEmployee';
@@ -111,9 +113,19 @@ export const AllEmployeesTable = ({
     setShowConfirmation(false);
   }
 
-  if (!data?.empty)
+  if (data?.empty)
     return (
-      <div className='min-h-[480px] grid-cols-10 overflow-hidden rounded-2xl bg-neutral-100 640:grid'>
+      <div className='relative min-h-[480px] grid-cols-10 overflow-hidden rounded-2xl bg-neutral-100 640:grid'>
+        <SimpleToast
+          show={isLoading || isRefetching}
+          className='left-0 top-32 1180:left-[122px]'
+        >
+          <div className='flex py-2'>
+            <Spinner className='my-auto mr-1 h-4 text-white' />
+            <span className='my-auto'>Fetching</span>
+          </div>
+        </SimpleToast>
+
         <div className='col-span-6 my-auto h-full p-7 640:p-12 1280:col-span-5'>
           <div className='y-center h-full'>
             <h4 className='text-2xl 640:text-4xl'>Invite Employee</h4>

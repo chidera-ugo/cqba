@@ -2,10 +2,10 @@ type Plan = 'elite' | 'pro' | 'basic';
 
 export const usePlanBenefits = () => {
   const planBenefits = [
-    { title: 'Single interbank transfers', minimumPlan: 'basic' },
     { title: 'Transfer to Chequebase accounts', minimumPlan: 'basic' },
-    { title: 'Invite unlimited team members', minimumPlan: 'basic' },
-    { title: 'Budgeting', minimumPlan: 'pro' },
+    { title: 'Invite team members', minimumPlan: 'basic' },
+    { title: 'Team member permissions', minimumPlan: 'basic' },
+    { title: 'Budgeting', minimumPlan: 'basic' },
     { title: 'Manage your team’s expenses', minimumPlan: 'pro' },
     { title: '24/7 support', minimumPlan: 'pro' },
     { title: 'Analytics', minimumPlan: 'pro' },

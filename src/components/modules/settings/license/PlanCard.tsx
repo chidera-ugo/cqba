@@ -25,7 +25,6 @@ export const PlanCard = ({
   isBestValue,
   color,
   benefits,
-  isActive,
   minimal,
   children,
 }: PropsWithChildren<Props>) => {
@@ -52,11 +51,15 @@ export const PlanCard = ({
 
         <div className='flex'>
           <h5 className={'mr-2 text-4xl font-semibold 768:text-5xl'}>
-            ₦{formatAmount({ value: amount, decimalPlaces: 0 })}
+            {isNaN(Number(amount))
+              ? amount
+              : `₦${formatAmount({ value: amount, decimalPlaces: 0 })}`}
           </h5>
-          <span className={'my-auto text-lg font-medium text-neutral-500'}>
-            Monthly
-          </span>
+          {isNaN(Number(amount)) ? null : (
+            <span className={'my-auto text-lg font-medium text-neutral-500'}>
+              Monthly
+            </span>
+          )}
         </div>
 
         <p className={'mt-3 text-sm font-medium text-neutral-800'}>
@@ -66,15 +69,15 @@ export const PlanCard = ({
 
       {!onlyShowHeader && (
         <div>
-          <button
-            disabled={isActive}
-            className={clsx(
-              isBestValue ? 'primary-button' : 'dark-button',
-              'mt-5 h-11 w-full disabled:hover:bg-black'
-            )}
-          >
-            {isActive ? 'Active Plan' : 'Get Started'}
-          </button>
+          {/*<button*/}
+          {/*  disabled={isActive}*/}
+          {/*  className={clsx(*/}
+          {/*    isBestValue ? 'primary-button' : 'dark-button',*/}
+          {/*    'mt-5 h-11 w-full disabled:hover:bg-black'*/}
+          {/*  )}*/}
+          {/*>*/}
+          {/*  {isActive ? 'Active Plan' : 'Get Started'}*/}
+          {/*</button>*/}
 
           <div className={'mt-4'}>
             {benefits.map(({ title, minimumPlan }) => {

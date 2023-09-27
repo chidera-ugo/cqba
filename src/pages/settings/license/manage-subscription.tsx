@@ -5,6 +5,7 @@ import { PlanCard } from 'components/modules/settings/license/PlanCard';
 import { Cross } from 'components/svgs/navigation/Exit';
 import { usePlanBenefits } from 'hooks/settings/license/usePlanBenefits';
 import Link from 'next/link';
+import NotFound from 'pages/404';
 import { useState } from 'react';
 
 export default function ManageSubscription() {
@@ -43,6 +44,8 @@ export default function ManageSubscription() {
       isBestValue: true,
     },
   ];
+
+  if (!false) return <NotFound />;
 
   return (
     <AppLayout
