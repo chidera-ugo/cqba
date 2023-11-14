@@ -43,7 +43,7 @@ export const CategoryPill = ({
     <div
       onClick={onClick}
       className={clsx(
-        'rounded-full px-2 py-0.5 cursor-pointer font-medium',
+        'cursor-pointer rounded-full px-2 py-0.5 font-medium',
         onClick ? 'text-sm hover:underline' : 'text-xs'
       )}
       style={{
