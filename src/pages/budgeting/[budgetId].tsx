@@ -1,3 +1,4 @@
+import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
 import { AppLayout } from 'components/layouts/AppLayout';
@@ -11,19 +12,31 @@ export default function BudgetDetails() {
 
   const id = getValidQueryParam(query['budgetId']);
 
-  const { isLoading, isError, data } = useGetBudgetById(id);
+  const { isLoading, isError, data } = useGetBudgetById(id, {
+    enabled: !!id,
+  });
 
   return (
     <AppLayout
-      title='Budget Details'
-      back={!data ? '/budgeting' : `/budgeting?_t=${data.status}`}
+      title={'Budgeting'}
+      breadCrumbs={[
+        {
+          title: 'Budgeting',
+          url: !data ? '/budgeting' : `/budgeting?_t=${data.status}`,
+        },
+        {
+          title: 'Track Expense',
+        },
+      ]}
     >
       {isLoading ? (
         <IsLoading />
       ) : isError ? (
         <IsError description={'Failed to get budget details'} />
       ) : (
-        <ApprovedBudgetDetails data={data} />
+        <AppErrorBoundary>
+          <ApprovedBudgetDetails data={data} />
+        </AppErrorBoundary>
       )}
     </AppLayout>
   );

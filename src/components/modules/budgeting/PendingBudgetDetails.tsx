@@ -3,9 +3,11 @@ import { FullScreenLoader } from 'components/common/FullScreenLoader';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
 import { BudgetCard } from 'components/modules/budgeting/BudgetCard';
+import { AppToast } from 'components/primary/AppToast';
 import { useApproveOrRejectBudget } from 'hooks/api/budgeting/useApproveOrRejectBudget';
 import { useGetBudgetById } from 'hooks/api/budgeting/useGetBudgetById';
 import { useGetColorByChar } from 'hooks/common/useGetColorByChar';
+import { toast } from 'react-toastify';
 
 interface Props {
   id: string;
@@ -14,7 +16,6 @@ interface Props {
 
 export const PendingBudgetDetails = ({ id, close }: Props) => {
   const queryClient = useQueryClient();
-
   const { getColor } = useGetColorByChar();
 
   const { isLoading: gettingBudget, isError, data } = useGetBudgetById(id);
@@ -23,6 +24,10 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
     onSuccess() {
       close();
       queryClient.invalidateQueries(['budgets']);
+      toast(<AppToast>Updated budget successfully</AppToast>, {
+        type: 'success',
+        autoClose: 2000,
+      });
     },
   });
 

@@ -42,6 +42,8 @@ export const DatePicker = ({
   const [showCalendar, setShowCalendar] = useState(false);
   const id = props.id ?? name;
 
+  // Todo: Test budget creation on click
+
   function finish(date: any, dontClose?: boolean) {
     setFieldValue!(name, { value: date.toISOString(), calendarValue: date });
 
@@ -65,14 +67,24 @@ export const DatePicker = ({
   }
 
   function handleClick() {
-    if (!disableTyping || props.disabled) return;
+    if (props.disabled) return;
+
+    if (!showCalendar) {
+      const date = dayjs(getValue());
+      if (date.isValid() && !date.isAfter(maxDate) && setFieldValue) {
+        setFieldValue(name, {
+          ...field.value,
+          calendarValue: date.toDate(),
+        });
+      }
+    }
 
     setShowCalendar((prev) => !prev);
   }
 
   return (
     <div className={clsx(className, 'mt-5 w-full')}>
-      <div className={'relative'} id={id ?? 'date-picker-wrapper'}>
+      <div className={'relative'}>
         <div className={clsx('relative')}>
           <div className='flex'>
             <label htmlFor={id} className='text-left'>
@@ -80,14 +92,15 @@ export const DatePicker = ({
             </label>
           </div>
 
-          <div className='relative'>
+          <div className='relative' id={id ?? 'date-picker-wrapper'}>
             <div onClick={handleClick}>
               <input
                 {...props}
                 {...field}
                 id={id}
+                type={disableTyping ? 'button' : 'input'}
                 value={getValue()}
-                disabled={props.disabled || disableTyping}
+                disabled={props.disabled}
                 onChange={(e) => {
                   setShowCalendar(false);
 
@@ -119,25 +132,7 @@ export const DatePicker = ({
             </div>
 
             <button
-              onClick={() => {
-                if (props.disabled) return;
-
-                if (!showCalendar) {
-                  const date = dayjs(getValue());
-                  if (
-                    date.isValid() &&
-                    !date.isAfter(maxDate) &&
-                    setFieldValue
-                  ) {
-                    setFieldValue(name, {
-                      ...field.value,
-                      calendarValue: date.toDate(),
-                    });
-                  }
-                }
-
-                setShowCalendar((prev) => !prev);
-              }}
+              onClick={handleClick}
               disabled={props.disabled}
               type='button'
               tabIndex={-1}
@@ -147,32 +142,32 @@ export const DatePicker = ({
                 <CalendarIcon />
               </div>
             </button>
+
+            <Dropdown
+              show={showCalendar}
+              className={clsx(
+                'right-0 h-fit w-full bg-white p-2 640:w-min',
+                dropdownClassname
+              )}
+              close={() => setShowCalendar(false)}
+              wrapperId={id!}
+            >
+              <Calendar
+                maxDate={maxDate}
+                minDate={minDate}
+                defaultActiveStartDate={field?.value?.calendarValue ?? maxDate}
+                onChange={(value) => finish(value, true)}
+                onClickDay={(date: Date) => finish(date)}
+                value={field?.value?.calendarValue}
+                prevLabel={<FirstPreviousButtonIcon className='h-6 w-6' />}
+                prev2Label={null}
+                nextLabel={<FirstNextButtonIcon className='h-6 w-6' />}
+                next2Label={null}
+                tileClassName='calendar-tile'
+              />
+            </Dropdown>
           </div>
         </div>
-
-        <Dropdown
-          show={showCalendar}
-          className={clsx(
-            'right-0 h-fit w-full bg-white p-2 640:w-min',
-            dropdownClassname
-          )}
-          close={() => setShowCalendar(false)}
-          wrapperId={id!}
-        >
-          <Calendar
-            maxDate={maxDate}
-            minDate={minDate}
-            defaultActiveStartDate={field?.value?.calendarValue ?? maxDate}
-            onChange={(value) => finish(value, true)}
-            onClickDay={(date: Date) => finish(date)}
-            value={field?.value?.calendarValue}
-            prevLabel={<FirstPreviousButtonIcon className='h-6 w-6' />}
-            prev2Label={null}
-            nextLabel={<FirstNextButtonIcon className='h-6 w-6' />}
-            next2Label={null}
-            tileClassName='calendar-tile'
-          />
-        </Dropdown>
       </div>
 
       {submitCount > 0 && meta.error ? (

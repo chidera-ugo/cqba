@@ -33,7 +33,11 @@ export default function Signup() {
       >
         {newUser?.email ? (
           <SimpleInformation
-            title={<span>Almost done. Confirm your email.</span>}
+            title={
+              <span className={'mx-auto block max-w-[300px] 640:min-w-full'}>
+                Almost done. Confirm your email.
+              </span>
+            }
             description={
               <span className='mt-3 block'>
                 We’ve sent a verification link to your email address. Click on
@@ -46,11 +50,22 @@ export default function Signup() {
               action: () => mutate({ email: newUser.email }),
               text: 'Resend Verification Link',
             }}
+            slot={
+              <div className='mx-auto mt-4 text-left text-sm text-neutral-600'>
+                {`Already verified your account?`}
+                <Link
+                  href='/auth/signin'
+                  className='text-button ml-1 text-left font-medium'
+                >
+                  Sign In
+                </Link>
+              </div>
+            }
           />
         ) : (
           <>
             <h4>Create a free account</h4>
-            <div className='mt-4 text-left text-sm text-neutral-600'>
+            <div className='mt-2 text-left text-sm text-neutral-600 640:mt-3'>
               {`Already have an account?`}
               <Link
                 href='/auth/signin'

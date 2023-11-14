@@ -30,7 +30,7 @@ export const Form = ({ processing, formikProps, institutions }: Props) => {
         name='bank'
         entity='Bank'
         next='accountNumber'
-        displayValueKey='planName'
+        displayValueKey='title'
         trueValueKey='code'
         className='mt-0'
         {...{

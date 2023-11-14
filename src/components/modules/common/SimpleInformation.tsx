@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, ReactNode } from 'react';
 
 export interface Props {
   processing?: boolean;
@@ -12,6 +12,7 @@ export interface Props {
     text?: string;
   };
   className?: string;
+  slot?: ReactNode;
 }
 
 export const SimpleInformation = ({
@@ -20,6 +21,7 @@ export const SimpleInformation = ({
   description,
   className,
   icon,
+  slot,
   processing,
   children,
 }: PropsWithChildren<Props>) => {
@@ -43,6 +45,8 @@ export const SimpleInformation = ({
           </SubmitButton>
         </div>
       )}
+
+      {slot}
     </div>
   );
 };

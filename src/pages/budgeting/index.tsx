@@ -6,7 +6,7 @@ import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { AllBudgets, ViewMode } from 'components/modules/budgeting/AllBudgets';
 import { CreateCategory } from 'components/modules/categories/CreateCategory';
 import { CreateDepartment } from 'components/modules/employees/CreateDepartment';
-import { PlusCircle } from 'components/svgs/others/Plus';
+import { SimplePlus } from 'components/svgs/others/Plus';
 import { Squares } from 'components/svgs/others/Squares';
 import { TableIcon } from 'components/svgs/others/Table';
 import { BudgetStatus } from 'enums/Budget';
@@ -48,6 +48,11 @@ export default function Budgeting() {
 
   function closeModal() {
     setModal(null);
+  }
+
+  function createBudget() {
+    setFormRecoveryValues(null);
+    setModal('budget');
   }
 
   return (
@@ -103,15 +108,12 @@ export default function Budgeting() {
             </button>
 
             <button
-              onClick={() => {
-                setFormRecoveryValues(null);
-                setModal('budget');
-              }}
+              onClick={createBudget}
               className='dark-button x-center flex h-11 w-full rounded-full px-4 480:w-auto'
             >
               <span className='my-auto mr-2'>Create budget</span>
               <span className='my-auto'>
-                <PlusCircle />
+                <SimplePlus />
               </span>
             </button>
           </div>
@@ -154,7 +156,7 @@ export default function Budgeting() {
         <AllBudgets
           status={currentTab?.value}
           search={debouncedSearch}
-          {...{ viewMode, currentTab }}
+          {...{ viewMode, currentTab, createBudget }}
         />
       </div>
     </AppLayout>

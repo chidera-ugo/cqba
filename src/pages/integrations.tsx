@@ -4,18 +4,17 @@ import Image from 'next/image';
 
 export default function Integrations() {
   return (
-    <AppLayout title='QuickBooks Integration'>
-      <div className='relative min-h-[480px] grid-cols-10 gap-10 overflow-hidden rounded-2xl bg-neutral-100 1180:grid'>
-        <div className='relative z-10 col-span-5 my-auto h-full p-7 640:p-12'>
+    <AppLayout title='Third Party Integration'>
+      <div className='min-h-[480px] grid-cols-10 overflow-hidden rounded-2xl bg-neutral-100 640:grid'>
+        <div className='col-span-6 my-auto h-full p-7 640:p-12 1280:col-span-5'>
           <div className='y-center h-full'>
-            <h4 className='text-2xl 640:text-4xl'>QuickBooks Integration</h4>
+            <h4 className='text-2xl 640:text-4xl'>Third-party Integration</h4>
 
             <p className='mt-4 font-light leading-6 text-neutral-600'>
-              {`Hey there! We're excited to announce that our seamless integration
-              with QuickBooks is just around the corner. We've been working
-              tirelessly to bring you a streamlined experience, making it easier
-              than ever to manage your finances and stay on top of your
-              business.`}
+              Streamline Spending with Third-Party Integration! Connect your
+              favorite financial tools seamlessly for smarter, more efficient
+              spend management. Stay tuned for a game-changing feature that will
+              transform your financial workflow. #ComingSoon
             </p>
 
             <div className='flex'>
@@ -25,13 +24,14 @@ export default function Integrations() {
             </div>
           </div>
         </div>
-
-        <div className={'min-h-[210px] 425:min-h-[280px] 480:min-h-[340px]'}>
-          <Image
-            src={integrations}
-            alt='integrations-mockup'
-            className='absolute bottom-0 right-0 z-0 mt-auto w-[640px] 1180:-bottom-8 1180:-right-56 1180:w-[740px] 1280:-right-48 1340:-right-32 1600:-right-0'
-          />
+        <div className='relative col-span-4 640:pt-12 1280:col-span-5'>
+          <div className='x-center bottom-0 -right-24 w-full 640:absolute 1280:right-0'>
+            <Image
+              src={integrations}
+              alt='card-mockup'
+              className='mx-auto mt-auto min-w-[500px] max-w-[500px]'
+            />
+          </div>
         </div>
       </div>
     </AppLayout>

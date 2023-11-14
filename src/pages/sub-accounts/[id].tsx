@@ -4,6 +4,7 @@ import { SubAccountInformation } from 'components/modules/sub-accounts/SubAccoun
 import { AppLayout } from 'components/layouts/AppLayout';
 import { useGetSubAccountById } from 'hooks/api/sub-accounts/useGetSubAccountById';
 import { useRouter } from 'next/router';
+import NotFound from 'pages/404';
 import { getValidQueryParam } from 'utils/getters/getValidQueryParam';
 
 export default function SubAccountDetails() {
@@ -15,8 +16,10 @@ export default function SubAccountDetails() {
   const id = getValidQueryParam(query['id']);
 
   const { isLoading, isError, data } = useGetSubAccountById(id, {
-    enabled: !!id,
+    enabled: false,
   });
+
+  if (!false) return <NotFound />;
 
   return (
     <AppLayout

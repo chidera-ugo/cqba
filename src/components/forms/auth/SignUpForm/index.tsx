@@ -1,6 +1,5 @@
 import { Formik } from 'formik';
 import { useSignup } from 'hooks/api/auth/useSignup';
-import { appendCountryCode } from 'utils/modifiers/appendCountryCode';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
@@ -16,14 +15,13 @@ export const SignUpForm = ({ onSuccess }: Props) => {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={({ email, phoneNumber, acceptedTerms: _, ...values }) => {
+      onSubmit={({ email, acceptedTerms: _, ...values }) => {
         const _email = email.trim();
 
         mutate(
           {
             ...values,
             email: _email,
-            phone: appendCountryCode(phoneNumber),
           },
           {
             onSuccess: () => onSuccess({ email: _email }),

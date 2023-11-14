@@ -33,13 +33,19 @@ export const SelectDefaultCategories = () => {
       !isVerified ||
       pathname.includes('/kyc') ||
       !user?.pinSet ||
-      !data?.length ||
-      user?.categoriesSet
-    )
+      !data?.length
+    ) {
+      setShowModal(false);
       return;
+    }
+
+    if (user?.defaultCategoryIds && user?.defaultCategoryIds?.length > 0) {
+      setShowModal(false);
+      return;
+    }
 
     setShowModal(true);
-  }, [pathname, data]);
+  }, [pathname, data, user]);
 
   function closeModal() {
     setShowModal(false);

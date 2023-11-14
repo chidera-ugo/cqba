@@ -10,7 +10,10 @@ export default function Home() {
   return (
     <AppLayout title='Overview'>
       <div className='x-between block 640:flex'>
-        <h5>Hi {user?.firstName}, Welcome to ChequeBase</h5>
+        <h5>
+          Hi {user?.firstName},{' '}
+          <span className={'text-neutral-400'}>Welcome to ChequeBase</span>
+        </h5>
       </div>
 
       <div className='mt-4'>

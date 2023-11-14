@@ -1,3 +1,4 @@
+import { PasswordRequirements } from 'components/forms/auth/SignUpForm/Form';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
@@ -9,7 +10,7 @@ interface Props {
 }
 
 export const Form = ({ processing, formikProps }: Props) => {
-  const { handleSubmit } = formikProps;
+  const { handleSubmit, values } = formikProps;
 
   return (
     <FormikForm onSubmit={handleSubmit} className='mt-10'>
@@ -28,10 +29,12 @@ export const Form = ({ processing, formikProps }: Props) => {
         className='mt-4'
       />
 
+      {values.password && <PasswordRequirements password={values.password} />}
+
       <SubmitButton
         id='new-password-submit-button'
         submitting={processing}
-        className='dark-button mt-12 w-full min-w-[200px] 640:w-auto'
+        className='primary-button mt-12 w-full min-w-[200px] 640:w-auto'
       >
         Set new password
       </SubmitButton>

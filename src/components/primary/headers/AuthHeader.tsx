@@ -1,7 +1,5 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import logo from '/public/logos/main-logo.svg';
 import clsx from 'clsx';
+import { Logo } from 'components/primary/headers/AppHeader';
 import { Right } from 'components/svgs/navigation/Arrows';
 
 export const AuthHeader = () => {
@@ -12,23 +10,14 @@ export const AuthHeader = () => {
       )}
     >
       <div className='x-between relative z-10 my-auto h-16 px-4 640:px-10 1024:h-[82px]'>
-        <div className='flex'>
-          <Link href='/' className='my-auto'>
-            <Image
-              src={logo}
-              priority
-              alt='chequebase-logo'
-              className='my-auto w-[160px] object-contain'
-            />
-          </Link>
-        </div>
+        <Logo />
 
         <div className='y-center'>
           <a
             href='https://chequebase.io'
             target='_blank'
             rel='noreferrer noopenner'
-            className='text-button flex text-sm font-medium text-black'
+            className='text-button flex text-xs font-medium text-black 640:text-sm'
           >
             <span className='my-auto mr-2'>Visit Website</span>
             <span className='my-auto'>

@@ -16,7 +16,7 @@ export default function NewPassword() {
     <AuthLayout title='Set New Password'>
       <div className={clsx('auth-container mx-auto py-8 640:py-[93px]')}>
         <h4>Set new password</h4>
-        <div className='mt-4 text-left text-sm text-neutral-600'>
+        <div className='mt-2 text-left text-sm text-neutral-600'>
           Create a new password for your account
         </div>
 

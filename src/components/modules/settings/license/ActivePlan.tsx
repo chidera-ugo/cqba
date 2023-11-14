@@ -13,7 +13,7 @@ export const ActivePlan = ({
       className={'max-w-[360px] border-none p-0 640:min-w-[360px]'}
       benefits={getBenefitsByPlan('basic')}
       planName={'Basic'}
-      amount={'1000'}
+      amount={'Free'}
       minimal
       description={'For new businesses'}
       color={'#E28800'}

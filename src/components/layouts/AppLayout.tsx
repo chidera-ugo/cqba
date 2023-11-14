@@ -5,6 +5,7 @@ import { SelectDefaultCategories } from 'components/modules/core/SelectDefaultCa
 import { VerifyYourAccount } from 'components/modules/kyc/VerifyYourAccount';
 import { PageHead } from 'components/primary/PageHead';
 import { Right } from 'components/svgs/navigation/Arrows';
+import { ChevronRight } from 'components/svgs/navigation/Chevrons';
 import { LineInfo } from 'components/svgs/others/Info';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import { useCurrentAccountSetupStepUrl } from 'hooks/dashboard/kyc/useCurrentAccountSetupStepUrl';
@@ -24,6 +25,7 @@ export interface Props {
   back?: string;
   hideSideNavigation?: boolean;
   childrenClassName?: string;
+  breadCrumbs?: { title: string; url?: string }[];
 }
 
 export const AppLayout = ({
@@ -34,6 +36,7 @@ export const AppLayout = ({
   requiresVerification,
   hideSideNavigation,
   childrenClassName,
+  breadCrumbs,
 }: PropsWithChildren<Props>) => {
   const { userExists } = useProtectedRoutesGuard();
 
@@ -58,7 +61,9 @@ export const AppLayout = ({
         }}
       >
         <PageHead title={title} />
+
         <CreatePin />
+
         <SelectDefaultCategories />
 
         <div className='disable-scrolling 1024:flex'>
@@ -78,12 +83,52 @@ export const AppLayout = ({
               {...{
                 back,
                 hideSideNavigation,
-
                 title,
               }}
             >
               {headerSlot}
             </AppHeader>
+
+            {breadCrumbs && (
+              <div className='app-container sticky left-0 top-16 z-[1000] -ml-3 flex h-12 gap-1 overflow-x-auto bg-white bg-opacity-80 backdrop-blur-md 1024:top-20'>
+                {breadCrumbs?.map(({ url, title }, i) => {
+                  return (
+                    <div key={title} className={'flex gap-1'}>
+                      {url ? (
+                        <Link
+                          href={url}
+                          className={clsx(
+                            'my-auto gap-3 px-3 py-2.5 text-center text-sm font-medium transition-colors',
+                            i === breadCrumbs.length - 1
+                              ? 'text-primary-main'
+                              : 'text-neutral-400 hover:text-black'
+                          )}
+                        >
+                          {title}
+                        </Link>
+                      ) : (
+                        <div
+                          className={clsx(
+                            'my-auto gap-3 px-3 py-2.5 text-center text-sm font-medium transition-colors',
+                            i === breadCrumbs.length - 1
+                              ? 'text-primary-main'
+                              : 'text-neutral-400 hover:text-black'
+                          )}
+                        >
+                          {title}
+                        </div>
+                      )}
+
+                      {i < breadCrumbs.length - 1 && (
+                        <span className={'my-auto'}>
+                          <ChevronRight />
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
 
             {!isVerified && !pathname.includes('/kyc') && (
               <div className='x-between block bg-warning-600 p-4 text-white 690:flex 690:p-6'>
@@ -122,7 +167,11 @@ export const AppLayout = ({
 
             <div
               className={clsx(
-                childrenClassName ?? 'app-container my-5 640:my-7'
+                !!childrenClassName
+                  ? childrenClassName
+                  : !!breadCrumbs
+                  ? 'app-container mb-5 mt-3 640:mb-7'
+                  : 'app-container my-5 640:my-7'
               )}
             >
               {requiresVerification && !isVerified ? (
