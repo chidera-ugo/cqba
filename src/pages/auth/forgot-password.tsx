@@ -47,7 +47,7 @@ export default function ForgotPassword() {
         ) : (
           <>
             <h4>Forgot your password?</h4>
-            <div className='mt-4 text-left text-sm text-neutral-600'>
+            <div className='mt-2 text-left text-sm text-neutral-600 640:mt-3'>
               Enter the email address associated with your account and we’ll
               send you a link to reset your password
             </div>

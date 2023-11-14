@@ -36,16 +36,7 @@ export const AppHeader = ({
             </span>
           </Link>
         ) : hideSideNavigation ? (
-          <div className='flex'>
-            <Link href='/' className='my-auto'>
-              <Image
-                src={logo}
-                priority
-                alt='chequebase-logo'
-                className='my-auto w-[160px] object-contain'
-              />
-            </Link>
-          </div>
+          <Logo />
         ) : (
           <div className='my-auto text-xl font-semibold text-neutral-1000 640:text-2xl'>
             {title}
@@ -57,5 +48,23 @@ export const AppHeader = ({
         <MobileMenu />
       </div>
     </header>
+  );
+};
+
+export const Logo = () => {
+  return (
+    <div className='flex'>
+      <Link href='/' className='my-auto flex gap-2'>
+        <Image
+          src={logo}
+          priority
+          alt='chequebase-logo'
+          className='my-auto w-[120px] object-contain 640:w-[160px]'
+        />
+        <button className='rounded-full border border-neutral-200 bg-neutral-100 py-0.5 px-2 text-xs shadow-sm 640:py-1 640:text-sm'>
+          Beta
+        </button>
+      </Link>
+    </div>
   );
 };

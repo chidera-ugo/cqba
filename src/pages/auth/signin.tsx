@@ -10,7 +10,7 @@ export default function Signin() {
     <AuthLayout title='Signin'>
       <div className={clsx('auth-container mx-auto py-8 640:py-[93px]')}>
         <h4>Sign in</h4>
-        <div className='mt-4 text-left text-sm text-neutral-600'>
+        <div className='mt-2 text-left text-sm text-neutral-600 640:mt-3'>
           {`Don't have an account?`}
           <Link
             href='/auth/signup'

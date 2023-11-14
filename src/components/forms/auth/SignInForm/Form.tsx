@@ -19,6 +19,7 @@ export const Form = ({ processing, formikProps }: Props) => {
         autoFocus
         label='Email Address'
         name='email'
+        placeholder={'Enter email address'}
         autoComplete='username'
         className='w-full'
       />
@@ -42,7 +43,7 @@ export const Form = ({ processing, formikProps }: Props) => {
       <SubmitButton
         id='signin-submit-button'
         submitting={processing}
-        className='dark-button mt-12 w-full min-w-[200px] 640:w-auto'
+        className='primary-button mt-12 w-full min-w-[200px] 640:w-auto'
       >
         Sign in
       </SubmitButton>

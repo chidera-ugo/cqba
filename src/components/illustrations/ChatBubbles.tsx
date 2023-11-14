@@ -5,6 +5,7 @@ export const ChatBubbles = () => {
       height='162'
       viewBox='0 0 195 162'
       fill='none'
+      className={'h-24'}
       xmlns='http://www.w3.org/2000/svg'
     >
       <path

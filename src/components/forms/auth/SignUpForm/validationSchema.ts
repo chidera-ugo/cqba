@@ -1,23 +1,49 @@
-import { phoneNumberTest } from 'utils/validators/validateField';
 import { object, boolean, string } from 'yup';
 
+export const signupPasswordValidation: {
+  name: string;
+  check: boolean | ((val: string) => boolean);
+}[] = [
+  {
+    name: 'Contain at least 8 characters',
+    check: (val) => val.length >= 8,
+  },
+  {
+    name: 'Must have at least one lowercase letter',
+    check: (val) => val.toUpperCase() !== val,
+  },
+  {
+    name: 'Must have at least one symbol (!@#$%^&*~-_+-)',
+    check: (val) => /[!@#$%^&*~_+\-]/.test(val),
+  },
+  {
+    name: 'Must have at least one uppercase letter',
+    check: (val) => val.toLowerCase() !== val,
+  },
+  {
+    name: 'Must have at least one number',
+    check: (val) => /[0-9]/.test(val),
+  },
+];
+
 export const validationSchema = object({
-  firstName: string().required('Please provide your first name'),
-  lastName: string().required('Please provide your last name'),
   email: string()
     .trim()
     .required('Please provide your email')
     .email('Please provide a valid email'),
   businessName: string().required('Please provide your company name'),
-  industry: string().required('Please provide your industry'),
   password: string()
     .trim()
     .required('Please provide new password')
-    .min(8, 'Please provide at least 8 characters'),
-  acceptedTerms: boolean().required('Please accept the terms'),
-  phoneNumber: string()
-    .required('Please provide your phone number')
-    .test('invalidNumber', 'Provide a valid phone number', (val) =>
-      phoneNumberTest(val)
+    .test(
+      'invalid password',
+      'Please fulfill the below requirements',
+      (val) => {
+        for (const { check } of signupPasswordValidation) {
+          if (typeof check === 'boolean') return check;
+          return check(val);
+        }
+      }
     ),
+  acceptedTerms: boolean().required('Please accept the terms'),
 });
