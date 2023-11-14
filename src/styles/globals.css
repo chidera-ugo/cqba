@@ -81,7 +81,7 @@
   }
 
   p {
-    @apply text-sm 640:text-base font-light text-neutral-600;
+    @apply text-sm font-light text-neutral-600 640:text-base;
   }
 }
 
@@ -115,7 +115,7 @@
   }
 
   .dark-button {
-    @apply smooth h-12 640:h-14 rounded-full border border-black bg-black text-sm 640:text-base px-5 640:px-8 text-center font-medium text-white transition-colors hover:bg-gray-900;
+    @apply smooth h-12 rounded-full border border-black bg-black px-5 text-center text-sm font-medium text-white transition-colors hover:bg-gray-900 640:h-14 640:px-8 640:text-base;
   }
 
   .action-button {
