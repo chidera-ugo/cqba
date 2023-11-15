@@ -4,6 +4,7 @@ import { useTMutation } from 'hooks/api/useTMutation';
 export interface SigninDto {
   email: string;
   password: string;
+  rememberMe?: boolean;
 }
 
 export interface SigninRes {
@@ -11,6 +12,7 @@ export interface SigninRes {
     access_token: string;
     refresh_token: string;
   };
+  rememberMe?: boolean;
   userId: string;
 }
 

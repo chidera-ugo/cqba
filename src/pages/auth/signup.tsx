@@ -65,7 +65,7 @@ export default function Signup() {
         ) : (
           <>
             <h4>Create a free account</h4>
-            <div className='mt-2 text-left text-sm text-neutral-600 640:mt-3'>
+            <div className='mt-2 text-left text-sm text-neutral-600'>
               {`Already have an account?`}
               <Link
                 href='/auth/signin'

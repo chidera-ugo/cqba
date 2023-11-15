@@ -94,7 +94,11 @@ export function CodeInput({
 
       <div
         id='code-input'
-        className={clsx('flex', className, useDots ? 'gap-5' : '')}
+        className={clsx(
+          'flex',
+          className,
+          useDots ? 'gap-5' : 'gap-2 640:gap-3.5'
+        )}
       >
         {[...Array(charLimit)].map((_, i) => {
           if (useDots) {
@@ -120,7 +124,6 @@ export function CodeInput({
               {...{
                 code,
                 autoComplete,
-                isFirst: i === 0,
               }}
               setCode={(val) => {
                 if (val.length === charLimit) {

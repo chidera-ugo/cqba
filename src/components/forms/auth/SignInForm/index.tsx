@@ -1,43 +1,42 @@
 import { Formik } from 'formik';
 import { useSignin } from 'hooks/api/auth/useSignin';
+import { useInitiateAuthSession } from 'hooks/app/useInitiateAuthSession';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
-import { useAppContext } from 'context/AppContext';
 
-export const SignInForm = () => {
-  const { dispatch, getCurrentUser } = useAppContext();
+export const SignInForm = ({
+  goTo2fa,
+}: {
+  goTo2fa: (email: string) => void;
+}) => {
+  const { initiateAuthSession } = useInitiateAuthSession();
 
-  const { isLoading, mutate } = useSignin({
-    onSuccess(res) {
-      const { access_token, refresh_token } = res.tokens;
-
-      getCurrentUser!(access_token);
-
-      dispatch({
-        type: 'setIsInitializing',
-        payload: true,
-      });
-
-      dispatch({
-        type: 'saveTokens',
-        payload: {
-          accessToken: access_token,
-          refreshToken: refresh_token,
-        },
-      });
-    },
-  });
+  const { isLoading, mutate } = useSignin();
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={({ email, password }) => {
-        mutate({
-          email: email.trim(),
-          password,
-        });
+      onSubmit={({ email: _, password, stayLoggedIn }) => {
+        const email = _.trim();
+
+        mutate(
+          {
+            email,
+            password,
+            rememberMe: stayLoggedIn,
+          },
+          {
+            onSuccess(res) {
+              if (!res.rememberMe) return goTo2fa(email);
+
+              const { access_token, refresh_token } = res.tokens;
+
+              initiateAuthSession(access_token, refresh_token);
+            },
+          }
+        );
       }}
       validateOnBlur={false}
     >

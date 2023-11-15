@@ -1,4 +1,5 @@
 import { Input } from 'components/form-elements/Input';
+import { ToggleSwitch } from 'components/form-elements/ToggleSwitch';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
@@ -39,6 +40,8 @@ export const Form = ({ processing, formikProps }: Props) => {
           Forgot password?
         </Link>
       </div>
+
+      <ToggleSwitch name='stayLoggedIn' label='Remember me?' className='mt-4' />
 
       <SubmitButton
         id='signin-submit-button'

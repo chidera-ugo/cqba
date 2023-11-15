@@ -40,7 +40,7 @@ export const Form = ({ processing, formikProps }: Props) => {
 
       <div className='mt-8 flex'>
         <label
-          className='relative my-auto flex cursor-pointer'
+          className='relative mt-1 flex cursor-pointer'
           htmlFor={'accept-terms'}
         >
           <input
@@ -54,7 +54,7 @@ export const Form = ({ processing, formikProps }: Props) => {
           />
         </label>
 
-        <span className='my-auto ml-1 text-sm font-medium text-neutral-400'>
+        <span className='ml-1 mt-0.5 text-sm font-medium text-neutral-400 640:mt-1'>
           {`I agree to ChequeBase's `}
           <a className='text-button'>Privacy Policy</a> and{' '}
           <a className='text-button'>Terms of Use</a>
