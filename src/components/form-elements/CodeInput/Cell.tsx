@@ -7,7 +7,6 @@ type Props = JSX.IntrinsicElements['input'] & {
   char: number;
   setCode: (val: string) => void;
   type: 'numeric' | 'password' | 'normal';
-  isFirst?: boolean;
 };
 
 export function Cell({
@@ -15,7 +14,6 @@ export function Cell({
   id: _id,
   code,
   type,
-  isFirst,
   setCode,
   autoComplete,
   className,
@@ -46,7 +44,7 @@ export function Cell({
   }, []);
 
   return (
-    <div className={clsx('relative', !isFirst && 'ml-3')}>
+    <div className={clsx('relative')}>
       {!!code[char] && type === 'password' && (
         <div
           onClick={() => document.getElementById(id)?.focus()}
@@ -98,7 +96,7 @@ export function Cell({
           }
         }}
         className={clsx(
-          `input y-center my-auto h-full w-12 border border-neutral-300 px-3 text-center text-xl font-bold caret-black 560:text-3xl 640:w-[54px]`,
+          `input y-center my-auto h-full w-10 rounded-xl border border-none border-neutral-300 bg-neutral-210 px-3 text-center text-xl font-bold caret-black shadow-none 340:w-12 560:text-3xl 640:w-[56px]`,
           type === 'password' ? 'text-opacity-0' : '',
           className ? className : 'bg-neutral-70'
         )}
