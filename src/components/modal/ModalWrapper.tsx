@@ -78,7 +78,7 @@ export const RightModalWrapper = ({
       {...props}
       type='right'
       className={clsx(
-        'thin-scrollbar relative z-[1000] ml-auto h-full w-full max-w-[598px] overflow-y-auto bg-white',
+        'thin-scrollbar relative z-[1000] ml-auto h-full w-full max-w-[520px] overflow-y-auto bg-white',
         className
       )}
     >

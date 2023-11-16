@@ -20,7 +20,11 @@ export const ReviewAndSubmit = () => {
 
   const { isUnderReview } = useAccountVerificationStatus();
 
-  const [fields, setFields] = useState<Record<string, boolean>>({});
+  const [fields, setFields] = useState<Record<string, boolean>>({
+    'owners-information': true,
+    'company-information': true,
+    'business-documentation': true,
+  });
 
   if (isUnderReview) return <ApplicationUnderReview />;
 
@@ -52,7 +56,7 @@ export const ReviewAndSubmit = () => {
       />
 
       <CheckInput
-        label='Owner Information'
+        label="Owners' Information"
         withBorders
         handleClick={handleCheckInputClick}
         isChecked={isCheckInputChecked}
@@ -60,7 +64,7 @@ export const ReviewAndSubmit = () => {
       />
 
       <CheckInput
-        label='Business documentation'
+        label='Business Documentation'
         withBorders
         handleClick={handleCheckInputClick}
         isChecked={isCheckInputChecked}
