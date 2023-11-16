@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 
 export const CreatePin = () => {
   const [showModal, setShowModal] = useState(false);
+  const [hasSetPin, setHasSetPin] = useState(false);
 
   const { pathname } = useRouter();
 
@@ -15,7 +16,8 @@ export const CreatePin = () => {
   const { isVerified } = useIsVerified();
 
   useEffect(() => {
-    if (!isVerified || pathname.includes('/kyc') || user?.pinSet) return;
+    if (!isVerified || pathname.includes('/kyc') || user?.pinSet || hasSetPin)
+      return;
 
     setShowModal(true);
   }, [pathname]);
@@ -31,7 +33,10 @@ export const CreatePin = () => {
         className='bg-white'
         title={'Create Transaction Pin'}
       >
-        <CreatePinSteps closeModal={closeModal} />
+        <CreatePinSteps
+          onSuccess={() => setHasSetPin(true)}
+          closeModal={closeModal}
+        />
       </RightModalWrapper>
     </>
   );
