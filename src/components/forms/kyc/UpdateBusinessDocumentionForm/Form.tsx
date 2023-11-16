@@ -5,6 +5,7 @@ import { ImageViewer } from 'components/modals/ImageViewer';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useScrollToFormError } from 'hooks/forms/useScrollToFormError';
+import { DatePickerValue } from 'types/Common';
 import { sanitizeRecordToRemoveUndefinedAndNulls } from 'utils/sanitizers/sanitizeRecordToRemoveUndefinedAndNulls';
 import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
@@ -41,14 +42,18 @@ export const Form = ({ processing, formikProps }: Props) => {
 
     const date = new Date(regDate);
 
+    const creationDate = regDate
+      ? {
+          value: date?.toISOString(),
+          calendarValue: date,
+        }
+      : {};
+
     setValues(
       {
         ...values,
         bnNumber,
-        creationDate: {
-          value: date.toISOString(),
-          calendarValue: date,
-        },
+        creationDate: creationDate as DatePickerValue,
       },
       false
     );

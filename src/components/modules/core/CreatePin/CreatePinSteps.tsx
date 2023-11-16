@@ -11,9 +11,10 @@ import { toast } from 'react-toastify';
 
 interface Props {
   closeModal: () => void;
+  onSuccess: () => void;
 }
 
-export const CreatePinSteps = ({ closeModal }: Props) => {
+export const CreatePinSteps = ({ closeModal, onSuccess }: Props) => {
   const [pins, setPins] = useState<Record<string, any>>({});
 
   const [mode, setMode] = useState<'new' | 'confirm'>('new');
@@ -29,6 +30,8 @@ export const CreatePinSteps = ({ closeModal }: Props) => {
       toast(<AppToast>{res.message}</AppToast>, {
         type: 'success',
       });
+
+      onSuccess();
 
       getCurrentUser!({});
     },
