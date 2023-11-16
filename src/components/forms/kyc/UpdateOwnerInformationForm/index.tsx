@@ -1,49 +1,46 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
-import { IdNavigator } from 'components/common/IdNavigator';
-import UnsavedChangesPrompt from 'components/common/UnsavedChangesPrompt';
 import { AppToast } from 'components/primary/AppToast';
 import { Formik } from 'formik';
-import { useUpdateOwnerInformation } from 'hooks/api/kyc/useUpdateOwnerInformation';
+import {
+  IOwner,
+  useUpdateOwnerInformation,
+} from 'hooks/api/kyc/useUpdateOwnerInformation';
 import { toast } from 'react-toastify';
 import { appendCountryCode } from 'utils/modifiers/appendCountryCode';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
-import { useState } from 'react';
-import { useRouter } from 'next/router';
 
-export const UpdateOwnerInformationForm = () => {
-  const { replace } = useRouter();
-
+export const UpdateOwnerInformationForm = ({
+  type,
+  currentOwner,
+  closeModal,
+}: {
+  type: 'owner' | 'director';
+  currentOwner: IOwner | null;
+  closeModal: () => void;
+}) => {
   const queryClient = useQueryClient();
 
   const { isLoading, mutate } = useUpdateOwnerInformation({
     onSuccess() {
       queryClient.invalidateQueries(['organization-information']);
-
-      replace('/kyc?tab=business-documentation&showSteps=true').then(() => {
-        toast(<AppToast>Update successful</AppToast>, { type: 'success' });
-      });
+      closeModal();
+      toast(<AppToast>Update successful</AppToast>, { type: 'success' });
     },
   });
-
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={({ phoneNumber, dateOfBirth, idFile, idType, ...values }) => {
-        setHasUnsavedChanges(false);
-
+      validationSchema={validationSchema(type)}
+      onSubmit={({ phoneNumber, dateOfBirth, percentOwned, ...values }) => {
         mutate({
           ...values,
+          percentOwned: !percentOwned ? 0 : parseInt(percentOwned),
           phone: appendCountryCode(phoneNumber),
           dob: String(dateOfBirth.calendarValue?.toISOString()),
-          politicalAffiliation: false,
-          formOfId: idType,
-          idImageUrl: idFile?.file?.name,
         });
       }}
       validateOnBlur={false}
@@ -51,23 +48,14 @@ export const UpdateOwnerInformationForm = () => {
       {(formikProps) => {
         return (
           <>
-            <IdNavigator id='owner-information' autoFocus />
-
-            <UnsavedChangesPrompt {...{ hasUnsavedChanges }} />
-
             <FullScreenLoader show={isLoading} />
-
-            <h5>Owner Information</h5>
-            <p className='mt-1 font-normal text-neutral-400'>
-              Provide your company information
-            </p>
 
             <Form
               {...{
+                currentOwner,
+                type,
                 formikProps,
                 processing: isLoading,
-                hasUnsavedChanges,
-                setHasUnsavedChanges,
               }}
             />
           </>

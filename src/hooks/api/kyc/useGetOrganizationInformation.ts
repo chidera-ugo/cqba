@@ -1,35 +1,40 @@
 import { UseQueryOptions } from '@tanstack/react-query';
+import { IOwner } from 'hooks/api/kyc/useUpdateOwnerInformation';
 import { useTQuery } from 'hooks/api/useTQuery';
 import { useAppContext } from 'context/AppContext';
 
 export interface IOrganization {
   lastName: string;
-  industry: string;
+  businessIndustry: string;
   status: string;
+  organizations: any;
   idNumber: string;
+  country: string;
+  owners: IOwner[];
+  directors: IOwner[];
   businessName: string;
   formOfId: string;
-  idImageUrl: string;
   firstName: string;
   state: string;
   city: string;
   bnNumber: string;
-  bnNumberImageUrl: string;
   dob: string;
   numberOfEmployees: string;
   adminId: string;
   utilityBillType: string;
-  politicalAffiliation: string;
   id: string;
   phone: string;
   averageMonthlyExpenses: string;
-  utilityBillImageUrl: string;
-  businessAddress: string;
+  utilityBill: string;
+  businessNameCert: string;
+  cacBn1: string;
+  address: string;
   gender: string;
   businessType: string;
-  taxIdNumber: string;
   updatedAt: number;
+  documents: Record<string, string>[];
   bvn: string;
+  regDate: string;
 }
 
 export function useGetOrganizationInformation(

@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
 import { CreatePin } from 'components/modules/core/CreatePin';
 import { SelectDefaultCategories } from 'components/modules/core/SelectDefaultCategories';
+import { IdleTimer } from 'components/modules/IdleTimer';
 import { VerifyYourAccount } from 'components/modules/kyc/VerifyYourAccount';
 import { PageHead } from 'components/primary/PageHead';
 import { Right } from 'components/svgs/navigation/Arrows';
@@ -63,6 +64,8 @@ export const AppLayout = ({
         <PageHead title={title} />
 
         <CreatePin />
+
+        <IdleTimer />
 
         <SelectDefaultCategories />
 

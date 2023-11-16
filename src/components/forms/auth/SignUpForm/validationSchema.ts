@@ -1,8 +1,8 @@
-import { object, boolean, string } from 'yup';
+import { object, string } from 'yup';
 
 export const signupPasswordValidation: {
   name: string;
-  check: boolean | ((val: string) => boolean);
+  check: (val: string) => boolean;
 }[] = [
   {
     name: 'Contain at least 8 characters',
@@ -38,12 +38,14 @@ export const validationSchema = object({
     .test(
       'invalid password',
       'Please fulfill the below requirements',
-      (val) => {
-        for (const { check } of signupPasswordValidation) {
-          if (typeof check === 'boolean') return check;
-          return check(val);
-        }
-      }
+      validatePassword
     ),
-  acceptedTerms: boolean().required('Please accept the terms'),
 });
+
+function validatePassword(val: string) {
+  for (const { check } of signupPasswordValidation) {
+    if (!check(val)) return false;
+  }
+
+  return true;
+}

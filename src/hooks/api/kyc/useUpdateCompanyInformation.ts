@@ -4,12 +4,14 @@ import { useTMutation } from 'hooks/api/useTMutation';
 
 export interface UpdateCompanyInformationDto {
   businessType: string;
-  businessAddress: string;
-  businessName: string;
+  businessIndustry: string;
+  companyName: string;
+  city: string;
+  country: string;
+  state: string;
   numberOfEmployees: string;
   averageMonthlyExpenses: string;
-  city: string;
-  state: string;
+  address: string;
 }
 
 export function useUpdateCompanyInformation(

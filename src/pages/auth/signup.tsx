@@ -34,7 +34,7 @@ export default function Signup() {
         {newUser?.email ? (
           <SimpleInformation
             title={
-              <span className={'mx-auto block max-w-[300px] 640:min-w-full'}>
+              <span className={'mx-auto block max-w-[300px] 640:max-w-none'}>
                 Almost done. Confirm your email.
               </span>
             }

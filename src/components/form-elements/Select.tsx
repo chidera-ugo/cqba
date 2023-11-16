@@ -21,6 +21,7 @@ export const Select = ({
   className,
   displayValueKey,
   next,
+  placeholder = 'Select',
   trueValueKey = 'id',
   ...props
 }: Props) => {
@@ -54,36 +55,48 @@ export const Select = ({
         </label>
       </div>
 
-      <select
-        {...props}
-        {...field}
-        onChange={(e) => {
-          if (props.onChange) {
-            props.onChange(e);
-          } else {
-            field.onChange(e);
-          }
-        }}
-        className={clsx(
-          meta.touched && meta.error ? 'border-error-main' : '',
-          'w-full',
-          !!field.value ? 'bg-white' : 'bg-neutral-100'
+      <div className='relative'>
+        {placeholder && !field.value && (
+          <div
+            className={
+              'y-center pointer-events-none absolute left-0 top-0 min-h-[44px] px-3.5 opacity-40'
+            }
+          >
+            {placeholder}
+          </div>
         )}
-      >
-        <option disabled hidden value=''></option>
 
-        {options.map((value: any) => {
-          const isObject = displayValueKey && typeof value === 'object';
+        <select
+          {...props}
+          {...field}
+          onChange={(e) => {
+            if (props.onChange) {
+              props.onChange(e);
+            } else {
+              field.onChange(e);
+            }
+          }}
+          className={clsx(
+            meta.touched && meta.error ? 'border-error-main' : '',
+            'w-full',
+            !!field.value ? 'bg-white' : 'bg-neutral-100'
+          )}
+        >
+          <option disabled hidden value=''></option>
 
-          const val = isObject ? value[trueValueKey] : (value as string);
+          {options.map((value: any) => {
+            const isObject = displayValueKey && typeof value === 'object';
 
-          return (
-            <option key={val} value={val}>
-              {isObject ? value[displayValueKey] : (value as string)}
-            </option>
-          );
-        })}
-      </select>
+            const val = isObject ? value[trueValueKey] : (value as string);
+
+            return (
+              <option key={val} value={val}>
+                {isObject ? value[displayValueKey] : (value as string)}
+              </option>
+            );
+          })}
+        </select>
+      </div>
 
       {meta.touched && meta.error ? (
         <div className='generic-error'>{meta.error}</div>

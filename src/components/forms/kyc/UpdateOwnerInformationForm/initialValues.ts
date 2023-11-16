@@ -1,13 +1,18 @@
-import { DatePickerValue, IFile } from 'types/Common';
+import { DatePickerValue } from 'types/Common';
 
 export const initialValues = {
   firstName: '',
   lastName: '',
   phoneNumber: '',
-  gender: '',
   dateOfBirth: {} as DatePickerValue,
   idType: '',
+  percentOwned: '',
+  email: '',
+  country: '',
+  address: '',
+  state: '',
+  title: '',
+  city: '',
   idNumber: '',
   bvn: '',
-  idFile: {} as IFile,
 };

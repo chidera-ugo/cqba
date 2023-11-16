@@ -5,6 +5,7 @@ import { AppToast } from 'components/primary/AppToast';
 import { Formik } from 'formik';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useUpdateCompanyInformation } from 'hooks/api/kyc/useUpdateCompanyInformation';
+import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import { toast } from 'react-toastify';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
@@ -16,11 +17,19 @@ export const UpdateCompanyInformationForm = () => {
   const { replace } = useRouter();
   const queryClient = useQueryClient();
 
+  const { hasProvidedAllRequirements } = useAccountVerificationStatus();
+
   const { isLoading, mutate } = useUpdateCompanyInformation({
     onSuccess() {
       queryClient.invalidateQueries(['organization-information']);
 
-      replace('/kyc?tab=owner-information&showSteps=true').then(() => {
+      replace(
+        `/kyc?tab=${
+          hasProvidedAllRequirements
+            ? 'review-and-submit'
+            : 'owners-information'
+        }&showSteps=true`
+      ).then(() => {
         toast(<AppToast>Update successful</AppToast>, { type: 'success' });
       });
     },
@@ -41,19 +50,23 @@ export const UpdateCompanyInformationForm = () => {
         companyType,
         city,
         state,
-        address,
         employees,
         expenses,
+        country,
         businessName,
+        businessIndustry,
+        address,
       }) => {
         setHasUnsavedChanges(false);
 
         mutate({
-          businessName,
-          businessAddress: address,
+          companyName: businessName,
+          businessIndustry,
+          country,
           averageMonthlyExpenses: expenses,
           businessType: companyType,
           numberOfEmployees: employees,
+          address,
           city,
           state,
         });

@@ -130,6 +130,8 @@ export const FileInput = ({
 
       {(!!file?.webUrl || !!file?.url) && onClickViewExistingFile ? (
         <div className='mt-2 flex justify-end'>
+          {/*Todo: Fix preview for pdfs*/}
+
           <ViewUploadedDocument
             url={file.webUrl ?? file.url!}
             onClick={(src) => onClickViewExistingFile(src)}

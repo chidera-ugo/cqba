@@ -15,7 +15,7 @@ export const SignUpForm = ({ onSuccess }: Props) => {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={({ email, acceptedTerms: _, ...values }) => {
+      onSubmit={({ email, ...values }) => {
         const _email = email.trim();
 
         mutate(

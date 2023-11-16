@@ -1,15 +1,14 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
-import { IdNavigator } from 'components/common/IdNavigator';
-import UnsavedChangesPrompt from 'components/common/UnsavedChangesPrompt';
 import { AppToast } from 'components/primary/AppToast';
+import FormData from 'form-data';
 import { Formik } from 'formik';
 import { useUpdateOrganizationDocuments } from 'hooks/api/kyc/useUpdateOrganizationDocuments';
+import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import { toast } from 'react-toastify';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 export const UpdateBusinessDocumentionForm = () => {
@@ -17,48 +16,56 @@ export const UpdateBusinessDocumentionForm = () => {
 
   const queryClient = useQueryClient();
 
+  const {
+    hasProvidedOwnerInformationRequirements,
+    hasProvidedCompanyInformation,
+  } = useAccountVerificationStatus();
+
+  const redirectUrl = !hasProvidedCompanyInformation
+    ? '/company-information'
+    : !hasProvidedOwnerInformationRequirements
+    ? '/owners-information'
+    : 'review-and-submit';
+
   const { isLoading, mutate } = useUpdateOrganizationDocuments({
     onSuccess() {
       queryClient.invalidateQueries(['organization-information']);
 
-      replace('/kyc?tab=review-and-submit&showSteps=true').then(() => {
+      replace(`/kyc?tab=${redirectUrl}&showSteps=true`).then(() => {
         toast(<AppToast>Update successful</AppToast>, { type: 'success' });
       });
     },
   });
-
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={({
-        bnDocumentFile,
         bnNumber,
-        utilityBillFile,
-        utilityBillType,
-        tin,
+        businessNameCert,
+        cacBn1,
+        creationDate,
+        utilityBill,
       }) => {
-        setHasUnsavedChanges(false);
+        const body = new FormData();
 
-        mutate({
-          bnNumber,
-          bnNumberImageUrl: bnDocumentFile.file.name,
-          utilityBillType,
-          taxIdNumber: tin,
-          utilityBillImageUrl: utilityBillFile.file.name,
-        });
+        body.append('bnNumber', bnNumber);
+
+        if (utilityBill.id) body.append('utilityBill', utilityBill.file);
+        if (businessNameCert.id)
+          body.append('businessNameCert', businessNameCert.file);
+        if (cacBn1.id) body.append('cacBn1', cacBn1.file);
+
+        body.append('regDate', creationDate.value);
+
+        mutate(body);
       }}
       validateOnBlur={false}
     >
       {(formikProps) => {
         return (
           <>
-            <IdNavigator id='business-documentation' autoFocus />
-
-            <UnsavedChangesPrompt {...{ hasUnsavedChanges }} />
-
             <FullScreenLoader show={isLoading} />
 
             <h5>Provide your business documents</h5>
@@ -71,7 +78,6 @@ export const UpdateBusinessDocumentionForm = () => {
               {...{
                 formikProps,
                 processing: isLoading,
-                setHasUnsavedChanges,
               }}
             />
           </>

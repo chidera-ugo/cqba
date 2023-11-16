@@ -2,7 +2,6 @@ import { Input } from 'components/form-elements/Input';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
-import Link from 'next/link';
 
 interface Props {
   formikProps: FormikProps<typeof initialValues>;
@@ -26,17 +25,10 @@ export const Form = ({ processing, formikProps }: Props) => {
         <SubmitButton
           id='reset-password-submit-button'
           submitting={processing}
-          className='primary-button w-full min-w-[200px] 640:w-auto'
+          className='primary-button w-full min-w-[172px] 640:w-auto'
         >
           Reset password
         </SubmitButton>
-
-        <Link
-          href='/auth/signin'
-          className='text-button my-auto mt-5 block w-full text-center text-sm text-neutral-600 640:mt-auto 640:w-auto'
-        >
-          Return to Sign in
-        </Link>
       </div>
     </FormikForm>
   );

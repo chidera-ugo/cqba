@@ -10,6 +10,7 @@ type Props = {
 export const IdNavigator = ({ id, autoFocus, className }: Props) => {
   useEffect(() => {
     if (!autoFocus) return;
+
     document.getElementById(`id_nav_${id}`)?.scrollIntoView();
   }, []);
 
