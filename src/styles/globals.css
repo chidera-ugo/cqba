@@ -8,7 +8,7 @@
 @layer base {
   html {
     scroll-behavior: smooth !important;
-    background-color: black;
+    /*background-color: black;*/
   }
 
   body {
@@ -32,7 +32,7 @@
   }
 
   h4 {
-    @apply text-[24px] font-semibold leading-[30px] 640:text-[32px] 640:leading-[45px];
+    @apply text-[24px] font-semibold leading-[30px] 640:text-[32px] 640:leading-[36px];
   }
 
   h5 {
@@ -44,7 +44,7 @@
   }
 
   label {
-    @apply mb-2 text-left text-sm font-medium text-neutral-700;
+    @apply mb-2 text-left text-sm font-normal text-neutral-700;
   }
 
   select,
@@ -60,7 +60,7 @@
   }
 
   input[type='checkbox'] {
-    @apply h-[22px] w-[22px] cursor-pointer appearance-none rounded-[4px] border-2 border-neutral-300 text-primary-main ring-0 checked:border-primary-main checked:bg-primary-main focus:ring-0 focus:ring-offset-0;
+    @apply h-[18px] w-[18px] cursor-pointer appearance-none rounded-[4px] border-2 border-neutral-300 text-primary-main ring-0 checked:border-primary-main checked:bg-primary-main focus:ring-0 focus:ring-offset-0;
     border: 2px solid rgba(111, 118, 126, 0.4);
   }
 
@@ -83,6 +83,16 @@
   p {
     @apply text-sm font-light text-neutral-600 640:text-base;
   }
+
+  ul {
+    @apply pl-4 !important;
+    list-style-type: disc;
+  }
+
+  ol {
+    @apply my-0 pl-4 !important;
+    list-style-type: auto;
+  }
 }
 
 @layer components {
@@ -103,19 +113,19 @@
   }
 
   .primary-button {
-    @apply smooth h-14 rounded-full bg-primary-main px-16 text-center font-medium text-white transition-colors hover:bg-primary-hmain;
+    @apply smooth h-10 rounded-full bg-primary-main px-5 text-center text-sm font-medium text-white transition-colors hover:bg-primary-hmain;
   }
 
   .secondary-button {
-    @apply smooth h-[60px] rounded-full border border-neutral-300 bg-white px-8 text-sm font-semibold text-neutral-1000 hover:bg-gray-100;
+    @apply smooth h-10 rounded-full border border-neutral-300 bg-white px-5 text-sm font-semibold text-neutral-1000 hover:bg-gray-100;
   }
 
   .light-button {
-    @apply smooth h-14 rounded-full border border-primary-main bg-white px-16 text-center font-medium text-primary-main transition-colors hover:bg-gray-100;
+    @apply smooth h-10 rounded-full border border-primary-main bg-white px-5 text-center text-sm font-medium text-primary-main transition-colors hover:bg-gray-100;
   }
 
   .dark-button {
-    @apply smooth h-12 rounded-full border border-black bg-black px-5 text-center text-sm font-medium text-white transition-colors hover:bg-gray-900 640:h-14 640:px-8 640:text-base;
+    @apply smooth h-10 rounded-full border border-black bg-black px-5 text-center text-sm font-medium text-white transition-colors hover:bg-gray-900;
   }
 
   .action-button {
@@ -123,7 +133,7 @@
   }
 
   .outline-button {
-    @apply smooth h-[60px] rounded-full border border-primary-700 bg-transparent px-8 text-center font-medium text-primary-700 transition-colors hover:bg-gray-100;
+    @apply smooth h-10 rounded-full border border-primary-700 bg-transparent px-5 text-center text-sm font-medium text-primary-700 transition-colors hover:bg-gray-100;
   }
 
   .text-button {
@@ -184,10 +194,6 @@
     @apply thin-scrollbar;
   }
 
-  .kyc-layout-height {
-    height: calc(100vh - 224px);
-  }
-
   .green-pill {
     @apply pill bg-success-600 text-white;
   }
@@ -242,6 +248,18 @@
 
   .blue-mpill-h {
     @apply mpill bg-blue-300 text-primary-main hover:bg-opacity-60;
+  }
+
+  .tpill {
+    @apply y-center h-[22px] rounded-full px-1.5 text-xs shadow-sm 640:px-2 640:py-1;
+  }
+
+  .pill_gray {
+    @apply tpill bg-neutral-100 text-neutral-900 ring-2 ring-neutral-600 ring-opacity-20;
+  }
+
+  .pill_yellow {
+    @apply tpill bg-others-yellow text-warning-700 ring-2 ring-warning-600 ring-opacity-40;
   }
 }
 

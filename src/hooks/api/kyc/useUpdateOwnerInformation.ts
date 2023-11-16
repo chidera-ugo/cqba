@@ -6,21 +6,41 @@ export interface UpdateOwnersInformationDto {
   firstName: string;
   lastName: string;
   phone: string;
-  gender: string;
   dob: string;
+  country: string;
+  address: string;
+  state: string;
+  title: string;
+  city: string;
   bvn: string;
-  formOfId: string;
+  percentOwned: number;
   idNumber: string;
-  idImageUrl: string;
-  politicalAffiliation: boolean;
+}
+
+export interface IOwner {
+  id: string;
+  lastName: string;
+  country: string;
+  idType: string;
+  address: string;
+  city: string;
+  percentOwned: number;
+  title: string;
+  idNumber: string;
+  firstName: string;
+  phone: string;
+  dob: string;
+  state: string;
+  bvn: string;
+  email: string;
 }
 
 export function useUpdateOwnerInformation(
-  options?: UseMutationOptions<any, unknown, void, unknown>
+  options?: UseMutationOptions<IOwner, unknown, void, unknown>
 ) {
   const { user } = useAppContext().state;
 
-  return useTMutation<UpdateOwnersInformationDto, any>({
+  return useTMutation<UpdateOwnersInformationDto, IOwner>({
     method: 'patch',
     url: `/${user?.organizationId}/update-owner-info`,
     service: 'organizations',

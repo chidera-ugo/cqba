@@ -1,9 +1,9 @@
-import { IsLoading } from 'components/data-states/IsLoading';
 import { Input } from 'components/form-elements/Input';
 import { ImageViewer } from 'components/modals/ImageViewer';
+import { OwnerType } from 'components/modules/kyc/ManageBusinessOwnersAndDirectors';
 import { useAppContext } from 'context/AppContext';
 import { Form as FormikForm, FormikProps } from 'formik';
-import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
+import { IOwner } from 'hooks/api/kyc/useUpdateOwnerInformation';
 import { useScrollToFormError } from 'hooks/forms/useScrollToFormError';
 import { DatePickerValue } from 'types/Common';
 import { constructIdTypes } from 'utils/constructors/constructIdTypes';
@@ -12,22 +12,23 @@ import { sanitizeRecordToRemoveUndefinedAndNulls } from 'utils/sanitizers/saniti
 import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { Select } from 'components/form-elements/Select';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PhoneNumberInput } from 'components/form-elements/PhoneNumberInput';
 import { DatePicker } from 'components/form-elements/DatePicker';
 import dayjs from 'dayjs';
-import { FileInput } from 'components/form-elements/FileInput';
 
 interface Props {
   formikProps: FormikProps<typeof initialValues>;
   processing: boolean;
-  setHasUnsavedChanges: Dispatch<SetStateAction<boolean>>;
+  type: OwnerType;
+  currentOwner: IOwner | null;
 }
 
 export const Form = ({
   processing,
   formikProps,
-  setHasUnsavedChanges,
+  currentOwner,
+  type,
 }: Props) => {
   const {
     handleSubmit,
@@ -38,29 +39,31 @@ export const Form = ({
     values,
   } = formikProps;
 
-  const { isLoading, data } = useGetOrganizationInformation();
   const [previewImageUrl, setPreviewImageUrl] = useState('');
 
   const { user } = useAppContext().state;
 
   useScrollToFormError(errors, submitCount);
 
-  const v = values as any;
-
   useEffect(() => {
-    if (!data) return;
+    if (!currentOwner) return;
 
     const {
       dob,
-      idImageUrl,
-      formOfId,
       bvn,
+      email,
+      title,
       phone,
+      percentOwned,
       firstName,
       lastName,
       idNumber,
-      gender,
-    } = sanitizeRecordToRemoveUndefinedAndNulls(data);
+      city,
+      country,
+      address,
+      state,
+      idType,
+    } = sanitizeRecordToRemoveUndefinedAndNulls(currentOwner);
 
     const _dob = !!dob ? dayjs(dob) : '';
 
@@ -74,31 +77,26 @@ export const Form = ({
                 calendarValue: _dob.toDate(),
               }
             : ({} as DatePickerValue),
-        idFile: {
-          ...values.idFile,
-          webUrl: idImageUrl,
-        },
         firstName: firstName ?? user?.firstName,
         lastName: lastName ?? user?.lastName,
-        gender,
         bvn,
         idNumber,
-        phoneNumber: formatPhoneNumber(phone ?? user?.phone),
-        idType: formOfId,
+        city,
+        idType,
+        country,
+        address,
+        state,
+        email,
+        percentOwned,
+        title,
+        phoneNumber: formatPhoneNumber(phone ?? user?.phone) ?? '',
       },
       false
     );
-  }, [data, user]);
-
-  if (isLoading) return <IsLoading />;
+  }, [currentOwner]);
 
   return (
-    <FormikForm
-      onChange={() => {
-        setHasUnsavedChanges(true);
-      }}
-      onSubmit={handleSubmit}
-    >
+    <FormikForm onSubmit={handleSubmit}>
       <ImageViewer
         show={!!previewImageUrl}
         closeModal={() => setPreviewImageUrl('')}
@@ -110,6 +108,21 @@ export const Form = ({
         <Input label='Last Name' name='lastName' />
       </div>
 
+      <DatePicker
+        label='Date of Birth'
+        name='dateOfBirth'
+        {...{
+          setFieldValue,
+        }}
+        limit={8}
+        shouldValidate
+        disableTyping
+        fieldType='dateOfBirth'
+        maxDate={dayjs()
+          .year(dayjs().year() - 18)
+          .toDate()}
+      />
+
       <PhoneNumberInput
         label='Phone Number'
         name='phoneNumber'
@@ -118,32 +131,57 @@ export const Form = ({
         shouldValidate
       />
 
-      <div className='gap-4 880:flex'>
-        <Select
-          label='Gender'
-          name='gender'
-          options={['Male', 'Female', 'Prefer not to say']}
-        />
+      <Input label='Email' name='email' />
 
-        <DatePicker
-          label='Date of Birth'
-          name='dateOfBirth'
-          {...{
-            setFieldValue,
-          }}
-          limit={8}
-          shouldValidate
-          fieldType='dateOfBirth'
-          maxDate={dayjs()
-            .year(dayjs().year() - 18)
-            .toDate()}
-        />
+      <div className='gap-4 880:flex'>
+        {type === 'owner' ? (
+          <Input
+            label='Percentage Owned (5% - 100%)'
+            placeholder={'Enter percentage'}
+            name='percentOwned'
+            inputMode={'tel'}
+            type={'number'}
+          />
+        ) : (
+          <Select
+            label='Title'
+            placeholder={'Select title'}
+            name='title'
+            options={['Manager']}
+          />
+        )}
+
+        <Select label='Country' name='country' options={['Nigeria']} />
       </div>
 
-      <h5 className='mt-10'>Identification</h5>
-      <p className='mt-1 font-normal text-neutral-400'>
-        Verify business owner identity
-      </p>
+      <Input
+        label='Address'
+        placeholder={'Enter business address'}
+        name='address'
+      />
+
+      <div className='flex gap-5'>
+        <Select
+          placeholder={'Select state'}
+          label='State'
+          name='state'
+          options={['test']}
+        />
+        <Select label='City' name='city' options={['test']} />
+      </div>
+
+      <div className='gap-4 880:flex'>
+        <Select
+          label='Identity Type'
+          name='idType'
+          next={'idNumber'}
+          displayValueKey={'name'}
+          trueValueKey={'id'}
+          options={constructIdTypes()}
+        />
+
+        <Input label='ID Document Number' name='idNumber' />
+      </div>
 
       <Input
         label='BVN'
@@ -158,35 +196,10 @@ export const Form = ({
         shouldValidate
       />
 
-      <div className='gap-4 880:flex'>
-        <Select
-          label='Form of ID'
-          name='idType'
-          next={'idNumber'}
-          displayValueKey={'name'}
-          trueValueKey={'id'}
-          options={constructIdTypes()}
-        />
-
-        <Input label='ID Number' name='idNumber' />
-      </div>
-
-      <FileInput
-        label='Copy of ID'
-        name='idFile'
-        fileType='all'
-        maximumFileSizeInMB={2}
-        {...{
-          setFieldValue,
-        }}
-        onClickViewExistingFile={(src) => setPreviewImageUrl(src)}
-        getFile={(id) => v[id]}
-      />
-
-      <div className='relative mt-5 flex pb-8'>
+      <div className='relative mt-8 flex pb-8'>
         <SubmitButton
           submitting={processing}
-          className='outline-button min-w-[200px]'
+          className='primary-button min-w-[170px]'
         >
           Save and Continue
         </SubmitButton>

@@ -39,7 +39,7 @@ export const SimpleInformation = ({
             onClick={actionButton.action}
             type='button'
             submitting={processing}
-            className='dark-button min-w-[120px]'
+            className='primary-button min-w-[120px]'
           >
             {actionButton.text ?? 'Try Again'}
           </SubmitButton>

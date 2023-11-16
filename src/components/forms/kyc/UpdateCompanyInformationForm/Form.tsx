@@ -30,6 +30,7 @@ export const Form = ({
   gettingOrganizationInformation,
 }: Props) => {
   const { handleSubmit, errors, submitCount, setValues, values } = formikProps;
+
   const submitButtonId = 'update-company-information-submit-button';
 
   useScrollToFormError(errors, submitCount);
@@ -56,25 +57,29 @@ export const Form = ({
     if (!organizationInformation) return;
 
     const {
-      businessAddress,
+      address,
       averageMonthlyExpenses,
       city,
+      country,
       businessName,
-      industry,
+      businessIndustry,
       state,
       numberOfEmployees,
+      businessType,
     } = sanitizeRecordToRemoveUndefinedAndNulls(organizationInformation);
 
     setValues(
       {
         ...values,
         businessName,
-        address: businessAddress,
-        companyType: industry,
+        businessIndustry,
+        address,
+        companyType: businessType,
         expenses: averageMonthlyExpenses,
         employees: numberOfEmployees,
         city,
         state,
+        country,
       },
       false
     );
@@ -93,48 +98,78 @@ export const Form = ({
       }}
       onSubmit={handleSubmit}
     >
+      <Input
+        label='Company Name'
+        placeholder={'Enter company name'}
+        name='businessName'
+      />
+
       <Select
-        label={`What kind of company is ${
-          organizationInformation?.businessName ?? 'this'
-        }`}
+        label='Business Type'
         name='companyType'
+        options={[
+          'BUSINESS_NAME_REGISTRATION',
+          'INCORPORATED_TRUSTEES',
+          'PRIVATE_LIMITED',
+          'PUBLIC_LIMITED',
+          'UNREGISTERED_INDIVIDUAL',
+        ].map((val) => val.replaceAll('_', ' '))}
+      />
+      <Select
+        label='Business Industry'
+        name='businessIndustry'
         options={industries}
       />
 
-      <Input label='Business Name' name='businessName' />
+      <div className='flex gap-5'>
+        <Select
+          label='Number of employees'
+          name='employees'
+          placeholder={'Select range'}
+          options={['Less than 10', 'Between 11 and 50', 'More than 50']}
+        />
+
+        <Select
+          label='Average monthly expenses'
+          name='expenses'
+          placeholder={'Select range'}
+          options={[
+            'Less than USD 5,000',
+            'Between USD 5,000 and USD 50,000',
+            'More than USD 50,000',
+          ]}
+        />
+      </div>
 
       <Select
-        label='Number of employees'
-        name='employees'
-        options={['Less than 10', 'Between 11 and 50', 'More than 50']}
+        placeholder={'Select country'}
+        label='Country'
+        name='country'
+        options={['Nigeria']}
       />
 
-      <Select
-        label='Average monthly expenses'
-        name='expenses'
-        options={[
-          'Less than USD 5,000',
-          'Between USD 5,000 and USD 50,000',
-          'More than USD 50,000',
-        ]}
+      <Input
+        label='Address'
+        placeholder={'Enter business address'}
+        name='address'
       />
 
-      <h5 className='mt-10'>Verify your business location</h5>
-      <p className='mt-1 font-normal text-neutral-400'>
-        You will need to upload a copy of utility bill associated to this
-        address in the documentation part of the onboarding.
-      </p>
-
-      <Input label='Address' name='address' />
-      <Select label='State' name='state' options={states} />
-      <Select label='City' name='city' next='address' options={lgas} />
+      <div className='flex gap-5'>
+        <Select
+          placeholder={'Select state'}
+          label='State'
+          name='state'
+          options={states}
+        />
+        <Select label='City' name='city' options={lgas} />
+      </div>
 
       <div className='relative mt-10 flex'>
         <div id={submitButtonId} data-tooltip-delay-show={1000}>
           <SubmitButton
             submitting={processing}
             onClick={dismissSaveAndContinueTooltip}
-            className='outline-button min-w-[200px]'
+            className='primary-button min-w-[170px]'
           >
             Save and Continue
           </SubmitButton>

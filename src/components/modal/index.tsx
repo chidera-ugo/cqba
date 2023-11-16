@@ -27,31 +27,31 @@ export const Modal = ({
     return () => clearTimeout(timeout);
   }, [grow]);
 
-  function resetZoomOut() {
-    if (type !== 'right') return;
+  // function resetZoomOut() {
+  //   if (type !== 'right') return;
+  //
+  //   const el = document.getElementById('app_wrapper');
+  //
+  //   if (el) {
+  //     el.style.transitionProperty = 'all';
+  //     el.style.transitionDuration = '0.4s';
+  //     el.style.transform = '';
+  //     el.style.overflow = '';
+  //   }
+  // }
 
-    const el = document.getElementById('app_wrapper');
-
-    if (el) {
-      el.style.transitionProperty = 'all';
-      el.style.transitionDuration = '0.4s';
-      el.style.transform = '';
-      el.style.overflow = '';
-    }
-  }
-
-  function zoomOut() {
-    if (type !== 'right') return;
-
-    const el = document.getElementById('app_wrapper');
-
-    if (el) {
-      el.style.transitionProperty = 'all';
-      el.style.transitionDuration = '0.4s';
-      el.style.transform = 'scale(0.96)';
-      el.style.overflow = 'hidden';
-    }
-  }
+  // function zoomOut() {
+  //   if (type !== 'right') return;
+  //
+  //   const el = document.getElementById('app_wrapper');
+  //
+  //   if (el) {
+  //     el.style.transitionProperty = 'all';
+  //     el.style.transitionDuration = '0.4s';
+  //     el.style.transform = 'scale(0.96)';
+  //     el.style.overflow = 'hidden';
+  //   }
+  // }
 
   return (
     <AnimatePresence initial={false}>
@@ -85,13 +85,13 @@ export const Modal = ({
                 closeOnClickOutside && 'cursor-pointer',
                 white ? 'bg-white' : 'bg-black bg-opacity-60'
               )}
-              onAnimationStart={(variant) => {
-                if (variant === 'show') {
-                  zoomOut();
-                } else {
-                  resetZoomOut();
-                }
-              }}
+              // onAnimationStart={(variant) => {
+              //   if (variant === 'show') {
+              //     zoomOut();
+              //   } else {
+              //     resetZoomOut();
+              //   }
+              // }}
             />
 
             <motion.div

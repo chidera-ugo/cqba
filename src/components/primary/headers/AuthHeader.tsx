@@ -6,10 +6,10 @@ export const AuthHeader = () => {
   return (
     <header
       className={clsx(
-        'sticky -top-[1px] left-0 z-[1000] h-16 border-b border-neutral-200 bg-white bg-opacity-80 backdrop-blur-md 640:h-20'
+        'sticky -top-[1px] left-0 z-[1000] h-14 border-b border-neutral-200 bg-white bg-opacity-80 backdrop-blur-md 640:h-20'
       )}
     >
-      <div className='x-between relative z-10 my-auto h-16 px-4 640:px-10 1024:h-[82px]'>
+      <div className='x-between relative z-10 my-auto h-full px-4 640:px-10'>
         <Logo />
 
         <div className='y-center'>
@@ -19,8 +19,9 @@ export const AuthHeader = () => {
             rel='noreferrer noopenner'
             className='text-button flex text-xs font-medium text-black 640:text-sm'
           >
-            <span className='my-auto mr-2'>Visit Website</span>
-            <span className='my-auto'>
+            <span className='my-auto block 640:hidden'>Learn More</span>
+            <span className='my-auto hidden 640:block'>Visit Website</span>
+            <span className='my-auto ml-2 hidden 640:block'>
               <Right className='h-5 w-5' />
             </span>
           </a>

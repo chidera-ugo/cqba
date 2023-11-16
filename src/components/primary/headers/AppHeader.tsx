@@ -10,6 +10,7 @@ interface Props {
   title?: string;
   back?: string;
   hideSideNavigation?: boolean;
+  className?: string;
 }
 
 export const AppHeader = ({
@@ -17,11 +18,13 @@ export const AppHeader = ({
   back,
   children,
   hideSideNavigation,
+  className,
 }: PropsWithChildren<Props>) => {
   return (
     <header
       className={clsx(
-        'sticky top-0 left-0 z-[1000] h-16 border-b border-neutral-200 bg-white bg-opacity-80 backdrop-blur-md 1024:h-20'
+        'sticky top-0 left-0 z-[1000] h-16 border-neutral-200 bg-white bg-opacity-80 backdrop-blur-md 1024:h-20',
+        className
       )}
     >
       <div className='x-between app-container relative z-10 my-auto h-full'>
@@ -59,9 +62,10 @@ export const Logo = () => {
           src={logo}
           priority
           alt='chequebase-logo'
-          className='my-auto w-[120px] object-contain 640:w-[160px]'
+          className='my-auto w-[100px] object-contain 640:w-[160px]'
         />
-        <button className='rounded-full border border-neutral-200 bg-neutral-100 py-0.5 px-2 text-xs shadow-sm 640:py-1 640:text-sm'>
+
+        <button className='rounded-full border border-neutral-200 bg-neutral-100 py-0.5 px-1.5 text-[10px] shadow-sm 640:px-2 640:py-1 640:text-sm'>
           Beta
         </button>
       </Link>

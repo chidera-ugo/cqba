@@ -73,7 +73,11 @@ export default function App({ Component, pageProps }: AppProps) {
           <AppContextProvider>
             <KycContextProvider>
               <Component {...pageProps} />
-              <ReactQueryDevtools position='top-left' initialIsOpen={false} />
+
+              <ReactQueryDevtools
+                position='bottom-left'
+                initialIsOpen={false}
+              />
             </KycContextProvider>
           </AppContextProvider>
         </QueryClientProvider>

@@ -51,6 +51,10 @@ export const TooltipWrapper = ({
 >) => {
   const { screenSize } = useAppContext().state;
 
+  const disabled = true;
+
+  if (disabled) return <></>;
+
   return (
     <Tooltip
       isOpen={show}

@@ -14,14 +14,13 @@ export const useAccountVerificationStatus = () => {
 
   const hasProvidedCompanyInformation =
     !!organizationInformation?.businessType &&
-    !!organizationInformation.businessAddress;
+    !!organizationInformation.address;
 
   const hasProvidedOwnerInformation =
-    !!organizationInformation?.formOfId && !!organizationInformation.bvn;
+    !!organizationInformation?.owners?.length ||
+    !!organizationInformation?.directors?.length;
 
-  const hasProvidedDocuments =
-    organizationInformation?.bnNumberImageUrl &&
-    organizationInformation.utilityBillType;
+  const hasProvidedDocuments = organizationInformation?.documents?.length;
 
   const hasProvidedAllRequirements =
     hasProvidedCompanyInformation &&

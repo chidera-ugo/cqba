@@ -1,11 +1,11 @@
 import clsx from 'clsx';
 import { UpdateBusinessDocumentionForm } from 'components/forms/kyc/UpdateBusinessDocumentionForm';
 import { UpdateCompanyInformationForm } from 'components/forms/kyc/UpdateCompanyInformationForm';
-import { UpdateOwnerInformationForm } from 'components/forms/kyc/UpdateOwnerInformationForm';
 import { GreenCheck } from 'components/illustrations/Success';
 import { AppLayout } from 'components/layouts/AppLayout';
 import { SimpleInformation } from 'components/modules/common/SimpleInformation';
 import { KycSteps } from 'components/modules/kyc/KycSteps';
+import { ManageBusinessOwnersAndDirectors } from 'components/modules/kyc/ManageBusinessOwnersAndDirectors';
 import { ReviewAndSubmit } from 'components/modules/kyc/ReviewAndSubmit';
 import { Cross } from 'components/svgs/navigation/Exit';
 import { useCurrentAccountSetupStepUrl } from 'hooks/dashboard/kyc/useCurrentAccountSetupStepUrl';
@@ -69,26 +69,18 @@ export default function Kyc() {
         </Link>
       }
     >
-      <div
-        className={clsx(
-          query['showSteps'] === 'true' ? 'block' : 'hidden 768:block'
-        )}
-      >
-        <h5>Activate your account</h5>
-        <p className='mt-1 font-normal text-neutral-500'>
-          Based on your business type, you will be required to submit the
-          documents below during the business activation process.{' '}
-        </p>
-      </div>
-
-      <div
-        className={clsx(
-          '768:kyc-layout-height mt-7 grid-cols-12 rounded-xl border-neutral-200 768:grid 768:border'
-        )}
-      >
-        <div className='m-0 border-neutral-200 768:col-span-5 768:m-5 768:mr-0 768:border-r 1200:col-span-4'>
-          <div className='mx-auto 768:max-w-[540px]'>
-            <h5 className={'hidden 768:block'}>Setup Guide</h5>
+      <div className='relative flex gap-5'>
+        <div className='sticky top-[108px] h-full w-[360px]'>
+          <div
+            className={clsx(
+              query['showSteps'] === 'true' ? 'block' : 'hidden 768:block'
+            )}
+          >
+            <h4>Activate your account</h4>
+            <p className='mt-2 text-sm font-normal text-neutral-500'>
+              Based on your business type, you will be required to submit the
+              documents below during the business activation process.{' '}
+            </p>
 
             <div
               className={clsx(
@@ -101,36 +93,44 @@ export default function Kyc() {
         </div>
 
         <div
-          className={clsx(
-            query['showSteps'] === 'true' && 'hidden 768:block',
-            'thin-scrollbar col-span-7 overflow-y-auto 768:mt-0 1200:col-span-8'
-          )}
+          className={clsx('w-full rounded-xl border-neutral-200 768:border')}
         >
-          <div className='mx-auto h-full max-w-[540px] px-1 768:py-5 768:px-8'>
-            {currentTab === 'review-and-submit' ? (
-              <ReviewAndSubmit />
-            ) : currentTab === 'business-documentation' ? (
-              <UpdateBusinessDocumentionForm />
-            ) : currentTab === 'owner-information' ? (
-              <UpdateOwnerInformationForm />
-            ) : currentTab === 'company-information' ? (
-              <UpdateCompanyInformationForm />
-            ) : (
-              <div className='y-center h-full'>
-                <SimpleInformation
-                  title={<span>Done</span>}
-                  description={
-                    <span className='mt-2 block'>
-                      {`You've completed this step already`}
-                    </span>
-                  }
-                  actionButton={{
-                    action: goToNextAccountSetupStep,
-                    text: 'Proceed',
-                  }}
-                />
-              </div>
+          <div
+            className={clsx(
+              query['showSteps'] === 'true' && 'hidden 768:block',
+              'thin-scrollbar w-full overflow-y-auto 768:mt-0'
             )}
+          >
+            <div className='mx-auto h-full max-w-[540px] px-1 768:py-5 768:px-8'>
+              {currentTab === 'review-and-submit' ? (
+                <ReviewAndSubmit />
+              ) : currentTab === 'business-documentation' ? (
+                <UpdateBusinessDocumentionForm />
+              ) : currentTab === 'owners-information' ? (
+                <div>
+                  <h5>{`Owners' Information`}</h5>
+
+                  <ManageBusinessOwnersAndDirectors />
+                </div>
+              ) : currentTab === 'company-information' ? (
+                <UpdateCompanyInformationForm />
+              ) : (
+                <div className='y-center h-full'>
+                  <SimpleInformation
+                    title={<span>Done</span>}
+                    description={
+                      <span className='mt-2 block'>
+                        {`You've completed this step already`}
+                      </span>
+                    }
+                    actionButton={{
+                      action: goToNextAccountSetupStep,
+                      text: 'Proceed',
+                    }}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

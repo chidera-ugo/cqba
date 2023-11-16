@@ -3,16 +3,24 @@ import { object, string } from 'yup';
 
 export const validationSchema = object({
   bnNumber: string().required('Please provide your BN number'),
-  tin: string().required('Please provide your tax identification number'),
-  utilityBillType: string().required('Please select utility bill type'),
-  utilityBillFile: object().test(
+  creationDate: object().test(
+    'required',
+    'Provide company creation date',
+    (val: any) => {
+      return !!val.value && !!val.calendarValue;
+    }
+  ),
+  utilityBill: object().test(
     'invalidFile',
     'Please upload your utility bill',
     (val) => validateFile(val)
   ),
-  bnDocumentFile: object().test(
+  businessNameCert: object().test(
     'invalidFile',
-    'Please upload your BN document',
+    'Upload business name certificate',
     (val) => validateFile(val)
+  ),
+  cacBn1: object().test('invalidFile', 'Upload your CAC BN1', (val) =>
+    validateFile(val)
   ),
 });

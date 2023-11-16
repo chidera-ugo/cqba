@@ -18,14 +18,14 @@ export const SignInForm = ({
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={({ email: _, password, stayLoggedIn }) => {
+      onSubmit={({ email: _, password, rememberMe }) => {
         const email = _.trim();
 
         mutate(
           {
             email,
             password,
-            rememberMe: stayLoggedIn,
+            rememberMe,
           },
           {
             onSuccess(res) {

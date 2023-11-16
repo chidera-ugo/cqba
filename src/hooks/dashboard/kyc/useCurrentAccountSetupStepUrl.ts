@@ -13,7 +13,7 @@ export const useCurrentAccountSetupStepUrl = () => {
     if (!hasProvidedCompanyInformation) return '/kyc?tab=company-information';
 
     if (!hasProvidedOwnerInformationRequirements)
-      return '/kyc?tab=owner-information';
+      return '/kyc?tab=owners-information';
 
     return '/kyc?tab=business-documentation';
   }

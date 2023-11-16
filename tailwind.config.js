@@ -59,6 +59,7 @@ module.exports = {
         },
         warning: {
           600: '#E9A23B',
+          700: '#C8811A',
         },
         others: {
           yellow: '#FBF2CB',

@@ -1,10 +1,13 @@
 import clsx from 'clsx';
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
 import { ForgotPasswordForm } from 'components/forms/auth/ForgotPasswordForm';
+import { ChatBubbles } from 'components/illustrations/ChatBubbles';
 import { AuthLayout } from 'components/layouts/AuthLayout';
 import { SimpleInformation } from 'components/modules/common/SimpleInformation';
 import { AppToast } from 'components/primary/AppToast';
+import { BackLine } from 'components/svgs/navigation/Arrows';
 import { useInitiatePasswordRecovery } from 'hooks/api/auth/useInitiatePasswordRecovery';
+import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -29,6 +32,7 @@ export default function ForgotPassword() {
       >
         {email ? (
           <SimpleInformation
+            icon={<ChatBubbles />}
             title={<span>We sent you a reset link.</span>}
             description={
               <span className='mt-3 block'>
@@ -46,6 +50,15 @@ export default function ForgotPassword() {
           />
         ) : (
           <>
+            <Link href={'/auth/signin'} className='group mb-4 flex gap-1.5'>
+              <BackLine
+                className={'my-auto h-4 w-4 stroke-2 text-primary-main'}
+              />
+              <span className='my-auto text-xs font-medium group-hover:underline'>
+                Back to Login
+              </span>
+            </Link>
+
             <h4>Forgot your password?</h4>
             <div className='mt-2 text-left text-sm text-neutral-600 640:mt-3'>
               Enter the email address associated with your account and we’ll

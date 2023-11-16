@@ -67,23 +67,18 @@ export const ReviewAndSubmit = () => {
         className='mt-3'
       />
 
-      <CheckInput
-        id='isAccurate'
-        label={`I/We confirm that the information provided are accurate and truthful.`}
-        handleClick={handleCheckInputClick}
-        isChecked={isCheckInputChecked}
-        className='mt-10'
-      />
+      <p className={'mt-5 text-sm'}>
+        I/We confirm that the information provided are accurate and truthful.
+      </p>
 
-      <div className='relative mt-10 flex pb-8'>
+      <div className='relative mt-7 flex pb-8'>
         <SubmitButton
           submitting={isLoading}
           type='button'
-          disabled={!fields['isAccurate']}
           onClick={() => {
             mutate({});
           }}
-          className='dark-button min-w-[200px]'
+          className='primary-button min-w-[170px]'
         >
           Submit Application
         </SubmitButton>
@@ -98,15 +93,14 @@ export const ApplicationUnderReview = () => {
   return (
     <div className='py-10'>
       <SimpleInformation
-        title={<div className='text-xl'>Verification Pending</div>}
+        title={`Thank you! We are verifying your business information`}
         description={
-          <span className='mt-1 block'>
-            {`We're reviewing your application, this may take a while. You will be
-            notified once this process has been completed.`}
+          <span className='mt-4 block'>
+            {`We can't wait to get you started. If everything is fine, you'll be verified and notified via email within the next 48 hours.`}
           </span>
         }
         actionButton={{
-          text: 'Continue to Dashboard',
+          text: 'Back to Home',
           action: () => push('/'),
         }}
         icon={<Clock />}

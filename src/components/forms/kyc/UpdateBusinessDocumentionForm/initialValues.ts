@@ -1,9 +1,9 @@
-import { IFile } from 'types/Common';
+import { DatePickerValue, IFile } from 'types/Common';
 
 export const initialValues = {
   bnNumber: '',
-  tin: '',
-  utilityBillType: '',
-  utilityBillFile: {} as IFile,
-  bnDocumentFile: {} as IFile,
+  creationDate: {} as DatePickerValue,
+  utilityBill: {} as IFile,
+  businessNameCert: {} as IFile,
+  cacBn1: {} as IFile,
 };
