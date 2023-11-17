@@ -3,7 +3,7 @@ import { useAppContext } from 'context/AppContext';
 
 export interface City {
   name: string;
-  isoCode: string;
+  stateCode: string;
   countryCode: string;
   latitude: string;
   longitude: string;

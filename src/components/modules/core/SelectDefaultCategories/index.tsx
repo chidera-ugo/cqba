@@ -39,13 +39,13 @@ export const SelectDefaultCategories = () => {
       return;
     }
 
-    if (user?.defaultCategoryIds && user?.defaultCategoryIds?.length > 0) {
+    if (!!user?.defaultCategoryIds?.length) {
       setShowModal(false);
       return;
     }
 
     setShowModal(true);
-  }, [pathname, data, user]);
+  }, [pathname, data, user, isVerified]);
 
   function closeModal() {
     setShowModal(false);

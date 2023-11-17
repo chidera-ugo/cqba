@@ -32,7 +32,11 @@ export interface IOrganization {
   gender: string;
   businessType: string;
   updatedAt: number;
-  documents: Record<string, string>[];
+  documents: {
+    cacBn1?: string;
+    utilityBill?: string;
+    businessNameCert?: string;
+  };
   bvn: string;
   regDate: string;
 }

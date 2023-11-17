@@ -31,6 +31,7 @@ export const AddressInputGroup = ({ country }: { country: string }) => {
         name='country'
         trueValueKey={'isoCode'}
         displayValueKey={'name'}
+        listKeyModifieres={['name']}
         options={countries}
         isLoading={loadingCountries}
         isError={countriesError}
@@ -49,6 +50,7 @@ export const AddressInputGroup = ({ country }: { country: string }) => {
           name='state'
           trueValueKey={'isoCode'}
           displayValueKey={'name'}
+          listKeyModifieres={['name']}
           options={states}
           isLoading={loadingStates && !!country}
           isError={statesError}
@@ -58,9 +60,10 @@ export const AddressInputGroup = ({ country }: { country: string }) => {
           placeholder={'Select city'}
           label='City'
           name='city'
-          trueValueKey={'isoCode'}
+          trueValueKey={'stateCode'}
           displayValueKey={'name'}
           options={cities}
+          listKeyModifieres={['latitude', 'longitude', 'name', 'stateCode']}
           isLoading={loadingCities && !!country}
           isError={citiesError}
         />

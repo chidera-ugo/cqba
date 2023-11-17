@@ -1,16 +1,17 @@
+import { SmallCheck } from 'components/svgs/others/Check';
 import { useField, useFormikContext } from 'formik';
 import clsx from 'clsx';
 import { useDropFile } from 'hooks/forms/useDropFile';
 import { useFileSelector } from 'hooks/forms/useFileSelector';
 import { FileField } from 'types/Common';
 import { FileUpload } from 'components/svgs/forms/FileUpload';
-import { ViewUploadedDocument } from 'components/modules/common/ViewUploadedDocument';
+import { ViewUploadedImage } from 'components/modules/common/ViewUploadedImage';
 
 type Props = JSX.IntrinsicElements['input'] &
   FileField & {
     label: string;
     fileType?: 'image' | 'all';
-    onClickViewExistingFile?: (src: any) => void;
+    openImagePreviewModal?: (src: any) => void;
   };
 
 export const FileInput = ({
@@ -21,7 +22,7 @@ export const FileInput = ({
   getFile,
   fileType = 'image',
   extensions: _extensions,
-  onClickViewExistingFile,
+  openImagePreviewModal,
   ...props
 }: Props) => {
   const { fileSelector, errorCb } = useFileSelector();
@@ -46,6 +47,17 @@ export const FileInput = ({
     extensions,
     id,
   });
+
+  function isImage() {
+    if (!file?.webUrl) return false;
+
+    const url = file.webUrl;
+
+    const chunks = url?.split('.');
+    const extension = chunks[chunks?.length - 1]?.toLowerCase();
+
+    return !!(extension && imageExtensions.includes(extension));
+  }
 
   function constructAcceptList() {
     if (!extensions?.length) return '';
@@ -81,15 +93,27 @@ export const FileInput = ({
               <FileUpload />
             </div>
             <div className='font-normal text-neutral-400'>
-              {file?.file && (
+              {file?.file || file?.webUrl ? (
                 <div className='mx-auto mt-1 flex'>
                   <span className='my-auto rounded-lg border border-primary-main py-1 px-2 text-left text-xs font-medium text-primary-main line-clamp-1'>
-                    {file?.file.name}
+                    {file?.file?.name ?? (
+                      <span className={'flex gap-1'}>
+                        <span className={'my-auto'}>
+                          <SmallCheck />
+                        </span>
+                        <span className='my-auto'>Uploaded Document</span>
+                      </span>
+                    )}
                   </span>
                 </div>
-              )}
+              ) : null}
 
-              <div className={clsx(file?.file && 'mt-2', 'text-sm')}>
+              <div
+                className={clsx(
+                  file?.file || file?.webUrl ? 'mt-2' : '',
+                  'text-sm'
+                )}
+              >
                 {!file?.file &&
                   `Drag and drop document here or Browse Supported file types: `}
 
@@ -128,13 +152,11 @@ export const FileInput = ({
         <div className='generic-error'>{meta.error}</div>
       ) : null}
 
-      {(!!file?.webUrl || !!file?.url) && onClickViewExistingFile ? (
+      {isImage() && openImagePreviewModal ? (
         <div className='mt-2 flex justify-end'>
-          {/*Todo: Fix preview for pdfs*/}
-
-          <ViewUploadedDocument
-            url={file.webUrl ?? file.url!}
-            onClick={(src) => onClickViewExistingFile(src)}
+          <ViewUploadedImage
+            url={file!.webUrl!}
+            onClick={(src) => openImagePreviewModal(src)}
           >
             <div className='blue-mpill-h'>
               <span className='my-auto mr-2'>View Uploaded Document</span>
@@ -155,7 +177,7 @@ export const FileInput = ({
                 </svg>
               </span>
             </div>
-          </ViewUploadedDocument>
+          </ViewUploadedImage>
         </div>
       ) : null}
     </div>

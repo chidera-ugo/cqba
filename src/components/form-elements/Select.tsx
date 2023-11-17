@@ -15,32 +15,22 @@ type Props = JSX.IntrinsicElements['select'] &
     trueValueKey?: string;
     isLoading?: boolean;
     isError?: boolean;
+    listKeyModifieres?: string[];
   };
 
 export const Select = ({
   label,
-  options: _options,
+  options,
   className,
   isLoading,
   displayValueKey,
+  listKeyModifieres,
   next,
   placeholder = 'Select',
   trueValueKey = 'id',
   isError,
   ...props
 }: Props) => {
-  const options = !_options?.length
-    ? ['']
-    : [
-        typeof _options?.[0] === 'string'
-          ? ''
-          : {
-              [trueValueKey]: '',
-              [displayValueKey ?? 'name']: '',
-            },
-        ..._options,
-      ];
-
   const [field, meta] = useField(props.name as string);
 
   const id = props.id ?? props.name;
@@ -50,6 +40,18 @@ export const Select = ({
       document.getElementById(next)?.focus();
     }
   }, [field.value]);
+
+  function getKeySuffix(value: any) {
+    if (!listKeyModifieres?.length) return '';
+
+    const arr = [];
+
+    for (const i of listKeyModifieres) {
+      arr.push(value[i]);
+    }
+
+    return arr.join('_');
+  }
 
   return (
     <div className={clsx(className, 'relative mt-5 w-full')}>
@@ -105,20 +107,20 @@ export const Select = ({
               }
             }}
             className={clsx(
-              meta.touched && meta.error ? 'border-error-main' : '',
               'w-full',
-              !!field.value ? 'bg-white' : 'bg-neutral-100'
+              !!field.value ? 'bg-white' : 'bg-neutral-100',
+              meta.touched && meta.error ? 'border-error-main' : ''
             )}
           >
-            <option disabled hidden value=''></option>
+            <option value=''></option>
 
-            {options.map((value: any) => {
+            {options?.map((value: any) => {
               const isObject = displayValueKey && typeof value === 'object';
 
               const val = isObject ? value[trueValueKey] : (value as string);
 
               return (
-                <option key={val} value={val}>
+                <option key={`${val}${getKeySuffix(value)}`} value={val}>
                   {isObject ? value[displayValueKey] : (value as string)}
                 </option>
               );

@@ -94,7 +94,7 @@ export const ReviewAndSubmit = () => {
           href={'/kyc?tab=review-and-submit&showSteps=true'}
           className='x-center mx-auto mt-4 flex w-full py-2 text-center text-sm font-medium 640:hidden'
         >
-          Skip for later
+          Make Changes
         </Link>
       </div>
     </>

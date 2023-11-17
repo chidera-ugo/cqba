@@ -6,9 +6,9 @@ import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { Confirmation } from 'components/modals/Confirmation';
 import { OwnersList } from 'components/modules/kyc/ManageBusinessOwnersAndDirectors/OwnersList';
 import { Spinner } from 'components/svgs/dashboard/Spinner';
+import { useDeleteOwner } from 'hooks/api/kyc/useDeleteOwner';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { IOwner } from 'hooks/api/kyc/useUpdateOwnerInformation';
-import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -35,9 +35,9 @@ export const ManageBusinessOwnersAndDirectors = () => {
   const { isLoading, isError, isFetching, data } =
     useGetOrganizationInformation();
 
-  const { mutate: _delete, isLoading: deleting } = useMakeDummyHttpRequest({
+  const { mutate: _delete, isLoading: deleting } = useDeleteOwner({
     onSuccess() {
-      queryClient.invalidateQueries(['owners']);
+      queryClient.invalidateQueries(['organization-information']);
     },
   });
 
@@ -169,7 +169,7 @@ export const ManageBusinessOwnersAndDirectors = () => {
         negative={() => setOwnerToDelete(null)}
         positive={() => {
           _delete({
-            directorId: ownerToDelete?.id,
+            id: ownerToDelete!.id,
           });
           setOwnerToDelete(null);
         }}

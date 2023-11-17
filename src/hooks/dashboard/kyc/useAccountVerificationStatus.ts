@@ -20,7 +20,10 @@ export const useAccountVerificationStatus = () => {
     !!organizationInformation?.owners?.length ||
     !!organizationInformation?.directors?.length;
 
-  const hasProvidedDocuments = organizationInformation?.documents?.length;
+  const hasProvidedDocuments =
+    organizationInformation?.documents?.utilityBill &&
+    organizationInformation.documents.cacBn1 &&
+    organizationInformation.documents.businessNameCert;
 
   const hasProvidedAllRequirements =
     hasProvidedCompanyInformation &&

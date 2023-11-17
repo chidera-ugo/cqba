@@ -154,6 +154,6 @@ export function phoneNumberTest(
 }
 
 export function validateFile(val?: any) {
-  if (!val.id) return true;
+  if (!val.file) return true;
   return !!val.file && !!val.id && !!val.url;
 }

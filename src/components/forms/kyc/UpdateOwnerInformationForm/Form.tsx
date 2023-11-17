@@ -147,7 +147,19 @@ export const Form = ({
           label='Title'
           placeholder={'Select title'}
           name='title'
-          options={['Manager']}
+          options={[
+            'CEO',
+            'COO',
+            'CFO',
+            'President',
+            'CIO',
+            'VP',
+            'Treasurer',
+            'Controller',
+            'Manager',
+            'Partner',
+            'Member',
+          ]}
         />
       )}
 
@@ -182,7 +194,7 @@ export const Form = ({
       <div className='relative mt-8 flex pb-8'>
         <SubmitButton
           submitting={processing}
-          className='primary-button min-w-[170px]'
+          className='primary-button w-full min-w-[170px] 640:w-min'
         >
           Save and Continue
         </SubmitButton>

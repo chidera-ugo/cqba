@@ -3,6 +3,7 @@ import { useAppContext } from 'context/AppContext';
 import { useTMutation } from 'hooks/api/useTMutation';
 
 export interface UpdateOwnersInformationDto {
+  id?: string;
   firstName: string;
   lastName: string;
   phone: string;

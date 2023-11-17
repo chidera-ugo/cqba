@@ -10,6 +10,7 @@ import { ManageBusinessOwnersAndDirectors } from 'components/modules/kyc/ManageB
 import { ReviewAndSubmit } from 'components/modules/kyc/ReviewAndSubmit';
 import { Cross } from 'components/svgs/navigation/Exit';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
+import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import { useCurrentAccountSetupStepUrl } from 'hooks/dashboard/kyc/useCurrentAccountSetupStepUrl';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useKycSteps } from 'hooks/kyc/useKycSteps';
@@ -27,13 +28,22 @@ export default function Kyc() {
 
   const { getCurrentAccountSetupStepUrl } = useCurrentAccountSetupStepUrl();
 
+  const { isUnderReview } = useAccountVerificationStatus();
+
   const { isRefetching } = useGetOrganizationInformation();
+
+  const showSteps = query['showSteps'] === 'true';
 
   useEffect(() => {
     if (isValidAccountSetupStep) return;
 
     replace(getCurrentAccountSetupStepUrl());
   }, [isValidAccountSetupStep]);
+
+  useEffect(() => {
+    if (isUnderReview && query['tab'] !== 'review-and-submit')
+      replace('/kyc?tab=review-and-submit');
+  }, [query['tab']]);
 
   if (isVerified)
     return (
@@ -75,26 +85,18 @@ export default function Kyc() {
         </Link>
       }
     >
-      <SimpleToast show={isRefetching}>Updating...</SimpleToast>
+      <SimpleToast show={isRefetching && showSteps}>Updating...</SimpleToast>
 
       <div className='relative gap-5 768:flex'>
         <div className='sticky top-[108px] h-full w-[360px]'>
-          <div
-            className={clsx(
-              query['showSteps'] === 'true' ? 'block' : 'hidden 768:block'
-            )}
-          >
+          <div className={clsx(showSteps ? 'block' : 'hidden 768:block')}>
             <h4>Activate your account</h4>
             <p className='mt-2 text-sm font-normal text-neutral-500'>
               Based on your business type, you will be required to submit the
               documents below during the business activation process.{' '}
             </p>
 
-            <div
-              className={clsx(
-                query['showSteps'] === 'true' ? 'block' : 'hidden 768:block'
-              )}
-            >
+            <div className={clsx(showSteps ? 'block' : 'hidden 768:block')}>
               <KycSteps />
             </div>
           </div>
@@ -102,7 +104,7 @@ export default function Kyc() {
 
         <div
           className={clsx(
-            query['showSteps'] === 'true' && 'hidden 768:block',
+            showSteps && 'hidden 768:block',
             'w-full rounded-xl border-neutral-200 768:border'
           )}
         >
