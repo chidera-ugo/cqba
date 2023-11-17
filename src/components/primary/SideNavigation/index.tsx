@@ -22,8 +22,8 @@ export const SideNavigationContent = ({
 }) => {
   return (
     <div className='y-between relative h-screen'>
-      <div className='h-max overflow-y-auto'>
-        <div className='x-between sticky top-0 left-0 z-10 block h-14 w-full border-b border-neutral-200 bg-white bg-opacity-80 px-5 backdrop-blur-lg 1024:hidden'>
+      <div className='h-max w-full overflow-y-auto'>
+        <div className='x-between sticky top-0 left-0 z-10 flex h-14 w-full border-b border-neutral-200 bg-white bg-opacity-80 px-5 backdrop-blur-lg 1024:hidden'>
           <Logo />
 
           <button onClick={closeModal} type={'button'} className='my-auto flex'>

@@ -39,7 +39,7 @@ export const FullScreenLoader = ({
           <div className='y-center'>
             <Spinner
               className={clsx(
-                'mx-auto h-16 w-16 animate-spin',
+                'mx-auto h-12 w-12 animate-spin',
                 asPage || white ? 'text-primary-main' : 'text-white'
               )}
             />
