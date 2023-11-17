@@ -31,7 +31,7 @@ export const UpdateBusinessDocumentionForm = () => {
     onSuccess() {
       queryClient.invalidateQueries(['organization-information']);
 
-      replace(`/kyc?tab=${redirectUrl}&showSteps=true`).then(() => {
+      replace(`/kyc?tab=${redirectUrl}`).then(() => {
         toast(<AppToast>Update successful</AppToast>, { type: 'success' });
       });
     },

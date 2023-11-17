@@ -1,9 +1,7 @@
 import clsx from 'clsx';
 import { Modal } from 'components/modal';
 import { PageHead } from 'components/primary/PageHead';
-import Image from 'next/image';
-import icon from '/public/logos/icon.svg';
-import icon_white from '/public/logos/icon-white.svg';
+import { Spinner } from 'components/svgs/dashboard/Spinner';
 
 interface Props {
   white?: boolean;
@@ -39,11 +37,11 @@ export const FullScreenLoader = ({
           )}
 
           <div className='y-center'>
-            <Image
-              priority
-              className='mx-auto h-16 w-16 animate-spin'
-              src={asPage ?? white ? icon : icon_white}
-              alt='icon'
+            <Spinner
+              className={clsx(
+                'mx-auto h-16 w-16 animate-spin',
+                asPage || white ? 'text-primary-main' : 'text-white'
+              )}
             />
 
             {message && (

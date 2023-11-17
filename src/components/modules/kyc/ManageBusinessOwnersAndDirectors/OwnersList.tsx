@@ -44,7 +44,7 @@ export const OwnersList = ({
                 }}
                 className='x-between group my-auto h-full w-full rounded-xl bg-neutral-100 px-4'
               >
-                <span className='my-auto text-sm font-medium text-black group-hover:text-primary-main'>
+                <span className='my-auto text-left text-sm font-medium text-black line-clamp-1 group-hover:text-primary-main'>
                   {firstName} {lastName}
                 </span>
 

@@ -140,18 +140,24 @@ export const ManageBusinessOwnersAndDirectors = () => {
       </div>
 
       {data?.directors?.length || data?.owners?.length ? (
-        <div className='relative mt-10 flex pb-8'>
+        <div className={'mt-10 pb-8'}>
           <Link
-            href={`/kyc?tab=
-          ${
-            hasProvidedAllRequirements
-              ? 'review-and-submit'
-              : 'business-documentation'
-          }`}
+            href={`/kyc?tab=${
+              hasProvidedAllRequirements
+                ? 'review-and-submit'
+                : 'business-documentation&showSteps=true'
+            }`}
           >
-            <div className='primary-button min-w-[170px]'>
+            <div className='primary-button w-full min-w-[170px] 640:w-min'>
               <span className='y-center h-full'>Save and Continue</span>
             </div>
+          </Link>
+
+          <Link
+            href={'/kyc?tab=review-and-submit&showSteps=true'}
+            className='x-center mx-auto mt-4 flex w-full py-2 text-center text-sm font-medium 640:hidden'
+          >
+            Skip for later
           </Link>
         </div>
       ) : null}

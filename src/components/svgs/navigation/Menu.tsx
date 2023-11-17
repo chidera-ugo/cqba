@@ -1,23 +1,25 @@
 export const Hamburger = () => {
   return (
     <svg
-      width='33'
-      height='33'
-      viewBox='0 0 33 33'
+      width='24'
+      height='25'
+      viewBox='0 0 24 25'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
     >
-      <path d='M6.51501 8.5H26.515' stroke='black' />
-      <path d='M6.51501 16.5H26.515' stroke='black' />
-      <path d='M6.51501 24.5H26.515' stroke='black' />
-      <rect
-        x='0.280029'
-        y='0.25'
-        width='32.47'
-        height='32.5'
-        rx='4.75'
-        stroke='#DADADA'
-        strokeWidth='0.5'
+      <path
+        d='M3.896 8.05469H19.896'
+        stroke='#282828'
+        strokeWidth='1.38462'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+      />
+      <path
+        d='M3.896 16.0547H19.896'
+        stroke='#282828'
+        strokeWidth='1.38462'
+        strokeLinecap='round'
+        strokeLinejoin='round'
       />
     </svg>
   );

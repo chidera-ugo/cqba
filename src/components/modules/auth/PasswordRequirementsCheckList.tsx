@@ -41,7 +41,7 @@ export const PasswordRequirementsCheckList = ({
               </svg>
             )}
           </span>
-          <span className='my-auto text-xs leading-[12px] text-black 640:text-sm'>
+          <span className='my-auto text-xs leading-[16px] text-black 640:text-sm'>
             {name}
           </span>
         </div>

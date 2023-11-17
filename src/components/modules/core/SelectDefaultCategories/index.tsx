@@ -56,7 +56,7 @@ export const SelectDefaultCategories = () => {
       <CentredModalWrapper
         show={showModal}
         undraggable
-        className='max-h-[80vh] overflow-y-auto bg-white py-6'
+        className='max-h-[736px] overflow-y-auto bg-white py-6'
       >
         <h3
           className={

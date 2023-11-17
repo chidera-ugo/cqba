@@ -38,7 +38,9 @@ export function validationSchema(type: OwnerType) {
         if (type === 'director') return true;
         return !!val;
       }),
-    bvn: string().required('Please provide bvn'),
+    bvn: string()
+      .required('Please provide bvn')
+      .length(11, 'Invalid bvn provided'),
     lastName: string().required('Please provide last name'),
     firstName: string().required('Please provide first name'),
     address: string().required('Provide address'),

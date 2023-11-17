@@ -1,22 +1,18 @@
 import { IsLoading } from 'components/data-states/IsLoading';
+import { AddressInputGroup } from 'components/form-elements/AddressInputGroup';
 import { Input } from 'components/form-elements/Input';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { IOrganization } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useScrollToFormError } from 'hooks/forms/useScrollToFormError';
+import Link from 'next/link';
 import { sanitizeRecordToRemoveUndefinedAndNulls } from 'utils/sanitizers/sanitizeRecordToRemoveUndefinedAndNulls';
 import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { Select } from 'components/form-elements/Select';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { useStatesAndLgas } from 'hooks/dashboard/kyc/useStatesAndLgas';
-import { TooltipWrapper } from 'components/common/Tooltip';
-import { useDismiss } from 'hooks/common/useDismiss';
-import { useInView } from 'react-intersection-observer';
-import { IdNavigator } from 'components/common/IdNavigator';
+import { useEffect } from 'react';
 
 interface Props {
   formikProps: FormikProps<typeof initialValues>;
-  setHasUnsavedChanges: Dispatch<SetStateAction<boolean>>;
   organizationInformation?: IOrganization;
   processing: boolean;
   gettingOrganizationInformation: boolean;
@@ -25,33 +21,12 @@ interface Props {
 export const Form = ({
   processing,
   formikProps,
-  setHasUnsavedChanges,
   organizationInformation,
   gettingOrganizationInformation,
 }: Props) => {
   const { handleSubmit, errors, submitCount, setValues, values } = formikProps;
 
-  const submitButtonId = 'update-company-information-submit-button';
-
   useScrollToFormError(errors, submitCount);
-
-  const { states, lgas } = useStatesAndLgas({ state: values.state });
-
-  const [dismiss, isDismissed, checkIsDismissed] =
-    useDismiss('save_and_continue');
-
-  const [isSaveAndContinueButtonVisible, setIsSaveAndContinueButtonVisible] =
-    useState(false);
-
-  const canShowSaveAndContinueTooltip =
-    !checkIsDismissed() && !isDismissed && isSaveAndContinueButtonVisible;
-
-  const { ref } = useInView({
-    rootMargin: '-54px',
-    onChange(inView) {
-      setIsSaveAndContinueButtonVisible(inView);
-    },
-  });
 
   useEffect(() => {
     if (!organizationInformation) return;
@@ -85,19 +60,10 @@ export const Form = ({
     );
   }, [organizationInformation]);
 
-  function dismissSaveAndContinueTooltip() {
-    dismiss();
-  }
-
   if (gettingOrganizationInformation) return <IsLoading />;
 
   return (
-    <FormikForm
-      onChange={() => {
-        setHasUnsavedChanges(true);
-      }}
-      onSubmit={handleSubmit}
-    >
+    <FormikForm onSubmit={handleSubmit}>
       <Input
         label='Company Name'
         placeholder={'Enter company name'}
@@ -121,7 +87,7 @@ export const Form = ({
         options={industries}
       />
 
-      <div className='flex gap-5'>
+      <div className='gap-5 480:flex'>
         <Select
           label='Number of employees'
           name='employees'
@@ -141,52 +107,24 @@ export const Form = ({
         />
       </div>
 
-      <Select
-        placeholder={'Select country'}
-        label='Country'
-        name='country'
-        options={['Nigeria']}
-      />
+      <AddressInputGroup country={values.country} />
 
-      <Input
-        label='Address'
-        placeholder={'Enter business address'}
-        name='address'
-      />
-
-      <div className='flex gap-5'>
-        <Select
-          placeholder={'Select state'}
-          label='State'
-          name='state'
-          options={states}
-        />
-        <Select label='City' name='city' options={lgas} />
-      </div>
-
-      <div className='relative mt-10 flex'>
-        <div id={submitButtonId} data-tooltip-delay-show={1000}>
+      <div className={'mt-10 pb-8'}>
+        <div className='relative flex'>
           <SubmitButton
             submitting={processing}
-            onClick={dismissSaveAndContinueTooltip}
-            className='primary-button min-w-[170px]'
+            className='primary-button w-full min-w-[170px] 640:w-min'
           >
             Save and Continue
           </SubmitButton>
         </div>
 
-        <TooltipWrapper
-          anchorId={submitButtonId}
-          show={canShowSaveAndContinueTooltip}
-          close={dismissSaveAndContinueTooltip}
+        <Link
+          href={'/kyc?tab=review-and-submit&showSteps=true'}
+          className='x-center mx-auto mt-4 flex w-full py-2 text-center text-sm font-medium 640:hidden'
         >
-          Remember to save the changes you make on each section. Remember to
-          save the changes you make on each section.
-        </TooltipWrapper>
-      </div>
-
-      <div ref={ref} className='h-8'>
-        <IdNavigator id='bottom-anchor' />
+          Skip for later
+        </Link>
       </div>
     </FormikForm>
   );

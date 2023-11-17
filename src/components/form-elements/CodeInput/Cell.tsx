@@ -96,7 +96,7 @@ export function Cell({
           }
         }}
         className={clsx(
-          `input y-center my-auto h-full w-10 rounded-xl border border-none border-neutral-300 bg-neutral-210 px-3 text-center text-xl font-bold caret-black shadow-none 340:w-12 560:text-3xl 640:w-[56px]`,
+          `input y-center my-auto h-full w-10 rounded-lg border border-none border-neutral-300 bg-neutral-210 px-3 text-center text-xl font-bold caret-black shadow-none 340:w-12 425:rounded-xl 560:text-3xl 640:w-[56px]`,
           type === 'password' ? 'text-opacity-0' : '',
           className ? className : 'bg-neutral-70'
         )}

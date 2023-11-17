@@ -5,6 +5,7 @@ export const Cancel = () => {
       height='164'
       viewBox='0 0 164 164'
       fill='none'
+      className={'h-24'}
       xmlns='http://www.w3.org/2000/svg'
     >
       <path

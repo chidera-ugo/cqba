@@ -1,3 +1,4 @@
+import { AddressInputGroup } from 'components/form-elements/AddressInputGroup';
 import { Input } from 'components/form-elements/Input';
 import { ImageViewer } from 'components/modals/ImageViewer';
 import { OwnerType } from 'components/modules/kyc/ManageBusinessOwnersAndDirectors';
@@ -133,42 +134,24 @@ export const Form = ({
 
       <Input label='Email' name='email' />
 
-      <div className='gap-4 880:flex'>
-        {type === 'owner' ? (
-          <Input
-            label='Percentage Owned (5% - 100%)'
-            placeholder={'Enter percentage'}
-            name='percentOwned'
-            inputMode={'tel'}
-            type={'number'}
-          />
-        ) : (
-          <Select
-            label='Title'
-            placeholder={'Select title'}
-            name='title'
-            options={['Manager']}
-          />
-        )}
-
-        <Select label='Country' name='country' options={['Nigeria']} />
-      </div>
-
-      <Input
-        label='Address'
-        placeholder={'Enter business address'}
-        name='address'
-      />
-
-      <div className='flex gap-5'>
-        <Select
-          placeholder={'Select state'}
-          label='State'
-          name='state'
-          options={['test']}
+      {type === 'owner' ? (
+        <Input
+          label='Percentage Owned (5% - 100%)'
+          placeholder={'Enter percentage'}
+          name='percentOwned'
+          inputMode={'tel'}
+          type={'number'}
         />
-        <Select label='City' name='city' options={['test']} />
-      </div>
+      ) : (
+        <Select
+          label='Title'
+          placeholder={'Select title'}
+          name='title'
+          options={['Manager']}
+        />
+      )}
+
+      <AddressInputGroup country={values.country} />
 
       <div className='gap-4 880:flex'>
         <Select

@@ -88,6 +88,7 @@ export const AppLayout = ({
                 hideSideNavigation,
                 title,
               }}
+              className={pathname !== '/kyc' ? 'border-b' : ''}
             >
               {headerSlot}
             </AppHeader>

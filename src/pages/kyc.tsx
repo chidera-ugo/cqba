@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { SimpleToast } from 'components/common/SimpleToast';
 import { UpdateBusinessDocumentionForm } from 'components/forms/kyc/UpdateBusinessDocumentionForm';
 import { UpdateCompanyInformationForm } from 'components/forms/kyc/UpdateCompanyInformationForm';
 import { GreenCheck } from 'components/illustrations/Success';
@@ -8,6 +9,7 @@ import { KycSteps } from 'components/modules/kyc/KycSteps';
 import { ManageBusinessOwnersAndDirectors } from 'components/modules/kyc/ManageBusinessOwnersAndDirectors';
 import { ReviewAndSubmit } from 'components/modules/kyc/ReviewAndSubmit';
 import { Cross } from 'components/svgs/navigation/Exit';
+import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useCurrentAccountSetupStepUrl } from 'hooks/dashboard/kyc/useCurrentAccountSetupStepUrl';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useKycSteps } from 'hooks/kyc/useKycSteps';
@@ -24,6 +26,8 @@ export default function Kyc() {
   const { isVerified } = useIsVerified();
 
   const { getCurrentAccountSetupStepUrl } = useCurrentAccountSetupStepUrl();
+
+  const { isRefetching } = useGetOrganizationInformation();
 
   useEffect(() => {
     if (isValidAccountSetupStep) return;
@@ -57,9 +61,11 @@ export default function Kyc() {
       title='Get Started'
       hideSideNavigation
       headerSlot={
-        <Link href={'/'} className={'group hidden 1024:flex'}>
+        <Link href={'/'} className={'group flex'}>
           <span
-            className={'my-auto mr-1 text-sm font-medium group-hover:underline'}
+            className={
+              'my-auto mr-1 text-xs font-medium group-hover:underline 640:text-sm'
+            }
           >
             Skip for Later
           </span>
@@ -69,7 +75,9 @@ export default function Kyc() {
         </Link>
       }
     >
-      <div className='relative flex gap-5'>
+      <SimpleToast show={isRefetching}>Updating...</SimpleToast>
+
+      <div className='relative gap-5 768:flex'>
         <div className='sticky top-[108px] h-full w-[360px]'>
           <div
             className={clsx(
@@ -93,14 +101,12 @@ export default function Kyc() {
         </div>
 
         <div
-          className={clsx('w-full rounded-xl border-neutral-200 768:border')}
+          className={clsx(
+            query['showSteps'] === 'true' && 'hidden 768:block',
+            'w-full rounded-xl border-neutral-200 768:border'
+          )}
         >
-          <div
-            className={clsx(
-              query['showSteps'] === 'true' && 'hidden 768:block',
-              'thin-scrollbar w-full overflow-y-auto 768:mt-0'
-            )}
-          >
+          <div className={clsx('w-full overflow-y-auto 768:mt-0')}>
             <div className='mx-auto h-full max-w-[540px] px-1 768:py-5 768:px-8'>
               {currentTab === 'review-and-submit' ? (
                 <ReviewAndSubmit />

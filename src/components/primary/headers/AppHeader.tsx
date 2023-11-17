@@ -23,7 +23,7 @@ export const AppHeader = ({
   return (
     <header
       className={clsx(
-        'sticky top-0 left-0 z-[1000] h-16 border-neutral-200 bg-white bg-opacity-80 backdrop-blur-md 1024:h-20',
+        'sticky top-0 left-0 z-[1000] h-14 border-neutral-200 bg-white bg-opacity-80 backdrop-blur-md 1024:h-20',
         className
       )}
     >
@@ -46,9 +46,7 @@ export const AppHeader = ({
           </div>
         )}
 
-        {children}
-
-        <MobileMenu />
+        {children ?? <MobileMenu />}
       </div>
     </header>
   );

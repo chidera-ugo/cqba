@@ -5,6 +5,7 @@ import { ImageViewer } from 'components/modals/ImageViewer';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useScrollToFormError } from 'hooks/forms/useScrollToFormError';
+import Link from 'next/link';
 import { DatePickerValue } from 'types/Common';
 import { sanitizeRecordToRemoveUndefinedAndNulls } from 'utils/sanitizers/sanitizeRecordToRemoveUndefinedAndNulls';
 import { initialValues } from './initialValues';
@@ -69,7 +70,7 @@ export const Form = ({ processing, formikProps }: Props) => {
         image={previewImageUrl}
       />
 
-      <div className='flex gap-4'>
+      <div className='gap-5 480:flex'>
         <Input label='BN Number' name='bnNumber' />
 
         <DatePicker
@@ -135,13 +136,22 @@ export const Form = ({ processing, formikProps }: Props) => {
         getFile={(id) => v[id]}
       />
 
-      <div className='relative mt-10 flex pb-8'>
-        <SubmitButton
-          submitting={processing}
-          className='primary-button min-w-[170px]'
+      <div className={'mt-10 pb-8'}>
+        <div className='relative flex'>
+          <SubmitButton
+            submitting={processing}
+            className='primary-button w-full min-w-[170px] 640:w-min'
+          >
+            Save and Continue
+          </SubmitButton>
+        </div>
+
+        <Link
+          href={'/kyc?tab=review-and-submit&showSteps=true'}
+          className='x-center mx-auto mt-4 flex w-full py-2 text-center text-sm font-medium 640:hidden'
         >
-          Save and Continue
-        </SubmitButton>
+          Skip for later
+        </Link>
       </div>
     </FormikForm>
   );

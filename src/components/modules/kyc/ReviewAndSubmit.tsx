@@ -6,6 +6,7 @@ import { Clock } from 'components/illustrations/Clock';
 import { SimpleInformation } from 'components/modules/common/SimpleInformation';
 import { useApplyForReview } from 'hooks/api/kyc/useApplyForReview';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
@@ -75,17 +76,26 @@ export const ReviewAndSubmit = () => {
         I/We confirm that the information provided are accurate and truthful.
       </p>
 
-      <div className='relative mt-7 flex pb-8'>
-        <SubmitButton
-          submitting={isLoading}
-          type='button'
-          onClick={() => {
-            mutate({});
-          }}
-          className='primary-button min-w-[170px]'
+      <div className={'mt-7 pb-8'}>
+        <div className='relative flex'>
+          <SubmitButton
+            submitting={isLoading}
+            type='button'
+            onClick={() => {
+              mutate({});
+            }}
+            className='primary-button w-full min-w-[170px] 640:w-min'
+          >
+            Submit Application
+          </SubmitButton>
+        </div>
+
+        <Link
+          href={'/kyc?tab=review-and-submit&showSteps=true'}
+          className='x-center mx-auto mt-4 flex w-full py-2 text-center text-sm font-medium 640:hidden'
         >
-          Submit Application
-        </SubmitButton>
+          Skip for later
+        </Link>
       </div>
     </>
   );

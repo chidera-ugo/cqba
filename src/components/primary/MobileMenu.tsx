@@ -28,9 +28,8 @@ export const MobileMenu = () => {
           show,
           closeModal,
         }}
-        className='max-w-[400px] bg-white'
       >
-        <SideNavigationContent mobile />
+        <SideNavigationContent {...{ closeModal }} mobile />
       </MobileMenuWrapper>
     </div>
   );
