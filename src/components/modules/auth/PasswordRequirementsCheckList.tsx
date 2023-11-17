@@ -1,4 +1,5 @@
 import { signupPasswordValidation } from 'components/forms/auth/SignUpForm/validationSchema';
+import { SmallCheck } from 'components/svgs/others/Check';
 
 export const PasswordRequirementsCheckList = ({
   password,
@@ -11,20 +12,7 @@ export const PasswordRequirementsCheckList = ({
         <div key={name} className={'flex'}>
           <span className='my-auto mr-1.5'>
             {check(password) ? (
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                fill='none'
-                viewBox='0 0 24 24'
-                strokeWidth={1.5}
-                stroke='#1A44ED'
-                className='h-4 w-4'
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  d='M4.5 12.75l6 6 9-13.5'
-                />
-              </svg>
+              <SmallCheck />
             ) : (
               <svg
                 width='17'
@@ -41,7 +29,7 @@ export const PasswordRequirementsCheckList = ({
               </svg>
             )}
           </span>
-          <span className='my-auto text-xs leading-[12px] text-black 640:text-sm'>
+          <span className='my-auto text-xs leading-[16px] text-black 640:text-sm'>
             {name}
           </span>
         </div>

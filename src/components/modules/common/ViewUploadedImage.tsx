@@ -6,7 +6,7 @@ interface Props {
   className?: string;
 }
 
-export const ViewUploadedDocument = ({
+export const ViewUploadedImage = ({
   url,
   onClick,
   children,

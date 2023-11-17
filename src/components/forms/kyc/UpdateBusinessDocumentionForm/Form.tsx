@@ -5,7 +5,8 @@ import { ImageViewer } from 'components/modals/ImageViewer';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useScrollToFormError } from 'hooks/forms/useScrollToFormError';
-import { DatePickerValue } from 'types/Common';
+import Link from 'next/link';
+import { DatePickerValue, IFile } from 'types/Common';
 import { sanitizeRecordToRemoveUndefinedAndNulls } from 'utils/sanitizers/sanitizeRecordToRemoveUndefinedAndNulls';
 import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
@@ -15,9 +16,10 @@ import { FileInput } from 'components/form-elements/FileInput';
 interface Props {
   formikProps: FormikProps<typeof initialValues>;
   processing: boolean;
+  redirectUrl?: string;
 }
 
-export const Form = ({ processing, formikProps }: Props) => {
+export const Form = ({ processing, formikProps, redirectUrl }: Props) => {
   const {
     handleSubmit,
     setValues,
@@ -35,10 +37,24 @@ export const Form = ({ processing, formikProps }: Props) => {
 
   const { data, isLoading } = useGetOrganizationInformation();
 
+  function prefillDocuments(documents: Record<string, string>): any {
+    const res: Record<string, IFile> = {};
+
+    for (const i in documents) {
+      res[i] = {
+        id: i,
+        webUrl: documents[i] ?? '',
+      } as IFile;
+    }
+
+    return res;
+  }
+
   useEffect(() => {
     if (!data) return;
 
-    const { bnNumber, regDate } = sanitizeRecordToRemoveUndefinedAndNulls(data);
+    const { bnNumber, regDate, documents } =
+      sanitizeRecordToRemoveUndefinedAndNulls(data);
 
     const date = new Date(regDate);
 
@@ -54,6 +70,7 @@ export const Form = ({ processing, formikProps }: Props) => {
         ...values,
         bnNumber,
         creationDate: creationDate as DatePickerValue,
+        ...prefillDocuments(documents),
       },
       false
     );
@@ -69,7 +86,7 @@ export const Form = ({ processing, formikProps }: Props) => {
         image={previewImageUrl}
       />
 
-      <div className='flex gap-4'>
+      <div className='gap-5 480:flex'>
         <Input label='BN Number' name='bnNumber' />
 
         <DatePicker
@@ -94,7 +111,7 @@ export const Form = ({ processing, formikProps }: Props) => {
         {...{
           setFieldValue,
         }}
-        onClickViewExistingFile={(src) => setPreviewImageUrl(src)}
+        openImagePreviewModal={(src) => setPreviewImageUrl(src)}
         getFile={(id) => v[id]}
       />
 
@@ -119,7 +136,7 @@ export const Form = ({ processing, formikProps }: Props) => {
         {...{
           setFieldValue,
         }}
-        onClickViewExistingFile={(src) => setPreviewImageUrl(src)}
+        openImagePreviewModal={(src) => setPreviewImageUrl(src)}
         getFile={(id) => v[id]}
       />
 
@@ -131,17 +148,26 @@ export const Form = ({ processing, formikProps }: Props) => {
         {...{
           setFieldValue,
         }}
-        onClickViewExistingFile={(src) => setPreviewImageUrl(src)}
+        openImagePreviewModal={(src) => setPreviewImageUrl(src)}
         getFile={(id) => v[id]}
       />
 
-      <div className='relative mt-10 flex pb-8'>
-        <SubmitButton
-          submitting={processing}
-          className='primary-button min-w-[170px]'
+      <div className={'mt-10 pb-8'}>
+        <div className='relative flex'>
+          <SubmitButton
+            submitting={processing}
+            className='primary-button w-full min-w-[170px] 640:w-min'
+          >
+            Save and Continue
+          </SubmitButton>
+        </div>
+
+        <Link
+          href={`/kyc?tab=${redirectUrl}`}
+          className='x-center mx-auto mt-4 flex w-full py-2 text-center text-sm font-medium 640:hidden'
         >
-          Save and Continue
-        </SubmitButton>
+          Skip for later
+        </Link>
       </div>
     </FormikForm>
   );

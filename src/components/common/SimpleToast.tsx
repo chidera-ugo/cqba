@@ -55,7 +55,7 @@ export const SimpleToast = ({
             className ?? 'bottom-32 left-0'
           )}
         >
-          <span className='via-gray-650 y-center mx-auto my-auto flex w-auto rounded-full bg-gradient-to-r from-gray-900 to-gray-500 px-4 text-center text-xs font-medium text-white'>
+          <span className='via-gray-650 y-center mx-auto my-auto flex w-auto rounded-full bg-gradient-to-r from-gray-900 to-gray-500 py-1 px-4 text-center text-xs font-medium text-white'>
             {children}
           </span>
         </motion.div>

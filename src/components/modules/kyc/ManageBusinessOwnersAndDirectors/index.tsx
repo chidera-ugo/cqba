@@ -6,9 +6,9 @@ import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { Confirmation } from 'components/modals/Confirmation';
 import { OwnersList } from 'components/modules/kyc/ManageBusinessOwnersAndDirectors/OwnersList';
 import { Spinner } from 'components/svgs/dashboard/Spinner';
+import { useDeleteOwner } from 'hooks/api/kyc/useDeleteOwner';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { IOwner } from 'hooks/api/kyc/useUpdateOwnerInformation';
-import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -35,9 +35,9 @@ export const ManageBusinessOwnersAndDirectors = () => {
   const { isLoading, isError, isFetching, data } =
     useGetOrganizationInformation();
 
-  const { mutate: _delete, isLoading: deleting } = useMakeDummyHttpRequest({
+  const { mutate: _delete, isLoading: deleting } = useDeleteOwner({
     onSuccess() {
-      queryClient.invalidateQueries(['owners']);
+      queryClient.invalidateQueries(['organization-information']);
     },
   });
 
@@ -140,18 +140,24 @@ export const ManageBusinessOwnersAndDirectors = () => {
       </div>
 
       {data?.directors?.length || data?.owners?.length ? (
-        <div className='relative mt-10 flex pb-8'>
+        <div className={'mt-10 pb-8'}>
           <Link
-            href={`/kyc?tab=
-          ${
-            hasProvidedAllRequirements
-              ? 'review-and-submit'
-              : 'business-documentation'
-          }`}
+            href={`/kyc?tab=${
+              hasProvidedAllRequirements
+                ? 'review-and-submit'
+                : 'business-documentation&showSteps=true'
+            }`}
           >
-            <div className='primary-button min-w-[170px]'>
+            <div className='primary-button w-full min-w-[170px] 640:w-min'>
               <span className='y-center h-full'>Save and Continue</span>
             </div>
+          </Link>
+
+          <Link
+            href={'/kyc?tab=review-and-submit&showSteps=true'}
+            className='x-center mx-auto mt-4 flex w-full py-2 text-center text-sm font-medium 640:hidden'
+          >
+            Skip for later
           </Link>
         </div>
       ) : null}
@@ -163,7 +169,7 @@ export const ManageBusinessOwnersAndDirectors = () => {
         negative={() => setOwnerToDelete(null)}
         positive={() => {
           _delete({
-            directorId: ownerToDelete?.id,
+            id: ownerToDelete!.id,
           });
           setOwnerToDelete(null);
         }}

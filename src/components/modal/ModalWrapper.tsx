@@ -47,7 +47,7 @@ export const MobileMenuWrapper = ({
       show={show}
       closeOnClickOutside
       className={clsx(
-        'relative z-[1000] mr-auto h-full w-full max-w-[324px] 560:my-auto 640:w-auto'
+        'relative z-[1000] mr-auto h-full w-full 560:my-auto 640:w-auto 640:max-w-[324px]'
       )}
       {...rest}
       type='left'
@@ -55,7 +55,7 @@ export const MobileMenuWrapper = ({
       <div
         className={clsx(
           `hidden-scrollbar relative h-full w-full min-w-full overflow-clip overflow-y-auto overflow-x-hidden 640:w-auto 640:min-w-[450px]`,
-          className ? className : 'bg-white px-6 560:min-w-[466px]'
+          className ? className : 'w-full bg-white'
         )}
       >
         <div className={clsx('560:min-w-[400px]')}>{children}</div>

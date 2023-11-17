@@ -1,6 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
-import UnsavedChangesPrompt from 'components/common/UnsavedChangesPrompt';
 import { AppToast } from 'components/primary/AppToast';
 import { Formik } from 'formik';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
@@ -10,7 +9,6 @@ import { toast } from 'react-toastify';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 export const UpdateCompanyInformationForm = () => {
@@ -27,8 +25,8 @@ export const UpdateCompanyInformationForm = () => {
         `/kyc?tab=${
           hasProvidedAllRequirements
             ? 'review-and-submit'
-            : 'owners-information'
-        }&showSteps=true`
+            : 'owners-information&showSteps=true'
+        }`
       ).then(() => {
         toast(<AppToast>Update successful</AppToast>, { type: 'success' });
       });
@@ -39,8 +37,6 @@ export const UpdateCompanyInformationForm = () => {
     isLoading: gettingOrganizationInformation,
     data: organizationInformation,
   } = useGetOrganizationInformation();
-
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   return (
     <Formik
@@ -57,8 +53,6 @@ export const UpdateCompanyInformationForm = () => {
         businessIndustry,
         address,
       }) => {
-        setHasUnsavedChanges(false);
-
         mutate({
           companyName: businessName,
           businessIndustry,
@@ -76,8 +70,6 @@ export const UpdateCompanyInformationForm = () => {
       {(formikProps) => {
         return (
           <>
-            <UnsavedChangesPrompt {...{ hasUnsavedChanges }} />
-
             <FullScreenLoader show={isLoading} />
 
             <h5>Company Information</h5>
@@ -89,7 +81,6 @@ export const UpdateCompanyInformationForm = () => {
               {...{
                 formikProps,
                 processing: isLoading,
-                setHasUnsavedChanges,
                 organizationInformation,
                 gettingOrganizationInformation,
               }}

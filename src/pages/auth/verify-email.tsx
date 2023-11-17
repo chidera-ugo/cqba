@@ -50,7 +50,7 @@ export default function VerifyEmail() {
       );
 
     return (
-      <div className='py-20'>
+      <div className='py-20 px-5'>
         <SimpleInformation
           title={<span className={'mt-5 block'}>Verification Successful</span>}
           description={

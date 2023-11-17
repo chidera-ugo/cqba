@@ -40,7 +40,7 @@ export const KycSteps = () => {
 
         return (
           <Link
-            href={`/kyc?tab=${url}`}
+            href={`/kyc?tab=${isUnderReview ? 'review-and-submit' : url}`}
             key={title}
             className={clsx(
               'smooth group mt-5 block w-full py-1.5 text-left font-medium transition-colors',

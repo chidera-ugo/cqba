@@ -31,7 +31,7 @@ export const UpdateBusinessDocumentionForm = () => {
     onSuccess() {
       queryClient.invalidateQueries(['organization-information']);
 
-      replace(`/kyc?tab=${redirectUrl}&showSteps=true`).then(() => {
+      replace(`/kyc?tab=${redirectUrl}`).then(() => {
         toast(<AppToast>Update successful</AppToast>, { type: 'success' });
       });
     },
@@ -52,10 +52,10 @@ export const UpdateBusinessDocumentionForm = () => {
 
         body.append('bnNumber', bnNumber);
 
-        if (utilityBill.id) body.append('utilityBill', utilityBill.file);
-        if (businessNameCert.id)
+        if (utilityBill.file) body.append('utilityBill', utilityBill.file);
+        if (businessNameCert.file)
           body.append('businessNameCert', businessNameCert.file);
-        if (cacBn1.id) body.append('cacBn1', cacBn1.file);
+        if (cacBn1.file) body.append('cacBn1', cacBn1.file);
 
         body.append('regDate', creationDate.value);
 
@@ -79,6 +79,7 @@ export const UpdateBusinessDocumentionForm = () => {
                 formikProps,
                 processing: isLoading,
               }}
+              redirectUrl={redirectUrl}
             />
           </>
         );

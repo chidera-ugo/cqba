@@ -41,6 +41,7 @@ export const UpdateOwnerInformationForm = ({
           percentOwned: !percentOwned ? 0 : parseInt(percentOwned),
           phone: appendCountryCode(phoneNumber),
           dob: String(dateOfBirth.calendarValue?.toISOString()),
+          id: currentOwner?.id,
         });
       }}
       validateOnBlur={false}

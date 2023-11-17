@@ -1,42 +1,54 @@
+import { Logo } from 'components/primary/headers/AppHeader';
+import { Cancel } from 'components/svgs/navigation/Menu';
 import { SideNavigationItems } from './SideNavigationItems';
 import { ProfileSwitcher } from 'components/primary/SideNavigation/ProfileSwitcher';
-import Link from 'next/link';
-import Image from 'next/image';
-import logo from '/public/logos/main-logo.svg';
 
-export const SideNavigation = () => {
+export const SideNavigation = ({ closeModal }: { closeModal?: () => void }) => {
   return (
     <div className='thin-scrollbar fixed left-0 top-0 z-[1200] w-[324px] overflow-x-visible bg-neutral-100'>
       <div className='relative z-10 h-full min-h-full'>
-        <SideNavigationContent />
+        <SideNavigationContent closeModal={closeModal} />
       </div>
     </div>
   );
 };
 
-export const SideNavigationContent = ({ mobile }: { mobile?: boolean }) => {
+export const SideNavigationContent = ({
+  mobile,
+  closeModal,
+}: {
+  mobile?: boolean;
+  closeModal?: () => void;
+}) => {
   return (
     <div className='y-between relative h-screen'>
-      <div className='h-max'>
-        <ProfileSwitcher {...{ mobile }} />
+      <div className='h-max overflow-y-auto'>
+        <div className='x-between sticky top-0 left-0 z-10 block h-14 w-full border-b border-neutral-200 bg-white bg-opacity-80 px-5 backdrop-blur-lg 1024:hidden'>
+          <Logo />
 
-        <div className='p-5 640:p-8 640:pt-0'>
+          <button onClick={closeModal} type={'button'} className='my-auto flex'>
+            <Cancel />
+          </button>
+        </div>
+
+        <ProfileSwitcher className={'hidden 1024:block'} {...{ mobile }} />
+
+        <div className='p-5 640:p-8 1024:pt-0'>
           <SideNavigationItems />
         </div>
       </div>
 
-      <div className='sticky bottom-0 left-0 mt-auto bg-white py-5 px-5 640:px-8 1024:bg-neutral-100'>
-        <div className='flex'>
-          <Link href='/' className='my-auto'>
-            <Image
-              src={logo}
-              priority
-              alt='chequebase-logo'
-              className='my-auto w-[160px] object-contain'
-            />
-          </Link>
-        </div>
+      <div className='sticky bottom-0 left-0 mt-auto hidden bg-white py-5 px-5 640:px-8 1024:block 1024:bg-neutral-100'>
+        <Logo />
       </div>
+
+      <ProfileSwitcher
+        top
+        className={
+          'sticky bottom-0 left-0 mt-auto block w-auto pb-5 pt-0 1024:hidden'
+        }
+        {...{ mobile }}
+      />
     </div>
   );
 };

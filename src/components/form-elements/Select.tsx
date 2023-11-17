@@ -1,3 +1,4 @@
+import { Spinner } from 'components/svgs/dashboard/Spinner';
 import { useField } from 'formik';
 import clsx from 'clsx';
 import { useEffect } from 'react';
@@ -13,30 +14,23 @@ type Props = JSX.IntrinsicElements['select'] &
     secondaryButton?: JSX.Element;
     trueValueKey?: string;
     isLoading?: boolean;
+    isError?: boolean;
+    listKeyModifieres?: string[];
   };
 
 export const Select = ({
   label,
-  options: _options,
+  options,
   className,
+  isLoading,
   displayValueKey,
+  listKeyModifieres,
   next,
   placeholder = 'Select',
   trueValueKey = 'id',
+  isError,
   ...props
 }: Props) => {
-  const options = !_options.length
-    ? ['']
-    : [
-        typeof _options[0] === 'string'
-          ? ''
-          : {
-              [trueValueKey]: '',
-              [displayValueKey ?? 'name']: '',
-            },
-        ..._options,
-      ];
-
   const [field, meta] = useField(props.name as string);
 
   const id = props.id ?? props.name;
@@ -46,6 +40,18 @@ export const Select = ({
       document.getElementById(next)?.focus();
     }
   }, [field.value]);
+
+  function getKeySuffix(value: any) {
+    if (!listKeyModifieres?.length) return '';
+
+    const arr = [];
+
+    for (const i of listKeyModifieres) {
+      arr.push(value[i]);
+    }
+
+    return arr.join('_');
+  }
 
   return (
     <div className={clsx(className, 'relative mt-5 w-full')}>
@@ -66,36 +72,61 @@ export const Select = ({
           </div>
         )}
 
-        <select
-          {...props}
-          {...field}
-          onChange={(e) => {
-            if (props.onChange) {
-              props.onChange(e);
-            } else {
-              field.onChange(e);
-            }
-          }}
-          className={clsx(
-            meta.touched && meta.error ? 'border-error-main' : '',
-            'w-full',
-            !!field.value ? 'bg-white' : 'bg-neutral-100'
-          )}
-        >
-          <option disabled hidden value=''></option>
+        {isLoading || isError ? (
+          <div className={clsx('input w-full bg-neutral-100')}>
+            <div className='y-center absolute right-3 h-full'>
+              {isLoading ? (
+                <Spinner className={'my-auto text-primary-main'} />
+              ) : (
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  strokeWidth={1.5}
+                  stroke='currentColor'
+                  className='h-6 w-6 text-red-500'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    d='M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z'
+                  />
+                </svg>
+              )}
+            </div>
+          </div>
+        ) : (
+          <select
+            {...props}
+            {...field}
+            onChange={(e) => {
+              if (props.onChange) {
+                props.onChange(e);
+              } else {
+                field.onChange(e);
+              }
+            }}
+            className={clsx(
+              'w-full',
+              !!field.value ? 'bg-white' : 'bg-neutral-100',
+              meta.touched && meta.error ? 'border-error-main' : ''
+            )}
+          >
+            <option value=''></option>
 
-          {options.map((value: any) => {
-            const isObject = displayValueKey && typeof value === 'object';
+            {options?.map((value: any) => {
+              const isObject = displayValueKey && typeof value === 'object';
 
-            const val = isObject ? value[trueValueKey] : (value as string);
+              const val = isObject ? value[trueValueKey] : (value as string);
 
-            return (
-              <option key={val} value={val}>
-                {isObject ? value[displayValueKey] : (value as string)}
-              </option>
-            );
-          })}
-        </select>
+              return (
+                <option key={`${val}${getKeySuffix(value)}`} value={val}>
+                  {isObject ? value[displayValueKey] : (value as string)}
+                </option>
+              );
+            })}
+          </select>
+        )}
       </div>
 
       {meta.touched && meta.error ? (

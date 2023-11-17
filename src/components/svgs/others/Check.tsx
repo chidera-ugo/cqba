@@ -25,6 +25,25 @@ export const Check = () => {
   );
 };
 
+export const SmallCheck = () => {
+  return (
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      fill='none'
+      viewBox='0 0 24 24'
+      strokeWidth={1.5}
+      stroke='#1A44ED'
+      className='h-4 w-4'
+    >
+      <path
+        strokeLinecap='round'
+        strokeLinejoin='round'
+        d='M4.5 12.75l6 6 9-13.5'
+      />
+    </svg>
+  );
+};
+
 export const SolidCheck = ({ className }: { className?: string }) => {
   return (
     <svg

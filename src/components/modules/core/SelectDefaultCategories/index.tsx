@@ -39,13 +39,13 @@ export const SelectDefaultCategories = () => {
       return;
     }
 
-    if (user?.defaultCategoryIds && user?.defaultCategoryIds?.length > 0) {
+    if (!!user?.defaultCategoryIds?.length) {
       setShowModal(false);
       return;
     }
 
     setShowModal(true);
-  }, [pathname, data, user]);
+  }, [pathname, data, user, isVerified]);
 
   function closeModal() {
     setShowModal(false);
@@ -56,7 +56,7 @@ export const SelectDefaultCategories = () => {
       <CentredModalWrapper
         show={showModal}
         undraggable
-        className='max-h-[80vh] overflow-y-auto bg-white py-6'
+        className='max-h-[736px] overflow-y-auto bg-white py-6'
       >
         <h3
           className={
