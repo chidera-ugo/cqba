@@ -5,7 +5,8 @@ interface UpdateEmployeeDto {
   firstName: string;
   lastName: string;
   email: string;
-  departmentId: string;
+  phone: string;
+  role: string;
 }
 
 export function useUpdateEmployee(

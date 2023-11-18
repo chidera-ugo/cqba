@@ -1,6 +1,7 @@
 import { IsLoading } from 'components/data-states/IsLoading';
 import { AddressInputGroup } from 'components/form-elements/AddressInputGroup';
 import { Input } from 'components/form-elements/Input';
+import { industries } from 'constants/kyc/industries';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { IOrganization } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useScrollToFormError } from 'hooks/forms/useScrollToFormError';
@@ -107,7 +108,7 @@ export const Form = ({
         />
       </div>
 
-      <AddressInputGroup country={values.country} />
+      <AddressInputGroup country={values.country} state={values.state} />
 
       <div className={'mt-10 pb-8'}>
         <div className='relative flex'>
@@ -129,32 +130,3 @@ export const Form = ({
     </FormikForm>
   );
 };
-
-const industries = [
-  'Agriculture',
-  'Auto Parts',
-  'Construction',
-  'Digital Services',
-  'E-Commerce',
-  'Electronics',
-  'Fashion & Beauty',
-  'Financial Services',
-  'Food & Beverage',
-  'Furniture',
-  'General Services',
-  'Haulage',
-  'Hospitals & Health',
-  'Household items',
-  'Leisure & Entertainment',
-  'Logistics',
-  'Membership Groups',
-  'NGOs',
-  'Others',
-  'Press & Media',
-  'Religious Organizations',
-  'Restaurant and Food',
-  'Schools',
-  'Technology',
-  'Travel & Hospitality',
-  'Utilities',
-];

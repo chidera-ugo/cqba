@@ -13,6 +13,7 @@ export const Modal = ({
   duration = 0.2,
   closeOnClickOutside,
   white,
+  hideBackground,
 }: PropsWithChildren<ModalProps>) => {
   const [grow, setGrow] = useState(false);
 
@@ -83,7 +84,11 @@ export const Modal = ({
               className={clsx(
                 `no-highlight absolute inset-0 h-full w-full`,
                 closeOnClickOutside && 'cursor-pointer',
-                white ? 'bg-white' : 'bg-black bg-opacity-60'
+                hideBackground
+                  ? 'bg-transparent'
+                  : white
+                  ? 'bg-white'
+                  : 'bg-black bg-opacity-60'
               )}
               // onAnimationStart={(variant) => {
               //   if (variant === 'show') {

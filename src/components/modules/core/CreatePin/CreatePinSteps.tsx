@@ -119,11 +119,16 @@ export const CreatePinSteps = ({ closeModal, onSuccess }: Props) => {
                   <div className='x-center mt-5'>
                     <button
                       type='button'
-                      onClick={() =>
+                      onClick={() => {
+                        if (pins?.confirm?.length !== 4)
+                          return toast(<AppToast>Confirm new PIN</AppToast>, {
+                            type: 'error',
+                          });
+
                         mutate({
                           pin: pins.new,
-                        })
-                      }
+                        });
+                      }}
                       className='dark-button'
                     >
                       Proceed

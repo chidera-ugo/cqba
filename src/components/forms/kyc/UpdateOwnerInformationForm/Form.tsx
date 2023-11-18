@@ -2,6 +2,7 @@ import { AddressInputGroup } from 'components/form-elements/AddressInputGroup';
 import { Input } from 'components/form-elements/Input';
 import { ImageViewer } from 'components/modals/ImageViewer';
 import { OwnerType } from 'components/modules/kyc/ManageBusinessOwnersAndDirectors';
+import { roles } from 'constants/kyc/roles';
 import { useAppContext } from 'context/AppContext';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { IOwner } from 'hooks/api/kyc/useUpdateOwnerInformation';
@@ -147,23 +148,11 @@ export const Form = ({
           label='Title'
           placeholder={'Select title'}
           name='title'
-          options={[
-            'CEO',
-            'COO',
-            'CFO',
-            'President',
-            'CIO',
-            'VP',
-            'Treasurer',
-            'Controller',
-            'Manager',
-            'Partner',
-            'Member',
-          ]}
+          options={roles}
         />
       )}
 
-      <AddressInputGroup country={values.country} />
+      <AddressInputGroup country={values.country} state={values.state} />
 
       <div className='gap-4 880:flex'>
         <Select

@@ -16,7 +16,7 @@ export const useAuthenticationRoutesGuard = () => {
     // Redirect to saved url if http session is valid
     if (!user) return;
 
-    if (redirectUrl === 'no_redirect') {
+    if (redirectUrl === 'no_redirect' || redirectUrl === '/') {
       replace(url);
       return;
     }

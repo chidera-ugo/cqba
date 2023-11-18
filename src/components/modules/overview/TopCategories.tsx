@@ -93,7 +93,9 @@ export const TopCategories = () => {
       </div>
 
       <div className='h-[420px]'>
-        {isVerified && isLoading ? (
+        {!isVerified ? (
+          <TopCategoriesChart chartData={[]} />
+        ) : isLoading ? (
           <IsLoadingIsError type={'loading'} />
         ) : isError || !chartData ? (
           <IsLoadingIsError type={'error'} />

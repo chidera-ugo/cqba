@@ -7,12 +7,16 @@ type Props = JSX.IntrinsicElements['input'] & {
   showShortcut?: boolean;
   clear?: () => void;
   lazyFocus?: boolean;
+  onClickSearch?: () => void;
+  wrapperClassname?: string;
 };
 
 export const SearchInput = ({
   className,
   clear,
   lazyFocus,
+  wrapperClassname,
+  onClickSearch,
   ...props
 }: Props) => {
   useEffect(() => {
@@ -30,14 +34,14 @@ export const SearchInput = ({
   return (
     <div
       className={clsx(
-        'group relative my-auto h-11 w-full',
-        className,
-        props.disabled ? 'opacity-50' : ''
+        'group relative my-auto h-full',
+        props.disabled && 'opacity-50',
+        wrapperClassname
       )}
     >
       <input
         className={clsx(
-          'input h-full rounded-full border-neutral-300 bg-white pl-10 text-sm font-medium focus:border-primary-main',
+          '_input h-full rounded-full border-neutral-300 bg-white pl-10 text-sm font-medium focus:border-primary-main',
           className
         )}
         style={{
@@ -48,11 +52,15 @@ export const SearchInput = ({
         value={props.value ?? ''}
       />
 
-      <div className='y-center absolute top-0 left-0 h-full w-10 text-neutral-400'>
-        <span className='y-center h-full'>
-          <Search className='my-auto mx-auto h-5 w-5' />
+      <button
+        type={'button'}
+        onClick={onClickSearch}
+        className='y-center absolute top-0 left-0 h-full w-10 text-neutral-400'
+      >
+        <span className='y-center mx-auto h-full'>
+          <Search className='my-auto mx-auto h-5 w-5 text-primary-main' />
         </span>
-      </div>
+      </button>
 
       {!!props.value && (
         <button

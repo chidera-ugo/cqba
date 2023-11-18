@@ -8,14 +8,12 @@ import { Form } from './Form';
 
 interface Props {
   onSuccess: () => void;
-  addDepartment?: (values: Record<string, any>) => void;
   formRecoveryValues?: Record<string, any> | null;
   currentEmployee?: IEmployee | null;
 }
 
 export const UpdateEmployeeForm = ({
   onSuccess,
-  addDepartment,
   currentEmployee,
   formRecoveryValues,
 }: Props) => {
@@ -32,10 +30,11 @@ export const UpdateEmployeeForm = ({
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={({ departmentId, ...values }) => {
+      onSubmit={({ email, phoneNumber, ...values }) => {
         mutate({
           ...values,
-          departmentId,
+          phone: phoneNumber,
+          email: email.trim(),
         });
       }}
       validateOnBlur={false}
@@ -48,7 +47,6 @@ export const UpdateEmployeeForm = ({
               processing: isLoading,
               currentEmployee,
               formRecoveryValues,
-              addDepartment,
             }}
           />
         );

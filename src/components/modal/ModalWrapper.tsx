@@ -15,6 +15,7 @@ export type ModalWrapperProps = ModalProps &
     className?: string;
     id?: string;
     childrenClassname?: string;
+    hideBackground?: boolean;
   };
 
 export type ModalProps = {
@@ -25,6 +26,7 @@ export type ModalProps = {
   duration?: number;
   white?: boolean;
   closeModal?: () => void;
+  hideBackground?: boolean;
 };
 
 export type CenteredModalWrapperProps = ModalWrapperProps & {

@@ -28,18 +28,13 @@ export const Tabs = ({
     >
       <div className={`my-auto flex h-full w-full p-[1px] align-middle`}>
         {tabs.map((tab) => {
-          const isString = typeof tab === 'string';
-          const displayValue = isString ? tab : tab.name;
+          const displayValue = tab.name;
 
-          const isActive = isString
-            ? tab === currentTab
-            : tab['name'] === (currentTab as any)['name'];
+          const isActive = tab['name'] === (currentTab as any)['name'];
 
           return (
             <button
-              onClick={() => {
-                setCurrentTab(tab);
-              }}
+              onClick={() => setCurrentTab(tab)}
               id={`tabs-${displayValue}`}
               key={displayValue}
               type='button'

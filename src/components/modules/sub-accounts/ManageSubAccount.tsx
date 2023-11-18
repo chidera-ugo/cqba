@@ -1,7 +1,6 @@
 import { UpdateSubAccountForm } from 'components/forms/sub-accounts/UpdateSubAccountForm';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { CreateDepartment } from 'components/modules/employees/CreateDepartment';
-import { CreateEmployee } from 'components/modules/employees/CreateEmployee';
 import { useManageSubAccount } from 'hooks/sub-accounts/useManageSubAccount';
 
 export const ManageSubAccount = ({
@@ -14,17 +13,6 @@ export const ManageSubAccount = ({
     <>
       <CreateDepartment
         showModal={modal === 'department'}
-        closeModal={() => {
-          setModal('create');
-        }}
-      />
-
-      <CreateEmployee
-        {...{
-          setModal,
-          modal,
-        }}
-        hideCreateDepartmentButton
         closeModal={() => {
           setModal('create');
         }}

@@ -4,24 +4,28 @@ import { PaginatedResponse } from 'types/Table';
 import { generateUrlParamsFromObject } from 'utils/generators/generateUrlParamsFromObject';
 
 export interface IEmployee {
-  departmentTitle: string;
-  departmentId: string;
-  organizationId: string;
   lastName: string;
-  userId: string;
-  updatedAt: string;
-  createdAt: string;
+  emailVerifyCode: string;
   status: string;
+  createdAt: number;
   email: string;
-  id: string;
   firstName: string;
   sKey: string;
+  role: string;
+  organizationId: string;
+  userId: string;
+  updatedAt: number;
+  id: string;
+  phone: string;
 }
+
+export type EmployeeStatus = 'active' | 'invited' | 'deleted';
 
 export function useGetAllEmployees(
   params: {
     page: number;
     size: number;
+    status?: EmployeeStatus;
     search?: string;
     departmentId?: string;
   },

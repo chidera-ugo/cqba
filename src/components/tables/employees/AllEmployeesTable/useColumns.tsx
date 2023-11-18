@@ -1,5 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { Pill } from 'components/common/Pill';
+import clsx from 'clsx';
 import { TableCell } from 'components/core/Table/TableCell';
 import {
   EmployeeAction,
@@ -37,26 +37,21 @@ export const useColumns = ({ handleActionClick }: Args) => {
         cell: (props) => <TableCell {...props} />,
       },
       {
-        header: 'Department',
-        accessorKey: 'departmentTitle',
+        header: 'Phone No',
+        accessorKey: 'phone',
         enableColumnFilter: false,
         cell: (props) => <TableCell {...props} />,
       },
       {
-        header: 'Status',
-        accessorKey: 'status',
+        header: 'Role',
+        accessorKey: 'role',
         enableColumnFilter: false,
         cell: ({ getValue }) => {
           const val = getValue() as string;
           return (
-            <Pill
-              config={{
-                success: 'active',
-                pending: 'invited',
-                failed: 'blocked',
-              }}
-              value={val}
-            />
+            <div className='flex w-min'>
+              <div className={clsx('pill_gray')}>{val}</div>
+            </div>
           );
         },
       },
@@ -80,7 +75,6 @@ export const useColumns = ({ handleActionClick }: Args) => {
               handleActionClick={(action) => {
                 handleActionClick(employee, action);
               }}
-              employee={employee}
             />
           );
         },

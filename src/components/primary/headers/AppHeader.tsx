@@ -1,7 +1,11 @@
 import logo from '/public/logos/main-logo.svg';
 import clsx from 'clsx';
+import { CurrentUserAvatar } from 'components/modules/app/CurrentUserAvatar';
+import { Notifications } from 'components/modules/app/Notifications';
 import { MobileMenu } from 'components/primary/MobileMenu';
+import { ToggleMode } from 'components/modules/app/ToggleMode';
 import { PointerLeft } from 'components/svgs/navigation/Arrows';
+import { useIsKycFlow } from 'hooks/kyc/useIsKycFlow';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PropsWithChildren } from 'react';
@@ -20,10 +24,12 @@ export const AppHeader = ({
   hideSideNavigation,
   className,
 }: PropsWithChildren<Props>) => {
+  const { isKycFlow } = useIsKycFlow();
+
   return (
     <header
       className={clsx(
-        'sticky top-0 left-0 z-[1000] h-14 border-neutral-200 bg-white bg-opacity-80 backdrop-blur-md 1024:h-20',
+        'sticky top-0 left-0 z-[1000] h-14 border-neutral-310 bg-white bg-opacity-80 backdrop-blur-md 1024:h-20',
         className
       )}
     >
@@ -46,7 +52,21 @@ export const AppHeader = ({
           </div>
         )}
 
-        {children ?? <MobileMenu />}
+        <div className='flex'>
+          {!isKycFlow && (
+            <div className={'hidden gap-4 1024:flex'}>
+              <ToggleMode />
+
+              <div className='my-auto h-10 w-0 border-r border-neutral-200'></div>
+
+              <Notifications />
+
+              <CurrentUserAvatar />
+            </div>
+          )}
+
+          {children ?? <MobileMenu />}
+        </div>
       </div>
     </header>
   );

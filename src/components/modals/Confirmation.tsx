@@ -1,5 +1,9 @@
+import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { SimpleModalHead } from 'components/modal/ModalHeader';
-import { CentredModalWrapper } from 'components/modal/ModalWrapper';
+import {
+  CentredModalWrapper,
+  RightModalWrapper,
+} from 'components/modal/ModalWrapper';
 import clsx from 'clsx';
 import { Spinner } from 'components/svgs/dashboard/Spinner';
 
@@ -12,6 +16,8 @@ interface Props {
   buttonTexts?: string[];
   processing?: boolean;
   processingMessage?: string;
+  type?: 'right' | 'center';
+  hideBackground?: boolean;
 }
 
 export const Confirmation = ({
@@ -21,10 +27,35 @@ export const Confirmation = ({
   title,
   subTitle,
   positive,
+  hideBackground,
   processing,
   buttonTexts = ['No', 'Yes'],
+  type = 'center',
 }: Props) => {
   const onlyOneAction = !buttonTexts[1];
+
+  if (type === 'right')
+    return (
+      <RightModalWrapper
+        closeModal={negative}
+        closeOnClickOutside
+        {...{ show, hideBackground }}
+        className='bg-white p-0'
+      >
+        <h5>{title}</h5>
+        <p className={'mt-1'}>{subTitle}</p>
+
+        <SubmitButton
+          type={'button'}
+          submitting={processing}
+          onClick={onlyOneAction ? positive : negative}
+          id={'confirmation-negative'}
+          className={'primary-button mt-5 min-w-[120px]'}
+        >
+          {buttonTexts[0]}
+        </SubmitButton>
+      </RightModalWrapper>
+    );
 
   return (
     <CentredModalWrapper

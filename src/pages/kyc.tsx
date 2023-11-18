@@ -52,7 +52,7 @@ export default function Kyc() {
           <SimpleInformation
             title={<div className='text-xl'>Account Verified</div>}
             description={
-              <span className='mt-1 block'>
+              <span className='mt-1 block px-2'>
                 {`We have approved your application and an account has been created for you.`}
               </span>
             }

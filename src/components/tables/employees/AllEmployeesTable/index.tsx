@@ -2,15 +2,16 @@ import { useQueryClient } from '@tanstack/react-query';
 import { SimpleToast } from 'components/common/SimpleToast';
 import { Confirmation } from 'components/modals/Confirmation';
 import { Spinner } from 'components/svgs/dashboard/Spinner';
-import { SimplePlus } from 'components/svgs/others/Plus';
 import { EmployeeAction } from 'components/tables/employees/AllEmployeesTable/EmployeeActions';
 import { useBlockEmployee } from 'hooks/api/employees/useBlockEmployee';
 import { useDeleteEmployee } from 'hooks/api/employees/useDeleteEmployee';
 import {
+  EmployeeStatus,
   IEmployee,
   useGetAllEmployees,
 } from 'hooks/api/employees/useGetAllEmployees';
 import { useUnblockEmployee } from 'hooks/api/employees/useUnblockEmployee';
+import { EmployeeModalType } from 'hooks/employees/useManageEmployee';
 import Image from 'next/image';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import {
@@ -21,7 +22,7 @@ import {
 import { PaginatedResponse } from 'types/Table';
 import { useColumns } from './useColumns';
 import { Table } from 'components/core/Table';
-import employees from '/public/mockups/employees.png';
+import clock from '/public/mockups/clock.jpg';
 
 interface Props {
   reset?: () => void;
@@ -30,8 +31,8 @@ interface Props {
   setFilters?: Dispatch<SetStateAction<Record<string, string>>>;
   slot?: JSX.Element;
   currentEmployee: IEmployee | null;
-  onRowClick: Dispatch<SetStateAction<IEmployee | null>>;
-  createEmployee?: () => void;
+  onRowClick: (employee: IEmployee, action: EmployeeModalType) => void;
+  status?: EmployeeStatus;
 }
 
 export const AllEmployeesTable = ({
@@ -39,8 +40,8 @@ export const AllEmployeesTable = ({
   reset,
   filters,
   setFilters,
+  status = 'active',
   onRowClick,
-  createEmployee,
 }: Props) => {
   const queryClient = useQueryClient();
 
@@ -64,9 +65,13 @@ export const AllEmployeesTable = ({
 
   const { columns } = useColumns({
     handleActionClick(employee, action) {
-      setAction(action);
-      setEmployeeToPerformActionOn(employee);
-      setShowConfirmation(true);
+      if (action === 'edit') {
+        onRowClick(employee, 'edit_employee');
+      } else {
+        setAction(action);
+        setShowConfirmation(true);
+        setEmployeeToPerformActionOn(employee);
+      }
     },
   });
 
@@ -91,6 +96,7 @@ export const AllEmployeesTable = ({
     data: res,
     isRefetching,
   } = useGetAllEmployees({
+    status,
     page: pagination.pageIndex,
     size: pagination.pageSize,
     departmentId: filters?.['department']?.['value'],
@@ -115,7 +121,7 @@ export const AllEmployeesTable = ({
 
   if (data?.empty)
     return (
-      <div className='relative min-h-[480px] grid-cols-10 overflow-hidden rounded-2xl bg-neutral-100 640:grid'>
+      <div className='relative h-full py-20'>
         <SimpleToast
           show={isLoading || isRefetching}
           className='left-0 top-32 1180:left-[122px]'
@@ -126,36 +132,25 @@ export const AllEmployeesTable = ({
           </div>
         </SimpleToast>
 
-        <div className='col-span-6 my-auto h-full p-7 640:p-12 1280:col-span-5'>
-          <div className='y-center h-full'>
-            <h4 className='text-2xl 640:text-4xl'>Invite Employee</h4>
-
-            <p className='mt-4 font-light leading-6 text-neutral-600'>
-              Building a strong team is essential for business success. Invite
-              new employees to collaborate and manage your finances effectively
-            </p>
-
-            <div className='flex'>
-              <button
-                onClick={createEmployee}
-                className='dark-button x-center mt-4 flex h-11 w-full rounded-full px-4 480:w-auto'
-              >
-                <span className='my-auto mr-2'>Add Employee</span>
-                <span className='my-auto'>
-                  <SimplePlus />
-                </span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className='relative col-span-4 640:pt-12 1280:col-span-5'>
-          <div className='x-center bottom-0 -right-24 w-full 640:absolute 1280:right-0'>
+        <div className='x-center'>
+          <div className='y-center'>
             <Image
-              src={employees}
-              alt='card-mockup'
-              className='mx-auto -mb-20 mt-auto min-w-[500px] max-w-[500px]'
+              src={clock}
+              alt='clock-mockup'
+              className='mx-auto mt-auto block w-[90px] 640:w-[140px]'
             />
+
+            <div className='mx-auto max-w-[400px] text-center'>
+              <h4 className='mt-5 text-2xl 640:text-3xl'>
+                {status === 'active' ? 'Invite Employee' : 'No pending invites'}
+              </h4>
+
+              <p className='mt-4 text-sm font-light leading-5 text-neutral-600'>
+                {status === 'active'
+                  ? `Building a strong team is essential for business success. Invite new employees to collaborate and manage your finances effectively`
+                  : `You do not have any pending invites yet, there is no data to be displayed.`}
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -164,22 +159,10 @@ export const AllEmployeesTable = ({
   return (
     <>
       <Confirmation
+        type={'right'}
         show={showConfirmation && !!employeeToPerformActionOn && !!action}
-        title={<span className={'capitalize'}>{action} Employee</span>}
-        subTitle={
-          <span>
-            Are you sure you want to {action}{' '}
-            {employeeToPerformActionOn?.firstName}{' '}
-            {employeeToPerformActionOn?.lastName}?
-          </span>
-        }
-        processingMessage={
-          action === 'block'
-            ? 'Blocking'
-            : action === 'unblock'
-            ? 'Unblocking'
-            : 'Deleting'
-        }
+        title={'Remove team member'}
+        subTitle={`This means ${employeeToPerformActionOn?.firstName} ${employeeToPerformActionOn?.lastName} will no longer be able to access your dashboard`}
         positive={() => {
           const id = employeeToPerformActionOn?.id;
 
@@ -191,6 +174,7 @@ export const AllEmployeesTable = ({
             deleteEmployee(id);
           }
         }}
+        buttonTexts={['Remove User']}
         processing={deletingEmployee || blockingEmployee || unblockingEmployee}
         negative={() => {
           setShowConfirmation(false);
@@ -198,11 +182,12 @@ export const AllEmployeesTable = ({
       />
 
       <Table<IEmployee>
+        className={'mt-20 640:mt-4'}
         title='employees'
         headerSlot={slot}
         dontScrollToTopOnPageChange
         onRowClick={(employee) => {
-          onRowClick(employee);
+          onRowClick(employee, 'view_employee');
         }}
         returnOriginalOnRowClick
         accessor='id'
