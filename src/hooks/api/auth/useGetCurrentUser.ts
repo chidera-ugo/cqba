@@ -11,14 +11,13 @@ import { IUser } from 'types/Auth';
 
 export function useGetCurrentUser(
   retrieveNewTokens: (tokens: Tokens) => void,
-  token?: string,
+  accessToken?: string,
   options?: UseMutationOptions<IUser, unknown, any, unknown>
 ): UseMutationResult<IUser, unknown, any, unknown> {
   const axiosInstance = axios.create({
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
     },
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     withCredentials: process.env.WITH_CREDENTIALS === 'positive',
@@ -45,12 +44,16 @@ export function useGetCurrentUser(
   );
 
   return useMutation({
-    mutationFn: (token) => {
-      return axiosInstance['get'](`/v1/users/profile`, {
+    mutationFn: async (token) => {
+      const _token = !!token ? token : accessToken;
+
+      const res = await axiosInstance['get'](`/v1/users/profile`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: _token && `Bearer ${_token}`,
         },
-      }).then((res) => res?.data);
+      });
+
+      return res?.data;
     },
     ...options,
   });

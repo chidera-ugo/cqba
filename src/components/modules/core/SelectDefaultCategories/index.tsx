@@ -26,7 +26,7 @@ export const SelectDefaultCategories = () => {
   const { mutate, isLoading } = useChooseDefaultCategories({
     onSuccess() {
       closeModal();
-      getCurrentUser!({});
+      getCurrentUser!(null);
     },
   });
 
