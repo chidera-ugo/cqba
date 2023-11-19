@@ -60,7 +60,7 @@ export const AcceptInviteForm = () => {
         return (
           <>
             <h4>Welcome to Chequebase</h4>
-            <div className='mt-1 max-w-[400px] text-left text-sm text-neutral-600'>
+            <div className='mt-3 text-left text-sm text-neutral-600'>
               You have been invited to {String(companyName)} team. Enter your
               credentials to get started
             </div>

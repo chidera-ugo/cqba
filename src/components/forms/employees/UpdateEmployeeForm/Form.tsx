@@ -31,6 +31,8 @@ export const Form = ({
     submitCount,
   } = formikProps;
 
+  const isActive = currentEmployee?.status === 'active';
+
   useScrollToFormError(errors, submitCount);
 
   useEffect(() => {
@@ -75,33 +77,35 @@ export const Form = ({
 
   return (
     <FormikForm onSubmit={handleSubmit}>
-      <div className='gap-4 880:flex'>
-        <Input autoFocus label='First Name' name='firstName' />
-        <Input label='Last Name' name='lastName' />
-      </div>
+      {!isActive && (
+        <>
+          <div className='gap-4 880:flex'>
+            <Input autoFocus label='First Name' name='firstName' />
+            <Input label='Last Name' name='lastName' />
+          </div>
 
-      <Input label='Email' name='email' />
+          <Input label='Email' name='email' />
 
-      <PhoneNumberInput
-        label='Phone Number (Optional)'
-        name='phoneNumber'
-        setFieldValue={setFieldValue}
-        inputMode='tel'
-        shouldValidate
-      />
+          <PhoneNumberInput
+            label='Phone Number (Optional)'
+            name='phoneNumber'
+            setFieldValue={setFieldValue}
+            inputMode='tel'
+            shouldValidate
+          />
+        </>
+      )}
 
-      <Select
-        name={'role'}
-        label={'Role'}
-        options={['OWNER', 'CFO', 'EMPLOYEE']}
-      />
+      <Select name={'role'} label={'Role'} options={['CFO', 'EMPLOYEE']} />
 
       <div className='relative mt-10 flex pb-8'>
         <SubmitButton
           submitting={processing}
           className='primary-button min-w-[140px]'
         >
-          {currentEmployee ? 'Update' : 'Add'} Employee
+          {isActive
+            ? 'Change Role'
+            : `${currentEmployee ? 'Update' : 'Add'} Employee`}
         </SubmitButton>
       </div>
     </FormikForm>

@@ -68,7 +68,7 @@ function AppContextProvider({ children, ...props }: PropsWithChildren<any>) {
   );
 
   useEffect(() => {
-    const tokens = getFromLocalStore('tokens');
+    const tokens = getFromLocalStore('tokens', true);
 
     if (!tokens || !tokens.accessToken || !tokens.refreshToken)
       return dispatch({ type: 'setIsInitializing', payload: false });

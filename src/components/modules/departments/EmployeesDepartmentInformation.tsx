@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { SimpleDisplayValue } from 'components/common/SimpleDisplayValue';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
-import { CreateEmployee } from 'components/modules/employees/CreateEmployee';
+import { ManageEmployee } from 'components/modules/employees/ManageEmployee';
 import { AllEmployeesTable } from 'components/tables/employees/AllEmployeesTable';
 import { useGetDepartmentById } from 'hooks/api/departments/useGetDepartmentById';
 import { useManageEmployee } from 'hooks/employees/useManageEmployee';
@@ -61,7 +61,7 @@ export const EmployeesDepartmentInformation = () => {
         })}
       </div>
 
-      <CreateEmployee
+      <ManageEmployee
         {...rest}
         {...{
           setCurrentEmployee,

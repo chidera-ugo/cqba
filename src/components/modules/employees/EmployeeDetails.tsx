@@ -6,7 +6,9 @@ import { IsLoading } from 'components/data-states/IsLoading';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { Confirmation } from 'components/modals/Confirmation';
 import { AppToast } from 'components/primary/AppToast';
+import { useDeleteEmployee } from 'hooks/api/employees/useDeleteEmployee';
 import { useDeleteInvite } from 'hooks/api/employees/useDeleteInvite';
+import { IEmployee } from 'hooks/api/employees/useGetAllEmployees';
 import { useGetEmployeeById } from 'hooks/api/employees/useGetEmployeeById';
 import { useResendInvite } from 'hooks/api/employees/useResendInvite';
 import { useGetColorByChar } from 'hooks/common/useGetColorByChar';
@@ -14,13 +16,13 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { formatDate } from 'utils/formatters/formatDate';
 
-export const EmployeeDetails = ({
-  id,
-  close,
-}: {
+interface Props {
   id?: string;
   close: () => void;
-}) => {
+  changeRole: (employee: IEmployee) => void;
+}
+
+export const EmployeeDetails = ({ id, close, changeRole }: Props) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const queryClient = useQueryClient();
@@ -41,6 +43,14 @@ export const EmployeeDetails = ({
     },
   });
 
+  const { mutate: deleteEmployee, isLoading: deletingEmployee } =
+    useDeleteEmployee(id, {
+      onSuccess() {
+        queryClient.invalidateQueries(['employees']);
+        close();
+      },
+    });
+
   const { getColor } = useGetColorByChar();
 
   if (isLoading) return <IsLoading />;
@@ -48,7 +58,7 @@ export const EmployeeDetails = ({
   if (isError)
     return <IsError description={'Failed to get employee details'} />;
 
-  const { firstName, lastName, email, role, createdAt } = data;
+  const { firstName, lastName, status, email, role, createdAt } = data;
 
   const char = firstName.charAt(0);
 
@@ -58,17 +68,21 @@ export const EmployeeDetails = ({
     { title: 'Role', value: role },
   ];
 
+  const isActive = status === 'active';
+
   return (
     <>
       <Confirmation
         type={'right'}
         show={showConfirmation}
         hideBackground
-        title={'Delete invite'}
-        subTitle={`This means ${firstName} ${lastName} will no longer be able to join your organization`}
-        positive={() => deleteInvite(null)}
-        buttonTexts={['Delete Invite']}
-        processing={deleting}
+        title={isActive ? 'Remove team member' : 'Delete invite'}
+        subTitle={`This means ${firstName} ${lastName} will no longer be able to ${
+          isActive ? 'access your dashboard' : 'join your organization'
+        }`}
+        positive={() => (isActive ? deleteEmployee(null) : deleteInvite(null))}
+        buttonTexts={[isActive ? 'Remove User' : 'Delete Invite']}
+        processing={deleting || deletingEmployee}
         negative={() => setShowConfirmation(false)}
       />
 
@@ -96,19 +110,21 @@ export const EmployeeDetails = ({
       <div className='mt-5 flex gap-3'>
         <button
           className={'primary-button min-w-[120px]'}
-          onClick={() => setShowConfirmation(true)}
+          onClick={() =>
+            isActive ? changeRole(data) : setShowConfirmation(true)
+          }
           type={'button'}
         >
-          Delete Invite
+          {isActive ? 'Change Role' : 'Delete Invite'}
         </button>
 
         <SubmitButton
           className={'secondary-button min-w-[120px]'}
           submitting={resending}
           type={'button'}
-          onClick={() => resend(null)}
+          onClick={() => (isActive ? setShowConfirmation(true) : resend(null))}
         >
-          Resend Invite
+          {isActive ? 'Remove User' : 'Resend Invite'}
         </SubmitButton>
       </div>
     </>

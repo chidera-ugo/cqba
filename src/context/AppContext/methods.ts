@@ -17,7 +17,7 @@ export function reducer(state: State, action: Action): State {
     case 'saveTokens': {
       const tokens = action.payload;
 
-      saveToLocalStore('tokens', tokens);
+      saveToLocalStore('tokens', tokens, true);
 
       return { ...state, tokens };
     }

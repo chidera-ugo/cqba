@@ -4,20 +4,23 @@ import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { SearchInput } from 'components/form-elements/SearchInput';
 import { AppLayout } from 'components/layouts/AppLayout';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
-import { CreateEmployee } from 'components/modules/employees/CreateEmployee';
+import { ManageEmployee } from 'components/modules/employees/ManageEmployee';
 import { EmployeeDetails } from 'components/modules/employees/EmployeeDetails';
 import { SimplePlus } from 'components/svgs/others/Plus';
 import { AllEmployeesTable } from 'components/tables/employees/AllEmployeesTable';
 import {
   employeesFilterOptions,
   employeesFiltersSchema,
-} from 'constants/employees/fiilters';
+} from 'constants/employees/filters';
 import { useUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
 import { simpleParseSearch } from 'hooks/client_api/search_params';
 import { useDebouncer } from 'hooks/common/useDebouncer';
+import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useManageEmployee } from 'hooks/employees/useManageEmployee';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
+
+// Todo: Disable button clicks for unverified users
 
 export default function Employees() {
   const searchParams = useSearchParams();
@@ -27,6 +30,8 @@ export default function Employees() {
   const [debouncedSearch] = useDebouncer({
     value: search,
   });
+
+  const { isVerified } = useIsVerified();
 
   const [showSearchBar, setShowSearchBar] = useState(false);
 
@@ -48,7 +53,7 @@ export default function Employees() {
 
   return (
     <AppLayout title='Employees' childrenClassName={'mb-7'}>
-      <div className='sticky top-14 left-0 z-[800] h-10 justify-between gap-2 bg-white bg-opacity-80 px-3 backdrop-blur-md 640:flex 640:h-14 640:px-8 1024:top-20'>
+      <div className='sticky top-14 left-0 z-[800] h-10 justify-between gap-2 bg-white bg-opacity-80 px-3 backdrop-blur-md 640:flex 640:h-20 640:px-8 1024:top-20'>
         <div className='x-between my-auto h-10 w-full gap-5'>
           <WideTabs
             className={clsx(
@@ -85,6 +90,8 @@ export default function Employees() {
         <div className='x-center my-auto mt-4 w-full flex-shrink-0 640:mt-auto 640:mb-auto 640:w-fit'>
           <button
             onClick={() => {
+              if (!isVerified) return;
+
               setModal('add_employee');
             }}
             className='primary-button x-center w-full px-2 text-sm 640:px-4'
@@ -97,7 +104,7 @@ export default function Employees() {
         </div>
       </div>
 
-      <CreateEmployee
+      <ManageEmployee
         {...rest}
         {...{
           setCurrentEmployee,
@@ -113,7 +120,14 @@ export default function Employees() {
         closeOnClickOutside
       >
         <AppErrorBoundary>
-          <EmployeeDetails close={close} id={filters?.employeeId} />
+          <EmployeeDetails
+            changeRole={(employee) => {
+              setCurrentEmployee(employee); // There's no current employee at this point which the manage employee needs to show the form
+              setModal('edit_employee');
+            }}
+            close={close}
+            id={filters?.employeeId}
+          />
         </AppErrorBoundary>
       </RightModalWrapper>
 

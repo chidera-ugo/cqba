@@ -32,7 +32,7 @@ export const CreatePinSteps = ({ closeModal }: Props) => {
         type: 'success',
       });
 
-      getCurrentUser!({});
+      getCurrentUser!(null);
     },
     onError(e) {
       handleError(e);

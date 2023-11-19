@@ -6,7 +6,7 @@ import { generateUrlParamsFromObject } from 'utils/generators/generateUrlParamsF
 export interface IEmployee {
   lastName: string;
   emailVerifyCode: string;
-  status: string;
+  status: EmployeeStatus;
   createdAt: number;
   email: string;
   firstName: string;

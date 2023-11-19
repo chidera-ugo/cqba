@@ -9,15 +9,24 @@ interface Props {
   currentEmployee?: IEmployee | null;
 }
 
-export const CreateEmployee = ({
+export const ManageEmployee = ({
   modal,
   closeModal,
   currentEmployee,
 }: Props) => {
+  const isActive = currentEmployee?.status === 'active';
+
   return (
     <RightModalWrapper
       show={modal === 'add_employee' || modal === 'edit_employee'}
-      title={currentEmployee ? 'Update Employee' : 'Add Employee'}
+      title={
+        currentEmployee
+          ? isActive
+            ? 'Change Role'
+            : 'Update Employee'
+          : 'Add Employee'
+      }
+      hideBackground={isActive}
       closeModal={closeModal}
       closeOnClickOutside
       childrenClassname='py-0 640:px-8 px-4'
