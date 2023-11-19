@@ -41,7 +41,7 @@ export const SearchInput = ({
     >
       <input
         className={clsx(
-          '_input h-full rounded-full border-neutral-300 bg-white pl-10 text-sm font-medium focus:border-primary-main',
+          '_input h-full min-h-[40px] rounded-full border-neutral-300 bg-white pl-10 text-sm font-medium focus:border-primary-main',
           className
         )}
         style={{

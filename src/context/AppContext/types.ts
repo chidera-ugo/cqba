@@ -7,6 +7,7 @@ export interface State {
   user: IUser | null;
   redirectUrl: string;
   tokens: Tokens | null;
+  hasSetPin?: boolean;
   screenSize: {
     tablet: boolean;
     miniTablet: boolean;
@@ -23,6 +24,7 @@ export type Action =
   | { type: 'saveTokens'; payload: Tokens }
   | { type: 'removeTokens' }
   | { type: 'setCurrentUser'; payload: IUser }
+  | { type: 'update_has_set_pin'; payload: boolean }
   | { type: 'signout' };
 
 export interface Tokens {

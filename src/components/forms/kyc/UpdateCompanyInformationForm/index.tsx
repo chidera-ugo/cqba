@@ -44,25 +44,21 @@ export const UpdateCompanyInformationForm = () => {
       validationSchema={validationSchema}
       onSubmit={({
         companyType,
-        city,
-        state,
         employees,
         expenses,
-        country,
         businessName,
         businessIndustry,
-        address,
+        phoneNumber,
+        ...values
       }) => {
         mutate({
           companyName: businessName,
           businessIndustry,
-          country,
+          phone: phoneNumber,
           averageMonthlyExpenses: expenses,
           businessType: companyType,
           numberOfEmployees: employees,
-          address,
-          city,
-          state,
+          ...values,
         });
       }}
       validateOnBlur={false}

@@ -10,6 +10,7 @@ export function validationSchema(type: OwnerType) {
         phoneNumberTest(val)
       ),
     idNumber: string().required('Please provide ID number'),
+    postalCode: string().required('Provide postal code'),
     idType: string().required('Please select ID type'),
     email: string()
       .required('Please provide email')

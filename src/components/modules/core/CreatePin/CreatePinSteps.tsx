@@ -11,27 +11,26 @@ import { toast } from 'react-toastify';
 
 interface Props {
   closeModal: () => void;
-  onSuccess: () => void;
 }
 
-export const CreatePinSteps = ({ closeModal, onSuccess }: Props) => {
+export const CreatePinSteps = ({ closeModal }: Props) => {
   const [pins, setPins] = useState<Record<string, any>>({});
 
   const [mode, setMode] = useState<'new' | 'confirm'>('new');
 
-  const { getCurrentUser } = useAppContext();
+  const { getCurrentUser, dispatch } = useAppContext();
 
   const { handleError } = useHandleError();
 
   const { mutate, isLoading } = useCreatePin({
     onSuccess(res) {
+      dispatch({ type: 'update_has_set_pin', payload: true });
+
       closeModal();
 
       toast(<AppToast>{res.message}</AppToast>, {
         type: 'success',
       });
-
-      onSuccess();
 
       getCurrentUser!({});
     },

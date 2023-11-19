@@ -1,6 +1,7 @@
 import { IsLoading } from 'components/data-states/IsLoading';
 import { AddressInputGroup } from 'components/form-elements/AddressInputGroup';
 import { Input } from 'components/form-elements/Input';
+import { PhoneNumberInput } from 'components/form-elements/PhoneNumberInput';
 import { industries } from 'constants/kyc/industries';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { IOrganization } from 'hooks/api/kyc/useGetOrganizationInformation';
@@ -25,29 +26,40 @@ export const Form = ({
   organizationInformation,
   gettingOrganizationInformation,
 }: Props) => {
-  const { handleSubmit, errors, submitCount, setValues, values } = formikProps;
+  const {
+    handleSubmit,
+    errors,
+    setFieldValue,
+    submitCount,
+    setValues,
+    values,
+  } = formikProps;
 
   useScrollToFormError(errors, submitCount);
 
   useEffect(() => {
-    if (!organizationInformation) return;
+    if (!organizationInformation?.businessName) return;
+
+    setFieldValue('businessName', organizationInformation.businessName);
+
+    if (!organizationInformation?.businessIndustry) return;
 
     const {
       address,
       averageMonthlyExpenses,
       city,
       country,
-      businessName,
       businessIndustry,
       state,
       numberOfEmployees,
       businessType,
+      phone,
+      postalCode,
     } = sanitizeRecordToRemoveUndefinedAndNulls(organizationInformation);
 
     setValues(
       {
         ...values,
-        businessName,
         businessIndustry,
         address,
         companyType: businessType,
@@ -56,6 +68,8 @@ export const Form = ({
         city,
         state,
         country,
+        postalCode,
+        phoneNumber: phone,
       },
       false
     );
@@ -71,21 +85,31 @@ export const Form = ({
         name='businessName'
       />
 
-      <Select
-        label='Business Type'
-        name='companyType'
-        options={[
-          'BUSINESS_NAME_REGISTRATION',
-          'INCORPORATED_TRUSTEES',
-          'PRIVATE_LIMITED',
-          'PUBLIC_LIMITED',
-          'UNREGISTERED_INDIVIDUAL',
-        ].map((val) => val.replaceAll('_', ' '))}
-      />
-      <Select
-        label='Business Industry'
-        name='businessIndustry'
-        options={industries}
+      <div className='gap-5 480:flex'>
+        <Select
+          label='Business Type'
+          name='companyType'
+          options={[
+            'BUSINESS_NAME_REGISTRATION',
+            'INCORPORATED_TRUSTEES',
+            'PRIVATE_LIMITED',
+            'PUBLIC_LIMITED',
+            'UNREGISTERED_INDIVIDUAL',
+          ].map((val) => val.replaceAll('_', ' '))}
+        />
+        <Select
+          label='Business Industry'
+          name='businessIndustry'
+          options={industries}
+        />
+      </div>
+
+      <PhoneNumberInput
+        label='Phone Number'
+        name='phoneNumber'
+        setFieldValue={setFieldValue}
+        inputMode='tel'
+        shouldValidate
       />
 
       <div className='gap-5 480:flex'>

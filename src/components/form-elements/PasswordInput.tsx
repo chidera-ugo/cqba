@@ -3,10 +3,19 @@ import { CloseEye, OpenEye } from 'components/svgs/forms/Eye';
 import { useField } from 'formik';
 import { useState } from 'react';
 import { Field } from 'types/Common';
+import { validateField } from 'utils/validators/validateField';
 
 type Props = JSX.IntrinsicElements['input'] & Field;
 
-export const PasswordInput = ({ label, className, ...props }: Props) => {
+export const PasswordInput = ({
+  label,
+  setFieldValue,
+  className,
+  fieldType,
+  limit,
+  shouldValidate,
+  ...props
+}: Props) => {
   const [field, meta] = useField(props.name as string);
   const [showPassword, setShowPassword] = useState(true);
   const id = props.id ?? props.name;
@@ -24,6 +33,19 @@ export const PasswordInput = ({ label, className, ...props }: Props) => {
           {...props}
           {...field}
           id={id}
+          onChange={
+            setFieldValue
+              ? (e) =>
+                  validateField(
+                    e,
+                    setFieldValue,
+                    fieldType,
+                    field.name,
+                    limit,
+                    shouldValidate
+                  )
+              : field.onChange
+          }
           type={showPassword ? 'password' : 'text'}
           className={clsx(
             meta.touched && meta.error ? 'border-error-main' : '',

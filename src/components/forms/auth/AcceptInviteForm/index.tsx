@@ -18,14 +18,20 @@ export const AcceptInviteForm = () => {
 
   const { query } = useRouter();
 
-  const { email, code, businessName } = query;
+  const { code, companyName } = query;
 
-  const { isLoading, mutate } = useAcceptInvite();
+  const { isLoading, mutate } = useAcceptInvite({
+    onSuccess(res) {
+      const { access_token, refresh_token } = res.tokens;
+
+      initiateAuthSession(access_token, refresh_token);
+    },
+  });
 
   if (psuedoLoading) return <IsLoading />;
 
   function isValidLink() {
-    const vals = [email, code, businessName];
+    const vals = [code, companyName];
 
     for (const i of vals) {
       if (typeof i !== 'string') return false;
@@ -34,28 +40,19 @@ export const AcceptInviteForm = () => {
     return true;
   }
 
-  if (isValidLink()) return <IsError description={'Invalid invitation code'} />;
+  if (!isValidLink())
+    return <IsError description={'Invalid invitation code'} />;
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={({ phoneNumber, ...values }) => {
-        mutate(
-          {
-            ...values,
-            phone: phoneNumber,
-            email: String(email),
-            code: String(code),
-          },
-          {
-            onSuccess(res) {
-              const { access_token, refresh_token } = res.tokens;
-
-              initiateAuthSession(access_token, refresh_token);
-            },
-          }
-        );
+        mutate({
+          ...values,
+          phone: phoneNumber,
+          code: String(code),
+        });
       }}
       validateOnBlur={false}
     >
@@ -64,13 +61,13 @@ export const AcceptInviteForm = () => {
           <>
             <h4>Welcome to Chequebase</h4>
             <div className='mt-1 max-w-[400px] text-left text-sm text-neutral-600'>
-              You have been invited to {String(businessName)} team enter your
+              You have been invited to {String(companyName)} team. Enter your
               credentials to get started
             </div>
 
             <Form
               {...{
-                businessName,
+                businessName: companyName,
                 formikProps,
                 processing: isLoading,
               }}

@@ -31,17 +31,25 @@ export const AddressInputGroup = ({
 
   return (
     <>
-      <Select
-        placeholder={'Select country'}
-        label='Country'
-        name='country'
-        trueValueKey={'isoCode'}
-        displayValueKey={'name'}
-        listKeyModifieres={['name']}
-        options={countries}
-        isLoading={loadingCountries}
-        isError={countriesError}
-      />
+      <div className='gap-5 480:flex'>
+        <Select
+          placeholder={'Select country'}
+          label='Country'
+          name='country'
+          trueValueKey={'isoCode'}
+          displayValueKey={'name'}
+          listKeyModifieres={['name']}
+          options={countries}
+          isLoading={loadingCountries}
+          isError={countriesError}
+        />
+
+        <Input
+          label='Postal Code'
+          placeholder={'Enter postal code'}
+          name='postalCode'
+        />
+      </div>
 
       <Input
         label='Address'

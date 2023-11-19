@@ -1,4 +1,5 @@
 import { Input } from 'components/form-elements/Input';
+import { PasswordInput } from 'components/form-elements/PasswordInput';
 import { PhoneNumberInput } from 'components/form-elements/PhoneNumberInput';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { initialValues } from './initialValues';
@@ -27,7 +28,7 @@ export const Form = ({ processing, formikProps }: Props) => {
         shouldValidate
       />
 
-      <Input
+      <PasswordInput
         label='Create Password (6 digit pin)'
         name='password'
         setFieldValue={setFieldValue}

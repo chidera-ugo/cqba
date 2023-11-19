@@ -5,6 +5,7 @@ import { useAppContext } from 'context/AppContext';
 import { useChooseDefaultCategories } from 'hooks/api/categories/useChooseDefaultCategories';
 import { useGetDefaultCategories } from 'hooks/api/categories/useGetDefaultCategories';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
+import { useIsKycFlow } from 'hooks/kyc/useIsKycFlow';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -14,6 +15,7 @@ export const SelectDefaultCategories = () => {
   const [showModal, setShowModal] = useState(false);
   const [selected, setSelected] = useState<Array<string>>([]);
 
+  const { isKycFlow } = useIsKycFlow();
   const { isVerified } = useIsVerified();
   const { getCurrentUser, state } = useAppContext();
 
@@ -29,12 +31,7 @@ export const SelectDefaultCategories = () => {
   });
 
   useEffect(() => {
-    if (
-      !isVerified ||
-      pathname.includes('/kyc') ||
-      !user?.pinSet ||
-      !data?.length
-    ) {
+    if (!isVerified || isKycFlow || !user?.pinSet || !data?.length) {
       setShowModal(false);
       return;
     }

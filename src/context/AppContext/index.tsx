@@ -17,6 +17,7 @@ import { getFromLocalStore } from 'lib/localStore';
 const initialState: State = {
   user: null,
   redirectUrl: '',
+  hasSetPin: false,
   isInitializing: true,
   screenSize: null,
   tokens: null,
