@@ -4,7 +4,13 @@ import { useGetCities } from 'hooks/api/address/useGetCities';
 import { useGetCountries } from 'hooks/api/address/useGetCountries';
 import { useGetStates } from 'hooks/api/address/useGetStates';
 
-export const AddressInputGroup = ({ country }: { country: string }) => {
+export const AddressInputGroup = ({
+  country,
+  state,
+}: {
+  country: string;
+  state: string;
+}) => {
   const {
     isLoading: loadingCountries,
     isError: countriesError,
@@ -21,21 +27,29 @@ export const AddressInputGroup = ({ country }: { country: string }) => {
     isLoading: loadingCities,
     isError: citiesError,
     data: cities,
-  } = useGetCities(country);
+  } = useGetCities(country, state);
 
   return (
     <>
-      <Select
-        placeholder={'Select country'}
-        label='Country'
-        name='country'
-        trueValueKey={'isoCode'}
-        displayValueKey={'name'}
-        listKeyModifieres={['name']}
-        options={countries}
-        isLoading={loadingCountries}
-        isError={countriesError}
-      />
+      <div className='gap-5 480:flex'>
+        <Select
+          placeholder={'Select country'}
+          label='Country'
+          name='country'
+          trueValueKey={'isoCode'}
+          displayValueKey={'name'}
+          listKeyModifieres={['name']}
+          options={countries}
+          isLoading={loadingCountries}
+          isError={countriesError}
+        />
+
+        <Input
+          label='Postal Code'
+          placeholder={'Enter postal code'}
+          name='postalCode'
+        />
+      </div>
 
       <Input
         label='Address'
@@ -64,7 +78,7 @@ export const AddressInputGroup = ({ country }: { country: string }) => {
           displayValueKey={'name'}
           options={cities}
           listKeyModifieres={['latitude', 'longitude', 'name', 'stateCode']}
-          isLoading={loadingCities && !!country}
+          isLoading={loadingCities && !!country && !!state}
           isError={citiesError}
         />
       </div>

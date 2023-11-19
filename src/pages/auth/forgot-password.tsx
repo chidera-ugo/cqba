@@ -47,6 +47,17 @@ export default function ForgotPassword() {
               },
               text: 'Resend Reset Link',
             }}
+            slot={
+              <div className='mx-auto mt-4 text-left text-sm text-neutral-600'>
+                {`Already reset password?`}
+                <Link
+                  href='/auth/signin'
+                  className='text-button ml-1 text-left font-medium'
+                >
+                  Sign In
+                </Link>
+              </div>
+            }
           />
         ) : (
           <>

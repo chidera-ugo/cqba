@@ -32,6 +32,7 @@ export interface IOrganization {
   gender: string;
   businessType: string;
   updatedAt: number;
+  postalCode: string;
   documents: {
     cacBn1?: string;
     utilityBill?: string;

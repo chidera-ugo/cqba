@@ -2,25 +2,22 @@ import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { CreatePinSteps } from 'components/modules/core/CreatePin/CreatePinSteps';
 import { useAppContext } from 'context/AppContext';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
-import { useRouter } from 'next/router';
+import { useIsKycFlow } from 'hooks/kyc/useIsKycFlow';
 import { useEffect, useState } from 'react';
 
 export const CreatePin = () => {
   const [showModal, setShowModal] = useState(false);
-  const [hasSetPin, setHasSetPin] = useState(false);
+  const { user, hasSetPin } = useAppContext().state;
 
-  const { pathname } = useRouter();
-
-  const { user } = useAppContext().state;
+  const { isKycFlow } = useIsKycFlow();
 
   const { isVerified } = useIsVerified();
 
   useEffect(() => {
-    if (!isVerified || pathname.includes('/kyc') || user?.pinSet || hasSetPin)
-      return;
+    if (!isVerified || isKycFlow || user?.pinSet || hasSetPin) return;
 
     setShowModal(true);
-  }, [pathname]);
+  }, [user, hasSetPin, isVerified, isKycFlow]);
 
   function closeModal() {
     setShowModal(false);
@@ -33,10 +30,7 @@ export const CreatePin = () => {
         className='bg-white'
         title={'Create Transaction Pin'}
       >
-        <CreatePinSteps
-          onSuccess={() => setHasSetPin(true)}
-          closeModal={closeModal}
-        />
+        <CreatePinSteps closeModal={closeModal} />
       </RightModalWrapper>
     </>
   );

@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
 import { CreatePin } from 'components/modules/core/CreatePin';
-import { SelectDefaultCategories } from 'components/modules/core/SelectDefaultCategories';
 import { IdleTimer } from 'components/modules/IdleTimer';
 import { VerifyYourAccount } from 'components/modules/kyc/VerifyYourAccount';
 import { PageHead } from 'components/primary/PageHead';
@@ -11,8 +10,8 @@ import { LineInfo } from 'components/svgs/others/Info';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import { useCurrentAccountSetupStepUrl } from 'hooks/dashboard/kyc/useCurrentAccountSetupStepUrl';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
+import { useIsKycFlow } from 'hooks/kyc/useIsKycFlow';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { PropsWithChildren } from 'react';
 import { SideNavigation } from 'components/primary/SideNavigation';
 import { AppHeader } from 'components/primary/headers/AppHeader';
@@ -41,11 +40,10 @@ export const AppLayout = ({
 }: PropsWithChildren<Props>) => {
   const { userExists } = useProtectedRoutesGuard();
 
-  const { pathname } = useRouter();
-
   const { screenSize } = useAppContext().state;
 
   const { isVerified } = useIsVerified();
+  const { isKycFlow } = useIsKycFlow();
 
   const { getCurrentAccountSetupStepUrl } = useCurrentAccountSetupStepUrl();
 
@@ -67,8 +65,6 @@ export const AppLayout = ({
 
         <IdleTimer />
 
-        <SelectDefaultCategories />
-
         <div className='disable-scrolling 1024:flex'>
           {!hideSideNavigation && (!screenSize || screenSize?.['desktop']) ? (
             <div className='hidden w-[324px] 1024:block'>
@@ -88,7 +84,7 @@ export const AppLayout = ({
                 hideSideNavigation,
                 title,
               }}
-              className={pathname !== '/kyc' ? 'border-b' : ''}
+              className={!isKycFlow ? 'border-b' : ''}
             >
               {headerSlot}
             </AppHeader>
@@ -134,7 +130,7 @@ export const AppLayout = ({
               </div>
             )}
 
-            {!isVerified && !pathname.includes('/kyc') && (
+            {!isVerified && !isKycFlow && (
               <div className='x-between block bg-warning-600 p-4 text-white 690:flex 690:p-6'>
                 <div className='flex'>
                   <span className={'mt-1 mr-2 hidden 640:mr-3 690:block'}>

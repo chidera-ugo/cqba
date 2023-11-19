@@ -11,6 +11,7 @@ export const initialValues = {
   country: '',
   address: '',
   state: '',
+  postalCode: '',
   title: '',
   city: '',
   idNumber: '',

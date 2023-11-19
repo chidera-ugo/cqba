@@ -18,6 +18,7 @@ interface Props {
   isLoading?: boolean;
   isError?: boolean;
   className?: string;
+  normal?: boolean;
 }
 
 export const DisplayValue = ({
@@ -31,7 +32,16 @@ export const DisplayValue = ({
   isLoading,
   className,
   titleClassName,
+  normal,
 }: Props) => {
+  if (normal)
+    return (
+      <div className={className}>
+        <div className={'text-sm text-neutral-600'}>{title}</div>
+        <div className='text-base font-semibold text-neutral-900'>{value}</div>
+      </div>
+    );
+
   return (
     <div className={clsx('my-auto', className)}>
       <div className='flex font-normal text-neutral-400'>

@@ -12,6 +12,8 @@ export function reducer(state: State, action: Action): State {
     case 'setScreenSize': {
       return { ...state, screenSize: action.payload };
     }
+    case 'update_has_set_pin':
+      return { ...state, hasSetPin: action.payload };
     case 'saveTokens': {
       const tokens = action.payload;
 

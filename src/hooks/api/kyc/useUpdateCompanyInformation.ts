@@ -9,6 +9,8 @@ export interface UpdateCompanyInformationDto {
   city: string;
   country: string;
   state: string;
+  phone: string;
+  postalCode: string;
   numberOfEmployees: string;
   averageMonthlyExpenses: string;
   address: string;

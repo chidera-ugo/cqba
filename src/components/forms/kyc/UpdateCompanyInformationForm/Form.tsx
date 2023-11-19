@@ -1,6 +1,8 @@
 import { IsLoading } from 'components/data-states/IsLoading';
 import { AddressInputGroup } from 'components/form-elements/AddressInputGroup';
 import { Input } from 'components/form-elements/Input';
+import { PhoneNumberInput } from 'components/form-elements/PhoneNumberInput';
+import { industries } from 'constants/kyc/industries';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { IOrganization } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useScrollToFormError } from 'hooks/forms/useScrollToFormError';
@@ -24,29 +26,40 @@ export const Form = ({
   organizationInformation,
   gettingOrganizationInformation,
 }: Props) => {
-  const { handleSubmit, errors, submitCount, setValues, values } = formikProps;
+  const {
+    handleSubmit,
+    errors,
+    setFieldValue,
+    submitCount,
+    setValues,
+    values,
+  } = formikProps;
 
   useScrollToFormError(errors, submitCount);
 
   useEffect(() => {
-    if (!organizationInformation) return;
+    if (!organizationInformation?.businessName) return;
+
+    setFieldValue('businessName', organizationInformation.businessName);
+
+    if (!organizationInformation?.businessIndustry) return;
 
     const {
       address,
       averageMonthlyExpenses,
       city,
       country,
-      businessName,
       businessIndustry,
       state,
       numberOfEmployees,
       businessType,
+      phone,
+      postalCode,
     } = sanitizeRecordToRemoveUndefinedAndNulls(organizationInformation);
 
     setValues(
       {
         ...values,
-        businessName,
         businessIndustry,
         address,
         companyType: businessType,
@@ -55,6 +68,8 @@ export const Form = ({
         city,
         state,
         country,
+        postalCode,
+        phoneNumber: phone,
       },
       false
     );
@@ -70,21 +85,31 @@ export const Form = ({
         name='businessName'
       />
 
-      <Select
-        label='Business Type'
-        name='companyType'
-        options={[
-          'BUSINESS_NAME_REGISTRATION',
-          'INCORPORATED_TRUSTEES',
-          'PRIVATE_LIMITED',
-          'PUBLIC_LIMITED',
-          'UNREGISTERED_INDIVIDUAL',
-        ].map((val) => val.replaceAll('_', ' '))}
-      />
-      <Select
-        label='Business Industry'
-        name='businessIndustry'
-        options={industries}
+      <div className='gap-5 480:flex'>
+        <Select
+          label='Business Type'
+          name='companyType'
+          options={[
+            'BUSINESS_NAME_REGISTRATION',
+            'INCORPORATED_TRUSTEES',
+            'PRIVATE_LIMITED',
+            'PUBLIC_LIMITED',
+            'UNREGISTERED_INDIVIDUAL',
+          ].map((val) => val.replaceAll('_', ' '))}
+        />
+        <Select
+          label='Business Industry'
+          name='businessIndustry'
+          options={industries}
+        />
+      </div>
+
+      <PhoneNumberInput
+        label='Phone Number'
+        name='phoneNumber'
+        setFieldValue={setFieldValue}
+        inputMode='tel'
+        shouldValidate
       />
 
       <div className='gap-5 480:flex'>
@@ -107,7 +132,7 @@ export const Form = ({
         />
       </div>
 
-      <AddressInputGroup country={values.country} />
+      <AddressInputGroup country={values.country} state={values.state} />
 
       <div className={'mt-10 pb-8'}>
         <div className='relative flex'>
@@ -129,32 +154,3 @@ export const Form = ({
     </FormikForm>
   );
 };
-
-const industries = [
-  'Agriculture',
-  'Auto Parts',
-  'Construction',
-  'Digital Services',
-  'E-Commerce',
-  'Electronics',
-  'Fashion & Beauty',
-  'Financial Services',
-  'Food & Beverage',
-  'Furniture',
-  'General Services',
-  'Haulage',
-  'Hospitals & Health',
-  'Household items',
-  'Leisure & Entertainment',
-  'Logistics',
-  'Membership Groups',
-  'NGOs',
-  'Others',
-  'Press & Media',
-  'Religious Organizations',
-  'Restaurant and Food',
-  'Schools',
-  'Technology',
-  'Travel & Hospitality',
-  'Utilities',
-];

@@ -9,15 +9,15 @@ export interface City {
   longitude: string;
 }
 
-export function useGetCities(country: string) {
+export function useGetCities(country: string, state: string) {
   const { user } = useAppContext().state;
 
   return useTQuery<City[]>({
-    queryKey: ['cities', country],
-    url: `/${user?.organizationId}/countries/${country}/cities`,
+    queryKey: ['cities', country, state],
+    url: `/${user?.organizationId}/countries/${country}/states/${state}/cities`,
     service: 'organizations',
     options: {
-      enabled: !!user?.organizationId && !!country,
+      enabled: !!user?.organizationId && !!country && !!state,
       staleTime: Infinity,
       meta: { silent: true },
     },

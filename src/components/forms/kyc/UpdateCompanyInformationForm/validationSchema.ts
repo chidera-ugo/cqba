@@ -1,3 +1,4 @@
+import { phoneNumberTest } from 'utils/validators/validateField';
 import { object, string } from 'yup';
 
 export const validationSchema = object({
@@ -10,4 +11,10 @@ export const validationSchema = object({
   address: string().required('Provide your address'),
   state: string().required('Select your state'),
   city: string().required('Select your city'),
+  postalCode: string().required('Provide postal code'),
+  phoneNumber: string()
+    .required('Please provide phone number')
+    .test('invalidNumber', 'Provide a valid phone number', (val) =>
+      phoneNumberTest(val)
+    ),
 });
