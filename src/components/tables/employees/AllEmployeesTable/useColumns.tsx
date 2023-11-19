@@ -72,6 +72,7 @@ export const useColumns = ({ handleActionClick }: Args) => {
 
           return (
             <EmployeeActions
+              isEmployeeActive={employee.status === 'active'}
               handleActionClick={(action) => {
                 handleActionClick(employee, action);
               }}
