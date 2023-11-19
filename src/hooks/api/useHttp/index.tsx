@@ -36,10 +36,14 @@ export default function useHttp({
     });
   }
 
+  const authHeader = tokens?.accessToken
+    ? { Authorization: `Bearer ${tokens.accessToken}` }
+    : {};
+
   const axiosInstance = axios.create({
     headers: {
       Accept: 'application/json',
-      Authorization: tokens?.accessToken ? `Bearer ${tokens.accessToken}` : '',
+      ...authHeader,
     },
     baseURL,
     withCredentials: process.env.WITH_CREDENTIALS === 'positive',
