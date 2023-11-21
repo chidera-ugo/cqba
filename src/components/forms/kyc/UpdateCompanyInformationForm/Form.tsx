@@ -40,15 +40,12 @@ export const Form = ({
   useEffect(() => {
     if (!organizationInformation?.businessName) return;
 
-    setFieldValue('businessName', organizationInformation.businessName);
-
-    if (!organizationInformation?.businessIndustry) return;
-
     const {
       address,
       averageMonthlyExpenses,
       city,
       country,
+      businessName,
       businessIndustry,
       state,
       numberOfEmployees,
@@ -69,6 +66,7 @@ export const Form = ({
         state,
         country,
         postalCode,
+        businessName,
         phoneNumber: phone,
       },
       false
@@ -90,13 +88,16 @@ export const Form = ({
           label='Business Type'
           name='companyType'
           options={[
-            'BUSINESS_NAME_REGISTRATION',
-            'INCORPORATED_TRUSTEES',
-            'PRIVATE_LIMITED',
-            'PUBLIC_LIMITED',
-            'UNREGISTERED_INDIVIDUAL',
-          ].map((val) => val.replaceAll('_', ' '))}
+            { name: 'BUSINESS NAME REGISTRATION', id: 'Business_Name' },
+            { name: 'INCORPORATED TRUSTEES', id: 'Incorporated_Trustees' },
+            { name: 'PRIVATE LIMITED', id: 'Private_Incorporated' },
+            { name: 'PUBLIC LIMITED', id: 'Public_Incorporated' },
+            { name: 'UNREGISTERED INDIVIDUAL', id: 'Free_Zone' },
+          ]}
+          displayValueKey={'name'}
+          trueValueKey={'id'}
         />
+
         <Select
           label='Business Industry'
           name='businessIndustry'

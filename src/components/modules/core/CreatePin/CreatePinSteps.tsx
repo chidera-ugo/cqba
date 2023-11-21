@@ -121,7 +121,7 @@ export const CreatePinSteps = ({ closeModal }: Props) => {
                       onClick={() => {
                         if (pins?.confirm?.length !== 4)
                           return toast(<AppToast>Confirm new PIN</AppToast>, {
-                            type: 'error',
+                            type: 'info',
                           });
 
                         mutate({

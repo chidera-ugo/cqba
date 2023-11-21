@@ -7,7 +7,6 @@ import {
   useUpdateOwnerInformation,
 } from 'hooks/api/kyc/useUpdateOwnerInformation';
 import { toast } from 'react-toastify';
-import { appendCountryCode } from 'utils/modifiers/appendCountryCode';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
@@ -39,7 +38,7 @@ export const UpdateOwnerInformationForm = ({
         mutate({
           ...values,
           percentOwned: !percentOwned ? 0 : parseInt(percentOwned),
-          phone: appendCountryCode(phoneNumber),
+          phone: phoneNumber,
           dob: String(dateOfBirth.calendarValue?.toISOString()),
           id: currentOwner?.id,
         });

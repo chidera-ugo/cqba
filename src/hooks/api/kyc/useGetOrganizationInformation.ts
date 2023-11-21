@@ -12,6 +12,7 @@ export interface IOrganization {
   country: string;
   owners: IOwner[];
   directors: IOwner[];
+  companyName: string;
   businessName: string;
   formOfId: string;
   firstName: string;
