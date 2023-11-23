@@ -83,9 +83,9 @@ export const Logo = () => {
           className='my-auto w-[100px] object-contain 640:w-[160px]'
         />
 
-        <button className='rounded-full border border-neutral-200 bg-neutral-100 py-0.5 px-1.5 text-[10px] shadow-sm 640:px-2 640:py-1 640:text-sm'>
+        <div className='rounded-full border border-neutral-200 bg-neutral-100 py-0.5 px-1.5 text-[10px] shadow-sm 640:px-2 640:py-1 640:text-sm'>
           Beta
-        </button>
+        </div>
       </Link>
     </div>
   );
