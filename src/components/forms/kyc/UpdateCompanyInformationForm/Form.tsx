@@ -67,7 +67,7 @@ export const Form = ({
         country,
         postalCode,
         businessName,
-        phoneNumber: phone,
+        phoneNumber: phone ?? '',
       },
       false
     );

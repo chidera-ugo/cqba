@@ -9,7 +9,7 @@ export interface IUser {
   emailVerified?: boolean;
   GSI1pKey?: string;
   roles?: string[];
-  organizationId?: string;
+  organization?: string;
   updatedAt?: number;
   GSI1sKey?: string;
   hashRt?: string;

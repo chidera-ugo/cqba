@@ -47,7 +47,7 @@ export function useGetCurrentUser(
     mutationFn: async (token) => {
       const _token = !!token ? token : accessToken;
 
-      const res = await axiosInstance['get'](`/v1/users/profile`, {
+      const res = await axiosInstance['get'](`/v1/auth/profile`, {
         headers: {
           Authorization: _token && `Bearer ${_token}`,
         },

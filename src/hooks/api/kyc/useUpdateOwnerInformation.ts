@@ -44,7 +44,7 @@ export function useUpdateOwnerInformation(
 
   return useTMutation<UpdateOwnersInformationDto, IOwner>({
     method: 'patch',
-    url: `/${user?.organizationId}/update-owner-info`,
+    url: `/${user?.organization}/update-owner-info`,
     service: 'organizations',
     options,
   });

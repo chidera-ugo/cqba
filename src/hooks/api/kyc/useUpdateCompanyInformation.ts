@@ -23,7 +23,7 @@ export function useUpdateCompanyInformation(
 
   return useTMutation<UpdateCompanyInformationDto, any>({
     method: 'patch',
-    url: `/${user?.organizationId}/update-company-info`,
+    url: `/${user?.organization}/update-company-info`,
     service: 'organizations',
     options,
   });

@@ -14,10 +14,10 @@ export function useGetCities(country: string, state: string) {
 
   return useTQuery<City[]>({
     queryKey: ['cities', country, state],
-    url: `/${user?.organizationId}/countries/${country}/states/${state}/cities`,
+    url: `/${user?.organization}/countries/${country}/states/${state}/cities`,
     service: 'organizations',
     options: {
-      enabled: !!user?.organizationId && !!country && !!state,
+      enabled: !!user?.organization && !!country && !!state,
       staleTime: Infinity,
       meta: { silent: true },
     },

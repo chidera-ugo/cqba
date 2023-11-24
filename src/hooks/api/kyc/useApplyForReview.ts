@@ -9,7 +9,7 @@ export function useApplyForReview(
 
   return useTMutation({
     method: 'patch',
-    url: `/${user?.organizationId}/apply-for-approval`,
+    url: `/${user?.organization}/apply-for-approval`,
     service: 'organizations',
     options,
   });

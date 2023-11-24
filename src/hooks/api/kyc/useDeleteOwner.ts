@@ -9,7 +9,7 @@ export function useDeleteOwner(
 
   return useTMutation<{ id: string }, null>({
     method: 'patch',
-    url: `/${user?.organizationId}/delete-owner-info`,
+    url: `/${user?.organization}/delete-owner-info`,
     service: 'organizations',
     options,
   });

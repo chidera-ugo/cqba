@@ -8,7 +8,7 @@ export function useUpdateOrganizationDocuments(
   const { user } = useAppContext().state;
 
   return useTMutation({
-    url: `/${user?.organizationId}/update-business-documentation`,
+    url: `/${user?.organization}/update-business-documentation`,
     service: 'organizations',
     options,
   });

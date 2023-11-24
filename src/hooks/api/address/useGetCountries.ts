@@ -13,10 +13,10 @@ export function useGetCountries() {
 
   return useTQuery<Country[]>({
     queryKey: ['countries'],
-    url: `/${user?.organizationId}/countries`,
+    url: `/${user?.organization}/countries`,
     service: 'organizations',
     options: {
-      enabled: !!user?.organizationId,
+      enabled: !!user?.organization,
       staleTime: Infinity,
       meta: { silent: true },
     },
