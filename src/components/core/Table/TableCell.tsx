@@ -31,7 +31,7 @@ export const TableCell = <T,>({
 
   if (isDate) return <span>{formatDate(value, 'semi-full')}</span>;
 
-  if (isAmount) return <span>₦{formatAmount({ value })}</span>;
+  if (isAmount) return <span>₦{formatAmount({ value: value / 100 })}</span>;
 
   if (typeof value !== 'number' && !value) return <span>-----</span>;
 

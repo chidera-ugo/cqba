@@ -6,7 +6,7 @@ export function useCreatePin(
 ) {
   return useTMutation<{ pin: string }, any>({
     url: '/create-pin',
-    service: 'transactions',
+    service: 'settings',
     options,
   });
 }

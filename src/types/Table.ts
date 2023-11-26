@@ -1,11 +1,15 @@
 export type PaginatedResponse<T> = PaginationDetails & {
-  content: T[];
+  docs: T[];
 };
 
 export type PaginationDetails = {
-  first?: boolean;
-  last?: boolean;
-  empty?: boolean;
+  totalDocs?: number;
+  limit?: number;
   totalPages?: number;
-  pageNumber?: number;
+  page?: number;
+  pagingCounter?: number;
+  hasPrevPage?: boolean;
+  hasNextPage?: boolean;
+  prevPage?: number;
+  nextPage?: number;
 };

@@ -29,7 +29,7 @@ export function useGetAnalyticsChart(
   return useTQuery<InflowOutflowRes>({
     queryKey: ['inflow-outflow-chart', _params],
     url: `/balance-volume${_params}`,
-    service: 'transactions',
+    service: 'overview',
     options: {
       ...options,
       meta: {

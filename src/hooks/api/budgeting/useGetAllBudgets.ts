@@ -4,56 +4,30 @@ import { PaginatedResponse } from 'types/Table';
 import { generateUrlParamsFromObject } from 'utils/generators/generateUrlParamsFromObject';
 
 export interface IBudget {
-  departmentId: string;
-  creator: Creator;
-  currentBalance: number;
-  status: string;
-  categoryTitle: string;
-  createdAt: number;
-  priority: string;
-  sKey: string;
-  deadline: string;
-  departmentTitle: string;
-  initialBalance: number;
-  categoryId: string;
-  organizationId: string;
-  updatedAt: number;
-  amount: string;
+  _id: string;
   description: string;
-  id: string;
-  title: string;
-}
-
-export interface Creator {
-  lastName: string;
-  roles: string[];
-  defaultCategoryIds: string[];
-  organizationId: string;
-  createdAt: number;
-  firstName: string;
-  emailVerified: boolean;
-  password: string;
-  GSI1sKey: string;
-  GSI1pKey: string;
-  pinSet: boolean;
-  hashRt: string;
-  phone: string;
-  emailVerifyCode: string;
-  kybStatus: string;
-  sKey: string;
-  id: string;
-  email: string;
   status: string;
-  updatedAt: number;
+  currency: string;
+  amount: number;
+  expiry: string;
+  name: string;
+  threshold: number;
+  paused: boolean;
+  beneficiaries: {
+    email: string;
+  }[];
+  spentAmount: number;
+  availableAmount: number;
 }
 
 export function useGetAllBudgets(
   params: {
-    page: number;
-    size: number;
+    page?: number;
+    size?: number;
     search?: string;
     departmentId?: string;
     status?: string;
+    paginated?: boolean;
   },
   options?: UseQueryOptions<any, any, any, string[]>
 ) {
@@ -64,6 +38,21 @@ export function useGetAllBudgets(
   return useTQuery<PaginatedResponse<IBudget>>({
     queryKey: ['budgets', _params],
     url: _params,
+    service: 'budgets',
+    options: {
+      ...options,
+      meta: { silent: true },
+      staleTime: Infinity,
+    },
+  });
+}
+
+export function useGetAllBudgetsUnpaginated(
+  options?: UseQueryOptions<any, any, any, string[]>
+) {
+  return useTQuery<PaginatedResponse<IBudget>>({
+    queryKey: ['budgets', 'unpaginated'],
+    url: `?paginated=false`,
     service: 'budgets',
     options: {
       ...options,

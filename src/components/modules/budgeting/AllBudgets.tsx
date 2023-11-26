@@ -98,7 +98,7 @@ export const AllBudgets = ({
       >
         {currentBudget && (
           <AppErrorBoundary>
-            <PendingBudgetDetails id={currentBudget.id} close={closeModal} />
+            <PendingBudgetDetails id={currentBudget._id} close={closeModal} />
           </AppErrorBoundary>
         )}
       </RightModalWrapper>
@@ -124,7 +124,7 @@ export const AllBudgets = ({
               if (res.status === 'declined') return null;
 
               if (res.status === 'approved')
-                return push(`/budgeting/${res.id}`);
+                return push(`/budgeting/${res._id}`);
 
               setCurrentBudget(res);
             },
@@ -149,7 +149,7 @@ export const AllBudgetsList = ({
 }: { viewMode: ViewMode } & BudgetListProps & {
     createBudget: () => void;
   }) => {
-  if (props.data?.empty)
+  if (!props.data?.docs?.length)
     return (
       <div className='min-h-[480px] grid-cols-10 overflow-hidden rounded-2xl bg-neutral-100 640:grid'>
         <div className='col-span-6 my-auto h-full p-7 640:p-12 1280:col-span-5'>

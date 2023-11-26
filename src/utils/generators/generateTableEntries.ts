@@ -22,12 +22,16 @@ export function generateTableEntries<T>(
 
   return {
     data: {
-      first: true,
-      last: false,
-      pageNumber: 0,
-      totalPages: 6,
-      content: entries,
-      empty: !limit,
+      hasPrevPage: false,
+      hasNextPage: false,
+      limit,
+      page: 1,
+      nextPage: 1,
+      totalPages: 1,
+      pagingCounter: 0,
+      prevPage: 1,
+      totalDocs: 1,
+      docs: entries,
     },
   };
 }

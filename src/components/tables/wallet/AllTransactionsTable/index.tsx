@@ -1,3 +1,4 @@
+import { useGetWalletTransactions } from 'hooks/api/wallet/useGetWalletTransactions';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import {
   ColumnFiltersState,
@@ -7,15 +8,13 @@ import {
 import { PaginatedResponse } from 'types/Table';
 
 import { useColumns } from './useColumns';
-import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
-import { generateTableEntries } from 'utils/generators/generateTableEntries';
 import { Table } from 'components/core/Table';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { TransactionDetails } from 'components/modules/transactions/TransactionDetails';
 
 interface Props {
   reset?: () => void;
-  filters?: Record<string, unknown>;
+  filters?: Record<string, string>;
   setFilters?: Dispatch<SetStateAction<Record<string, string>>>;
   slot?: JSX.Element;
   search: string;
@@ -49,29 +48,13 @@ export const AllTransactionsTable = ({
     isLoading,
     isError,
     data: res,
-  } = useMakeDummyHttpRequest({
-    method: 'get',
-    res: generateTableEntries<any>(
-      {
-        id: '',
-        accountName: 'John Doe',
-        amount: 200000,
-        type: 'credit',
-        status: 'successful',
-        search,
-        createdAt: new Date().toISOString(),
-      },
-      10
-    ),
-  });
+  } = useGetWalletTransactions({ search, type: filters?.transactionType });
 
   useEffect(() => {
-    if (!!res) setData(res.data);
+    if (!!res) setData(res);
   }, [res]);
 
-  const [data, setData] = useState<PaginatedResponse<any> | undefined>(
-    res?.data
-  );
+  const [data, setData] = useState<PaginatedResponse<any> | undefined>(res);
 
   const { columns } = useColumns();
 
@@ -106,7 +89,7 @@ export const AllTransactionsTable = ({
             : (filter) => setFilters(({ [filter]: _, ...rest }) => rest)
         }
         returnOriginalOnRowClick
-        accessor='id'
+        accessor='_id'
         mustHaveRange
         {...{
           isLoading,

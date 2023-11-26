@@ -2,11 +2,11 @@ import clsx from 'clsx';
 import { FullScreenLoader } from 'components/common/FullScreenLoader';
 import { CodeInput } from 'components/form-elements/CodeInput';
 import { AppToast } from 'components/primary/AppToast';
+import { AnimateLayout } from 'components/transition/AnimateLayout';
 import { useAppContext } from 'context/AppContext';
-import { useCreatePin } from 'hooks/api/useCreatePin';
+import { useCreatePin } from 'hooks/api/settings/useCreatePin';
 import { useHandleError } from 'hooks/api/useHandleError';
 import { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 
 interface Props {
@@ -46,98 +46,75 @@ export const CreatePinSteps = ({ closeModal }: Props) => {
       <FullScreenLoader show={isLoading} />
 
       <div className={clsx('y-center smooth relative w-full overflow-hidden')}>
-        <AnimatePresence initial={false} mode='popLayout'>
-          <motion.div
-            initial='enter'
-            animate='center'
-            exit='exit'
-            variants={{
-              enter: {
-                x: '100%',
-              },
-              center: {
-                x: 0,
-              },
-              exit: {
-                x: '-100%',
-              },
-            }}
-            transition={{
-              y: { type: 'spring', stiffness: 300, damping: 30 },
-              duration: 0.3,
-            }}
-            key={mode}
-            className='mx-auto w-full'
-          >
-            {mode === 'new' ? (
-              <>
-                <p className={'text-center'}>Enter your new PIN</p>
-                <div className={clsx('mx-auto max-w-[300px] pb-10')}>
-                  <CodeInput
-                    charLimit={4}
-                    autoComplete='off'
-                    autoFocus
-                    type={'password'}
-                    submit={(pin) => {
-                      setPins((prev) => ({ ...prev, new: pin }));
-                      setMode('confirm');
-                    }}
-                    name='newPin'
-                    className='x-center h-[54px] 768:h-[68px]'
-                  />
-                </div>
-              </>
-            ) : (
-              <>
-                <p className={'text-center'}>Confirm your new PIN</p>
-                <div className={clsx('mx-auto max-w-[300px] pb-10')}>
-                  <CodeInput
-                    charLimit={4}
-                    autoComplete='off'
-                    autoFocus
-                    type={'password'}
-                    submit={(pin) => {
-                      if (pin !== pins.new) {
-                        setPins((prev) => ({
-                          current: prev.current,
-                        }));
+        <AnimateLayout changeTracker={mode} className='mx-auto w-full'>
+          {mode === 'new' ? (
+            <>
+              <p className={'text-center'}>Enter your new PIN</p>
+              <div className={clsx('mx-auto max-w-[300px] pb-10')}>
+                <CodeInput
+                  charLimit={4}
+                  autoComplete='off'
+                  autoFocus
+                  type={'password'}
+                  submit={(pin) => {
+                    setPins((prev) => ({ ...prev, new: pin }));
+                    setMode('confirm');
+                  }}
+                  name='newPin'
+                  className='x-center h-[54px] 768:h-[68px]'
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <p className={'text-center'}>Confirm your new PIN</p>
+              <div className={clsx('mx-auto max-w-[300px] pb-10')}>
+                <CodeInput
+                  charLimit={4}
+                  autoComplete='off'
+                  autoFocus
+                  type={'password'}
+                  submit={(pin) => {
+                    if (pin !== pins.new) {
+                      setPins((prev) => ({
+                        current: prev.current,
+                      }));
 
-                        setMode('new');
+                      setMode('new');
 
-                        toast(<AppToast>PINs do not match</AppToast>, {
+                      toast(<AppToast>PINs do not match</AppToast>, {
+                        type: 'info',
+                      });
+                    } else {
+                      setPins((prev) => ({ ...prev, confirm: pin }));
+                    }
+                  }}
+                  name='confirmPin'
+                  className='x-center h-[54px] 768:h-[68px]'
+                />
+
+                <div className='x-center mt-5'>
+                  <button
+                    type='button'
+                    onClick={() => {
+                      if (pins?.confirm?.length !== 4)
+                        return toast(<AppToast>Confirm new PIN</AppToast>, {
                           type: 'info',
                         });
-                      } else {
-                        setPins((prev) => ({ ...prev, confirm: pin }));
-                      }
+
+                      mutate({
+                        pin: pins.new,
+                      });
                     }}
-                    name='confirmPin'
-                    className='x-center h-[54px] 768:h-[68px]'
-                  />
-
-                  <div className='x-center mt-5'>
-                    <button
-                      type='button'
-                      onClick={() => {
-                        if (pins?.confirm?.length !== 4)
-                          return toast(<AppToast>Confirm new PIN</AppToast>, {
-                            type: 'info',
-                          });
-
-                        mutate({
-                          pin: pins.new,
-                        });
-                      }}
-                      className='dark-button'
-                    >
-                      Proceed
-                    </button>
-                  </div>
+                    className='dark-button'
+                  >
+                    Proceed
+                  </button>
                 </div>
-              </>
-            )}
-          </motion.div>
-        </AnimatePresence>
+              </div>
+            </>
+          )}
+        </AnimateLayout>
       </div>
     </>
   );

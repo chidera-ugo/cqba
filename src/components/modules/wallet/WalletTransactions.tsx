@@ -26,6 +26,7 @@ export const WalletTransactions = () => {
         />
       </div>
 
+      {/* Todo: Add filters */}
       <AllTransactionsTable
         search={debouncedSearch}
         {...{ filters, setFilters }}

@@ -2,25 +2,20 @@ import clsx from 'clsx';
 import { DisplayValue } from 'components/common/DisplayValue';
 import { FundWallet } from 'components/modules/wallet/FundWallet';
 import { MakeTransfer } from 'components/modules/wallet/MakeTransfer';
-import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
+import { useManageWallets } from 'hooks/wallet/useManageWallets';
 
 export const WalletOverview = () => {
-  const { isLoading, isError, data } = useMakeDummyHttpRequest({
-    method: 'get',
-    res: {
-      balance: 844082.31,
-    },
-  });
+  const { isLoading, isError, primaryWallet } = useManageWallets();
 
   if (isLoading) return <IsLoadingIsError isLoading />;
-  if (isError || !data) return <IsLoadingIsError />;
+  if (isError || !primaryWallet) return <IsLoadingIsError />;
 
   return (
     <div className='w-full justify-between gap-8 768:flex'>
       <div className='y-center w-full 768:w-auto 768:p-0'>
         <div className='my-auto'>
           <DisplayValue
-            value={data?.balance}
+            value={primaryWallet.availableBalance}
             isAmount
             title='Main balance'
             moreInfo='Your main wallet balance'

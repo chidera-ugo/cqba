@@ -14,7 +14,7 @@ export const AllBudgetsCardView = ({
   onItemClick,
   ...props
 }: BudgetListProps) => {
-  const showData = !isError && !!res?.content?.length;
+  const showData = !isError && !!res?.docs?.length;
 
   const { getColor } = useGetColorByChar();
 
@@ -28,13 +28,13 @@ export const AllBudgetsCardView = ({
       >
         <div className='grid w-full grid-cols-12 gap-5'>
           {showData
-            ? res.content.map((budget) => {
+            ? res?.docs?.map((budget) => {
                 return (
                   <BudgetCard
                     className={'col-span-12 768:col-span-6 1340:col-span-4'}
                     {...{ onItemClick, getColor }}
                     {...budget}
-                    key={budget.id}
+                    key={budget._id}
                   />
                 );
               })
@@ -51,7 +51,9 @@ export const AllBudgetsCardView = ({
         />
       </div>
 
-      {res?.empty || isError || (isLoading && !res?.content.length) ? null : (
+      {!res?.docs.length ||
+      isError ||
+      (isLoading && !res?.docs.length) ? null : (
         <Pagination {...props} {...{ isLoading, isRefetching, res }} />
       )}
     </div>

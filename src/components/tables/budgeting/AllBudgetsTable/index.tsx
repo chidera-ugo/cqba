@@ -22,7 +22,7 @@ export const AllBudgetsTable = ({ onItemClick, ...props }: BudgetListProps) => {
         value: 'declined',
       }}
       returnOriginalOnRowClick
-      accessor='id'
+      accessor='_id'
       mustHaveRange
       {...props}
       {...{

@@ -44,6 +44,7 @@ export default function useHttp({
     headers: {
       Accept: 'application/json',
       ...authHeader,
+      ...headers,
     },
     baseURL,
     withCredentials: process.env.WITH_CREDENTIALS === 'positive',
@@ -65,15 +66,6 @@ export default function useHttp({
       return axiosInstance(req);
     }
   );
-
-  const headersConfig: Record<string, string> = {
-    'Content-Type': 'application/json',
-    ...headers,
-  };
-
-  for (const key in headersConfig) {
-    axiosInstance.defaults.headers.common[key] = headersConfig[key]!;
-  }
 
   return axiosInstance;
 }

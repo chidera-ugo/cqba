@@ -73,6 +73,10 @@
     @apply disabled:cursor-not-allowed disabled:opacity-50;
   }
 
+  .text-link {
+    @apply text-sm font-medium hover:underline;
+  }
+
   button,
   a,
   .no-highlight {

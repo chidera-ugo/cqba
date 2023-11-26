@@ -1,11 +1,11 @@
-import { DefaultCategory } from 'hooks/api/categories/useGetDefaultCategories';
 import { useGetColorByChar } from 'hooks/common/useGetColorByChar';
 import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
 interface Props {
-  data: DefaultCategory[];
-  setSelected: Dispatch<SetStateAction<string[]>>;
+  data: string[];
+  setSelected?: Dispatch<SetStateAction<string[]>>;
+  show?: boolean;
 }
 
 type Node = {
@@ -18,23 +18,27 @@ type Node = {
   length: number;
 };
 
-export const DefaultCategoriesPicker = ({ data, setSelected }: Props) => {
+export const DefaultCategoriesPicker = ({ data, setSelected, show }: Props) => {
+  const SIZE = 450;
+
   const { getColor } = useGetColorByChar();
 
   const hoveredItem = useRef<string>('');
   const selectedItems = useRef<string[]>([]);
-  const svgWidth = useRef(400);
-  const svgHeight = useRef(400);
+  const svgWidth = useRef(SIZE);
+  const svgHeight = useRef(SIZE);
 
   useEffect(() => {
-    const width = 400,
-      height = 400;
+    if (!show) return;
 
-    const nodes: Node[] = data.map(({ title, id }) => {
+    const width = SIZE,
+      height = SIZE;
+
+    const nodes: Node[] = data.map((title) => {
       const radius = Math.max(title.length * 5, 20);
-      const color = getColor(data.findIndex((item) => item.title === title));
+      const color = getColor(data.findIndex((item) => item === title));
 
-      return { radius, name: title, id, color, length: title.length };
+      return { radius, name: title, color, length: title.length };
     }) as any;
 
     const strength = data.length * -6.67 + 283;
@@ -61,6 +65,9 @@ export const DefaultCategoriesPicker = ({ data, setSelected }: Props) => {
     function initZoom() {
       const svg = d3.select('#d3_svg_body');
       const svgNode = svg.node() as any;
+
+      if (!svg || !svgNode || !svgWidth || !svgHeight) return;
+
       const svgWidthWithPadding = svgWidth.current + 40;
       const svgHeightWithPadding = svgHeight.current + 40;
 
@@ -86,8 +93,8 @@ export const DefaultCategoriesPicker = ({ data, setSelected }: Props) => {
       const svg = d3.select('#d3_svg_body'); // Assuming you have an SVG container with the "svg" selector
       const svgNode = svg.node() as any;
       const boundingBox = svgNode?.getBBox();
-      svgWidth.current = boundingBox.width;
-      svgHeight.current = boundingBox.height;
+      svgWidth.current = boundingBox?.width ? boundingBox.width : 12;
+      svgHeight.current = boundingBox?.height ? boundingBox.height : 12;
 
       initZoom();
     }
@@ -144,6 +151,7 @@ export const DefaultCategoriesPicker = ({ data, setSelected }: Props) => {
         })
         .on('mouseover', function (_, d) {
           hoveredItem.current = d.id;
+          return; // Don't deepen color
           updateShapes();
         })
         .on('mouseout', function () {
@@ -162,6 +170,8 @@ export const DefaultCategoriesPicker = ({ data, setSelected }: Props) => {
             selectedItems.current = val;
           }
 
+          if (!setSelected) return;
+
           setSelected(val);
 
           updateShapes();
@@ -170,15 +180,13 @@ export const DefaultCategoriesPicker = ({ data, setSelected }: Props) => {
       updateTexts();
       getTrueBounds();
     }
-  }, []);
+  }, [show]);
 
   return (
     <svg
       width='100%'
-      height='400'
-      className={
-        'no-highlight mx-auto rounded-xl border border-neutral-200 text-xs font-medium'
-      }
+      height={SIZE}
+      className={'no-highlight mx-auto text-xs font-medium'}
       id={'d3_svg_body'}
     >
       <g className='circles cursor-pointer'></g>

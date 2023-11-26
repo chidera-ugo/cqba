@@ -2,6 +2,7 @@ import { validateAmount } from 'utils/formatters/formatAmount';
 import { object, string } from 'yup';
 
 export const validationSchema = object({
+  budget: string().required('Please select budget category'),
   amount: string()
     .required('Please provide amount')
     .test('min', 'Must be at least NGN10', (value) =>
@@ -10,6 +11,8 @@ export const validationSchema = object({
         limit: 10,
       })
     ),
-  owner: string().required('Please select an owner'),
-  cardName: string().required('Please provide card name'),
+  bank: string().required('Please select a bank'),
+  accountNumber: string()
+    .required('Please provide account number')
+    .length(10, 'Account number should be 10 digits'),
 });

@@ -9,10 +9,7 @@ export const SecondaryActionButton = ({
   return (
     <button
       {...props}
-      className={clsx(
-        'x-between group w-full px-4 text-primary-main',
-        className
-      )}
+      className={clsx('group flex w-full text-primary-main', className)}
       type={'button'}
     >
       <span className='my-auto font-semibold group-hover:underline'>

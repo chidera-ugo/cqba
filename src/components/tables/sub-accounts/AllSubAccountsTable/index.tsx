@@ -150,14 +150,14 @@ export const AllSubAccountsTable = ({
         title='sub accounts'
         headerSlot={slot}
         dontScrollToTopOnPageChange
-        onRowClick={(id) => {
+        onRowClick={(_id) => {
           push(
-            `/sub-accounts/${id}${
+            `/sub-accounts/${_id}${
               fromSubAccountDepartments ? '?_f=departments' : ''
             }`
           );
         }}
-        accessor='id'
+        accessor='_id'
         mustHaveRange
         {...{
           isLoading,

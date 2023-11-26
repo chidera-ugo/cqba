@@ -1,7 +1,7 @@
 import { Spinner } from 'components/svgs/dashboard/Spinner';
 import { Dollar } from 'components/svgs/wallet/Icons_MakeTransfer';
+import { useGetTransferFee } from 'hooks/api/wallet/useGetTransferFee';
 import { useDebouncer } from 'hooks/common/useDebouncer';
-import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
 import { useEffect, useState } from 'react';
 import { formatAmount, sanitizeAmount } from 'utils/formatters/formatAmount';
 
@@ -13,7 +13,7 @@ interface Props {
   emitIsProcessing: (processing: boolean) => void;
 }
 
-const GetTransactionFeeContent = ({
+export const GetTransactionFee = ({
   transactionType,
   amount,
   getValue,
@@ -36,17 +36,15 @@ const GetTransactionFeeContent = ({
       emitIsProcessing(true);
     },
     performDebouncedAction() {
-      mutate({
-        transactionType,
-        amount: sanitizedAmount,
-      });
+      mutate(null);
     },
-    dependencies: [transactionType, amount],
+    value: amount,
+    dependencies: [transactionType],
   });
 
-  const { isLoading, mutate } = useMakeDummyHttpRequest({
-    onSuccess() {
-      const fee = '50';
+  const { isLoading, mutate } = useGetTransferFee({
+    onSuccess(res) {
+      const fee = (res.transferFee / 100).toString();
       getValue(fee);
       setFee(fee);
     },
@@ -56,25 +54,22 @@ const GetTransactionFeeContent = ({
     emitIsProcessing(isLoading);
   }, [isLoading]);
 
-  if (!isValid) return <></>;
-  if (isLoading) return <Spinner />;
-
-  return (
-    <div className='flex text-sm'>
-      <span className='my-auto mr-2'>
-        <Dollar />
-      </span>
-      <span className='my-auto font-medium'>
-        ₦{formatAmount({ value: fee, decimalPlaces: 2 })}
-      </span>
-    </div>
-  );
-};
-
-export const GetTransactionFee = (props: Props) => {
   return (
     <div className='my-4 pl-1'>
-      <GetTransactionFeeContent {...props} />
+      {!isValid ? (
+        <></>
+      ) : isLoading ? (
+        <Spinner className={'text-primary-main'} />
+      ) : (
+        <div className='flex text-sm'>
+          <span className='my-auto mr-2'>
+            <Dollar />
+          </span>
+          <span className='my-auto font-medium'>
+            ₦{formatAmount({ value: fee, decimalPlaces: 2 })}
+          </span>
+        </div>
+      )}
     </div>
   );
 };

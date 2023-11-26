@@ -6,7 +6,9 @@ export type Service =
   | 'departments'
   | 'transactions'
   | 'employees'
-  | 'dashboard'
+  | 'overview'
   | 'sub-accounts'
   | 'category'
+  | 'wallet'
+  | 'settings'
   | 'budgets';

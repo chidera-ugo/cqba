@@ -71,10 +71,10 @@ export const Form = ({
           label='Department'
           name='departmentId'
           displayValueKey='title'
-          trueValueKey='id'
+          trueValueKey='_id'
           {...{
             setFieldValue,
-            options: departments?.content ?? [],
+            options: departments?.docs ?? [],
           }}
           isLoading={gettingDepartments}
           isRefetching={refetchingDepartments}
@@ -95,11 +95,11 @@ export const Form = ({
             label='Employee'
             name='employeeId'
             displayValueKey='name'
-            trueValueKey='id'
+            trueValueKey='_id'
             {...{
               setFieldValue,
               options:
-                employees?.content.map(({ id, firstName, lastName }) => ({
+                employees?.docs.map(({ id, firstName, lastName }) => ({
                   id,
                   name: `${firstName} ${lastName}`,
                 })) ?? [],

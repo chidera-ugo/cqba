@@ -61,8 +61,8 @@ export const SubAccountsDepartmentTable = ({ search }: Props) => {
     <Table<ISubAccountsDepartment>
       title='departments'
       dontScrollToTopOnPageChange
-      onRowClick={(id) => push(`/sub-accounts/departments/${id}`)}
-      accessor='id'
+      onRowClick={(_id) => push(`/sub-accounts/departments/${_id}`)}
+      accessor='_id'
       mustHaveRange
       {...{
         isLoading,
