@@ -33,7 +33,7 @@ export const AmountInput = ({
       <div className='relative w-full'>
         <div
           className={clsx(
-            'y-center absolute left-[17px] h-full',
+            'y-center absolute left-[17px] h-full text-neutral-400',
             props.disabled && 'opacity-60'
           )}
         >

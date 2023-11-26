@@ -23,6 +23,8 @@ type Props = JSX.IntrinsicElements['input'] &
     disableTyping?: boolean;
   };
 
+// Todo: Change date picker
+
 export const DatePicker = ({
   className,
   label,
@@ -126,7 +128,7 @@ export const DatePicker = ({
                   disableTyping &&
                     'disabled:cursor-pointer disabled:opacity-100',
                   submitCount > 0 && meta.error ? 'border-error-main' : '',
-                  !!field.value.value ? 'bg-white' : 'bg-neutral-100'
+                  !!field?.value?.value ? 'bg-white' : 'bg-neutral-100'
                 )}
               />
             </div>

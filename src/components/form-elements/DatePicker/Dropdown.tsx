@@ -63,7 +63,8 @@ export function Dropdown({
         },
       }}
       className={clsx(
-        'absolute top-[100%] z-[100] mt-3 w-full overflow-hidden rounded-xl border border-neutral-300 p-0 shadow-lg',
+        'absolute z-[100] w-full overflow-hidden rounded-xl border border-neutral-300 p-0 shadow-lg',
+        top ? 'bottom-[100%] mb-3' : 'top-[100%] mt-3',
         className
       )}
     >

@@ -3,10 +3,11 @@ import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
 import { NothingHere } from 'components/illustrations/NothingHere';
 import { SimpleInformation } from 'components/modules/common/SimpleInformation';
+import { PaginatedResponse } from 'types/Table';
 
 type Props = {
   title: string;
-  data: any;
+  data?: PaginatedResponse<any>;
   canNotShowData?: boolean;
   isError?: boolean;
   isLoading?: boolean;
@@ -31,7 +32,7 @@ export const TableDataStates = ({
     <>
       {canNotShowData ? (
         <IsEmpty {...{ emptyTableText, emptyTableIcon, minimal }} />
-      ) : isLoading && !res?.content.length ? (
+      ) : isLoading && !res?.docs?.length ? (
         <IsLoading
           className={clsx(minimal ? 'h-[50px]' : 'h-[200px] 640:h-[300px]')}
         />
@@ -48,7 +49,7 @@ export const TableDataStates = ({
                 }
           }
         />
-      ) : res?.empty ? (
+      ) : !res?.docs.length ? (
         <IsEmpty {...{ emptyTableText, emptyTableIcon, minimal }} />
       ) : null}
     </>

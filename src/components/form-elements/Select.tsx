@@ -62,7 +62,7 @@ export const Select = ({
       </div>
 
       <div className='relative'>
-        {placeholder && !field.value && (
+        {placeholder && (!field.value || isError || isLoading) && (
           <div
             className={
               'y-center pointer-events-none absolute left-0 top-0 min-h-[44px] px-3.5 opacity-40'

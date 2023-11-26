@@ -28,13 +28,13 @@ export const useDebouncer = <T>({
     setDebouncedValue('');
 
     timeout.current = setTimeout(() => {
-      if (!!value) {
-        setDebouncedValue(value);
+      if (!value) return;
 
-        if (!performDebouncedAction) return;
+      setDebouncedValue(value);
 
-        performDebouncedAction(value);
-      }
+      if (!performDebouncedAction) return;
+
+      performDebouncedAction(value);
     }, debounce);
 
     return () => clearTimeout(timeout.current);

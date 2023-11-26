@@ -1,5 +1,5 @@
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
-import { BankTransfer } from 'components/modules/wallet/FundWallet/methods/BankTransfer';
+import { VirtualAccounts } from 'components/modules/wallet/FundWallet/methods/VirtualAccounts';
 import { Inbound } from 'components/svgs/navigation/Arrows';
 import { useState } from 'react';
 
@@ -18,7 +18,7 @@ export const FundWallet = () => {
         closeOnClickOutside
         title={'Bank Transfer'}
       >
-        <BankTransfer />
+        <VirtualAccounts />
       </RightModalWrapper>
 
       <button

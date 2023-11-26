@@ -15,7 +15,7 @@ export function useGetDashboardSummary(
   return useTQuery<GetDashboardSummaryRes>({
     queryKey: ['dashboard-summary'],
     url: `/summary`,
-    service: 'dashboard',
+    service: 'overview',
     options: {
       ...options,
       meta: {

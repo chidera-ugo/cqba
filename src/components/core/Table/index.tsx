@@ -134,7 +134,7 @@ export function Table<T>({
   );
 
   const table = useReactTable({
-    data: res?.content ? res?.content : [],
+    data: res?.docs ? res?.docs : [],
     columns,
     state: {
       rowSelection,
@@ -213,7 +213,7 @@ export function Table<T>({
         show={
           !hideFetchingToast &&
           (!!isLoading || !!isRefetching) &&
-          !!res?.content.length
+          !!res?.docs?.length
         }
         className='left-0 top-32 1180:left-[122px]'
       >
@@ -226,7 +226,7 @@ export function Table<T>({
       <div
         className={clsx(
           'h-full overflow-x-auto',
-          !!res?.content.length && !isError && 'min-h-[400px]'
+          !!res?.docs?.length && !isError && 'min-h-[400px]'
         )}
       >
         <div className='thin-scrollbar min-w-[900px]'>
@@ -403,7 +403,7 @@ export function Table<T>({
         }}
       />
 
-      {!hidePagination && !minimal && !!res?.content.length && <Pagination />}
+      {!hidePagination && !minimal && !!res?.docs?.length && <Pagination />}
     </div>
   );
 }

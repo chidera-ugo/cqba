@@ -12,16 +12,18 @@ type Props = PaginationDetails & {
 };
 
 export const Pagination = ({
-  first,
-  last,
+  hasNextPage,
+  hasPrevPage,
   setPagination,
   pagination,
   fetching,
   totalPages,
-  pageNumber: _,
+  pagingCounter: pageNumber,
 }: Props) => {
-  const disabled = true;
-  // typeof pageNumber === 'undefined' || !totalPages;
+  const last = !hasNextPage;
+  const first = !hasPrevPage;
+
+  const disabled = typeof pageNumber === 'undefined' || !totalPages;
 
   const [page, setPage] = useState(pagination.pageIndex);
 

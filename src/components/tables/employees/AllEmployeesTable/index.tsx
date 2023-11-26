@@ -119,7 +119,7 @@ export const AllEmployeesTable = ({
     setShowConfirmation(false);
   }
 
-  if (data?.empty)
+  if (!data?.docs?.length)
     return (
       <div className='relative h-full py-20'>
         <SimpleToast
@@ -190,7 +190,7 @@ export const AllEmployeesTable = ({
           onRowClick(employee, 'view_employee');
         }}
         returnOriginalOnRowClick
-        accessor='id'
+        accessor='_id'
         mustHaveRange
         {...{
           isLoading,

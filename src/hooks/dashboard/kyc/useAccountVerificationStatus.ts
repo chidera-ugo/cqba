@@ -4,11 +4,12 @@ import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationI
 export const useAccountVerificationStatus = () => {
   const { user } = useAppContext().state;
 
-  const isVerified = user?.kybStatus === 'completed';
+  const isVerified = user?.KYBStatus === 'approved';
 
-  const { data: organizationInformation } = useGetOrganizationInformation({
-    enabled: !isVerified,
-  });
+  const { data: organizationInformation, isLoading: gettingOrganizationInfo } =
+    useGetOrganizationInformation({
+      enabled: !isVerified,
+    });
 
   const isUnderReview = organizationInformation?.status === 'completed';
 
@@ -37,6 +38,7 @@ export const useAccountVerificationStatus = () => {
     hasProvidedOwnerInformationRequirements: hasProvidedOwnerInformation,
     hasProvidedCompanyInformation,
     isVerified,
+    gettingOrganizationInfo,
     businessInformation: organizationInformation,
   };
 };

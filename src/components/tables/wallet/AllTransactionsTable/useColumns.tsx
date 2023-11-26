@@ -1,23 +1,38 @@
 import { ColumnDef } from '@tanstack/react-table';
+import clsx from 'clsx';
 import { Pill } from 'components/common/Pill';
 import { TableCell } from 'components/core/Table/TableCell';
+import { IWalletTransaction } from 'hooks/api/wallet/useGetWalletTransactions';
 import { useMemo } from 'react';
 import { formatDate } from 'utils/formatters/formatDate';
 
 export const useColumns = () => {
-  const columns = useMemo<ColumnDef<any>[]>(
+  const columns = useMemo<ColumnDef<IWalletTransaction>[]>(
     () => [
       {
         header: 'Transaction ID',
-        accessorKey: 'id',
+        accessorKey: '_id',
         enableColumnFilter: false,
         cell: (props) => <TableCell {...props} />,
       },
       {
-        header: 'Account Name',
-        accessorKey: 'accountName',
+        header: 'Type',
+        accessorKey: 'type',
         enableColumnFilter: false,
-        cell: (props) => <TableCell {...props} />,
+        cell: ({ getValue }) => {
+          const value = getValue() as any;
+
+          return (
+            <span
+              className={clsx(
+                value === 'credit' && 'text-green-500',
+                'capitalize'
+              )}
+            >
+              {value}
+            </span>
+          );
+        },
       },
       {
         header: 'Amount',
@@ -26,14 +41,28 @@ export const useColumns = () => {
         cell: (props) => <TableCell isAmount {...props} />,
       },
       {
-        header: 'Type',
-        accessorKey: 'type',
+        header: 'Budget',
+        accessorKey: 'budget.name',
         enableColumnFilter: false,
-        cell: (props) => (
-          <span className='capitalize'>
-            <TableCell {...props} />
-          </span>
-        ),
+        cell: ({ getValue }) => {
+          const value = getValue() as any;
+
+          if (!value) return '----';
+
+          return (
+            <div className={'flex'}>
+              <span className='pill_gray capitalize'>{value}</span>
+            </div>
+          );
+        },
+      },
+      {
+        header: 'Date/Time',
+        accessorKey: 'createdAt',
+        enableColumnFilter: false,
+        cell: ({ getValue }) => {
+          return <div>{formatDate(getValue() as string, 'semi-full')}</div>;
+        },
       },
       {
         header: 'Status',
@@ -50,14 +79,6 @@ export const useColumns = () => {
               value={val}
             />
           );
-        },
-      },
-      {
-        header: 'Date/Time',
-        accessorKey: 'createdAt',
-        enableColumnFilter: false,
-        cell: ({ getValue }) => {
-          return <div>{formatDate(getValue() as string, 'semi-full')}</div>;
         },
       },
     ],

@@ -1,5 +1,5 @@
 export interface IUser {
-  kybStatus?: string;
+  KYBStatus?: string;
   lastName?: string;
   emailVerifyCode?: string;
   status?: string;

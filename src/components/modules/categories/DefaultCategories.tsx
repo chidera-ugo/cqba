@@ -16,11 +16,11 @@ export const DefaultCategories = ({
 }) => {
   const { data } = useGetAllCategories(true);
 
-  if (!data?.content) return <></>;
+  if (!data?.docs) return <></>;
 
   return (
     <>
-      {data.content?.map((category) => (
+      {data.docs?.map((category) => (
         <CategoryPill
           key={category.id}
           {...{ getColor }}

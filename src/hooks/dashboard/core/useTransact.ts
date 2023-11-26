@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 
 interface Args {
-  transactionType: any;
+  transactionType: 'WALLET_TO_BANK';
   actionOnAuthorize?: () => void;
 }
 
@@ -11,9 +11,9 @@ export type TransactionProcess = {
 } | null;
 
 export const useTransact = ({ transactionType }: Args) => {
-  const [mode, setMode] = useState<'authorize' | 'success' | 'receipt' | null>(
-    null
-  );
+  const [mode, setMode] = useState<
+    'authorize' | 'processing' | 'success' | 'receipt' | null
+  >(null);
 
   const transaction = useRef<TransactionProcess>(null);
 
@@ -24,9 +24,7 @@ export const useTransact = ({ transactionType }: Args) => {
       setMode(null);
       transaction.current = null;
     },
-    authorize() {
-      null;
-    },
+
     transactionType,
     transaction: transaction.current,
   };
