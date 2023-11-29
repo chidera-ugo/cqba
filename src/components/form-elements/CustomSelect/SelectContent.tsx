@@ -1,8 +1,8 @@
 import clsx from 'clsx';
-import { Dropdown } from 'components/common/Dropdown';
+import { Dropdown } from 'components/commons/Dropdown';
 import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { CentredModalWrapper } from 'components/modal/ModalWrapper';
-import useMediaQuery from 'hooks/common/useMediaQuery';
+import useMediaQuery from 'hooks/commons/useMediaQuery';
 import { Dispatch, PropsWithChildren, SetStateAction } from 'react';
 import { Select } from './Select';
 import { Props } from '.';

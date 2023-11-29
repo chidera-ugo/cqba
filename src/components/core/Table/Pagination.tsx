@@ -18,8 +18,9 @@ export const Pagination = ({
   pagination,
   fetching,
   totalPages,
-  pagingCounter: pageNumber,
+  page: pageIndex,
 }: Props) => {
+  const pageNumber = (pageIndex ?? 1) - 1;
   const last = !hasNextPage;
   const first = !hasPrevPage;
 
@@ -100,14 +101,14 @@ export const Pagination = ({
     );
 
   return (
-    <div id='react-paginate-wrapper' className='relative'>
+    <div id='react_paginate_wrapper' className='relative'>
       <ReactPaginate
         forcePage={page}
         breakLabel='...'
         className='x-center flex w-full gap-1 py-4'
         onPageChange={({ selected }) => handleChange(selected + 1)}
-        pageLinkClassName={clsx('h-10 py-1.5 rounded-lg px-3')}
-        activeClassName={'bg-black rounded-lg font-medium text-white'}
+        pageLinkClassName={clsx('h-10 py-1.5 rounded-lg px-2')}
+        activeClassName={'bg-primary-main rounded-lg font-medium text-white'}
         pageRangeDisplayed={1}
         pageCount={totalPages ?? 1}
         nextLabel={
@@ -151,13 +152,14 @@ const Arrow = () => {
       height='18'
       viewBox='0 0 18 18'
       fill='none'
+      className={'text-primary-main'}
       xmlns='http://www.w3.org/2000/svg'
     >
       <path
         fillRule='evenodd'
         clipRule='evenodd'
         d='M15.3 8.99961C15.3 9.3724 14.9978 9.67461 14.625 9.67461L5.05092 9.67461L8.7929 13.238C9.06162 13.4964 9.07 13.9237 8.81161 14.1925C8.55322 14.4612 8.12592 14.4696 7.8572 14.2112L2.9072 9.48617C2.77485 9.35891 2.70005 9.18322 2.70005 8.99961C2.70005 8.816 2.77485 8.64031 2.9072 8.51305L7.8572 3.78805C8.12592 3.52966 8.55323 3.53804 8.81161 3.80676C9.07 4.07548 9.06162 4.50279 8.7929 4.76117L5.05092 8.32461L14.625 8.32461C14.9978 8.32461 15.3 8.62682 15.3 8.99961Z'
-        fill='#581689'
+        fill='currentColor'
       />
     </svg>
   );

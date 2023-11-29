@@ -1,4 +1,4 @@
-import { SimpleToast } from 'components/common/SimpleToast';
+import { SimpleToast } from 'components/commons/SimpleToast';
 import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { Spinner } from 'components/svgs/dashboard/Spinner';
 import { SimplePlus } from 'components/svgs/others/Plus';

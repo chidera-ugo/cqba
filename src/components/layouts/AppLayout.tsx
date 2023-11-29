@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { FullScreenLoader } from 'components/common/FullScreenLoader';
+import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { CreatePin } from 'components/modules/core/CreatePin';
 import { IdleTimer } from 'components/modules/IdleTimer';
 import { VerifyYourAccount } from 'components/modules/kyc/VerifyYourAccount';

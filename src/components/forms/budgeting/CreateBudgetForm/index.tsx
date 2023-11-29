@@ -7,16 +7,20 @@ import { Form } from './Form';
 import { validationSchema } from './validationSchema';
 import { initialValues } from './initialValues';
 
-export const CreateBudgetForm = ({ onSuccess }: { onSuccess: () => void }) => {
+export const CreateBudgetForm = ({
+  onSuccess,
+}: {
+  onSuccess: (budgetId: string) => void;
+}) => {
   const { primaryWallet } = useManageWallets();
   const queryClient = useQueryClient();
 
   const { mutate: createPersonalBudget, isLoading: creatingPersonalBudget } =
     useCreatePersonalBudget({
-      onSuccess() {
+      onSuccess(res) {
         queryClient.invalidateQueries(['budgets']);
         queryClient.invalidateQueries(['wallets']);
-        onSuccess();
+        onSuccess(res._id);
       },
     });
 

@@ -1,40 +1,38 @@
+import { EmptyTable } from 'components/core/Table/EmptyTable';
+import { MobileWalletTransactionsList } from 'components/modules/transactions/MobileWalletTransactionsList';
+import { TransactionReceipt } from 'components/modules/transactions/TransactionReceipt';
+import { useAppContext } from 'context/AppContext';
 import { useGetWalletTransactions } from 'hooks/api/wallet/useGetWalletTransactions';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import {
-  ColumnFiltersState,
-  PaginationState,
-  SortingState,
-} from '@tanstack/react-table';
+import { UseUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
+import { useEffect, useState } from 'react';
+import { ColumnFiltersState, SortingState } from '@tanstack/react-table';
 import { PaginatedResponse } from 'types/Table';
-
+import card from '/public/mockups/transactions.jpg';
+import { IWalletTransaction } from 'types/transaction';
+import { getDateRange } from 'utils/getters/getDateRange';
 import { useColumns } from './useColumns';
 import { Table } from 'components/core/Table';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
-import { TransactionDetails } from 'components/modules/transactions/TransactionDetails';
 
 interface Props {
-  reset?: () => void;
-  filters?: Record<string, string>;
-  setFilters?: Dispatch<SetStateAction<Record<string, string>>>;
   slot?: JSX.Element;
   search: string;
+  walletId?: string;
 }
 
-export const AllTransactionsTable = ({
+export const WalletTransactionsTable = ({
   slot,
-  reset,
   filters,
   setFilters,
   search,
-}: Props) => {
-  const [currentTransaction, setCurrentTransaction] = useState<any | null>(
-    null
-  );
+  pagination,
+  setPagination,
+  range,
+  walletId,
+}: Props & UseUrlManagedState) => {
+  const [transactionId, setTransactionId] = useState<any | null>(null);
 
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 10,
-  });
+  const { screenSize } = useAppContext().state;
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -42,81 +40,107 @@ export const AllTransactionsTable = ({
 
   useEffect(() => {
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-  }, [filters, columnFilters]);
+  }, [filters, columnFilters, search]);
 
   const {
     isLoading,
     isError,
     data: res,
-  } = useGetWalletTransactions({ search, type: filters?.transactionType });
+    isRefetching,
+  } = useGetWalletTransactions(
+    !!search
+      ? {
+          range: getDateRange({ days: 90 }),
+          pageIndex: 1,
+          search,
+          walletId,
+        }
+      : {
+          range,
+          type: filters?.transactionType,
+          pageIndex: pagination.pageIndex + 1,
+          walletId,
+          budgetId: filters.budgetId,
+        }
+  );
 
   useEffect(() => {
     if (!!res) setData(res);
   }, [res]);
 
-  const [data, setData] = useState<PaginatedResponse<any> | undefined>(res);
+  const [data, setData] = useState<
+    PaginatedResponse<IWalletTransaction> | undefined
+  >(res);
 
   const { columns } = useColumns();
 
   function closeModal() {
-    setCurrentTransaction(null);
+    setTransactionId(null);
   }
+
+  if (!isLoading && !data?.docs?.length)
+    return (
+      <EmptyTable
+        processing={isLoading || isRefetching}
+        title='Stay on top of your transactions'
+        imageSrc={card}
+        subTitle={`Creating a budget is the first step to financial success. Define your spending limits and allocate resources.`}
+      />
+    );
 
   return (
     <>
       <RightModalWrapper
         title='Transaction details'
-        show={!!currentTransaction}
+        show={!!transactionId}
         {...{ closeModal }}
         closeOnClickOutside
         childrenClassname='p-0'
       >
-        {currentTransaction && (
-          <TransactionDetails transaction={currentTransaction} />
-        )}
+        {transactionId && <TransactionReceipt transactionId={transactionId} />}
       </RightModalWrapper>
 
-      <Table<any>
-        title='transactions'
-        headerSlot={slot}
-        dontScrollToTopOnPageChange
-        onRowClick={(transaction) => {
-          setCurrentTransaction(transaction);
-        }}
-        onFilterClick={
-          !setFilters
-            ? undefined
-            : (filter) => setFilters(({ [filter]: _, ...rest }) => rest)
-        }
-        returnOriginalOnRowClick
-        accessor='_id'
-        mustHaveRange
-        {...{
-          isLoading,
-          filters,
-          data,
-          setColumnFilters,
-          columnFilters,
-          currentSearchColumn,
-          pagination,
-          columns,
-          setPagination,
-          setCurrentSearchColumn,
-          setSorting,
-          sorting,
-          isError,
-        }}
-        reset={() => {
-          setFilters && setFilters({});
-          setPagination({
-            pageIndex: 0,
-            pageSize: 10,
-          });
-          setSorting([]);
-          reset && reset();
-        }}
-        emptyTableText='You have not processed any transactions on this account yet.'
-      />
+      {screenSize?.mobile ? (
+        <MobileWalletTransactionsList
+          {...{
+            pagination,
+            setPagination,
+            data,
+          }}
+          onRowClick={(transactionId) => setTransactionId(transactionId)}
+          fetching={isLoading}
+        />
+      ) : (
+        <Table<IWalletTransaction>
+          title='wallet transactions'
+          headerSlot={slot}
+          dontScrollToTopOnPageChange
+          onRowClick={(transactionId) => {
+            setTransactionId(transactionId);
+          }}
+          onFilterClick={
+            !setFilters
+              ? undefined
+              : (filter) => setFilters(({ [filter]: _, ...rest }) => rest)
+          }
+          accessor='_id'
+          mustHaveRange
+          {...{
+            isLoading,
+            data,
+            setColumnFilters,
+            columnFilters,
+            currentSearchColumn,
+            pagination,
+            columns,
+            setPagination,
+            setCurrentSearchColumn,
+            setSorting,
+            sorting,
+            isError,
+          }}
+        />
+      )}
     </>
   );
 };

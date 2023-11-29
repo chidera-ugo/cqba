@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { MoreInfo } from 'components/common/MoreInfo';
+import { MoreInfo } from 'components/commons/MoreInfo';
 import { Spinner } from 'components/svgs/dashboard/Spinner';
 import { PropsWithChildren } from 'react';
 import { formatAmount } from 'utils/formatters/formatAmount';
@@ -44,19 +44,21 @@ export const DisplayValue = ({
 
   return (
     <div className={clsx('my-auto', className)}>
-      <div className='flex font-normal text-neutral-400'>
+      <div className='flex font-normal text-neutral-500'>
         {title && (
-          <div className={clsx('text-sm font-medium', titleClassName)}>
+          <div className={clsx('text-xs 640:text-sm', titleClassName)}>
             {title}
           </div>
         )}
-        {moreInfo && <MoreInfo>{moreInfo}</MoreInfo>}
+        {moreInfo && (
+          <MoreInfo className={'hidden 1180:block'}>{moreInfo}</MoreInfo>
+        )}
       </div>
 
       <div
         className={clsx(
-          'font-semibold 640:text-3xl',
-          smallText ? 'text-lg' : 'mt-2 text-3xl'
+          'font-semibold',
+          smallText ? 'text-lg' : 'mt-1.5 text-lg 640:mt-2 640:text-3xl'
         )}
       >
         {isLoading ? (
@@ -73,7 +75,7 @@ export const DisplayValue = ({
               : formatAmount({
                   value,
                   decimalPlaces: isAmount ? 2 : 0,
-                  kFormatter: isAmount ? value > 9999999 : false,
+                  kFormatter: isAmount ? value > 99999999 : false,
                 })}
           </>
         )}

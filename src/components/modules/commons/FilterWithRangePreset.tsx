@@ -1,13 +1,18 @@
-import { UseUrlManagedState } from '@/client_api/hooks/useUrlManagedState';
-import { Dropdown } from '@/components/common/Dropdown';
-import { AppErrorBoundary } from '@/components/core/ErrorBoundary';
-import { Adjusters } from '@/components/svgs/forms/Adjusters';
-import { BoxCancel } from '@/components/svgs/navigation/Menu';
-import { getDateRange } from '@/utils/getters/getDateRange';
 import { DatePicker } from 'antd';
 import clsx from 'clsx';
+import { AppErrorBoundary } from 'components/core/ErrorBoundary';
+import { SubmitButton } from 'components/form-elements/SubmitButton';
+import { CentredModalWrapper } from 'components/modal/ModalWrapper';
+import { Funnel } from 'components/svgs/forms/Funnel';
 import dayjs from 'dayjs';
+import { UseUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
 import { useEffect, useState } from 'react';
+import { getDateRange } from 'utils/getters/getDateRange';
+import weekday from 'dayjs/plugin/weekday';
+import localeData from 'dayjs/plugin/localeData';
+
+dayjs.extend(weekday);
+dayjs.extend(localeData);
 
 export type SelectFilterItem = {
   label: string;
@@ -19,6 +24,7 @@ interface Props {
   className?: string;
   selectFilters?: SelectFilterItem[];
   hideDateRange?: boolean;
+  processing?: boolean;
 }
 
 export const FilterWithRangePreset = ({
@@ -28,9 +34,11 @@ export const FilterWithRangePreset = ({
   range,
   filters,
   selectFilters,
+  processing,
   hideDateRange,
 }: Props & Omit<UseUrlManagedState, 'pagination' | 'setPagination'>) => {
   const [showDropdown, setShowDropdown] = useState(false);
+
   const [hasGeneratedExtraDefaultFilters, setHasGeneratedExtraDefaultFilters] =
     useState(false);
 
@@ -47,6 +55,7 @@ export const FilterWithRangePreset = ({
       isDefault: true,
     },
     { name: '30 days', value: 30 },
+    { name: '3 months', value: 90 },
     {
       name: '1 year',
       value: 365,
@@ -54,11 +63,11 @@ export const FilterWithRangePreset = ({
   ];
 
   const defaultRangePreset = dateRangePresets.find(
-    ({ isDefault }) => isDefault,
+    ({ isDefault }) => isDefault
   );
 
   const [dropdownFilters, setDropdownFilters] = useState<Record<string, any>>({
-    rangePreset: !!range.start ? null : defaultRangePreset,
+    rangePreset: defaultRangePreset,
     range: getDateRange({
       startDate: new Date(range?.start),
       endDate: new Date(range?.end),
@@ -160,175 +169,170 @@ export const FilterWithRangePreset = ({
 
   return (
     <div id={id} className={clsx('relative my-auto flex-shrink-0', className)}>
-      <button
-        onClick={() => setShowDropdown((prev) => !prev)}
+      <SubmitButton
+        submitting={processing}
+        onClick={() => {
+          if (processing) return;
+          setShowDropdown((prev) => !prev);
+        }}
         type='button'
         className={clsx(
-          'x-between z-50 h-8 w-full rounded-md border border-neutral-300 hover:border-primary-main transition-colors bg-white px-3',
-          showDropdown && 'active-input',
+          'secondary-button z-50 flex h-11 w-[94px] px-4',
+          showDropdown && 'active-input'
         )}
       >
         <div className='my-auto mr-2'>
-          <Adjusters />
+          <Funnel />
         </div>
 
         <div className='my-auto text-sm font-medium'>Filter</div>
-      </button>
+      </SubmitButton>
 
-      <AppErrorBoundary>
-        <Dropdown
-          disableCloseOnClickOutside
-          show={showDropdown}
-          className={clsx('right-0 bg-white min-w-max 640:left-0 p-4')}
-          dismiss={dismiss}
-          wrapperId={id}
-          style={{
-            minWidth: 300,
-          }}
-        >
-          <div className='x-between'>
-            <div></div>
-            <button
-              onClick={dismiss}
-              type={'button'}
-              className='y-center transition-colors text-neutral-380 hover:text-red-500'
-            >
-              <BoxCancel />
-            </button>
-          </div>
+      <CentredModalWrapper
+        show={showDropdown}
+        closeModal={dismiss}
+        title={'Filter'}
+        className={'p-0'}
+      >
+        <div className={'h-full overflow-y-auto p-4'}>
+          <AppErrorBoundary>
+            {!hideDateRange && (
+              <div className={'w-full'}>
+                <div className='label'>Select Date Range</div>
 
-          {!hideDateRange && (
-            <>
-              <div className='label'>Date Range</div>
-
-              <div className='flex gap-2'>
-                {dateRangePresets.map(({ name, value }) => {
-                  const isActive = name === dropdownFilters?.rangePreset?.name;
-
-                  return (
-                    <button
-                      key={name}
-                      type={'button'}
-                      className={clsx(
-                        'py-1 px-2 border rounded-md flex-shrink-0 text-sm',
-                        isActive
-                          ? 'border-primary-main text-primary-main'
-                          : 'text-neutral-380 border-neutral-370',
-                      )}
-                      onClick={() => {
-                        setDropdownFilters((prev) => ({
-                          ...prev,
-                          rangePreset: {
-                            name,
-                            value,
-                          },
-                          range: getDateRange({ days: value }),
-                        }));
-                      }}
-                    >
-                      {name}
-                    </button>
-                  );
-                })}
-              </div>
-
-              <div className='label mt-5'>Custom Date Range</div>
-
-              <DatePicker.RangePicker
-                className={'h-11 border-neutral-370'}
-                value={[
-                  dropdownFilters?.range?.dayjsStart,
-                  dropdownFilters?.range?.dayjsEnd,
-                ]}
-                disabledDate={(d) =>
-                  !d ||
-                  d.isAfter(dayjs()) ||
-                  d.isBefore(dayjs().subtract(5, 'years'))
-                }
-                onChange={(values) => {
-                  if (!values || !values[0] || !values[1]) return;
-
-                  setDropdownFilters((prev) => ({
-                    ...prev,
-                    range: getDateRange({
-                      startDate: values[0]!.toDate(),
-                      endDate: values[1]!.toDate(),
-                    }),
-                    rangePreset: null,
-                  }));
-                }}
-              />
-            </>
-          )}
-
-          {selectFilters?.map(({ id, label, options }, i) => {
-            const value = dropdownFilters[id];
-
-            return (
-              <div key={id}>
-                <div
-                  className={clsx(
-                    i > 0 || !hideDateRange ? 'mt-5' : '',
-                    'label',
-                  )}
-                >
-                  {label}
-                </div>
-
-                <select
-                  onChange={(e) => {
-                    setDropdownFilters((prev) => ({
-                      ...prev,
-                      [id]: e.target.value,
-                    }));
-                  }}
-                  value={!!value ? value : ''}
-                  className={clsx('w-full bg-white border-neutral-370')}
-                >
-                  <option value={''}></option>
-                  {[...options]?.map((option) => {
-                    if (typeof option === 'string')
-                      return (
-                        <option key={option} value={option}>
-                          {option}
-                        </option>
-                      );
-
-                    const { label, value } = option;
+                <div className='flex w-full gap-2'>
+                  {dateRangePresets.map(({ name, value }) => {
+                    const isActive =
+                      name === dropdownFilters?.rangePreset?.name;
 
                     return (
-                      <option key={label} value={value}>
-                        {label}
-                      </option>
+                      <button
+                        key={name}
+                        type={'button'}
+                        className={clsx(
+                          'w-full min-w-fit rounded-md border py-1 px-2 text-sm',
+                          isActive
+                            ? 'border-primary-main text-primary-main'
+                            : 'text-neutral-380 border-neutral-370'
+                        )}
+                        onClick={() => {
+                          setDropdownFilters((prev) => ({
+                            ...prev,
+                            rangePreset: {
+                              name,
+                              value,
+                            },
+                            range: getDateRange({ days: value }),
+                          }));
+                        }}
+                      >
+                        {name}
+                      </button>
                     );
                   })}
-                </select>
+                </div>
+
+                <div className='label mt-5'>Custom Date Range</div>
+
+                <DatePicker.RangePicker
+                  rootClassName={'z-[2000]'}
+                  className={'z-[2000] h-11 w-full'}
+                  value={[
+                    dropdownFilters?.range?.dayjsStart,
+                    dropdownFilters?.range?.dayjsEnd,
+                  ]}
+                  disabledDate={(d) =>
+                    !d ||
+                    d.isAfter(dayjs()) ||
+                    d.isBefore(dayjs().subtract(5, 'years'))
+                  }
+                  onChange={(values) => {
+                    if (!values || !values[0] || !values[1]) return;
+
+                    setDropdownFilters((prev) => ({
+                      ...prev,
+                      range: getDateRange({
+                        startDate: values[0]!.toDate(),
+                        endDate: values[1]!.toDate(),
+                      }),
+                      rangePreset: null,
+                    }));
+                  }}
+                />
               </div>
-            );
-          })}
+            )}
 
-          <div className='x-between mt-5'>
-            <div></div>
+            {selectFilters?.map(({ id, label, options }, i) => {
+              const value = dropdownFilters[id];
 
-            <div className='flex gap-2'>
-              <button
-                onClick={clear}
-                type={'button'}
-                className='secondary-button border border-neutral-300 bg-white rounded-md h-8 px-3 text-sm'
-              >
-                Clear
-              </button>
-              <button
-                type={'button'}
-                onClick={apply}
-                className='primary-button h-8 rounded-md text-sm px-3'
-              >
-                Apply Filters
-              </button>
+              return (
+                <div key={id}>
+                  <div
+                    className={clsx(
+                      i > 0 || !hideDateRange ? 'mt-5' : '',
+                      'label'
+                    )}
+                  >
+                    {label}
+                  </div>
+
+                  <select
+                    onChange={(e) => {
+                      setDropdownFilters((prev) => ({
+                        ...prev,
+                        [id]: e.target.value,
+                      }));
+                    }}
+                    value={!!value ? value : ''}
+                    className={clsx(
+                      'border-neutral-370 w-full',
+                      !!value ? 'bg-white' : 'bg-neutral-100'
+                    )}
+                  >
+                    <option value={''}></option>
+                    {[...options]?.map((option) => {
+                      if (typeof option === 'string')
+                        return (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        );
+
+                      const { label, value } = option;
+
+                      return (
+                        <option key={label} value={value}>
+                          {label}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              );
+            })}
+
+            <div className='mt-5 flex'>
+              <div className='flex gap-2'>
+                <button
+                  type={'button'}
+                  onClick={apply}
+                  className='primary-button px-5 text-sm'
+                >
+                  Apply Filters
+                </button>
+
+                <button
+                  onClick={clear}
+                  type={'button'}
+                  className='secondary-button border border-neutral-300 bg-white px-5 text-sm'
+                >
+                  Clear
+                </button>
+              </div>
             </div>
-          </div>
-        </Dropdown>
-      </AppErrorBoundary>
+          </AppErrorBoundary>
+        </div>
+      </CentredModalWrapper>
     </div>
   );
 };

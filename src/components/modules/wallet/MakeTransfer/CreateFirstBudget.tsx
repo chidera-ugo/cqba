@@ -2,7 +2,7 @@ import { CreateBudgetForm } from 'components/forms/budgeting/CreateBudgetForm';
 import { GreenCheck } from 'components/illustrations/Success';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { CreateBudgetPrompt } from 'components/modules/budgeting/CreateBudgetPrompt';
-import { SimpleInformation } from 'components/modules/common/SimpleInformation';
+import { SimpleInformation } from 'components/modules/commons/SimpleInformation';
 import { AnimateLayout } from 'components/transition/AnimateLayout';
 import { useState } from 'react';
 
@@ -25,7 +25,10 @@ export const CreateFirstBudget = ({
       closeOnClickOutside={mode !== 'create'}
       childrenClassname={'p-0'}
     >
-      <AnimateLayout changeTracker={mode} className={'py-10'}>
+      <AnimateLayout
+        changeTracker={mode}
+        className={'flex flex-col px-4 640:px-8'}
+      >
         {mode === 'success' ? (
           <SimpleInformation
             className={'mt-20'}
@@ -54,13 +57,11 @@ export const CreateFirstBudget = ({
             }}
           />
         ) : mode === 'create' ? (
-          <div className={'-mt-10 px-8'}>
-            <CreateBudgetForm
-              onSuccess={() => {
-                setMode('success');
-              }}
-            />
-          </div>
+          <CreateBudgetForm
+            onSuccess={() => {
+              setMode('success');
+            }}
+          />
         ) : (
           <CreateBudgetPrompt
             close={close}

@@ -5,4 +5,5 @@ export const initialValues = {
   accountName: '',
   fee: '',
   amount: '',
+  budgetBalance: '',
 };

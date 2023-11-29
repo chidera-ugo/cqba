@@ -40,7 +40,7 @@ export const MakeTransfer = () => {
 
           setModal('transfer');
         }}
-        className='primary-button x-center mt-3 h-11 w-full min-w-[163px] px-4 text-sm font-semibold 425:mt-0 768:w-auto'
+        className='primary-button x-center mt-3 h-11 w-full min-w-[163px] px-4 text-sm font-semibold 375:mt-0 1180:w-auto'
       >
         <span className='my-auto mr-2'>Make a transfer</span>
         <span className='my-auto'>

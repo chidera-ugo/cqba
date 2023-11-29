@@ -21,7 +21,7 @@ export const Pill = ({ value, solid, suffix, config }: Props) => {
       return solid ? 'yellow-pill' : 'yellow-alt-pill';
     } else if (val === config.failed) {
       return solid ? 'red-pill' : 'red-alt-pill';
-    } else return 'gray-alt-pill';
+    } else return solid ? 'gray-pill' : 'gray-alt-pill';
   };
 
   return (

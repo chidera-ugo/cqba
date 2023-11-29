@@ -9,12 +9,8 @@ export const FundWallet = () => {
   return (
     <>
       <RightModalWrapper
-        {...{
-          show: showModal,
-          closeModal() {
-            setShowModal(false);
-          },
-        }}
+        show={showModal}
+        closeModal={() => setShowModal(false)}
         closeOnClickOutside
         title={'Bank Transfer'}
       >
@@ -23,7 +19,7 @@ export const FundWallet = () => {
 
       <button
         onClick={() => setShowModal(true)}
-        className='dark-button x-center h-11 w-full px-4 text-sm font-semibold 768:w-auto'
+        className='secondary-button 640:dark-button x-center h-11 w-full px-4 text-sm font-semibold 1180:w-auto'
       >
         <span className='my-auto mr-2'>Fund wallet</span>
         <span className='my-auto'>

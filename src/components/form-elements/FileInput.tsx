@@ -3,9 +3,9 @@ import { useField, useFormikContext } from 'formik';
 import clsx from 'clsx';
 import { useDropFile } from 'hooks/forms/useDropFile';
 import { useFileSelector } from 'hooks/forms/useFileSelector';
-import { FileField } from 'types/Common';
+import { FileField } from 'types/commons';
 import { FileUpload } from 'components/svgs/forms/FileUpload';
-import { ViewUploadedImage } from 'components/modules/common/ViewUploadedImage';
+import { ViewUploadedImage } from 'components/modules/commons/ViewUploadedImage';
 
 type Props = JSX.IntrinsicElements['input'] &
   FileField & {

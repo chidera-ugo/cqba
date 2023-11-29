@@ -1,5 +1,5 @@
 import { Formik } from 'formik';
-import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
+import { useMakeDummyHttpRequest } from 'hooks/commons/useMakeDummyHttpRequest';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';

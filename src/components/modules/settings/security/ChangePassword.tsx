@@ -1,6 +1,6 @@
 import { ChangePasswordForm } from 'components/forms/settings/security/ChangePasswordForm';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
-import { useQueryValidator } from 'hooks/common/useQueryValidator';
+import { useQueryValidator } from 'hooks/commons/useQueryValidator';
 import { useRouter } from 'next/router';
 
 export const ChangePassword = () => {

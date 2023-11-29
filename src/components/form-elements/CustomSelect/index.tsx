@@ -1,10 +1,10 @@
 import { Spinner } from 'components/svgs/dashboard/Spinner';
-import { useDetectKeyPress } from 'hooks/common/useDetectKeyPress';
+import { useDetectKeyPress } from 'hooks/commons/useDetectKeyPress';
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { useField, useFormikContext } from 'formik';
 import clsx from 'clsx';
 import { TSelect, TOptions } from './Select';
-import { Field } from 'types/Common';
+import { Field } from 'types/commons';
 import { ChevronDown } from 'components/svgs/navigation/Chevrons';
 import { SelectContent } from './SelectContent';
 

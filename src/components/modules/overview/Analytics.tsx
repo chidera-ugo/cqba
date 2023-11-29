@@ -33,7 +33,7 @@ export const Analytics = () => {
 
   const { isVerified } = useIsVerified();
 
-  const { isLoading, isFetching, isError, data } = useGetAnalyticsChart(
+  const { isLoading, isFetching, data } = useGetAnalyticsChart(
     {
       type: filters.transactionType.value,
       duration: 'DAILY',
@@ -83,9 +83,10 @@ export const Analytics = () => {
       <div className='h-[420px]'>
         {isVerified && isLoading ? (
           <IsLoadingIsError type={'loading'} />
-        ) : isError ? (
-          <IsLoadingIsError type={'error'} />
         ) : (
+          // ) : isError ? (
+          //   <IsLoadingIsError type={'error'} />
+          // ) : (
           <div className='x-thin-scrollbar h-full overflow-x-auto px-3'>
             <div className='h-full min-w-[700px]'>
               <AnalyticsChart

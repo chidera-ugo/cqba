@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { Dropdown } from 'components/common/Dropdown';
+import { Dropdown } from 'components/commons/Dropdown';
 import { Adjusters } from 'components/svgs/forms/Adjusters';
 import { MiniChevronDown } from 'components/svgs/navigation/Chevrons';
 import { SolidCheck } from 'components/svgs/others/Check';

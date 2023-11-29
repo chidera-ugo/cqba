@@ -5,12 +5,11 @@ import { AppLayout } from 'components/layouts/AppLayout';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { AllBudgets, ViewMode } from 'components/modules/budgeting/AllBudgets';
 import { CreateCategory } from 'components/modules/categories/CreateCategory';
-import { CreateDepartment } from 'components/modules/employees/CreateDepartment';
 import { SimplePlus } from 'components/svgs/others/Plus';
 import { Squares } from 'components/svgs/others/Squares';
 import { TableIcon } from 'components/svgs/others/Table';
 import { BudgetStatus } from 'enums/Budget';
-import { useDebouncer } from 'hooks/common/useDebouncer';
+import { useDebouncer } from 'hooks/commons/useDebouncer';
 import { useQueryParamManagedState } from 'hooks/dashboard/useQueryParamManagedState';
 import { getFromLocalStore, saveToLocalStore } from 'lib/localStore';
 import Link from 'next/link';
@@ -113,13 +112,6 @@ export default function Budgeting() {
           </div>
         </div>
       </div>
-
-      <CreateDepartment
-        showModal={modal === 'department'}
-        closeModal={() => {
-          setModal('budget');
-        }}
-      />
 
       <CreateCategory
         showModal={modal === 'category'}

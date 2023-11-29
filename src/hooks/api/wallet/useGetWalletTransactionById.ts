@@ -1,62 +1,66 @@
 import { UseQueryOptions } from '@tanstack/react-query';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
 import { useTQuery } from 'hooks/api/useTQuery';
-import { useManageWallets } from 'hooks/wallet/useManageWallets';
-import { PaginatedResponse } from 'types/Table';
-import { IWalletTransaction } from 'types/transaction';
-import { generateUrlParamsFromObject } from 'utils/generators/generateUrlParamsFromObject';
-import { DateRange } from 'utils/getters/getDateRange';
 
-type Params = {
-  range: DateRange;
-  pageIndex: number;
-  search?: string;
-  type?: string;
-  budgetId?: string;
-  walletId?: string;
-};
-
-export function useGetWalletTransactions(
-  params: Params,
-  options?: UseQueryOptions<
-    any,
-    any,
-    PaginatedResponse<IWalletTransaction>,
-    string[]
-  >
+export function useGetWalletTransactionById(
+  id: string,
+  options?: UseQueryOptions<any, any, IWalletTransactionDetails, string[]>
 ) {
-  const { primaryWallet } = useManageWallets();
-
-  const {
-    range: { start, end },
-    search,
-    pageIndex,
-    type,
-    walletId,
-    budgetId,
-  } = params;
-
-  const _params = generateUrlParamsFromObject({
-    data: {
-      search,
-      from: start,
-      to: end,
-      wallet: walletId,
-      budget: budgetId,
-      page: pageIndex,
-      type,
-    },
-  });
-
-  return useTQuery<PaginatedResponse<IWalletTransaction>>({
-    queryKey: ['wallet_transactions', _params],
-    url: `/history${_params}`,
+  return useTQuery<IWalletTransactionDetails>({
+    queryKey: ['wallet_transactions', id],
+    url: `/history/${id}`,
     service: 'wallet',
     options: {
       ...options,
-      enabled: !!primaryWallet?._id,
       meta: {
         silent: true,
       },
     },
   });
+}
+
+export interface IWalletTransactionDetails {
+  _id: string;
+  type: string;
+  organization: string;
+  wallet: string;
+  status: string;
+  amount: number;
+  currency: string;
+  balanceAfter: number;
+  balanceBefore: number;
+  scope: string;
+  counterparty: CounterParty;
+  fee: number;
+  paymentMethod: string;
+  providerRef: string;
+  narration: string;
+  reference: string;
+  meta: Meta;
+  createdAt: string;
+  updatedAt: string;
+  budget?: IBudget;
+  __v: number;
+}
+
+interface Meta {
+  sourceAccount: SourceAccount;
+}
+
+interface SourceAccount {
+  accountName: string;
+  accountNumber: string;
+  bankName: string;
+}
+
+interface CounterParty {
+  _id: string;
+  accountNumber: string;
+  bankCode: string;
+  organization: string;
+  __v: number;
+  accountName: string;
+  bankName: string;
+  createdAt: string;
+  updatedAt: string;
 }

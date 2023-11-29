@@ -1,15 +1,15 @@
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
 import { WalletToBankForm } from 'components/forms/wallet/make-transfer/WalletToBankForm';
+import { WalletToBankFormRecoveryProps } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank/index';
 import { useGetInstitutions } from 'hooks/api/wallet/useGetInstitutions';
-import { Dispatch, SetStateAction } from 'react';
 
-export const WalletToBank = (props: {
-  setFormRecoveryValues: Dispatch<SetStateAction<Record<string, any> | null>>;
-  formRecoveryValues: Record<string, any> | null;
-  createBudget: () => void;
-  close: () => void;
-}) => {
+export const WalletToBank = (
+  props: {
+    createBudget: () => void;
+    close: () => void;
+  } & WalletToBankFormRecoveryProps
+) => {
   const { isLoading, isError, data } = useGetInstitutions();
 
   if (isLoading) return <IsLoading />;

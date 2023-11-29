@@ -1,4 +1,4 @@
-import { Avatar } from 'components/common/Avatar';
+import { Avatar } from 'components/commons/Avatar';
 
 interface Props {
   title: string;

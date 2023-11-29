@@ -3,10 +3,13 @@ import dayjs from 'dayjs';
 export type DateRange = {
   dateStart?: Date;
   dateEnd?: Date;
-  isoStart?: string;
-  isoEnd?: string;
-  start?: string;
-  end?: string;
+  isoStart: string;
+  isoEnd: string;
+  start: string;
+  end: string;
+  dayjsStart: dayjs.Dayjs;
+  dayjsEnd: dayjs.Dayjs;
+  realEnd: string;
 };
 
 export const getDateRange = ({
@@ -21,11 +24,20 @@ export const getDateRange = ({
   previous?: boolean;
 }): DateRange => {
   const start = previous
-    ? dayjs(startDate).subtract((days ?? 0) + (days ?? 1), 'day')
-    : dayjs(startDate).subtract(days ?? 0, 'day');
+    ? dayjs(startDate)
+        .subtract((days ?? 0) + (days ?? 1), 'day')
+        .startOf('day')
+    : dayjs(startDate)
+        .subtract(days ?? 0, 'day')
+        .startOf('day');
+
   const end = previous
-    ? dayjs(endDate).subtract((days ?? 0) + 1, 'day')
-    : dayjs(endDate);
+    ? dayjs(endDate)
+        .subtract((days ?? 0) + 1, 'day')
+        .startOf('day')
+    : dayjs(endDate).startOf('day');
+
+  const realEnd = dayjs(endDate).add(1, 'days').startOf('day');
 
   return {
     dateStart: start.toDate(),
@@ -34,5 +46,8 @@ export const getDateRange = ({
     isoEnd: end.toISOString(),
     start: start.format('YYYY-MM-DD'),
     end: end.format('YYYY-MM-DD'),
+    dayjsStart: start,
+    dayjsEnd: end,
+    realEnd: realEnd.toISOString(),
   };
 };

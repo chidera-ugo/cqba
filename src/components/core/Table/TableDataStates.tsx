@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
 import { NothingHere } from 'components/illustrations/NothingHere';
-import { SimpleInformation } from 'components/modules/common/SimpleInformation';
+import { SimpleInformation } from 'components/modules/commons/SimpleInformation';
 import { PaginatedResponse } from 'types/Table';
 
 type Props = {
@@ -74,7 +74,7 @@ export const IsEmpty = ({
               <span className='text-xl'>Nothing to show (yet)</span>
             )
           }
-          description={<span className='mt-1 block'>{emptyTableText}</span>}
+          description={<span className='block 640:mt-1'>{emptyTableText}</span>}
           icon={
             emptyTableIcon ? (
               emptyTableIcon

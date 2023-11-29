@@ -1,10 +1,10 @@
 import clsx from 'clsx';
-import { SimpleToast } from 'components/common/SimpleToast';
+import { SimpleToast } from 'components/commons/SimpleToast';
 import { UpdateBusinessDocumentionForm } from 'components/forms/kyc/UpdateBusinessDocumentionForm';
 import { UpdateCompanyInformationForm } from 'components/forms/kyc/UpdateCompanyInformationForm';
 import { GreenCheck } from 'components/illustrations/Success';
 import { AppLayout } from 'components/layouts/AppLayout';
-import { SimpleInformation } from 'components/modules/common/SimpleInformation';
+import { SimpleInformation } from 'components/modules/commons/SimpleInformation';
 import { KycSteps } from 'components/modules/kyc/KycSteps';
 import { ManageBusinessOwnersAndDirectors } from 'components/modules/kyc/ManageBusinessOwnersAndDirectors';
 import { ReviewAndSubmit } from 'components/modules/kyc/ReviewAndSubmit';

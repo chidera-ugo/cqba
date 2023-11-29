@@ -1,9 +1,9 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { FullScreenLoader } from 'components/common/FullScreenLoader';
+import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { AppToast } from 'components/primary/AppToast';
 import { Formik } from 'formik';
-import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
+import { useMakeDummyHttpRequest } from 'hooks/commons/useMakeDummyHttpRequest';
 import { toast } from 'react-toastify';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';

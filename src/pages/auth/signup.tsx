@@ -1,9 +1,9 @@
 import clsx from 'clsx';
-import { FullScreenLoader } from 'components/common/FullScreenLoader';
+import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { SignUpForm } from 'components/forms/auth/SignUpForm';
 import { ChatBubbles } from 'components/illustrations/ChatBubbles';
 import { AuthLayout } from 'components/layouts/AuthLayout';
-import { SimpleInformation } from 'components/modules/common/SimpleInformation';
+import { SimpleInformation } from 'components/modules/commons/SimpleInformation';
 import { AppToast } from 'components/primary/AppToast';
 import { useResendVerificationEmail } from 'hooks/api/auth/useResendVerificationEmail';
 import Link from 'next/link';

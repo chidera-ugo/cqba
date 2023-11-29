@@ -5,7 +5,7 @@ import { initialValues } from './initialValues';
 import { toast } from 'react-toastify';
 import { encode } from 'base64-arraybuffer';
 import { AppToast } from 'components/primary/AppToast';
-import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
+import { useMakeDummyHttpRequest } from 'hooks/commons/useMakeDummyHttpRequest';
 
 interface Props {
   accountNumber: string;

@@ -1,12 +1,12 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { FullScreenLoader } from 'components/common/FullScreenLoader';
+import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
 import { BudgetCard } from 'components/modules/budgeting/BudgetCard';
 import { AppToast } from 'components/primary/AppToast';
 import { useApproveOrRejectBudget } from 'hooks/api/budgeting/useApproveOrRejectBudget';
 import { useGetBudgetById } from 'hooks/api/budgeting/useGetBudgetById';
-import { useGetColorByChar } from 'hooks/common/useGetColorByChar';
+import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { toast } from 'react-toastify';
 
 interface Props {

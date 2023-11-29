@@ -6,7 +6,7 @@ import {
   phoneNumberRegex,
   phoneNumberRegex11,
 } from 'utils/regexes';
-import { Field } from 'types/Common';
+import { Field } from 'types/commons';
 import { formatDateOfBirth } from 'utils/formatters/formatDateOfBirth';
 
 export const validateField = (

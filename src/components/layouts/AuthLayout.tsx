@@ -1,4 +1,4 @@
-import { FullScreenLoader } from 'components/common/FullScreenLoader';
+import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { PageHead } from 'components/primary/PageHead';
 import { AuthHeader } from 'components/primary/headers/AuthHeader';
 import { useAuthenticationRoutesGuard } from 'hooks/app/useAuthenticationRoutesGuard';
@@ -6,12 +6,18 @@ import { PropsWithChildren } from 'react';
 
 export interface Props {
   title?: string;
+  noRedirect?: boolean;
 }
 
-export const AuthLayout = ({ children, title }: PropsWithChildren<Props>) => {
-  const { userExists } = useAuthenticationRoutesGuard();
+export const AuthLayout = ({
+  children,
+  noRedirect,
+  title,
+}: PropsWithChildren<Props>) => {
+  const { userExists } = useAuthenticationRoutesGuard(noRedirect);
 
-  if (userExists) return <FullScreenLoader id='auth-layout' asPage />;
+  if (!noRedirect && userExists)
+    return <FullScreenLoader id='auth-layout' asPage />;
 
   return (
     <div className={'bg-white'}>

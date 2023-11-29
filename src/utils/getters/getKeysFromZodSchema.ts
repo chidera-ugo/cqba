@@ -1,8 +1,7 @@
-// get zod object keys recursively
 import { z } from 'zod';
 
 export function getKeysFromZodSchema<T extends z.ZodTypeAny>(
-  schema: T,
+  schema: T
 ): string[] {
   // make sure schema is not null or undefined
   if (schema === null || schema === undefined) return [];

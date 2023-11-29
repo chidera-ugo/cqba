@@ -1,7 +1,7 @@
 import { useField } from 'formik';
 import { useEffect } from 'react';
 import clsx from 'clsx';
-import { Field } from 'types/Common';
+import { Field } from 'types/commons';
 import { validateField } from 'utils/validators/validateField';
 import { ChevronDown } from 'components/svgs/navigation/Chevrons';
 import { formatPhoneNumber } from 'utils/formatters/formatPhoneNumber';

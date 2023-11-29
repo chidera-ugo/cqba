@@ -2,7 +2,7 @@ import { NothingHere } from 'components/illustrations/NothingHere';
 import {
   SimpleInformation,
   Props as PropsSimpleInformation,
-} from 'components/modules/common/SimpleInformation';
+} from 'components/modules/commons/SimpleInformation';
 
 interface Props {
   title?: string;

@@ -1,15 +1,25 @@
-import { AlertBox } from 'components/common/AlertBox';
-import { Restrictor } from 'components/common/Restrictor';
+import { AlertBox } from 'components/commons/AlertBox';
+import { Restrictor } from 'components/commons/Restrictor';
+import { NotFoundFace } from 'components/illustrations/NotFound';
+import { AuthLayout } from 'components/layouts/AuthLayout';
 import { PageHead } from 'components/primary/PageHead';
 
 const NotFound = () => {
   return (
-    <>
+    <AuthLayout noRedirect>
       <PageHead title='Page Not Found' />
       <div className='y-center h-screen bg-white'>
         <Restrictor
+          icon={<NotFoundFace />}
+          subTitle={
+            <span className={'mx-auto block max-w-[600px]'}>
+              {`The page you're looking for isn't available. Try to search again
+              or use the go back button below.`}
+            </span>
+          }
           {...{
-            title: <span>Page Not Found</span>,
+            title: <span>Page not found...</span>,
+
             action: {
               link: '/',
               text: 'Go Home',
@@ -17,7 +27,7 @@ const NotFound = () => {
           }}
         />
       </div>
-    </>
+    </AuthLayout>
   );
 };
 

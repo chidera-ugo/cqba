@@ -10,6 +10,13 @@ export const validationSchema = object({
         value,
         limit: 10,
       })
+    )
+    .test('max', 'Above budget balance', (value, ctx) =>
+      validateAmount({
+        value,
+        limit: ctx.parent.budgetBalance,
+        reverse: true,
+      })
     ),
   bank: string().required('Please select a bank'),
   accountNumber: string()

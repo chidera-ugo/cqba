@@ -1,9 +1,9 @@
 import { ColumnDef } from '@tanstack/react-table';
 import clsx from 'clsx';
-import { Pill } from 'components/common/Pill';
+import { Pill } from 'components/commons/Pill';
 import { TableCell } from 'components/core/Table/TableCell';
-import { IWalletTransaction } from 'hooks/api/wallet/useGetWalletTransactions';
 import { useMemo } from 'react';
+import { IWalletTransaction } from 'types/transaction';
 import { formatDate } from 'utils/formatters/formatDate';
 
 export const useColumns = () => {
@@ -25,7 +25,7 @@ export const useColumns = () => {
           return (
             <span
               className={clsx(
-                value === 'credit' && 'text-green-500',
+                value === 'credit' && 'text-success-700',
                 'capitalize'
               )}
             >
@@ -42,10 +42,10 @@ export const useColumns = () => {
       },
       {
         header: 'Budget',
-        accessorKey: 'budget.name',
+        accessorKey: 'budget',
         enableColumnFilter: false,
-        cell: ({ getValue }) => {
-          const value = getValue() as any;
+        cell: ({ row }) => {
+          const value = row.original.budget?.name;
 
           if (!value) return '----';
 
@@ -70,6 +70,7 @@ export const useColumns = () => {
         enableColumnFilter: false,
         cell: ({ getValue }) => {
           const val = getValue() as string;
+
           return (
             <Pill
               config={{

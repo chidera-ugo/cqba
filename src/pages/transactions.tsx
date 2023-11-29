@@ -3,12 +3,18 @@ import { GenerateStatementForm } from 'components/forms/transactions/GenerateSta
 import { AppLayout } from 'components/layouts/AppLayout';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { Download } from 'components/svgs/others/Download';
-import { AllTransactionsTable } from 'components/tables/wallet/AllTransactionsTable';
-import { useDebouncer } from 'hooks/common/useDebouncer';
+import { WalletTransactionsTable } from 'components/tables/wallet/WalletTransactionsTable';
+import { useUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
+import { useDebouncer } from 'hooks/commons/useDebouncer';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
+import { walletFiltersSchema } from 'zod_schemas/wallet';
 
 export default function Transactions() {
-  const [filters, setFilters] = useState<Record<string, any>>({});
+  const searchParams = useSearchParams();
+
+  const { filters, setFilters, pagination, setPagination, range, setRange } =
+    useUrlManagedState(walletFiltersSchema, searchParams, 7);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -60,9 +66,9 @@ export default function Transactions() {
         <GenerateStatementForm close={closeModal} accountNumber='01848828848' />
       </RightModalWrapper>
 
-      <AllTransactionsTable
+      <WalletTransactionsTable
         search={debouncedSearch}
-        {...{ filters, setFilters }}
+        {...{ filters, setFilters, pagination, setPagination, range, setRange }}
       />
     </AppLayout>
   );

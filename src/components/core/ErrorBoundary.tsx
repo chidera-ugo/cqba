@@ -1,5 +1,5 @@
-import { AlertBox } from 'components/common/AlertBox';
-import { MoreInfo } from 'components/common/MoreInfo';
+import { AlertBox } from 'components/commons/AlertBox';
+import { MoreInfo } from 'components/commons/MoreInfo';
 import { FailedToLoadPage } from 'pages/404';
 import { PropsWithChildren } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';

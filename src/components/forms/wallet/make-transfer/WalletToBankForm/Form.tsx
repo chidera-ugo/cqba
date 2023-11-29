@@ -2,6 +2,7 @@ import { SecondaryActionButton } from 'components/form-elements/CustomSelect/Sec
 import { Input } from 'components/form-elements/Input';
 import { Select } from 'components/form-elements/Select';
 import { Institution } from 'components/forms/wallet/make-transfer/WalletToBankForm/index';
+import { WalletToBankFormRecoveryValues } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { useGetAllBudgetsUnpaginated } from 'hooks/api/budgeting/useGetAllBudgets';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
@@ -18,7 +19,7 @@ interface Props {
   formikProps: FormikProps<typeof initialValues>;
   institutions: Institution[];
   createBudget: () => void;
-  formRecoveryValues: Record<string, any> | null;
+  formRecoveryValues: WalletToBankFormRecoveryValues;
 }
 
 export const Form = ({
@@ -31,7 +32,8 @@ export const Form = ({
 
   const { handleSubmit, setFieldValue, setValues, values } = formikProps;
 
-  const { isLoading, isError, data } = useGetAllBudgetsUnpaginated();
+  const { isLoading, isRefetching, isError, data } =
+    useGetAllBudgetsUnpaginated();
 
   const [isProcessing, setIsProcessing] = useState({
     fee: false,
@@ -47,16 +49,31 @@ export const Form = ({
     });
   }, [formRecoveryValues]);
 
+  useEffect(() => {
+    if (!values.budget) return;
+
+    setFieldValue(
+      'budgetBalance',
+      Number(
+        data?.docs.find(({ _id }) => _id === values.budget)!.availableAmount
+      ) / 100
+    );
+  }, [values.budget]);
+
   return (
     <FormikForm onSubmit={handleSubmit}>
       <Select
-        options={data?.docs.map(({ name, _id, availableAmount }) => ({
-          name: `${name} - ${primaryWallet.currency} ${formatAmount({
-            value: availableAmount / 100,
-          })}`,
-          _id,
-        }))}
-        {...{ isLoading, isError }}
+        options={
+          data?.docs.map(({ name, _id, availableAmount }) => ({
+            name: `${name} - ${primaryWallet.currency} ${formatAmount({
+              value: availableAmount / 100,
+            })}`,
+            availableAmount,
+            _id,
+          })) ?? []
+        }
+        isError={isError}
+        isLoading={isLoading || isRefetching}
         className={'mt-0'}
         displayValueKey={'name'}
         next={'amount'}
@@ -64,13 +81,12 @@ export const Form = ({
         name={'budget'}
         label={'Budget Category'}
       />
-
-      {/* Todo: Test this */}
-      <SecondaryActionButton
-        onClick={createBudget}
-        text={'Create New Budget'}
-        className={'mt-4'}
-      />
+      <div className='mt-3 flex'>
+        <SecondaryActionButton
+          onClick={createBudget}
+          text={'Create New Budget'}
+        />
+      </div>
 
       <AmountInput
         label='Amount'

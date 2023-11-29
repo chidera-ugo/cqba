@@ -1,4 +1,4 @@
-import { DatePickerValue } from 'types/Common';
+import { DatePickerValue } from 'types/commons';
 
 export const initialValues = {
   endDate: {} as DatePickerValue,

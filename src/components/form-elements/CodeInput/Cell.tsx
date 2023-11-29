@@ -7,6 +7,7 @@ type Props = JSX.IntrinsicElements['input'] & {
   char: number;
   setCode: (val: string) => void;
   type: 'numeric' | 'password' | 'normal';
+  charLimit?: number;
 };
 
 export function Cell({
@@ -16,6 +17,7 @@ export function Cell({
   type,
   setCode,
   autoComplete,
+  charLimit,
   className,
 }: Props) {
   const id = `${_id ?? ''}char${char}`;
@@ -30,7 +32,7 @@ export function Cell({
         event.clipboardData || (window as any).clipboardData
       ).getData('text');
 
-      if (paste.length === 6) {
+      if (paste.length === charLimit) {
         setCode(paste);
         return;
       }
@@ -50,7 +52,20 @@ export function Cell({
           onClick={() => document.getElementById(id)?.focus()}
           className='y-center absolute h-full w-full'
         >
-          <div className='mx-auto h-3 w-3 rounded-full bg-black'></div>
+          <svg
+            width='35'
+            height='52'
+            viewBox='0 0 35 52'
+            fill='none'
+            className={'pointer-events-none mx-auto'}
+            xmlns='http://www.w3.org/2000/svg'
+          >
+            <rect width='35' height='52' fill='#F3F3F3' />
+            <path
+              d='M15.268 35.096L16.18 28.328L10.804 32.552L8.5 28.472L14.788 25.976L8.548 23.576L10.708 19.688L16.228 23.864L15.268 17H19.732L18.772 23.864L24.244 19.688L26.356 23.528L20.116 26.024L26.404 28.52L24.148 32.504L18.772 28.328L19.684 35.096H15.268Z'
+              fill='black'
+            />
+          </svg>
         </div>
       )}
 
@@ -82,10 +97,7 @@ export function Cell({
         onChange={(e) => {
           const val = e.target.value;
 
-          if (!val) {
-            setCode(val.charAt(val?.length - 1));
-            return;
-          }
+          if (!val) return setCode(val.charAt(val?.length - 1));
 
           const isValid =
             type === 'numeric' ? number.test(val) : alphaNumeric.test(val);
@@ -96,8 +108,8 @@ export function Cell({
           }
         }}
         className={clsx(
-          `input y-center my-auto h-full w-10 rounded-lg border border-none border-neutral-300 bg-neutral-210 px-3 text-center text-xl font-bold caret-black shadow-none 340:w-12 425:rounded-xl 560:text-3xl 640:w-[56px]`,
-          type === 'password' ? 'text-opacity-0' : '',
+          `input y-center my-auto h-full w-10 rounded-lg bg-neutral-210 px-3 text-center text-xl font-bold caret-black shadow-none 340:w-12 425:rounded-xl 560:text-3xl 640:w-[56px]`,
+          type === 'password' && 'text-opacity-0',
           className ? className : 'bg-neutral-70'
         )}
       />

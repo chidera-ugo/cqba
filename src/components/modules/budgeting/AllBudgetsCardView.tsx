@@ -3,7 +3,7 @@ import { Pagination } from 'components/core/Table/Pagination';
 import { TableDataStates } from 'components/core/Table/TableDataStates';
 import { BudgetListProps } from 'components/modules/budgeting/AllBudgets';
 import { BudgetCard } from 'components/modules/budgeting/BudgetCard';
-import { useGetColorByChar } from 'hooks/common/useGetColorByChar';
+import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 
 export const AllBudgetsCardView = ({
   className,

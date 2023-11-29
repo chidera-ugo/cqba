@@ -2,7 +2,7 @@ import { PropsWithChildren, useState } from 'react';
 import { useField, useFormikContext } from 'formik';
 import clsx from 'clsx';
 import { TMultiSelect, TMultiOptions } from './Select';
-import { Field } from 'types/Common';
+import { Field } from 'types/commons';
 import { ChevronDown } from 'components/svgs/navigation/Chevrons';
 import { SelectContent } from './SelectContent';
 

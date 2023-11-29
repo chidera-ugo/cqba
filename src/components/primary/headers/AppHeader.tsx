@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { CurrentUserAvatar } from 'components/modules/app/CurrentUserAvatar';
 import { Notifications } from 'components/modules/app/Notifications';
 import { MobileMenu } from 'components/primary/MobileMenu';
-import { ToggleMode } from 'components/modules/app/ToggleMode';
 import { PointerLeft } from 'components/svgs/navigation/Arrows';
 import { useIsKycFlow } from 'hooks/kyc/useIsKycFlow';
 import Image from 'next/image';
@@ -47,7 +46,7 @@ export const AppHeader = ({
         ) : hideSideNavigation ? (
           <Logo />
         ) : (
-          <div className='my-auto text-xl font-semibold text-neutral-1000 640:text-2xl'>
+          <div className='my-auto text-base font-semibold text-neutral-1000 640:text-2xl'>
             {title}
           </div>
         )}
@@ -55,12 +54,7 @@ export const AppHeader = ({
         <div className='flex'>
           {!isKycFlow && (
             <div className={'hidden gap-4 1024:flex'}>
-              <ToggleMode />
-
-              <div className='my-auto h-10 w-0 border-r border-neutral-200'></div>
-
               <Notifications />
-
               <CurrentUserAvatar />
             </div>
           )}

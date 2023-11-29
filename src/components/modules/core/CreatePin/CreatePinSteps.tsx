@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { FullScreenLoader } from 'components/common/FullScreenLoader';
+import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { CodeInput } from 'components/form-elements/CodeInput';
 import { AppToast } from 'components/primary/AppToast';
 import { AnimateLayout } from 'components/transition/AnimateLayout';

@@ -1,11 +1,11 @@
 import clsx from 'clsx';
-import { FullScreenLoader } from 'components/common/FullScreenLoader';
+import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { Cancel } from 'components/illustrations/Cancel';
 import { GreenCheck } from 'components/illustrations/Success';
 import { AuthLayout } from 'components/layouts/AuthLayout';
-import { SimpleInformation } from 'components/modules/common/SimpleInformation';
+import { SimpleInformation } from 'components/modules/commons/SimpleInformation';
 import { useVerifyEmail } from 'hooks/api/auth/useVerifyEmail';
-import { useQueryValidator } from 'hooks/common/useQueryValidator';
+import { useQueryValidator } from 'hooks/commons/useQueryValidator';
 import { useRouter } from 'next/router';
 import NotFound from 'pages/404';
 
