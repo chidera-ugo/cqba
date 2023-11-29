@@ -1,28 +1,12 @@
-import { SearchInput } from 'components/form-elements/SearchInput';
 import { GenerateStatementForm } from 'components/forms/transactions/GenerateStatementForm';
 import { AppLayout } from 'components/layouts/AppLayout';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
+import { WalletTransactions } from 'components/modules/wallet/WalletTransactions';
 import { Download } from 'components/svgs/others/Download';
-import { WalletTransactionsTable } from 'components/tables/wallet/WalletTransactionsTable';
-import { useUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
-import { useDebouncer } from 'hooks/commons/useDebouncer';
-import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
-import { walletFiltersSchema } from 'zod_schemas/wallet';
 
 export default function Transactions() {
-  const searchParams = useSearchParams();
-
-  const { filters, setFilters, pagination, setPagination, range, setRange } =
-    useUrlManagedState(walletFiltersSchema, searchParams, 7);
-
   const [showModal, setShowModal] = useState(false);
-
-  const [search, setSearch] = useState('');
-
-  const [debouncedSearch] = useDebouncer({
-    value: search,
-  });
 
   function closeModal() {
     setShowModal(false);
@@ -30,17 +14,17 @@ export default function Transactions() {
 
   return (
     <AppLayout title='Transactions'>
-      <div className='my-5 justify-between gap-2 640:my-7 880:flex'>
-        <SearchInput
-          placeholder='Search transactions'
-          value={search}
-          className='w-full 640:w-[300px]'
-          onChange={(e) => {
-            setSearch(e.target.value);
-          }}
-          clear={() => setSearch('')}
-        />
+      <RightModalWrapper
+        show={showModal}
+        title='Generate statement'
+        closeModal={closeModal}
+        closeOnClickOutside
+        childrenClassname='py-0 640:px-8 px-4'
+      >
+        <GenerateStatementForm close={closeModal} />
+      </RightModalWrapper>
 
+      <WalletTransactions showAllTransactions>
         <div className='mt-3 flex gap-2 880:mt-0'>
           <div className='flex gap-2'></div>
 
@@ -54,22 +38,7 @@ export default function Transactions() {
             </span>
           </button>
         </div>
-      </div>
-
-      <RightModalWrapper
-        show={showModal}
-        title='Generate statement'
-        closeModal={closeModal}
-        closeOnClickOutside
-        childrenClassname='py-0 640:px-8 px-4'
-      >
-        <GenerateStatementForm close={closeModal} accountNumber='01848828848' />
-      </RightModalWrapper>
-
-      <WalletTransactionsTable
-        search={debouncedSearch}
-        {...{ filters, setFilters, pagination, setPagination, range, setRange }}
-      />
+      </WalletTransactions>
     </AppLayout>
   );
 }

@@ -2,7 +2,7 @@ export interface IWalletTransaction {
   _id: string;
   type: string;
   budget: Budget;
-  status: string;
+  status: 'successful' | 'pending' | 'failed' | string;
   amount: number;
   currency: string;
   scope: string;

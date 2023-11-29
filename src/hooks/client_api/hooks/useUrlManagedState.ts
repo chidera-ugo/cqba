@@ -1,4 +1,5 @@
 import { PaginationState } from '@tanstack/react-table';
+import { defaultPageSize } from 'constants/commons';
 import {
   defaultStringifySearch,
   simpleParseSearch,
@@ -36,9 +37,10 @@ export const useUrlManagedState = <T extends ZodRawShape>(
     getDateRange({ days: defaultRangeNumberOfDays ?? 0 })
   );
 
-  const [pagination, setPagination] = useState<PaginationState>(
-    {} as PaginationState
-  );
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: defaultPageSize,
+  } as PaginationState);
 
   const { replace } = useRouter();
 

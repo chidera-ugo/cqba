@@ -5,7 +5,7 @@ import { useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 
 export const useShareAndDownloadFile = () => {
-  const RECEIPT_TITLE = `AKU_RECEIPT.jpg`;
+  const RECEIPT_TITLE = `CHEQUEBASE_RECEIPT.jpg`;
 
   let canvas: HTMLCanvasElement;
 

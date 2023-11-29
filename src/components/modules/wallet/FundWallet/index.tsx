@@ -18,13 +18,16 @@ export const FundWallet = () => {
       </RightModalWrapper>
 
       <button
+        type={'button'}
         onClick={() => setShowModal(true)}
-        className='secondary-button 640:dark-button x-center h-11 w-full px-4 text-sm font-semibold 1180:w-auto'
+        className='dark-button block h-11 w-full min-w-[163px] border border-neutral-200 bg-white px-4 text-sm font-semibold text-neutral-1000 hover:bg-gray-100 640:bg-black 640:text-white 1180:w-auto'
       >
-        <span className='my-auto mr-2'>Fund wallet</span>
-        <span className='my-auto'>
-          <Inbound />
-        </span>
+        <div className='x-center'>
+          <span className='my-auto mr-2'>Fund wallet</span>
+          <span className='my-auto'>
+            <Inbound />
+          </span>
+        </div>
       </button>
     </>
   );

@@ -34,7 +34,6 @@ export const TransactionReceipt = ({
   const {
     reference,
     amount,
-    counterparty,
     status,
     type,
     meta,
@@ -47,13 +46,13 @@ export const TransactionReceipt = ({
   const debitPayload = [
     {
       title: 'Receiver',
-      value: counterparty?.accountName,
+      value: meta?.counterparty?.accountName,
     },
     {
       title: 'Account Number',
-      value: counterparty?.accountNumber,
+      value: meta?.counterparty?.accountNumber,
     },
-    { title: 'Receiving Bank', value: counterparty?.bankName },
+    { title: 'Receiving Bank', value: meta?.counterparty?.bankName },
   ];
 
   const payload = [
@@ -128,7 +127,7 @@ export const TransactionReceipt = ({
                 <div className='mt-0.5 flex'>
                   <div
                     className={clsx(
-                      'my-auto text-right text-base font-semibold text-black'
+                      'my-auto text-right text-base font-medium text-black'
                     )}
                   >
                     <span

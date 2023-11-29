@@ -25,7 +25,7 @@ export const SideNavigationItems = () => {
       {Object.keys(navigationItems).map((item, i) => {
         return (
           <div key={item} className={clsx(i > 0 && 'mt-8')}>
-            <div className='mb-3 text-sm font-semibold text-neutral-1000'>
+            <div className='mb-3 text-sm font-medium text-neutral-1000'>
               {item}
             </div>
 

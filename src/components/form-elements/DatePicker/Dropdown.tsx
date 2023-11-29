@@ -7,6 +7,7 @@ export type Props = JSX.IntrinsicElements['div'] & {
   close: () => void;
   show: boolean;
   wrapperId?: string;
+  bottom?: boolean;
 };
 
 export function Dropdown({
@@ -15,6 +16,7 @@ export function Dropdown({
   show,
   children,
   className,
+  bottom,
 }: PropsWithChildren<Props>) {
   useEffect(() => {
     const parent = document.getElementById(wrapperId ?? 'date-picker-wrapper');
@@ -64,7 +66,7 @@ export function Dropdown({
       }}
       className={clsx(
         'absolute z-[100] w-full overflow-hidden rounded-xl border border-neutral-300 p-0 shadow-lg',
-        top ? 'bottom-[100%] mb-3' : 'top-[100%] mt-3',
+        bottom ? 'bottom-[100%] mb-3' : 'top-[100%] mt-3',
         className
       )}
     >

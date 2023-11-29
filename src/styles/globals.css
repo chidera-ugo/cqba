@@ -237,7 +237,7 @@
   }
 
   .red-alt-pill {
-    @apply alt-pill bg-red-600 text-red-700;
+    @apply alt-pill border-red-500 border-opacity-30 bg-red-100 text-red-700;
   }
 
   .yellow-alt-pill {
