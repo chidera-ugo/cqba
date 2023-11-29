@@ -23,6 +23,8 @@ export const useColumns = ({ handleActionClick }: Args) => {
         cell: ({ row }) => {
           const { firstName, lastName } = row.original;
 
+          if (!firstName) return <>---</>;
+
           return (
             <span>
               {firstName} {lastName}

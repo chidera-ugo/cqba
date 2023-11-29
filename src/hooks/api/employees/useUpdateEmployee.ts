@@ -15,7 +15,7 @@ export function useUpdateEmployee(
 ) {
   return useTMutation<UpdateEmployeeDto, any>({
     method: employeeId ? 'put' : 'post',
-    url: employeeId ? `/${employeeId}` : '',
+    url: employeeId ? `/${employeeId}` : '/invite',
     service: 'employees',
     options,
   });

@@ -5,7 +5,7 @@ export function urlModifier(url?: Service) {
     case 'overview':
       return '/v1/overview';
     case 'employees':
-      return '/v1/employees';
+      return '/v1/auth/members';
     case 'organizations':
       return '/v1/organizations';
     case 'transactions':

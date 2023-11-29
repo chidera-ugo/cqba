@@ -17,8 +17,11 @@ import { ZodObject, ZodRawShape } from 'zod';
 export const useUrlManagedState = <T extends ZodRawShape>(
   schema: ZodObject<T>,
   searchParams: ReadonlyURLSearchParams,
-  defaultRangeNumberOfDays?: number
+  defaultRangeNumberOfDays?: number,
+  pageSize?: number
 ) => {
+  const _pageSize = pageSize ?? defaultPageSize;
+
   const schemaKeys = getKeysFromZodSchema(schema);
 
   function validateSearchParams() {
@@ -39,7 +42,7 @@ export const useUrlManagedState = <T extends ZodRawShape>(
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: defaultPageSize,
+    pageSize: _pageSize,
   } as PaginationState);
 
   const { replace } = useRouter();
@@ -77,7 +80,7 @@ export const useUrlManagedState = <T extends ZodRawShape>(
     if (isNaN(pageIndex) || isNaN(pageSize) || pageSize !== 10)
       return setPagination({
         pageIndex: 0,
-        pageSize: 10,
+        pageSize: _pageSize,
       });
 
     setPagination({ pageIndex, pageSize });
@@ -87,3 +90,8 @@ export const useUrlManagedState = <T extends ZodRawShape>(
 };
 
 export type UseUrlManagedState = ReturnType<typeof useUrlManagedState>;
+
+export type TPagination = {
+  pagination: UseUrlManagedState['pagination'];
+  setPagination: UseUrlManagedState['setPagination'];
+};

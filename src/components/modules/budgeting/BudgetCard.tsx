@@ -1,4 +1,9 @@
+import clsx from 'clsx';
+import { Avatar } from 'components/commons/Avatar';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
+import { Fragment } from 'react';
+import { formatAmount } from 'utils/formatters/formatAmount';
+import { formatDate } from 'utils/formatters/formatDate';
 
 type Props = IBudget & {
   showFullDetails?: boolean;
@@ -7,220 +12,114 @@ type Props = IBudget & {
   className?: string;
 };
 
-export const BudgetCard = ({}: Props) => {
-  return <></>;
-};
+export const BudgetCard = ({ getColor, ...budget }: Props) => {
+  const {
+    // _id,
+    // description,
+    amountUsed,
+    expiry,
+    name,
+    currency,
+    // status,
+    amount,
+    availableAmount,
+    threshold,
+  } = budget;
 
-// import { useQueryClient } from '@tanstack/react-query';
-// import clsx from 'clsx';
-// import { ProfileCard } from 'components/common/ProfileCard';
-// import {
-//   TableAction,
-//   TableActionItem,
-// } from 'components/core/Table/TableAction';
-// import { CategoryPill } from 'components/modules/categories/DefaultCategories';
-// import { AppToast } from 'components/primary/AppToast';
-// import { Lock, Pause } from 'components/svgs/budgeting/Budget_Icons';
-// import { Spinner } from 'components/svgs/dashboard/Spinner';
-// import { CircleThreeDots } from 'components/svgs/Icons_TableActions';
-// import { useCloseBudget } from 'hooks/api/budgeting/useCloseBudget';
-// import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
-// import { usePauseBudget } from 'hooks/api/budgeting/usePauseBudget';
-// import { Dispatch, SetStateAction, useState } from 'react';
-// import { toast } from 'react-toastify';
-// import { formatAmount } from 'utils/formatters/formatAmount';
-// import { formatDate } from 'utils/formatters/formatDate';
-//
-// export const BudgetCard = ({
-//   onItemClick,
-//   showFullDetails,
-//   getColor,
-//   className,
-//   ...budget
-// }: Props) => {
-//   const queryClient = useQueryClient();
-//
-//   const [showDropdown, setShowDropdown] = useState(false);
-//
-//   const { mutate: pause, isLoading: pausing } = usePauseBudget(budget._id, {
-//     onSuccess: () => onSuccess('Paused'),
-//   });
-//
-//   const { mutate: close, isLoading: closing } = useCloseBudget(budget._id, {
-//     onSuccess: () => onSuccess('Closed'),
-//   });
-//
-//   const {
-//     _id,
-//     description,
-//     creator,
-//     deadline,
-//     departmentTitle,
-//     title,
-//     status,
-//     amount,
-//     categoryTitle,
-//     createdAt,
-//   } = budget;
-//
-//   const budgetIsActive = status !== 'open' && status !== 'declined';
-//
-//   const actions: TableActionItem[] = [
-//     {
-//       title: 'Pause Budget',
-//       icon: <Pause />,
-//       onClick: () => {
-//         setShowDropdown(false);
-//         pause({});
-//       },
-//     },
-//     {
-//       title: 'Close Budget',
-//       icon: <Lock />,
-//       onClick: () => {
-//         setShowDropdown(false);
-//         close({});
-//       },
-//     },
-//   ];
-//
-//   function handleClick() {
-//     if (showDropdown) return;
-//     if (showFullDetails || !onItemClick) return;
-//     onItemClick(budget);
-//   }
-//
-//   function onSuccess(action: string) {
-//     toast(<AppToast>{action} budget successfully</AppToast>, {
-//       type: 'success',
-//     });
-//
-//     queryClient.invalidateQueries(['budgets']);
-//   }
-//
-//   return (
-//     <div
-//       className={clsx(
-//         className,
-//         'card y-between p-0 transition-colors',
-//         status !== 'declined' &&
-//           !showFullDetails &&
-//           'cursor-pointer hover:ring-4 hover:ring-primary-main hover:ring-opacity-20'
-//       )}
-//       key={_id}
-//     >
-//       <div className={clsx('x-between')}>
-//         <div className='w-full p-3 pb-2 640:p-5 640:pb-4' onClick={handleClick}>
-//           <ProfileCard
-//             getBackgroundColor={getColor}
-//             title={`${creator?.firstName} ${creator?.lastName}`}
-//             subTitle={`${departmentTitle} Department`}
-//           />
-//         </div>
-//
-//         {budgetIsActive ? (
-//           <div className={'y-center'}>
-//             <div className='h-[28px]' onClick={handleClick}></div>
-//             <BudgetAction
-//               {...{ actions }}
-//               id={budget._id}
-//               processing={pausing || closing}
-//               externalShowDropdown={showDropdown}
-//               externalSetShowDropdown={setShowDropdown}
-//             />
-//             <div onClick={handleClick} className='h-full'></div>
-//           </div>
-//         ) : null}
-//       </div>
-//
-//       <div className={'h-full p-3 pt-0 640:p-5 640:pt-0'} onClick={handleClick}>
-//         <div className='text-left'>
-//           <h4 className='text-lg'>{title}</h4>
-//           <p
-//             className={clsx(
-//               'mt-1 text-sm font-normal leading-6 text-neutral-500',
-//               !showFullDetails && 'line-clamp-2'
-//             )}
-//           >
-//             {status === 'approved'
-//               ? `Approved by Admin - ${formatDate(deadline, 'short')}`
-//               : description}
-//           </p>
-//         </div>
-//       </div>
-//
-//       <div className={'p-3 pt-0 640:p-5 640:pt-0'} onClick={handleClick}>
-//         <div className='x-between'>
-//           <div className={clsx('flex gap-3')}>
-//             <div className='y-center'>
-//               <CategoryPill
-//                 {...{
-//                   getColor,
-//                 }}
-//                 category={categoryTitle}
-//               />
-//             </div>
-//
-//             <div className='my-auto text-sm font-medium text-neutral-500'>
-//               {formatDate(createdAt, 'short')}
-//             </div>
-//           </div>
-//         </div>
-//
-//         {status === 'open' && (
-//           <div
-//             className={clsx(
-//               'text-left font-semibold text-neutral-1000',
-//               showFullDetails ? 'mt-4 text-3xl' : 'mt-3 text-2xl'
-//             )}
-//           >
-//             ₦
-//             {formatAmount({
-//               value: amount,
-//               decimalPlaces: 2,
-//               kFormatter: Number(amount) > 9999999999,
-//             })}
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-//
-// export const BudgetAction = ({
-//   actions,
-//   externalShowDropdown,
-//   externalSetShowDropdown,
-//   processing,
-//   id,
-// }: {
-//   id: string;
-//   actions: TableActionItem[];
-//   processing?: boolean;
-//   externalShowDropdown?: boolean;
-//   externalSetShowDropdown?: Dispatch<SetStateAction<boolean>>;
-// }) => {
-//   return (
-//     <TableAction
-//       options={actions}
-//       {...{
-//         externalShowDropdown,
-//         externalSetShowDropdown,
-//       }}
-//       id={`budget-card-table-action-${id}`}
-//       className={'mr-0 h-[48px] w-[48px]'}
-//       dropdownClassname={'right-4'}
-//       marginClassname={'-mt-0'}
-//       wrapperClassname={'h-full w-full'}
-//       icon={
-//         <span className={'x-center'}>
-//           {processing ? (
-//             <Spinner className={'text-primary-main'} />
-//           ) : (
-//             <CircleThreeDots />
-//           )}
-//         </span>
-//       }
-//     />
-//   );
-// };
+  // const budgetIsActive = status !== 'open' && status !== 'declined';
+
+  function getWidth(val: number) {
+    return `${Math.round((val * 100) / amount)}%`;
+  }
+
+  const breakdown = [
+    {
+      title: 'Spent',
+      className: 'bg-primary-main',
+      value: amountUsed,
+    },
+    {
+      title: 'Available',
+      className: 'bg-neutral-300',
+      value: availableAmount,
+    },
+    {
+      title: 'Budget Threshold',
+      className: 'bg-neutral-300',
+      value: threshold,
+      disabled: threshold === amount,
+    },
+  ];
+
+  return (
+    <div className={'card col-span-4'}>
+      <div className='x-between'>
+        <div>
+          <div className={'text-base font-medium'}>{name}</div>
+          {expiry && (
+            <div className={'text-[10px] text-neutral-500'}>
+              Due Date: {formatDate(expiry, 'semi-full')}
+            </div>
+          )}
+        </div>
+
+        <Avatar char={name.charAt(0)} getBackgroundColor={getColor} />
+      </div>
+
+      <div className={'text-sm font-medium'}>
+        Total Budget: {currency}
+        {formatAmount({ value: amount / 100 })}
+      </div>
+
+      <div className='relative mt-3 h-2 w-full overflow-hidden rounded-full bg-neutral-200'>
+        {threshold !== amount && (
+          <div
+            className={'absolute left-0 top-0 h-full rounded-full bg-green-300'}
+            style={{
+              width: getWidth(threshold),
+            }}
+          ></div>
+        )}
+
+        <div
+          className={
+            'absolute left-0 top-0 h-full rounded-full bg-primary-main'
+          }
+          style={{
+            width: getWidth(amountUsed),
+          }}
+        ></div>
+      </div>
+
+      <div className='mt-4 flex gap-5'>
+        {breakdown.map(({ title, disabled, value, className }) => {
+          if (disabled) return <Fragment key={title} />;
+
+          return (
+            <div key={title}>
+              <div className='flex'>
+                <div className={'text-[10px] text-neutral-500'}>{title}</div>
+
+                <span
+                  className={clsx(className, 'my-auto ml-1 rounded-full')}
+                  style={{
+                    height: 7,
+                    width: 7,
+                  }}
+                ></span>
+              </div>
+
+              <div className='mt-0.5 text-xs font-medium'>
+                {currency}
+                {formatAmount({
+                  value: value / 100,
+                  kFormatter: value > 99999999,
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};

@@ -30,9 +30,10 @@ export const UpdateEmployeeForm = ({
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={({ email, phoneNumber, ...values }) => {
+      onSubmit={({ email, phoneNumber, role, ...values }) => {
         mutate({
           ...values,
+          role: role.toLowerCase(),
           phone: phoneNumber,
           email: email.trim(),
         });

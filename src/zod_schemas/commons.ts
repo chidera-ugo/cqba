@@ -1,3 +1,4 @@
+import { defaultPageSize } from 'constants/commons';
 import { z } from 'zod';
 
 export const paginationAndRangeZodSchema = z.object({
@@ -8,7 +9,7 @@ export const paginationAndRangeZodSchema = z.object({
     })
     .catch({
       pageIndex: 0,
-      pageSize: 10,
+      pageSize: defaultPageSize,
     }),
   range: z
     .object({

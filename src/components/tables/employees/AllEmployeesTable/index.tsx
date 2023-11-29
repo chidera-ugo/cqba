@@ -117,7 +117,7 @@ export const AllEmployeesTable = ({
     setShowConfirmation(false);
   }
 
-  if (!data?.docs?.length)
+  if (!isLoading && !data?.docs?.length)
     return (
       <EmptyTable
         processing={isLoading || isRefetching}
