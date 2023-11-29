@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { WideTabs } from 'components/common/WideTabs';
+import { WideTabs } from 'components/commons/WideTabs';
 import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { SearchInput } from 'components/form-elements/SearchInput';
 import { AppLayout } from 'components/layouts/AppLayout';
@@ -8,17 +8,14 @@ import { ManageEmployee } from 'components/modules/employees/ManageEmployee';
 import { EmployeeDetails } from 'components/modules/employees/EmployeeDetails';
 import { SimplePlus } from 'components/svgs/others/Plus';
 import { AllEmployeesTable } from 'components/tables/employees/AllEmployeesTable';
-import {
-  employeesFilterOptions,
-  employeesFiltersSchema,
-} from 'constants/employees/filters';
+import { employeesFilterOptions } from 'constants/employees/filters';
 import { useUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
-import { simpleParseSearch } from 'hooks/client_api/search_params';
-import { useDebouncer } from 'hooks/common/useDebouncer';
+import { useDebouncer } from 'hooks/commons/useDebouncer';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useManageEmployee } from 'hooks/employees/useManageEmployee';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
+import { employeesFiltersSchema } from 'zod_schemas/employees';
 
 // Todo: Disable button clicks for unverified users
 
@@ -35,11 +32,9 @@ export default function Employees() {
 
   const [showSearchBar, setShowSearchBar] = useState(false);
 
-  const { filters, setFilters } = useUrlManagedState(() =>
-    employeesFiltersSchema.parse({
-      status: simpleParseSearch(searchParams.get('status')!),
-      employeeId: simpleParseSearch(searchParams.get('employeeId')!),
-    })
+  const { filters, setFilters } = useUrlManagedState(
+    employeesFiltersSchema,
+    searchParams
   );
 
   const { currentEmployee, setCurrentEmployee, setModal, ...rest } =

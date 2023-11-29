@@ -12,8 +12,6 @@ export function urlModifier(url?: Service) {
       return '/v1/transactions';
     case 'auth':
       return '/v1/auth';
-    case 'departments':
-      return '/v1/departments';
     case 'budgets':
       return '/v1/budget';
     case 'wallet':
@@ -22,8 +20,6 @@ export function urlModifier(url?: Service) {
       return '/v1/settings';
     case 'category':
       return '/v1/category';
-    case 'sub-accounts':
-      return '/v1/sub-accounts';
     default:
       return '/';
   }

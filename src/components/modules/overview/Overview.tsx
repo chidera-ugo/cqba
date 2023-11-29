@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { MoreInfo } from 'components/common/MoreInfo';
+import { MoreInfo } from 'components/commons/MoreInfo';
 import { Outbound } from 'components/svgs/navigation/Arrows';
 import { useGetDashboardSummary } from 'hooks/api/dashboard/useGetDashboardSummary';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
@@ -26,14 +26,14 @@ export const Overview = () => {
   }[] = [
     {
       name: 'Account Balance',
-      value: data?.subAccountBalance,
+      value: 0,
       isAmount: true,
       moreInfo: 'Total amount in your wallet',
       variance: 20,
     },
     {
       name: 'Budget Balance',
-      value: data?.budgetBalance,
+      value: 0,
       isAmount: true,
       moreInfo: 'Total amount in your budget balance',
       variance: 20,
@@ -46,7 +46,7 @@ export const Overview = () => {
     },
     {
       name: 'Approved Budgets',
-      value: data?.subAccountBalance,
+      value: 0,
       moreInfo: 'Total amount in your wallet',
       hideInMobile: true,
       variance: 20,
@@ -62,7 +62,7 @@ export const Overview = () => {
     {
       name: 'No. of Employees',
       hideInMobile: true,
-      value: 3,
+      value: 0,
     },
   ];
 

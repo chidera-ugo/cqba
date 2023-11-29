@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
-import { useCopyToClipboard } from 'hooks/common/useCopyToClipboard';
+import { useCopyToClipboard } from 'hooks/commons/useCopyToClipboard';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 
 export const VirtualAccounts = () => {
@@ -34,9 +34,9 @@ export const VirtualAccounts = () => {
           ];
 
           return (
-            <>
+            <div key={accountNumber}>
               {!accountNumber ? null : (
-                <div className='w-full rounded-xl border border-neutral-300 bg-neutral-50 p-5'>
+                <div className='w-full rounded-xl border border-neutral-200 p-5'>
                   {accountDetails.map(({ name, canCopy, value }) => {
                     return (
                       <div
@@ -73,7 +73,7 @@ export const VirtualAccounts = () => {
                   })}
                 </div>
               )}
-            </>
+            </div>
           );
         }
       )}

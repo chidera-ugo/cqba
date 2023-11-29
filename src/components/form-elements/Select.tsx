@@ -2,12 +2,12 @@ import { Spinner } from 'components/svgs/dashboard/Spinner';
 import { useField } from 'formik';
 import clsx from 'clsx';
 import { useEffect } from 'react';
-import { Field } from 'types/Common';
+import { Field } from 'types/commons';
 
 type Props = JSX.IntrinsicElements['select'] &
   Field & {
     label: string;
-    options: any;
+    options: any[];
     note?: string;
     isRequired?: boolean;
     displayValueKey?: string; // If the options passed is an array of objects then this is the key of the value that will be displayed
@@ -16,6 +16,7 @@ type Props = JSX.IntrinsicElements['select'] &
     isLoading?: boolean;
     isError?: boolean;
     listKeyModifieres?: string[];
+    actionOnSelect?: (option: unknown) => void;
   };
 
 export const Select = ({
@@ -29,6 +30,7 @@ export const Select = ({
   placeholder = 'Select',
   trueValueKey = 'id',
   isError,
+  actionOnSelect,
   ...props
 }: Props) => {
   const [field, meta] = useField(props.name as string);
@@ -105,6 +107,14 @@ export const Select = ({
               } else {
                 field.onChange(e);
               }
+
+              if (!actionOnSelect) return;
+
+              actionOnSelect(
+                options.find(
+                  (option) => option[trueValueKey] === e.target.value
+                )
+              );
             }}
             className={clsx(
               'w-full',

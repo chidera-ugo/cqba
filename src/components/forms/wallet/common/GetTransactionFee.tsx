@@ -1,7 +1,7 @@
 import { Spinner } from 'components/svgs/dashboard/Spinner';
 import { Dollar } from 'components/svgs/wallet/Icons_MakeTransfer';
 import { useGetTransferFee } from 'hooks/api/wallet/useGetTransferFee';
-import { useDebouncer } from 'hooks/common/useDebouncer';
+import { useDebouncer } from 'hooks/commons/useDebouncer';
 import { useEffect, useState } from 'react';
 import { formatAmount, sanitizeAmount } from 'utils/formatters/formatAmount';
 

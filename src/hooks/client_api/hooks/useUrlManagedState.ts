@@ -1,24 +1,54 @@
-import { defaultStringifySearch } from 'hooks/client_api/search_params';
-import { usePathname, useRouter } from 'next/navigation';
+import { PaginationState } from '@tanstack/react-table';
+import {
+  defaultStringifySearch,
+  simpleParseSearch,
+} from 'hooks/client_api/search_params';
+import {
+  ReadonlyURLSearchParams,
+  usePathname,
+  useRouter,
+} from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getDateRange } from 'utils/getters/getDateRange';
+import { getKeysFromZodSchema } from 'utils/getters/getKeysFromZodSchema';
+import { ZodObject, ZodRawShape } from 'zod';
 
-export const useUrlManagedState = (
-  validateSearch: () => any,
+export const useUrlManagedState = <T extends ZodRawShape>(
+  schema: ZodObject<T>,
+  searchParams: ReadonlyURLSearchParams,
   defaultRangeNumberOfDays?: number
 ) => {
+  const schemaKeys = getKeysFromZodSchema(schema);
+
+  function validateSearchParams() {
+    const data: Record<string, any> = {};
+
+    for (const i of schemaKeys) {
+      data[i] = simpleParseSearch(searchParams.get(i) ?? '');
+    }
+
+    return schema.parse(data);
+  }
+
   const [filters, setFilters] = useState<Record<string, any>>({});
+
   const [range, setRange] = useState(
     getDateRange({ days: defaultRangeNumberOfDays ?? 0 })
   );
 
+  const [pagination, setPagination] = useState<PaginationState>(
+    {} as PaginationState
+  );
+
   const { replace } = useRouter();
+
   const pathname = usePathname();
 
   useEffect(() => {
-    const search = validateSearch();
+    const { pagination, ...search } = validateSearchParams();
 
     setFilters(search);
+    getPaginationFromUrl(pagination);
 
     if (!search?.range) return;
 
@@ -35,10 +65,23 @@ export const useUrlManagedState = (
   }, []);
 
   useEffect(() => {
-    replace(`${pathname}${defaultStringifySearch(filters)}`);
-  }, [filters]);
+    replace(`${pathname}${defaultStringifySearch({ ...filters, pagination })}`);
+  }, [filters, pagination]);
 
-  return { filters, setFilters, range, setRange };
+  function getPaginationFromUrl(pagination: any) {
+    const pageIndex = parseInt(pagination.pageIndex);
+    const pageSize = parseInt(pagination.pageSize);
+
+    if (isNaN(pageIndex) || isNaN(pageSize) || pageSize !== 10)
+      return setPagination({
+        pageIndex: 0,
+        pageSize: 10,
+      });
+
+    setPagination({ pageIndex, pageSize });
+  }
+
+  return { filters, setFilters, range, setRange, pagination, setPagination };
 };
 
 export type UseUrlManagedState = ReturnType<typeof useUrlManagedState>;

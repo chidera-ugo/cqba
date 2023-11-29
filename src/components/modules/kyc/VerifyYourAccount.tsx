@@ -1,4 +1,4 @@
-import { Restrictor } from 'components/common/Restrictor';
+import { Restrictor } from 'components/commons/Restrictor';
 import { ChatBubbles } from 'components/illustrations/ChatBubbles';
 import { useCurrentAccountSetupStepUrl } from 'hooks/dashboard/kyc/useCurrentAccountSetupStepUrl';
 import { useRouter } from 'next/router';

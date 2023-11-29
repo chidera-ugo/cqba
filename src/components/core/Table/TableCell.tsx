@@ -1,6 +1,6 @@
 import { CellContext } from '@tanstack/react-table';
 import clsx from 'clsx';
-import { useCopyToClipboard } from 'hooks/common/useCopyToClipboard';
+import { useCopyToClipboard } from 'hooks/commons/useCopyToClipboard';
 import { formatAmount } from 'utils/formatters/formatAmount';
 import { formatDate } from 'utils/formatters/formatDate';
 
@@ -47,6 +47,7 @@ export const TableCell = <T,>({
       <span className={clsx(canCopy && 'cell-button hover:underline')}>
         {value}
       </span>
+
       {canCopy && (
         <span className={'my-auto ml-1'}>
           <svg

@@ -1,9 +1,9 @@
 import clsx from 'clsx';
-import { FullScreenLoader } from 'components/common/FullScreenLoader';
+import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { ForgotPasswordForm } from 'components/forms/auth/ForgotPasswordForm';
 import { ChatBubbles } from 'components/illustrations/ChatBubbles';
 import { AuthLayout } from 'components/layouts/AuthLayout';
-import { SimpleInformation } from 'components/modules/common/SimpleInformation';
+import { SimpleInformation } from 'components/modules/commons/SimpleInformation';
 import { AppToast } from 'components/primary/AppToast';
 import { BackLine } from 'components/svgs/navigation/Arrows';
 import { useInitiatePasswordRecovery } from 'hooks/api/auth/useInitiatePasswordRecovery';

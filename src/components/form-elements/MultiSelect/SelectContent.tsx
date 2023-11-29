@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { Dropdown } from 'components/common/Dropdown';
+import { Dropdown } from 'components/commons/Dropdown';
 import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { CentredModalWrapper } from 'components/modal/ModalWrapper';
 import { Dispatch, PropsWithChildren, SetStateAction } from 'react';

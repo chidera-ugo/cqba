@@ -1,10 +1,10 @@
 import clsx from 'clsx';
-import { FullScreenLoader } from 'components/common/FullScreenLoader';
+import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { CodeInput } from 'components/form-elements/CodeInput';
 import { AppToast } from 'components/primary/AppToast';
 import { AnimateLayout } from 'components/transition/AnimateLayout';
 import { useHandleError } from 'hooks/api/useHandleError';
-import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
+import { useMakeDummyHttpRequest } from 'hooks/commons/useMakeDummyHttpRequest';
 import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';

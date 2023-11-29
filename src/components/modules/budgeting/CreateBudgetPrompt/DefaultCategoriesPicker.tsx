@@ -1,4 +1,4 @@
-import { useGetColorByChar } from 'hooks/common/useGetColorByChar';
+import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 

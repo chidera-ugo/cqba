@@ -1,6 +1,5 @@
-import { AppErrorBoundary } from 'components/core/ErrorBoundary';
-import { DefaultCategoriesPicker } from 'components/modules/budgeting/CreateBudgetPrompt/DefaultCategoriesPicker';
-import { useState } from 'react';
+import Image from 'next/image';
+import asset from '/public/assets/budgets/create_budget_prompt.jpg';
 
 export const CreateBudgetPrompt = ({
   close,
@@ -9,27 +8,10 @@ export const CreateBudgetPrompt = ({
   close: () => void;
   createBudget: () => void;
 }) => {
-  const data = [
-    'Advertising',
-    'Gifts',
-    'Food',
-    'Training',
-    'Salary',
-    'Advertising',
-    'Transportation',
-    'Gifts',
-    'Travels',
-    'Bills and Utility',
-    'Training',
-  ];
-
-  // Todo: Remove this later it may be redundant
-  const [show, setShow] = useState(true);
-
   return (
-    <div className='h-full'>
-      <div className={'mx-auto max-w-[440px] px-4 text-center 640:px-8'}>
-        <h3 className={'relative text-3xl font-semibold leading-9'}>
+    <>
+      <div className={'mx-auto max-w-[440px] pt-10 text-center'}>
+        <h3 className={'text-3xl font-semibold leading-8 640:leading-9'}>
           Create a budget and stay on top of your expense
         </h3>
 
@@ -37,22 +19,15 @@ export const CreateBudgetPrompt = ({
           Manage expenses the easy way, create a budget before you start
           transacting.
         </p>
+
+        <Image
+          src={asset}
+          alt={'budget_categories'}
+          className={'mx-auto py-10'}
+        />
       </div>
 
-      <div className='y-center h-auto w-full cursor-grab overflow-visible py-10 640:min-w-[400px]'>
-        {!!data?.length && (
-          <AppErrorBoundary type={'invisible'}>
-            <DefaultCategoriesPicker
-              {...{
-                data,
-              }}
-              show={show}
-            />
-          </AppErrorBoundary>
-        )}
-      </div>
-
-      <div className='y-center'>
+      <div className='y-center mt-4'>
         <button
           type={'button'}
           onClick={createBudget}
@@ -61,16 +36,10 @@ export const CreateBudgetPrompt = ({
           Create Personal Budget
         </button>
 
-        <button
-          onClick={() => {
-            setShow(false);
-            close();
-          }}
-          className={'text-link mt-4'}
-        >
+        <button onClick={close} className={'text-link mt-4'}>
           Skip for Later
         </button>
       </div>
-    </div>
+    </>
   );
 };

@@ -6,8 +6,8 @@ import { useRouter } from 'next/router';
 import { convertToUrlString } from 'utils/converters/convertToUrlString';
 import clsx from 'clsx';
 import { Fragment } from 'react';
-import { TooltipWrapper } from 'components/common/Tooltip';
-import { useDismiss } from 'hooks/common/useDismiss';
+import { TooltipWrapper } from 'components/commons/Tooltip';
+import { useDismiss } from 'hooks/commons/useDismiss';
 
 export const SideNavigationItems = () => {
   const { pathname } = useRouter();

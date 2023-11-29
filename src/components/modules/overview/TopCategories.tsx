@@ -3,7 +3,7 @@ import { TopCategoriesChart } from 'components/charts/overview/TopCategoriesChar
 import { Filter } from 'components/form-elements/Filter';
 import { Spinner } from 'components/svgs/dashboard/Spinner';
 import { CalendarIcon } from 'components/svgs/others/CalendarIcon';
-import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
+import { useMakeDummyHttpRequest } from 'hooks/commons/useMakeDummyHttpRequest';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useState } from 'react';
 import { getDateRange } from 'utils/getters/getDateRange';

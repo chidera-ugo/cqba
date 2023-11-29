@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { NewPasswordForm } from 'components/forms/auth/NewPasswordForm';
 import { AuthLayout } from 'components/layouts/AuthLayout';
-import { useQueryValidator } from 'hooks/common/useQueryValidator';
+import { useQueryValidator } from 'hooks/commons/useQueryValidator';
 import NotFound from 'pages/404';
 
 export default function NewPassword() {

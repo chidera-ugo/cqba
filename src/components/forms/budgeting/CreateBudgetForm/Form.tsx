@@ -18,7 +18,7 @@ export const Form = ({ formikProps, processing }: Props) => {
 
   return (
     <FormikForm onSubmit={handleSubmit}>
-      <Input label='Budget Title' name='title' />
+      <Input label='Budget Title' lazyFocus name='title' />
 
       <TextArea label={'Description'} name={'description'} />
 

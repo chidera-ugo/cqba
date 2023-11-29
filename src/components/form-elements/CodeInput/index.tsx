@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Cell } from './Cell';
 import { clsx } from 'clsx';
-import { Field } from 'types/Common';
+import { Field } from 'types/commons';
 import { formatCode } from 'utils/formatters/formatCode';
 import { convertToUrlString } from 'utils/converters/convertToUrlString';
 
@@ -97,7 +97,7 @@ export function CodeInput({
         className={clsx(
           'flex',
           className,
-          useDots ? 'gap-5' : 'gap-2 640:gap-3.5'
+          useDots ? 'gap-5' : 'gap-3 640:gap-3.5'
         )}
       >
         {[...Array(charLimit)].map((_, i) => {
@@ -123,6 +123,7 @@ export function CodeInput({
               id={id}
               {...{
                 code,
+                charLimit,
                 autoComplete,
               }}
               setCode={(val) => {

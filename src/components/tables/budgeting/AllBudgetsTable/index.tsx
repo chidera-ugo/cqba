@@ -35,10 +35,7 @@ export const AllBudgetsTable = ({ onItemClick, ...props }: BudgetListProps) => {
         sorting,
       }}
       reset={() => {
-        props.setPagination({
-          pageIndex: 0,
-          pageSize: 10,
-        });
+        // Reset pagination
         setSorting([]);
       }}
     />

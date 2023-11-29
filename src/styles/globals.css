@@ -32,7 +32,7 @@
   }
 
   h4 {
-    @apply text-[24px] font-semibold leading-[30px] 640:text-[32px] 640:leading-[36px];
+    @apply text-[24px] font-semibold leading-[24px] 640:text-[32px] 640:leading-[36px];
   }
 
   h5 {
@@ -43,7 +43,8 @@
     @apply text-xl font-semibold text-neutral-1000;
   }
 
-  label {
+  label,
+  .label {
     @apply mb-2 text-left text-sm font-normal text-neutral-700;
   }
 
@@ -54,13 +55,13 @@
   }
 
   ._input {
-    @apply smooth block appearance-none rounded-lg border border-neutral-100 bg-neutral-100 px-3.5 text-neutral-1000 placeholder-neutral-400 transition-colors focus:border-neutral-400 focus:outline-none focus:ring-4 focus:ring-neutral-200;
+    @apply smooth block appearance-none rounded-lg border border-neutral-100 bg-neutral-100 px-3.5 text-neutral-1000 placeholder-neutral-400 transition-colors focus:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-200 640:focus:ring-4;
     box-shadow: 0 2px 5px rgba(103, 110, 118, 0.08),
       0 0 0 1px rgba(103, 110, 118, 0.16), 0 1px 1px rgba(0, 0, 0, 0.12);
   }
 
   .pagination-button {
-    @apply smooth block appearance-none rounded-lg bg-white px-3.5 text-neutral-1000 placeholder-neutral-400 shadow-sm transition-colors focus:border-neutral-400 focus:outline-none 640:border-none 640:shadow-none;
+    @apply smooth block appearance-none rounded-lg bg-white px-3.5 text-neutral-1000 placeholder-neutral-400 shadow-sm transition-colors focus:border-neutral-400 focus:outline-none disabled:opacity-30 640:border-none 640:shadow-none;
   }
 
   input[type='checkbox'] {
@@ -97,6 +98,11 @@
     list-style-type: disc;
   }
 
+  #react_paginate_wrapper > ul {
+    @apply pl-0 !important;
+    list-style-type: none;
+  }
+
   ol {
     @apply my-0 pl-4 !important;
     list-style-type: auto;
@@ -121,19 +127,19 @@
   }
 
   .primary-button {
-    @apply smooth h-10 rounded-full bg-primary-main px-5 text-center text-sm font-medium text-white transition-colors hover:bg-primary-hmain;
+    @apply smooth h-10 rounded-full bg-primary-main px-4 text-center text-sm font-medium text-white transition-colors hover:bg-primary-hmain;
   }
 
   .secondary-button {
-    @apply smooth h-10 rounded-full border border-neutral-300 bg-white px-5 text-sm font-semibold text-neutral-1000 hover:bg-gray-100;
+    @apply smooth h-10 rounded-full border border-neutral-200 bg-white px-4 text-sm font-semibold text-neutral-1000 hover:bg-gray-100;
   }
 
   .light-button {
-    @apply smooth h-10 rounded-full border border-primary-main bg-white px-5 text-center text-sm font-medium text-primary-main transition-colors hover:bg-gray-100;
+    @apply smooth h-10 rounded-full border border-primary-main bg-white px-4 text-center text-sm font-medium text-primary-main transition-colors hover:bg-gray-100;
   }
 
   .dark-button {
-    @apply smooth h-10 rounded-full border border-black bg-black px-5 text-center text-sm font-medium text-white transition-colors hover:bg-gray-900;
+    @apply smooth h-10 rounded-full border border-black bg-black px-4 text-center text-sm font-medium text-white transition-colors hover:bg-gray-900;
   }
 
   .action-button {
@@ -141,7 +147,7 @@
   }
 
   .outline-button {
-    @apply smooth h-10 rounded-full border border-primary-700 bg-transparent px-5 text-center text-sm font-medium text-primary-700 transition-colors hover:bg-gray-100;
+    @apply smooth h-10 rounded-full border border-primary-700 bg-transparent px-4 text-center text-sm font-medium text-primary-700 transition-colors hover:bg-gray-100;
   }
 
   .text-button {
@@ -161,7 +167,7 @@
   }
 
   .card {
-    @apply rounded-xl border border-neutral-200 p-5;
+    @apply w-full rounded-lg border border-neutral-200 p-3 640:rounded-xl 640:p-5;
   }
 
   .x-between {
@@ -210,24 +216,8 @@
     @apply pill bg-yellow-500 text-white;
   }
 
-  .blue-pill {
-    @apply pill bg-primary-main bg-opacity-20 text-[10px] font-semibold uppercase text-primary-main !important;
-  }
-
-  .red-pill {
-    @apply pill bg-red-500 bg-opacity-20 text-[10px] font-semibold uppercase text-red-500 !important;
-  }
-
-  .green-alt-pill {
-    @apply alt-pill bg-success-600 text-green-700;
-  }
-
-  .red-alt-pill {
-    @apply alt-pill bg-red-600 text-red-700;
-  }
-
-  .yellow-alt-pill {
-    @apply alt-pill bg-yellow-600 text-yellow-600;
+  .gray-pill {
+    @apply pill bg-neutral-500 text-black;
   }
 
   .blue-pill {
@@ -239,7 +229,31 @@
   }
 
   .alt-pill {
-    @apply y-center smooth h-[26px] rounded-full bg-opacity-10 px-2 py-1 text-xs font-medium capitalize transition-colors;
+    @apply y-center smooth h-[26px] rounded-full border-2 px-2 py-1 text-xs font-medium capitalize;
+  }
+
+  .green-alt-pill {
+    @apply alt-pill border-success-400 bg-success-200 text-success-700;
+  }
+
+  .red-alt-pill {
+    @apply alt-pill bg-red-600 text-red-700;
+  }
+
+  .yellow-alt-pill {
+    @apply alt-pill border-yellow-500 border-opacity-30 bg-yellow-50 text-yellow-600;
+  }
+
+  .gray-alt-pill {
+    @apply alt-pill bg-neutral-50 text-neutral-700;
+  }
+
+  .blue-pill {
+    @apply pill bg-primary-main bg-opacity-20 text-[10px] font-semibold uppercase text-primary-main !important;
+  }
+
+  .red-pill {
+    @apply pill bg-red-500 bg-opacity-20 text-[10px] font-semibold uppercase text-red-500 !important;
   }
 
   .pill {
@@ -259,11 +273,11 @@
   }
 
   .tpill {
-    @apply y-center h-[22px] rounded-full px-1.5 text-xs shadow-sm 640:px-2 640:py-1;
+    @apply y-center h-[18px] rounded-full px-1.5 text-[10px] shadow-sm 640:h-[22px] 640:px-2 640:py-1 640:text-xs;
   }
 
   .pill_gray {
-    @apply tpill bg-neutral-100 text-neutral-900 ring-2 ring-neutral-600 ring-opacity-20;
+    @apply tpill bg-neutral-100 text-neutral-900 ring-1 ring-neutral-600 ring-opacity-20 640:ring-2;
   }
 
   .pill_yellow {

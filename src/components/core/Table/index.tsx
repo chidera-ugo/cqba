@@ -24,7 +24,7 @@ import { PaginatedResponse } from 'types/Table';
 import { TableHead as TableColumnsHead } from './TableHead';
 import { AppliedFilters } from './AppliedFilters';
 import clsx from 'clsx';
-import { SimpleToast } from 'components/common/SimpleToast';
+import { SimpleToast } from 'components/commons/SimpleToast';
 import { Spinner } from 'components/svgs/dashboard/Spinner';
 
 export type Props<T> = JSX.IntrinsicElements['table'] & {
@@ -215,7 +215,7 @@ export function Table<T>({
           (!!isLoading || !!isRefetching) &&
           !!res?.docs?.length
         }
-        className='left-0 top-32 1180:left-[122px]'
+        className='bottom-32 left-0 1180:left-[122px]'
       >
         <div className='flex py-2'>
           <Spinner className='my-auto mr-1 h-4 text-white' />
@@ -320,7 +320,7 @@ export function Table<T>({
                       <tr
                         key={key}
                         className={clsx(
-                          `group h-[71px] border-b border-gray-100 text-sm font-semibold`,
+                          `group h-[60px] border-b border-gray-100 text-sm font-semibold`,
                           canClick && 'cursor-pointer',
                           i % 2 !== 0 && 'bg-neutral-100',
                           textColor
@@ -333,7 +333,6 @@ export function Table<T>({
                               valign={alignTop ? 'top' : 'middle'}
                               className={clsx(
                                 `my-auto max-w-[200px] py-3 pr-3 font-medium`,
-                                canClick && 'group-hover:bg-[#2A85FF10]',
                                 alignTop && 'h-16 pt-5',
                                 index === row.getVisibleCells().length - 1 &&
                                   'rounded-r-none',
@@ -403,7 +402,14 @@ export function Table<T>({
         }}
       />
 
-      {!hidePagination && !minimal && !!res?.docs?.length && <Pagination />}
+      {/* Outrageous, yes */}
+      {!hidePagination &&
+        pagination &&
+        !minimal &&
+        res?.docs?.length &&
+        (pagination?.pageIndex > 0 || // Hide pagination if first page and items count is less than pageSize
+          (pagination?.pageIndex === 0 &&
+            res?.docs?.length === pagination?.pageSize)) && <Pagination />}
     </div>
   );
 }

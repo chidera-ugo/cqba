@@ -1,4 +1,4 @@
-import { FullScreenLoader } from 'components/common/FullScreenLoader';
+import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { Action, State, StoreApi } from 'context/AppContext/types';
 import {
   PropsWithChildren,
@@ -9,7 +9,7 @@ import {
   useMemo,
   useReducer,
 } from 'react';
-import useMediaQuery from 'hooks/common/useMediaQuery';
+import useMediaQuery from 'hooks/commons/useMediaQuery';
 import { useGetCurrentUser } from 'hooks/api/auth/useGetCurrentUser';
 import { reducer } from 'context/AppContext/methods';
 import { getFromLocalStore } from 'lib/localStore';

@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
-import { FullScreenLoader } from 'components/common/FullScreenLoader';
+import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { UpdateOwnerInformationForm } from 'components/forms/kyc/UpdateOwnerInformationForm';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { Confirmation } from 'components/modals/Confirmation';

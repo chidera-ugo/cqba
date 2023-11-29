@@ -9,7 +9,7 @@ import Calendar from 'react-calendar';
 import dayjs from 'dayjs';
 import clsx from 'clsx';
 import { Dropdown } from './Dropdown';
-import { Field, SetFieldValue } from 'types/Common';
+import { Field, SetFieldValue } from 'types/commons';
 import { validateField } from 'utils/validators/validateField';
 
 type Props = JSX.IntrinsicElements['input'] &

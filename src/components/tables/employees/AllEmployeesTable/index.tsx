@@ -1,7 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { SimpleToast } from 'components/common/SimpleToast';
+import { EmptyTable } from 'components/core/Table/EmptyTable';
 import { Confirmation } from 'components/modals/Confirmation';
-import { Spinner } from 'components/svgs/dashboard/Spinner';
 import { EmployeeAction } from 'components/tables/employees/AllEmployeesTable/EmployeeActions';
 import { useBlockEmployee } from 'hooks/api/employees/useBlockEmployee';
 import { useDeleteEmployee } from 'hooks/api/employees/useDeleteEmployee';
@@ -12,7 +11,6 @@ import {
 } from 'hooks/api/employees/useGetAllEmployees';
 import { useUnblockEmployee } from 'hooks/api/employees/useUnblockEmployee';
 import { EmployeeModalType } from 'hooks/employees/useManageEmployee';
-import Image from 'next/image';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import {
   ColumnFiltersState,
@@ -121,39 +119,16 @@ export const AllEmployeesTable = ({
 
   if (!data?.docs?.length)
     return (
-      <div className='relative h-full py-20'>
-        <SimpleToast
-          show={isLoading || isRefetching}
-          className='left-0 top-32 1180:left-[122px]'
-        >
-          <div className='flex py-2'>
-            <Spinner className='my-auto mr-1 h-4 text-white' />
-            <span className='my-auto'>Fetching</span>
-          </div>
-        </SimpleToast>
-
-        <div className='x-center'>
-          <div className='y-center'>
-            <Image
-              src={clock}
-              alt='clock-mockup'
-              className='mx-auto mt-auto block w-[90px] 640:w-[140px]'
-            />
-
-            <div className='mx-auto max-w-[400px] text-center'>
-              <h4 className='mt-5 text-2xl 640:text-3xl'>
-                {status === 'active' ? 'Invite Employee' : 'No pending invites'}
-              </h4>
-
-              <p className='mt-4 text-sm font-light leading-5 text-neutral-600'>
-                {status === 'active'
-                  ? `Building a strong team is essential for business success. Invite new employees to collaborate and manage your finances effectively`
-                  : `You do not have any pending invites yet, there is no data to be displayed.`}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <EmptyTable
+        processing={isLoading || isRefetching}
+        imageSrc={clock}
+        title={status === 'active' ? 'Invite Employee' : 'No pending invites'}
+        subTitle={
+          status === 'active'
+            ? `Building a strong team is essential for business success. Invite new employees to collaborate and manage your finances effectively`
+            : `You do not have any pending invites yet, there is no data to be displayed.`
+        }
+      />
     );
 
   return (

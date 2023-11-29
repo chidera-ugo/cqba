@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { Dropdown } from 'components/common/Dropdown';
+import { Dropdown } from 'components/commons/Dropdown';
 import { ChevronDown } from 'components/svgs/navigation/Chevrons';
 import { Exit } from 'components/svgs/navigation/Exit';
 import { useAppContext } from 'context/AppContext';

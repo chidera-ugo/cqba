@@ -7,7 +7,7 @@ import { useAppContext } from 'context/AppContext';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { IOwner } from 'hooks/api/kyc/useUpdateOwnerInformation';
 import { useScrollToFormError } from 'hooks/forms/useScrollToFormError';
-import { DatePickerValue } from 'types/Common';
+import { DatePickerValue } from 'types/commons';
 import { constructIdTypes } from 'utils/constructors/constructIdTypes';
 import { formatPhoneNumber } from 'utils/formatters/formatPhoneNumber';
 import { sanitizeRecordToRemoveUndefinedAndNulls } from 'utils/sanitizers/sanitizeRecordToRemoveUndefinedAndNulls';

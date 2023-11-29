@@ -1,6 +1,6 @@
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { ChangePinSteps } from 'components/modules/settings/security/ChangePin/ChangePinSteps';
-import { useQueryValidator } from 'hooks/common/useQueryValidator';
+import { useQueryValidator } from 'hooks/commons/useQueryValidator';
 import { useRouter } from 'next/router';
 
 export const ChangePin = ({ hasSetPin }: { hasSetPin: boolean }) => {

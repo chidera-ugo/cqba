@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { CloseEye, OpenEye } from 'components/svgs/forms/Eye';
 import { useField } from 'formik';
 import { useState } from 'react';
-import { Field } from 'types/Common';
+import { Field } from 'types/commons';
 import { validateField } from 'utils/validators/validateField';
 
 type Props = JSX.IntrinsicElements['input'] & Field;

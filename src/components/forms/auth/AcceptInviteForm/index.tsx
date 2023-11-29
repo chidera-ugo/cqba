@@ -3,7 +3,7 @@ import { IsLoading } from 'components/data-states/IsLoading';
 import { Formik } from 'formik';
 import { useAcceptInvite } from 'hooks/api/auth/useAcceptInvite';
 import { useInitiateAuthSession } from 'hooks/app/useInitiateAuthSession';
-import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
+import { useMakeDummyHttpRequest } from 'hooks/commons/useMakeDummyHttpRequest';
 import { useRouter } from 'next/router';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';

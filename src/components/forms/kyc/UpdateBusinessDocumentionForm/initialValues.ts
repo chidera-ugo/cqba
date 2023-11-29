@@ -1,4 +1,4 @@
-import { DatePickerValue, IFile } from 'types/Common';
+import { DatePickerValue, IFile } from 'types/commons';
 
 export const initialValues = {
   bnNumber: '',

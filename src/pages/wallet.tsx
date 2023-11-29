@@ -5,10 +5,7 @@ import { WalletOverview } from 'components/modules/wallet/WalletOverview';
 export default function Wallet() {
   return (
     <AppLayout title='Wallet'>
-      <div className='flex'>
-        <WalletOverview />
-      </div>
-
+      <WalletOverview />
       <WalletTransactions />
     </AppLayout>
   );

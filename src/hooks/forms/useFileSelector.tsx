@@ -1,6 +1,6 @@
 import { AppToast } from 'components/primary/AppToast';
 import { toast } from 'react-toastify';
-import { IFile } from 'types/Common';
+import { IFile } from 'types/commons';
 import { getBase64String } from 'utils/getters/getBase64String';
 
 interface HandleFileProps {

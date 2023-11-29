@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { Dropdown } from 'components/common/Dropdown';
+import { Dropdown } from 'components/commons/Dropdown';
 import { VerticalDots } from 'components/svgs/Icons_TableActions';
 import { Dispatch, PropsWithChildren, SetStateAction, useState } from 'react';
 

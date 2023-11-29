@@ -1,6 +1,6 @@
 import { useField, useFormikContext } from 'formik';
 import clsx from 'clsx';
-import { Field } from 'types/Common';
+import { Field } from 'types/commons';
 import { formatAmount, sanitizeAmount } from 'utils/formatters/formatAmount';
 
 type Props = JSX.IntrinsicElements['input'] &
@@ -53,14 +53,14 @@ export const AmountInput = ({
               value: e.target.value,
             });
 
-            if (setFieldValue) {
-              const val = formatAmount({
-                value: String(value).split('.').join(''),
-                typing: true,
-              });
+            if (!setFieldValue) return;
 
-              setFieldValue(props.name!, val);
-            }
+            const val = formatAmount({
+              value: String(value).split('.').join(''),
+              typing: true,
+            });
+
+            setFieldValue(props.name!, val, true);
           }}
           className={clsx(
             `input w-full pl-[56px] pr-12`,

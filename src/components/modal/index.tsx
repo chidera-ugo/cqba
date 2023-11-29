@@ -28,32 +28,6 @@ export const Modal = ({
     return () => clearTimeout(timeout);
   }, [grow]);
 
-  // function resetZoomOut() {
-  //   if (type !== 'right') return;
-  //
-  //   const el = document.getElementById('app_wrapper');
-  //
-  //   if (el) {
-  //     el.style.transitionProperty = 'all';
-  //     el.style.transitionDuration = '0.4s';
-  //     el.style.transform = '';
-  //     el.style.overflow = '';
-  //   }
-  // }
-
-  // function zoomOut() {
-  //   if (type !== 'right') return;
-  //
-  //   const el = document.getElementById('app_wrapper');
-  //
-  //   if (el) {
-  //     el.style.transitionProperty = 'all';
-  //     el.style.transitionDuration = '0.4s';
-  //     el.style.transform = 'scale(0.96)';
-  //     el.style.overflow = 'hidden';
-  //   }
-  // }
-
   return (
     <AnimatePresence initial={false}>
       {show && (
@@ -69,7 +43,13 @@ export const Modal = ({
               initial='hide'
               animate='show'
               exit='hide'
-              onClick={closeOnClickOutside ? closeModal : () => setGrow(true)}
+              onClick={
+                closeOnClickOutside
+                  ? closeModal
+                  : hideBackground
+                  ? undefined
+                  : () => setGrow(true)
+              }
               variants={{
                 show: {
                   opacity: 1,
@@ -90,13 +70,6 @@ export const Modal = ({
                   ? 'bg-white'
                   : 'bg-black bg-opacity-60'
               )}
-              // onAnimationStart={(variant) => {
-              //   if (variant === 'show') {
-              //     zoomOut();
-              //   } else {
-              //     resetZoomOut();
-              //   }
-              // }}
             />
 
             <motion.div
@@ -130,7 +103,7 @@ export const Modal = ({
                 if (e.target.id === 'modal-child-wrapper') {
                   if (closeOnClickOutside && closeModal) {
                     closeModal();
-                  } else {
+                  } else if (!hideBackground) {
                     setGrow(true);
                   }
                 }

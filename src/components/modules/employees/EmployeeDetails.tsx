@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { Avatar } from 'components/common/Avatar';
-import { DisplayValue } from 'components/common/DisplayValue';
+import { Avatar } from 'components/commons/Avatar';
+import { DisplayValue } from 'components/commons/DisplayValue';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
@@ -11,7 +11,7 @@ import { useDeleteInvite } from 'hooks/api/employees/useDeleteInvite';
 import { IEmployee } from 'hooks/api/employees/useGetAllEmployees';
 import { useGetEmployeeById } from 'hooks/api/employees/useGetEmployeeById';
 import { useResendInvite } from 'hooks/api/employees/useResendInvite';
-import { useGetColorByChar } from 'hooks/common/useGetColorByChar';
+import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { formatDate } from 'utils/formatters/formatDate';

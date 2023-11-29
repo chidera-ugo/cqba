@@ -1,4 +1,5 @@
 import { UseMutationOptions } from '@tanstack/react-query';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
 import { useTMutation } from 'hooks/api/useTMutation';
 
 export interface CreatePersonalBudgetDto {
@@ -11,9 +12,9 @@ export interface CreatePersonalBudgetDto {
 }
 
 export function useCreatePersonalBudget(
-  options?: UseMutationOptions<any, unknown, void, unknown>
+  options?: UseMutationOptions<IBudget, unknown, void, unknown>
 ) {
-  return useTMutation<CreatePersonalBudgetDto, any>({
+  return useTMutation<CreatePersonalBudgetDto, IBudget>({
     url: '/transfer',
     service: 'budgets',
     options,

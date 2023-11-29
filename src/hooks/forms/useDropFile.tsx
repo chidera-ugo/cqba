@@ -1,6 +1,6 @@
 import { useFileSelector } from 'hooks/forms/useFileSelector';
 import { useEffect } from 'react';
-import { FileField } from 'types/Common';
+import { FileField } from 'types/commons';
 
 export const useDropFile = ({
   id,

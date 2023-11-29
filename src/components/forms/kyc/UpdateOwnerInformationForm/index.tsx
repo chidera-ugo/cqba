@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { FullScreenLoader } from 'components/common/FullScreenLoader';
+import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { AppToast } from 'components/primary/AppToast';
 import { Formik } from 'formik';
 import {

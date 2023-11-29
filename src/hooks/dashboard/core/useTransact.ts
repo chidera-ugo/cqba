@@ -10,10 +10,10 @@ export type TransactionProcess = {
   shortRef?: string;
 } | null;
 
+type Mode = 'authorize' | 'success' | 'receipt' | null;
+
 export const useTransact = ({ transactionType }: Args) => {
-  const [mode, setMode] = useState<
-    'authorize' | 'processing' | 'success' | 'receipt' | null
-  >(null);
+  const [mode, setMode] = useState<Mode>(null);
 
   const transaction = useRef<TransactionProcess>(null);
 
@@ -24,7 +24,6 @@ export const useTransact = ({ transactionType }: Args) => {
       setMode(null);
       transaction.current = null;
     },
-
     transactionType,
     transaction: transaction.current,
   };

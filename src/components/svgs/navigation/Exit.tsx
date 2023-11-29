@@ -92,13 +92,14 @@ export const Cross = ({ className }: { className?: string }) => {
   );
 };
 
-export const CrossSubtract = () => {
+export const CrossSubtract = ({ className }: { className?: string }) => {
   return (
     <svg
       width='37'
       height='38'
       viewBox='0 0 37 38'
       fill='none'
+      className={className}
       xmlns='http://www.w3.org/2000/svg'
     >
       <path

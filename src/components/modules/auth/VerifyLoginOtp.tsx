@@ -3,12 +3,12 @@ import { CodeInput } from 'components/form-elements/CodeInput';
 import { useResendLoginOtp } from 'hooks/api/auth/useResendLoginOtp';
 import { useVerifyLoginOtp } from 'hooks/api/auth/useVerifyLoginOtp';
 import { useInitiateAuthSession } from 'hooks/app/useInitiateAuthSession';
-import { useResetter } from 'hooks/common/useResetter';
-import { useCountdown } from 'hooks/common/useCountdown';
+import { useResetter } from 'hooks/commons/useResetter';
+import { useCountdown } from 'hooks/commons/useCountdown';
 import { AppToast } from 'components/primary/AppToast';
 import { toast } from 'react-toastify';
 import { Spinner } from 'components/svgs/dashboard/Spinner';
-import { FullScreenLoader } from 'components/common/FullScreenLoader';
+import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { BackLine } from 'components/svgs/navigation/Arrows';
 
 interface Props {

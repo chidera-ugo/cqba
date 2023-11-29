@@ -2,8 +2,8 @@ import { CodeInput } from 'components/form-elements/CodeInput';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { AppToast } from 'components/primary/AppToast';
 import { useHandleError } from 'hooks/api/useHandleError';
-import { useMakeDummyHttpRequest } from 'hooks/common/useMakeDummyHttpRequest';
-import { useResetter } from 'hooks/common/useResetter';
+import { useMakeDummyHttpRequest } from 'hooks/commons/useMakeDummyHttpRequest';
+import { useResetter } from 'hooks/commons/useResetter';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 

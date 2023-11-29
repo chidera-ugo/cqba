@@ -1,7 +1,7 @@
 import { Confirmation } from 'components/modals/Confirmation';
 import { isDev } from 'constants/environmentVariables';
 import { useDestroySession } from 'hooks/app/useDestroySession';
-import { useCountdown } from 'hooks/common/useCountdown';
+import { useCountdown } from 'hooks/commons/useCountdown';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useRouter } from 'next/router';
 import { useState } from 'react';

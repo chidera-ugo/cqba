@@ -1,9 +1,9 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { FullScreenLoader } from 'components/common/FullScreenLoader';
+import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { CheckInput } from 'components/form-elements/CheckInput';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { Clock } from 'components/illustrations/Clock';
-import { SimpleInformation } from 'components/modules/common/SimpleInformation';
+import { SimpleInformation } from 'components/modules/commons/SimpleInformation';
 import { useApplyForReview } from 'hooks/api/kyc/useApplyForReview';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import Link from 'next/link';

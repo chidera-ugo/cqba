@@ -14,7 +14,7 @@ const commaSeperator = (num: string) => {
 };
 
 export const formatAmount = ({
-  value = 0,
+  value,
   decimalPlaces = 2,
   kFormatter,
   typing,
@@ -40,30 +40,29 @@ export const formatAmount = ({
     }
 
     return `${commaSeperator(actualValue)}`;
-  } else if (!kFormatter && value < 100_000_000_000) {
+  } else if (!kFormatter) {
     return commaSeperator(
       Number(Math.sign(value) * Math.abs(value)).toFixed(decimalPlaces)
     );
   }
 
-  // I hate it too
-  return Math.abs(value) > 999999999999
-    ? Math.sign(value) *
-        Number((Math.abs(value) / 1000000000000).toFixed(decimalPlaces)) +
-        'T'
-    : Math.abs(value) > 999999999
-    ? Math.sign(value) *
-        Number((Math.abs(value) / 1000000000).toFixed(decimalPlaces)) +
-      'B'
-    : Math.abs(value) > 999999
-    ? Math.sign(value) *
-        Number((Math.abs(value) / 1000000).toFixed(decimalPlaces)) +
-      'M'
-    : Math.abs(value) > 999
-    ? Math.sign(value) *
-        Number((Math.abs(value) / 1000).toFixed(decimalPlaces)) +
-      'K'
-    : Number(Math.sign(value) * Math.abs(value)).toFixed(decimalPlaces);
+  const abbreviations = ['', 'K', 'M', 'B', 'T', 'Qd'];
+
+  for (let i = abbreviations.length - 1; i >= 0; i--) {
+    const divisor = Math.pow(10, i * 3);
+    if (Math.abs(value) >= divisor) {
+      const formattedValue = (
+        Math.sign(value) *
+        (Math.abs(value) / divisor)
+      ).toFixed(decimalPlaces);
+
+      return `${formattedValue.replace(/(\.0+|(\.\d+?)0+)$/, '$2')}${
+        abbreviations[i]
+      }`;
+    }
+  }
+
+  return Number(Math.sign(value) * Math.abs(value)).toFixed(decimalPlaces);
 };
 
 export const sanitizeAmount = ({
@@ -75,7 +74,7 @@ export const sanitizeAmount = ({
   returnTrueAmount?: boolean;
   returnInputIfLessThanOne?: boolean;
 }) => {
-  let val = value ? value.split(',').join('') : '';
+  let val = value ? value?.split(',').join('') : '';
   val = val.replace(/[^0-9]/g, '');
 
   if (!val || (val?.length === 1 && val.charAt(0) === '0')) return '';
@@ -87,9 +86,11 @@ export const sanitizeAmount = ({
   }
 
   if (returnTrueAmount) {
-    return `${amount.substring(0, amount?.length - 2)}.${amount.substring(
+    const trueAmount = `${amount.substring(
+      0,
       amount?.length - 2
-    )}`;
+    )}.${amount.substring(amount?.length - 2)}`;
+    return trueAmount;
   }
 
   return amount;

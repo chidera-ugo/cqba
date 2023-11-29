@@ -3,7 +3,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { TableCell } from 'components/core/Table/TableCell';
 import { CategoryPill } from 'components/modules/categories/DefaultCategories';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
-import { useGetColorByChar } from 'hooks/common/useGetColorByChar';
+import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { useMemo } from 'react';
 
 export const useColumns = () => {

@@ -1,9 +1,10 @@
 import clsx from 'clsx';
+import { CrossSubtract } from 'components/svgs/navigation/Exit';
 import { FC, PropsWithChildren, useState } from 'react';
 import { Modal } from '.';
 import { useDragControls, motion } from 'framer-motion';
 import { Header, HeaderProps } from './ModalHeader';
-import useMediaQuery from 'hooks/common/useMediaQuery';
+import useMediaQuery from 'hooks/commons/useMediaQuery';
 
 export const defaultBackgroundClassname = 'bg-white';
 
@@ -164,19 +165,11 @@ export const CentredModalWrapper = ({
           {!hideHeader && props.closeModal && (
             <div className='x-between bg-white p-4'>
               <h5>{props.title}</h5>
-              <button onClick={props.closeModal} className='text-gray-400'>
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  viewBox='0 0 24 24'
-                  fill='currentColor'
-                  className='h-7 w-7'
-                >
-                  <path
-                    fillRule='evenodd'
-                    d='M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z'
-                    clipRule='evenodd'
-                  />
-                </svg>
+              <button
+                onClick={props.closeModal}
+                className='text-gray-400 hover:text-red-500'
+              >
+                <CrossSubtract className={'h-7 w-7'} />
               </button>
             </div>
           )}
