@@ -20,6 +20,7 @@ type Props = {
   successTitle: string;
   close: () => void;
   actionMessage: string;
+  showBackground?: boolean;
 };
 
 export const AuthorizeActionWithPin = ({
@@ -33,6 +34,7 @@ export const AuthorizeActionWithPin = ({
   successMessage,
   successTitle,
   actionMessage,
+  showBackground,
 }: Props) => {
   const [pin, setPin] = useState('');
   const [clearCodeInput, setClearCodeInput] = useResetter();
@@ -40,7 +42,7 @@ export const AuthorizeActionWithPin = ({
   return (
     <RightModalWrapper
       title={title}
-      hideBackground
+      hideBackground={!showBackground}
       show={show}
       closeModal={close}
     >

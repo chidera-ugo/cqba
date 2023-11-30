@@ -5,7 +5,7 @@ export function usePauseBudget(
   budgetId: string,
   options?: UseMutationOptions<any, unknown, void, unknown>
 ) {
-  return useTMutation({
+  return useTMutation<{ pin: string }, null>({
     url: `/${budgetId}/pause`,
     service: 'budgets',
     options,
