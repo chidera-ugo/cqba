@@ -11,13 +11,13 @@ export const validationSchema = object({
         limit: 10,
       })
     )
-    .test('max', 'Above budget balance', (value, ctx) =>
-      validateAmount({
+    .test('max', 'Above budget balance', (value, ctx) => {
+      return validateAmount({
         value,
         limit: ctx.parent.budgetBalance,
         reverse: true,
-      })
-    ),
+      });
+    }),
   bank: string().required('Please select a bank'),
   accountNumber: string()
     .required('Please provide account number')

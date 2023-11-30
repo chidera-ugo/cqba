@@ -8,7 +8,7 @@ import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { useSearchParams } from 'next/navigation';
 import { PropsWithChildren, useState } from 'react';
 import { formatAmount } from 'utils/formatters/formatAmount';
-import { walletFiltersSchema } from 'zod_schemas/wallet';
+import { walletFiltersSchema } from 'zod_schemas/wallet_schema';
 
 export const WalletTransactions = ({
   showAllTransactions,
@@ -36,7 +36,7 @@ export const WalletTransactions = ({
       <div className='my-5 block justify-between gap-2 640:my-7 1180:flex'>
         <div className='hidden gap-2 1180:flex'>
           <SearchInput
-            placeholder='Search by transaction id'
+            placeholder='Search by transaction _id'
             value={search}
             wrapperClassname={'640:w-auto w-full'}
             className='w-full 640:w-[300px]'

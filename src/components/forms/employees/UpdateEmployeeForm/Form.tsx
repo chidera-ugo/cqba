@@ -69,7 +69,7 @@ export const Form = ({
         lastName,
         email,
         phoneNumber: phone,
-        role,
+        role: role === 'owner' ? '' : role,
       },
       false
     );
@@ -96,7 +96,16 @@ export const Form = ({
         </>
       )}
 
-      <Select name={'role'} label={'Role'} options={['CFO', 'EMPLOYEE']} />
+      <Select
+        name={'role'}
+        label={'Role'}
+        trueValueKey={'value'}
+        displayValueKey={'name'}
+        options={[
+          { name: 'CFO', value: 'cfo' },
+          { name: 'Employee', value: 'employee' },
+        ]}
+      />
 
       <div className='relative mt-10 flex pb-8'>
         <SubmitButton

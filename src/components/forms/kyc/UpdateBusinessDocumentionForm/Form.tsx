@@ -95,9 +95,7 @@ export const Form = ({ processing, formikProps, redirectUrl }: Props) => {
           {...{
             setFieldValue,
           }}
-          limit={8}
           shouldValidate
-          disableTyping
           fieldType='dateOfBirth'
           maxDate={new Date()}
         />

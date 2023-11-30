@@ -23,7 +23,7 @@ export interface IBudget {
 export function useGetAllBudgets(
   params: {
     page?: number;
-    size?: number;
+    limit?: number;
     search?: string;
     departmentId?: string;
     status?: string;

@@ -1,6 +1,7 @@
 import { Input } from 'components/form-elements/Input';
 import { PasswordInput } from 'components/form-elements/PasswordInput';
 import { PhoneNumberInput } from 'components/form-elements/PhoneNumberInput';
+import { PasswordRequirementsCheckList } from 'components/modules/auth/PasswordRequirementsCheckList';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
@@ -11,7 +12,7 @@ interface Props {
 }
 
 export const Form = ({ processing, formikProps }: Props) => {
-  const { handleSubmit, setFieldValue } = formikProps;
+  const { handleSubmit, setFieldValue, values } = formikProps;
 
   return (
     <FormikForm onSubmit={handleSubmit} className='mt-4'>
@@ -29,17 +30,15 @@ export const Form = ({ processing, formikProps }: Props) => {
       />
 
       <PasswordInput
-        label='Create Password (6 digit pin)'
+        label='Password'
         name='password'
-        setFieldValue={setFieldValue}
-        type='text'
-        inputMode='tel'
-        autoComplete='off'
-        next={'idType'}
-        fieldType='idNumber'
-        limit={6}
-        shouldValidate
+        type='password'
+        autoComplete='new-password'
       />
+
+      {values.password && (
+        <PasswordRequirementsCheckList password={values.password} />
+      )}
 
       <SubmitButton
         submitting={processing}

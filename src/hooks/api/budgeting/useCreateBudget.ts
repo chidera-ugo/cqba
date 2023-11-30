@@ -2,11 +2,19 @@ import { UseMutationOptions } from '@tanstack/react-query';
 import { useTMutation } from 'hooks/api/useTMutation';
 
 export interface CreateBudgetDto {
+  beneficiaries: Beneficiary[];
+  pin: string;
   name: string;
+  description: string;
   amount: number;
-  threshold: number | null;
+  threshold: number;
   expiry: Date | null;
-  currency?: string;
+  currency: string;
+}
+
+export interface Beneficiary {
+  user: string;
+  allocation: number;
 }
 
 export function useCreateBudget(

@@ -1,14 +1,15 @@
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
 import { WalletToBankForm } from 'components/forms/wallet/make-transfer/WalletToBankForm';
-import { WalletToBankFormRecoveryProps } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank/index';
+import { WalletToBankFormRecoveryValues } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank/index';
 import { useGetInstitutions } from 'hooks/api/wallet/useGetInstitutions';
+import { FormRecoveryProps } from 'types/forms/form_recovery';
 
 export const WalletToBank = (
   props: {
     createBudget: () => void;
     close: () => void;
-  } & WalletToBankFormRecoveryProps
+  } & FormRecoveryProps<WalletToBankFormRecoveryValues>
 ) => {
   const { isLoading, isError, data } = useGetInstitutions();
 

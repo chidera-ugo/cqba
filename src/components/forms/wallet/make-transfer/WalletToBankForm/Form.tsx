@@ -52,13 +52,13 @@ export const Form = ({
   useEffect(() => {
     if (!values.budget) return;
 
-    setFieldValue(
-      'budgetBalance',
+    const budgetBalance =
       Number(
-        data?.docs.find(({ _id }) => _id === values.budget)!.availableAmount
-      ) / 100
-    );
-  }, [values.budget]);
+        data?.docs.find(({ _id }) => _id === values.budget)?.availableAmount
+      ) / 100;
+
+    setFieldValue('budgetBalance', budgetBalance);
+  }, [values.budget, data]);
 
   return (
     <FormikForm onSubmit={handleSubmit}>
@@ -81,7 +81,7 @@ export const Form = ({
         name={'budget'}
         label={'Budget Category'}
       />
-      <div className='mt-3 flex'>
+      <div className='mt-3 flex w-fit'>
         <SecondaryActionButton
           onClick={createBudget}
           text={'Create New Budget'}

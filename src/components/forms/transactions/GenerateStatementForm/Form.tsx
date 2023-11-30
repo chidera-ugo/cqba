@@ -20,7 +20,6 @@ export const Form = ({ formikProps, processing }: Props) => {
         {...{ setFieldValue }}
         maxDate={dayjs().subtract(1, 'day').toDate()}
         minDate={dayjs().subtract(1, 'year').toDate()}
-        bottom
       />
 
       <DatePicker

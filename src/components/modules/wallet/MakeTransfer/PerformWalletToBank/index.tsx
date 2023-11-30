@@ -3,7 +3,8 @@ import { initialValues } from 'components/forms/wallet/make-transfer/WalletToBan
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { WalletToBank } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank/WalletToBank';
 import { AnimateLayout } from 'components/transition/AnimateLayout';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useManageWallets } from 'hooks/wallet/useManageWallets';
+import { useState } from 'react';
 
 interface Props {
   close: () => void;
@@ -12,24 +13,26 @@ interface Props {
 
 export type WalletToBankFormRecoveryValues = typeof initialValues | null;
 
-export type WalletToBankFormRecoveryProps = {
-  setFormRecoveryValues: Dispatch<
-    SetStateAction<WalletToBankFormRecoveryValues>
-  >;
-  formRecoveryValues: WalletToBankFormRecoveryValues;
-};
-
 export const PerformWalletToBank = ({ close, show }: Props) => {
   const [mode, setMode] = useState<'transfer' | 'create_budget'>('transfer');
 
+  const { primaryWallet } = useManageWallets();
+
   const [formRecoveryValues, setFormRecoveryValues] =
     useState<WalletToBankFormRecoveryValues>(null);
+
+  function closeModal() {
+    setFormRecoveryValues(null);
+    close();
+  }
 
   return (
     <RightModalWrapper
       show={show}
       title={mode === 'create_budget' ? 'Create Budget' : 'Make a transfer'}
-      closeModal={mode === 'create_budget' ? () => setMode('transfer') : close}
+      closeModal={
+        mode === 'create_budget' ? () => setMode('transfer') : closeModal
+      }
       childrenClassname={'p-0'}
     >
       <AnimateLayout
@@ -38,6 +41,7 @@ export const PerformWalletToBank = ({ close, show }: Props) => {
       >
         {mode === 'create_budget' ? (
           <CreateBudgetForm
+            currency={primaryWallet.currency}
             onSuccess={(budgetId) => {
               setMode('transfer');
 
@@ -49,10 +53,7 @@ export const PerformWalletToBank = ({ close, show }: Props) => {
           />
         ) : (
           <WalletToBank
-            close={() => {
-              close();
-              setFormRecoveryValues(null);
-            }}
+            close={closeModal}
             createBudget={() => setMode('create_budget')}
             {...{ formRecoveryValues, setFormRecoveryValues }}
           />

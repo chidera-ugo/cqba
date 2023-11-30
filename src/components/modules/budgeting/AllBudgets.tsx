@@ -1,16 +1,21 @@
+import clsx from 'clsx';
+import { SimpleToast } from 'components/commons/SimpleToast';
 import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { EmptyTable } from 'components/core/Table/EmptyTable';
+import { Pagination } from 'components/core/Table/Pagination';
+import { TableDataStates } from 'components/core/Table/TableDataStates';
+import { BudgetCard } from 'components/modules/budgeting/BudgetCard';
+import { Spinner } from 'components/svgs/dashboard/Spinner';
 import {
   IBudget,
   useGetAllBudgets,
 } from 'hooks/api/budgeting/useGetAllBudgets';
 import { TPagination } from 'hooks/client_api/hooks/useUrlManagedState';
-import { useRouter } from 'next/router';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { PaginationState } from '@tanstack/react-table';
+import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
+import { className } from 'postcss-selector-parser';
+import { useEffect, useState } from 'react';
 import { PaginatedResponse } from 'types/Table';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
-import { AllBudgetsCardView } from 'components/modules/budgeting/AllBudgetsCardView';
 import { PendingBudgetDetails } from './PendingBudgetDetails';
 import budgeting from '/public/mockups/budgeting.jpg';
 
@@ -20,27 +25,14 @@ interface Props {
   currentTab?: { name: string; value: string };
 }
 
-export type BudgetListProps = {
-  isLoading?: boolean;
-  isRefetching?: boolean;
-  isError?: boolean;
-  data: PaginatedResponse<IBudget> | undefined;
-  pagination: PaginationState;
-  setPagination: Dispatch<SetStateAction<PaginationState>>;
-  onItemClick?: ((res: any) => void) | undefined;
-  className?: string;
-  title: string;
-};
-
 export const AllBudgets = ({
   status,
   pagination,
   setPagination,
-  ...props
 }: Props & TPagination) => {
   const [showPinModal, setShowPinModal] = useState(false);
 
-  const { push } = useRouter();
+  const { getColor } = useGetColorByChar();
 
   const [currentBudget, setCurrentBudget] = useState<IBudget | null>(null);
 
@@ -51,7 +43,7 @@ export const AllBudgets = ({
     isRefetching,
   } = useGetAllBudgets({
     page: pagination.pageIndex + 1,
-    size: pagination.pageSize,
+    limit: pagination.pageSize,
     status: status === 'active' ? undefined : status,
   });
 
@@ -68,17 +60,18 @@ export const AllBudgets = ({
     setCurrentBudget(null);
   }
 
-  console.log(status);
-
-  if (!isLoading && !data?.docs?.length)
+  if (data && !data?.docs?.length)
     return (
       <EmptyTable
         processing={isLoading || isRefetching}
         imageSrc={budgeting}
         title='Create Budget'
+        toastClassname={'bottom-24'}
         subTitle={`Creating a budget is the first step to financial success. Define your spending limits and allocate resources strategically to achieve your business goals`}
       />
     );
+
+  const showData = !isError && !!data?.docs?.length;
 
   return (
     <>
@@ -100,26 +93,55 @@ export const AllBudgets = ({
       </RightModalWrapper>
 
       <AppErrorBoundary>
-        <AllBudgetsCardView
-          {...props}
-          title='budgets'
-          {...{
-            onItemClick(res: IBudget) {
-              if (res.status === 'declined') return null;
+        <div className={clsx(className)}>
+          <SimpleToast
+            show={!!data?.docs.length && (isLoading || isRefetching)}
+            className='bottom-24 left-0 1180:left-[122px]'
+          >
+            <div className='flex py-2'>
+              <Spinner className='my-auto mr-1 h-4 text-white' />
+              <span className='my-auto'>Fetching</span>
+            </div>
+          </SimpleToast>
 
-              if (res.status === 'approved')
-                return push(`/budgeting/${res._id}`);
+          <div
+            className={clsx(
+              'mb-0',
+              !showData && `rounded-[10px] border border-neutral-200 bg-white`
+            )}
+          >
+            <div className='grid w-full grid-cols-12 gap-5'>
+              {showData
+                ? data?.docs?.map((budget) => {
+                    return (
+                      <BudgetCard
+                        className={'col-span-12 768:col-span-6 1340:col-span-4'}
+                        {...{ getColor }}
+                        {...budget}
+                        key={budget._id}
+                      />
+                    );
+                  })
+                : null}
+            </div>
 
-              setCurrentBudget(res);
-            },
-            data,
-            isLoading,
-            isError,
-            isRefetching,
-            pagination,
-            setPagination,
-          }}
-        />
+            <TableDataStates
+              title={'budgets'}
+              {...{
+                isLoading,
+                isError,
+                data,
+              }}
+            />
+          </div>
+
+          {!!data?.docs.length && (
+            <Pagination
+              {...data}
+              {...{ isLoading, isRefetching, pagination, setPagination }}
+            />
+          )}
+        </div>
       </AppErrorBoundary>
     </>
   );

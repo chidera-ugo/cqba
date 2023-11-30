@@ -7,22 +7,27 @@ interface Props {
   getBackgroundColor: (char: string) => string;
   clickable?: boolean;
   size?: number;
+  className?: string;
 }
 
 export const Avatar = ({
   avatar,
   clickable,
-  char,
+  char = 'A',
   getBackgroundColor,
   size = 40,
+  className,
 }: Props) => {
-  const color = getBackgroundColor(char ?? 'A');
+  const color = getBackgroundColor(char);
 
   return (
     <>
       {!avatar ? (
         <div
-          className='y-center flex-shrink-0 rounded-full text-center text-sm font-semibold text-black'
+          className={clsx(
+            'y-center flex-shrink-0 rounded-full text-center text-sm font-semibold text-black',
+            className
+          )}
           style={{
             backgroundColor: `${color}30`,
             color,
@@ -38,7 +43,8 @@ export const Avatar = ({
           onClick={() => clickable && window.open(avatar, '_blank')}
           className={clsx(
             'my-auto rounded-full object-cover',
-            clickable && 'cursor-pointer'
+            clickable && 'cursor-pointer',
+            className
           )}
           style={{
             height: size,

@@ -1,4 +1,5 @@
 import { UseQueryOptions } from '@tanstack/react-query';
+import { EmployeeRole } from 'enums/employee_enum';
 import { useTQuery } from 'hooks/api/useTQuery';
 import { PaginatedResponse } from 'types/Table';
 import { generateUrlParamsFromObject } from 'utils/generators/generateUrlParamsFromObject';
@@ -11,11 +12,11 @@ export interface IEmployee {
   email: string;
   firstName: string;
   sKey: string;
-  role: string;
+  role: EmployeeRole;
   organizationId: string;
   userId: string;
   updatedAt: number;
-  id: string;
+  _id: string;
   phone: string;
 }
 
@@ -27,7 +28,6 @@ export function useGetAllEmployees(
     size: number;
     status?: EmployeeStatus;
     search?: string;
-    departmentId?: string;
   },
   options?: UseQueryOptions<any, any, any, string[]>
 ) {

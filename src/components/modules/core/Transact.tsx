@@ -16,6 +16,7 @@ type Props = TransactProps & {
   processing?: boolean;
 };
 
+// Todo: Modularize action authorization flow with this and remove the on in budget creation
 export const Transact = ({
   mode,
   processing,
@@ -71,6 +72,12 @@ export const Transact = ({
           <form
             onSubmit={(e) => {
               e.preventDefault();
+
+              if (pin.length !== 4)
+                return toast(<AppToast>Please provide a valid PIN</AppToast>, {
+                  type: 'error',
+                });
+
               handleSubmit();
             }}
           >

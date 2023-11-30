@@ -65,14 +65,14 @@ export const Dropdown = ({
           className={
             !isTableAction
               ? clsx(
-                  'absolute z-[200] w-full overflow-y-auto rounded-md border border-neutral-200 p-0 shadow-lg',
+                  'absolute z-[200] w-full overflow-y-auto rounded-lg border border-neutral-200 p-0 shadow-lg',
                   anchorPosition === 'bottom'
                     ? 'top-[100%] mt-2'
                     : 'bottom-[100%] mb-2',
                   className
                 )
               : clsx(
-                  'absolute z-[200] -mr-1 w-full overflow-y-auto rounded-md border border-neutral-200 p-0 shadow-lg',
+                  'absolute z-[200] -mr-1 w-full overflow-y-auto rounded-lg border border-neutral-200 p-0 shadow-lg',
                   anchorPosition === 'bottom'
                     ? 'top-[100%] -mt-5'
                     : 'bottom-[100%] -mb-5',

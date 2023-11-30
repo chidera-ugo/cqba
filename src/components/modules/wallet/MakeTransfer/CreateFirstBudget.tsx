@@ -4,6 +4,7 @@ import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { CreateBudgetPrompt } from 'components/modules/budgeting/CreateBudgetPrompt';
 import { SimpleInformation } from 'components/modules/commons/SimpleInformation';
 import { AnimateLayout } from 'components/transition/AnimateLayout';
+import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { useState } from 'react';
 
 export const CreateFirstBudget = ({
@@ -15,6 +16,7 @@ export const CreateFirstBudget = ({
   onSuccess: () => void;
   close: () => void;
 }) => {
+  const { primaryWallet } = useManageWallets();
   const [mode, setMode] = useState<'create' | 'success' | 'prompt'>('prompt');
 
   return (
@@ -58,6 +60,7 @@ export const CreateFirstBudget = ({
           />
         ) : mode === 'create' ? (
           <CreateBudgetForm
+            currency={primaryWallet.currency}
             onSuccess={() => {
               setMode('success');
             }}

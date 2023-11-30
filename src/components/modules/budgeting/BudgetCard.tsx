@@ -20,6 +20,7 @@ export const BudgetCard = ({ getColor, ...budget }: Props) => {
     expiry,
     name,
     currency,
+    beneficiaries,
     // status,
     amount,
     availableAmount,
@@ -40,7 +41,7 @@ export const BudgetCard = ({ getColor, ...budget }: Props) => {
     },
     {
       title: 'Available',
-      className: 'bg-neutral-300',
+      className: 'bg-neutral-200',
       value: availableAmount,
     },
     {
@@ -63,10 +64,31 @@ export const BudgetCard = ({ getColor, ...budget }: Props) => {
           )}
         </div>
 
-        <Avatar char={name.charAt(0)} getBackgroundColor={getColor} />
+        <div className='relative flex'>
+          {beneficiaries.map(({ email }, i) => {
+            return (
+              <div
+                key={email}
+                className={'absolute right-0 top-0 z-10'}
+                style={{
+                  zIndex: 10 + i,
+                  right: 20 * i,
+                }}
+              >
+                <Avatar
+                  className={'-ml-2 ring-2 ring-white'}
+                  size={27}
+                  key={email}
+                  char={email.charAt(0)}
+                  getBackgroundColor={getColor}
+                />
+              </div>
+            );
+          })}
+        </div>
       </div>
 
-      <div className={'text-sm font-medium'}>
+      <div className={'mt-6 text-sm font-medium'}>
         Total Budget: {currency}
         {formatAmount({ value: amount / 100 })}
       </div>
@@ -74,7 +96,9 @@ export const BudgetCard = ({ getColor, ...budget }: Props) => {
       <div className='relative mt-3 h-2 w-full overflow-hidden rounded-full bg-neutral-200'>
         {threshold !== amount && (
           <div
-            className={'absolute left-0 top-0 h-full rounded-full bg-green-300'}
+            className={
+              'absolute left-0 top-0 h-full rounded-full bg-neutral-300'
+            }
             style={{
               width: getWidth(threshold),
             }}

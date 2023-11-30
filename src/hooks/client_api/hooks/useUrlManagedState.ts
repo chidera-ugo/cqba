@@ -77,7 +77,7 @@ export const useUrlManagedState = <T extends ZodRawShape>(
     const pageIndex = parseInt(pagination.pageIndex);
     const pageSize = parseInt(pagination.pageSize);
 
-    if (isNaN(pageIndex) || isNaN(pageSize) || pageSize !== 10)
+    if (isNaN(pageIndex) || isNaN(pageSize) || pageSize !== _pageSize)
       return setPagination({
         pageIndex: 0,
         pageSize: _pageSize,

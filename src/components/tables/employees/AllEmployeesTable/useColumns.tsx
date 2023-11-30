@@ -5,6 +5,7 @@ import {
   EmployeeAction,
   EmployeeActions,
 } from 'components/tables/employees/AllEmployeesTable/EmployeeActions';
+import { EmployeeRole, EmployeeRoles } from 'enums/employee_enum';
 import { IEmployee } from 'hooks/api/employees/useGetAllEmployees';
 import { useMemo } from 'react';
 import { formatDate } from 'utils/formatters/formatDate';
@@ -49,10 +50,13 @@ export const useColumns = ({ handleActionClick }: Args) => {
         accessorKey: 'role',
         enableColumnFilter: false,
         cell: ({ getValue }) => {
-          const val = getValue() as string;
+          const val = getValue() as EmployeeRole;
+
           return (
             <div className='flex w-min'>
-              <div className={clsx('pill_gray')}>{val}</div>
+              <div className={clsx('pill_gray capitalize')}>
+                {EmployeeRoles[val]}
+              </div>
             </div>
           );
         },
@@ -67,7 +71,7 @@ export const useColumns = ({ handleActionClick }: Args) => {
       },
       {
         header: 'Actions',
-        accessorKey: 'id',
+        accessorKey: '_id',
         enableColumnFilter: false,
         cell: ({ row }) => {
           const employee = row.original;

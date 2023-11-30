@@ -9,6 +9,7 @@ import { DateRange } from 'utils/getters/getDateRange';
 type Params = {
   range: DateRange;
   pageIndex: number;
+  pageSize: number;
   search?: string;
   type?: string;
   budgetId?: string;
@@ -30,6 +31,7 @@ export function useGetWalletTransactions(
     range: { start, end },
     search,
     pageIndex,
+    pageSize,
     type,
     walletId,
     budgetId,
@@ -43,6 +45,7 @@ export function useGetWalletTransactions(
       wallet: walletId,
       budget: budgetId,
       page: pageIndex,
+      limit: pageSize,
       type,
     },
   });

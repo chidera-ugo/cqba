@@ -52,6 +52,7 @@ export const WalletTransactionsTable = ({
       ? {
           range: getDateRange({ days: 90 }),
           pageIndex: 1,
+          pageSize: pagination.pageSize,
           search,
           walletId,
         }
@@ -59,6 +60,7 @@ export const WalletTransactionsTable = ({
           range,
           type: filters?.transactionType,
           pageIndex: pagination.pageIndex + 1,
+          pageSize: pagination.pageSize,
           walletId,
           budgetId: filters.budgetId,
         }
@@ -78,7 +80,7 @@ export const WalletTransactionsTable = ({
     setTransactionId(null);
   }
 
-  if (!isLoading && !data?.docs?.length)
+  if (data && !data?.docs?.length)
     return (
       <EmptyTable
         processing={isLoading || isRefetching}

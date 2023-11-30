@@ -20,7 +20,8 @@ export const Pagination = ({
   totalPages,
   page: pageIndex,
 }: Props) => {
-  const pageNumber = (pageIndex ?? 1) - 1;
+  const pageNumber = (pageIndex ?? 0) - 1;
+
   const last = !hasNextPage;
   const first = !hasPrevPage;
 

@@ -180,8 +180,7 @@ export const Select = ({
           {!filteredOptions?.length ? (
             <div className='y-center h-full'>
               <p className='text-center'>
-                No {entity?.toLowerCase().replace('(s)', '') ?? 'item'} matched
-                your search
+                No {entity?.toLowerCase().replace('(s)', '') ?? 'item'} found
               </p>
             </div>
           ) : (
@@ -265,11 +264,11 @@ export const Select = ({
                               checked={
                                 selectedOptions?.[data[trueValueKey]] ?? false
                               }
-                              onChange={(e) =>
+                              onChange={(e) => {
                                 handleChange({
                                   [data[trueValueKey]]: e.target.checked,
-                                })
-                              }
+                                });
+                              }}
                               type='checkbox'
                               className='my-auto flex-shrink-0'
                             />

@@ -1,10 +1,9 @@
 import clsx from 'clsx';
 import { WideTabs } from 'components/commons/WideTabs';
 import { SearchInput } from 'components/form-elements/SearchInput';
-import { CreateBudgetForm } from 'components/forms/budgeting/CreateBudgetForm';
 import { AppLayout } from 'components/layouts/AppLayout';
-import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { AllBudgets } from 'components/modules/budgeting/AllBudgets';
+import { ManageBudgetCreation } from 'components/modules/budgeting/ManageBudgetCreation';
 import { SimplePlus } from 'components/svgs/others/Plus';
 import { budgetingFilterOptions } from 'constants/budgeting/filters';
 import { useUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
@@ -12,7 +11,7 @@ import { useDebouncer } from 'hooks/commons/useDebouncer';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
-import { budgetingFiltersSchema } from 'zod_schemas/budgeting';
+import { budgetingFiltersSchema } from 'zod_schemas/budgeting_schema';
 
 export default function Budgeting() {
   const searchParams = useSearchParams();
@@ -34,13 +33,7 @@ export default function Budgeting() {
     value: search,
   });
 
-  const [modal, setModal] = useState<
-    'create_budget' | 'department' | 'category' | null
-  >(null);
-
-  function closeModal() {
-    setModal(null);
-  }
+  const [modal, setModal] = useState<'create_budget' | 'category' | null>(null);
 
   return (
     <AppLayout title='Budgets' childrenClassName={'mb-7'}>
@@ -95,15 +88,10 @@ export default function Budgeting() {
         </div>
       </div>
 
-      <RightModalWrapper
+      <ManageBudgetCreation
         show={modal === 'create_budget'}
-        title='Create Budget'
-        closeModal={closeModal}
-        closeOnClickOutside
-        childrenClassname='py-0 640:px-8 px-4'
-      >
-        <CreateBudgetForm onSuccess={closeModal} />
-      </RightModalWrapper>
+        close={() => setModal(null)}
+      />
 
       <div className={'px-3 640:px-8'}>
         <AllBudgets

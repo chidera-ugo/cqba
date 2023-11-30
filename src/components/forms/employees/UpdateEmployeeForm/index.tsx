@@ -19,7 +19,7 @@ export const UpdateEmployeeForm = ({
 }: Props) => {
   const queryClient = useQueryClient();
 
-  const { isLoading, mutate } = useUpdateEmployee(currentEmployee?.id, {
+  const { isLoading, mutate } = useUpdateEmployee(currentEmployee?._id, {
     onSuccess() {
       queryClient.invalidateQueries(['employees']);
       onSuccess();

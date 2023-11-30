@@ -8,14 +8,20 @@ type Props = JSX.IntrinsicElements['input'] &
     label: string;
     note?: string;
     currency?: string;
+    onChange?: (val: string) => void;
+    error?: string;
+    errorBorders?: boolean;
   };
 
 export const AmountInput = ({
   label,
   className,
   note,
+  onChange,
   currency = '₦',
+  errorBorders,
   setFieldValue,
+  error,
   ...props
 }: Props) => {
   const [field, meta] = useField(props.name as string);
@@ -44,7 +50,7 @@ export const AmountInput = ({
           {...props}
           {...field}
           id={id}
-          value={field.value}
+          value={field.value ?? ''}
           type='text'
           inputMode='tel'
           autoComplete='off'
@@ -53,25 +59,38 @@ export const AmountInput = ({
               value: e.target.value,
             });
 
-            if (!setFieldValue) return;
-
             const val = formatAmount({
               value: String(value).split('.').join(''),
               typing: true,
             });
 
-            setFieldValue(props.name!, val, true);
+            if (onChange) {
+              onChange(val);
+            }
+
+            if (setFieldValue) {
+              setFieldValue(props.name!, val, true);
+            }
           }}
           className={clsx(
-            `input w-full pl-[56px] pr-12`,
+            `input w-full border pl-[56px] pr-12`,
             submitCount > 0 && meta.error && 'border-error-main',
             !!field.value ? 'bg-white' : 'bg-neutral-100'
           )}
+          style={{
+            borderColor:
+              errorBorders &&
+              !Number(
+                sanitizeAmount({ value: field.value, returnTrueAmount: true })
+              )
+                ? 'red'
+                : '',
+          }}
         />
       </div>
 
-      {submitCount > 0 && meta.error ? (
-        <div className='generic-error'>{meta.error}</div>
+      {error || (submitCount > 0 && meta.error) ? (
+        <div className='generic-error'>{error ?? meta.error}</div>
       ) : null}
 
       {note && <p className='text-neutral-350 mt-3 text-sm'>{note}</p>}

@@ -17,9 +17,6 @@ type Props = JSX.IntrinsicElements['input'] &
     label: string;
     name: string;
     setFieldValue: SetFieldValue;
-    dropdownClassname?: string;
-    disableTyping?: boolean;
-    bottom?: boolean;
   };
 
 export const DatePicker = ({
@@ -32,7 +29,7 @@ export const DatePicker = ({
   disabled,
   ...props
 }: Props) => {
-  const [_, meta] = useField(name as string);
+  const [field, meta] = useField(name as string);
   const { submitCount } = useFormikContext();
   const id = props.id ?? name;
 
@@ -49,9 +46,19 @@ export const DatePicker = ({
           <AntdDatePicker
             disabled={disabled}
             rootClassName={'z-[2000]'}
-            className={'input y-center w-full'}
+            className={clsx(
+              'input y-center w-full',
+              !!field.value.calendarValue ? 'bg-white' : 'bg-neutral-100'
+            )}
+            value={
+              !field.value.calendarValue
+                ? undefined
+                : dayjs(field.value.calendarValue)
+            }
             disabledDate={(d) =>
-              !d || d.isAfter(dayjs(maxDate)) || d.isBefore(dayjs(minDate))
+              !d ||
+              (!!maxDate && d.isAfter(dayjs(maxDate))) ||
+              (!!minDate && d.isBefore(dayjs(minDate)))
             }
             onChange={(value) => {
               if (!value) return;
@@ -61,6 +68,7 @@ export const DatePicker = ({
                 calendarValue: value.toDate(),
               });
             }}
+            size={'large'}
           />
         </div>
       </div>
