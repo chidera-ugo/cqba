@@ -152,6 +152,9 @@ export const AllEmployeesTable = ({
       {screenSize?.['mobile'] ? (
         <MobileEmployeesList
           {...{
+            isLoading,
+            isError,
+            isRefetching,
             data,
             setPagination,
             pagination,

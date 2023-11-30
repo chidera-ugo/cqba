@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { SearchInput } from 'components/form-elements/SearchInput';
 import { FilterWithRangePreset } from 'components/modules/commons/FilterWithRangePreset';
 import { WalletTransactionsTable } from 'components/tables/wallet/WalletTransactionsTable';
@@ -18,7 +19,11 @@ export const WalletTransactions = ({
 }>) => {
   const searchParams = useSearchParams();
 
-  const { primaryWallet } = useManageWallets();
+  const {
+    primaryWallet,
+    isLoading: gettingWallet,
+    isError: walletErrored,
+  } = useManageWallets();
 
   const { filters, setFilters, pagination, setPagination, range, setRange } =
     useUrlManagedState(walletFiltersSchema, searchParams, 7);
@@ -34,9 +39,13 @@ export const WalletTransactions = ({
   return (
     <>
       <div className='my-5 block justify-between gap-2 640:my-7 1180:flex'>
-        <div className='hidden gap-2 1180:flex'>
+        <div
+          className={clsx(
+            showAllTransactions ? 'flex gap-2' : 'hidden gap-2 1180:flex'
+          )}
+        >
           <SearchInput
-            placeholder='Search by transaction _id'
+            placeholder='Search by Transaction ID'
             value={search}
             wrapperClassname={'640:w-auto w-full'}
             className='w-full 640:w-[300px]'
@@ -84,7 +93,16 @@ export const WalletTransactions = ({
       <WalletTransactionsTable
         search={debouncedSearch}
         walletId={showAllTransactions ? undefined : primaryWallet?._id}
-        {...{ filters, setFilters, pagination, setPagination, range, setRange }}
+        {...{
+          filters,
+          isLoading: gettingWallet,
+          error: walletErrored,
+          setFilters,
+          pagination,
+          setPagination,
+          range,
+          setRange,
+        }}
       />
     </>
   );

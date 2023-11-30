@@ -1,3 +1,5 @@
+import { IsError } from 'components/data-states/IsError';
+import { IsLoading } from 'components/data-states/IsLoading';
 import { CreateBudgetForm } from 'components/forms/budgeting/CreateBudgetForm';
 import { GreenCheck } from 'components/illustrations/Success';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
@@ -16,7 +18,7 @@ export const CreateFirstBudget = ({
   onSuccess: () => void;
   close: () => void;
 }) => {
-  const { primaryWallet } = useManageWallets();
+  const { primaryWallet, isLoading, isError } = useManageWallets();
   const [mode, setMode] = useState<'create' | 'success' | 'prompt'>('prompt');
 
   return (
@@ -60,16 +62,24 @@ export const CreateFirstBudget = ({
           />
         ) : mode === 'create' ? (
           <CreateBudgetForm
-            currency={primaryWallet.currency}
+            currency={primaryWallet?.currency}
             onSuccess={() => {
               setMode('success');
             }}
           />
         ) : (
-          <CreateBudgetPrompt
-            close={close}
-            createBudget={() => setMode('create')}
-          />
+          <>
+            {isLoading ? (
+              <IsLoading />
+            ) : isError ? (
+              <IsError />
+            ) : (
+              <CreateBudgetPrompt
+                close={close}
+                createBudget={() => setMode('create')}
+              />
+            )}
+          </>
         )}
       </AnimateLayout>
     </RightModalWrapper>

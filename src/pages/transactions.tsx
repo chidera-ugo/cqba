@@ -25,7 +25,7 @@ export default function Transactions() {
       </RightModalWrapper>
 
       <WalletTransactions showAllTransactions>
-        <div className='mt-3 flex gap-2 880:mt-0'>
+        <div className='mt-3 hidden gap-2 880:mt-0 1180:flex'>
           <div className='flex gap-2'></div>
 
           <button

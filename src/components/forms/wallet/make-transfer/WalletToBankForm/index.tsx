@@ -23,12 +23,14 @@ interface Props {
   institutions: Institution[];
   createBudget: () => void;
   close: () => void;
+  currency: string;
 }
 
 export const WalletToBankForm = ({
   institutions,
   createBudget,
   close,
+  currency,
   formRecoveryValues,
   setFormRecoveryValues,
 }: Props & FormRecoveryProps<WalletToBankFormRecoveryValues>) => {
@@ -103,6 +105,7 @@ export const WalletToBankForm = ({
 
             <Form
               {...{
+                currency,
                 formikProps,
                 institutions,
                 formRecoveryValues,

@@ -4,7 +4,6 @@ import { MultiSelect } from 'components/form-elements/MultiSelect';
 import { AddBudgetBeneficiariesFormRecoveryValues } from 'components/forms/budgeting/AddBudgetBeneficiariesForm/index';
 import { FieldArray, Form as FormikForm, FormikProps } from 'formik';
 import { useGetBudgetBeneficiaries } from 'hooks/api/employees/useGetBudgetBeneficiaries';
-import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { useEffect } from 'react';
 import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
@@ -14,15 +13,15 @@ interface Props {
   formikProps: FormikProps<typeof initialValues>;
   recoveryValues?: AddBudgetBeneficiariesFormRecoveryValues;
   inviteEmployee: () => void;
+  currency: string;
 }
 
 export const Form = ({
   formikProps,
   recoveryValues,
   inviteEmployee,
+  currency,
 }: Props) => {
-  const { primaryWallet } = useManageWallets();
-
   const { handleSubmit, setFieldValue, setValues, values } = formikProps;
 
   useEffect(() => {
@@ -85,7 +84,7 @@ export const Form = ({
       <div className='card mt-5 rounded-xl p-4'>
         <div className={'text-xs text-neutral-500'}>Budget Allocation</div>
         <div className='mt-2 block text-xl font-semibold'>
-          {`${primaryWallet.currency} ${values.budgetAmount}`}
+          {`${currency} ${values.budgetAmount}`}
         </div>
       </div>
 

@@ -1,11 +1,13 @@
 import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { useAppContext } from 'context/AppContext';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
+import { useGetAllWallets } from 'hooks/api/wallet/useGetAllWallets';
 import { PropsWithChildren, createContext, useContext } from 'react';
 
 const KycContext = createContext(null);
 
 function KycContextProvider({ children }: PropsWithChildren<any>) {
+  useGetAllWallets();
   const { isLoading } = useGetOrganizationInformation();
   const { user } = useAppContext().state;
 

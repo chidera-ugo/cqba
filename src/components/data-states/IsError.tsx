@@ -6,7 +6,7 @@ import {
 
 interface Props {
   title?: string;
-  description: string;
+  description?: string;
   actionButton?: PropsSimpleInformation['actionButton'];
   className?: string;
   noIcon?: boolean;
@@ -23,7 +23,9 @@ export const IsError = ({
     <SimpleInformation
       title={<span className='text-xl text-red-500'>{title}</span>}
       description={
-        <span className='mt-1 block text-red-600'>{description}</span>
+        <span className='mt-1 block text-red-600'>
+          {description ?? 'An error occurred'}
+        </span>
       }
       {...{ actionButton, className }}
       icon={noIcon ? undefined : <NothingHere />}

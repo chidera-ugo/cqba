@@ -1,5 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { AppErrorBoundary } from 'components/core/ErrorBoundary';
+import { IsError } from 'components/data-states/IsError';
+import { IsLoading } from 'components/data-states/IsLoading';
 import { CodeInput } from 'components/form-elements/CodeInput';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { AddBudgetBeneficiariesForm } from 'components/forms/budgeting/AddBudgetBeneficiariesForm';
@@ -50,12 +52,12 @@ export const ManageBudgetCreation = ({
       null
     );
 
-  const { primaryWallet } = useManageWallets();
+  const { primaryWallet, isError, isLoading } = useManageWallets();
 
   const queryClient = useQueryClient();
   const { handleError } = useHandleError();
 
-  const { isLoading, mutate } = useCreateBudget({
+  const { isLoading: creatingBudget, mutate } = useCreateBudget({
     onSuccess() {
       setMode('success');
 
@@ -137,7 +139,7 @@ export const ManageBudgetCreation = ({
       description,
       pin,
       beneficiaries: getBeneficiaries(),
-      currency: primaryWallet.currency,
+      currency: primaryWallet?.currency,
       amount:
         parseInt(sanitizeAmount({ value: amount, returnTrueAmount: true })) *
         100,
@@ -218,7 +220,7 @@ export const ManageBudgetCreation = ({
 
             <div className='mt-4'>
               <SubmitButton
-                submitting={isLoading}
+                submitting={creatingBudget}
                 disabled={pin.length !== 4}
                 className='primary-button mt-4 w-[128px]'
               >
@@ -229,6 +231,7 @@ export const ManageBudgetCreation = ({
         ) : mode === 'add_beneficiaries' ? (
           <AppErrorBoundary>
             <AddBudgetBeneficiariesForm
+              currency={primaryWallet?.currency}
               formRecoveryValues={addBudgetBeneficiariesFormRecoveryValues}
               onSubmit={(values) => {
                 setAddBudgetBeneficiariesRecoveryValues((prev) => ({
@@ -242,23 +245,29 @@ export const ManageBudgetCreation = ({
           </AppErrorBoundary>
         ) : (
           <AppErrorBoundary>
-            <CreateBudgetForm
-              currency={primaryWallet.currency}
-              formRecoveryValues={createBudgetFormRecoveryValues}
-              onSubmit={(values) => {
-                setCreateBudgetFormRecoveryValues((prev) => ({
-                  ...prev!,
-                  ...values,
-                }));
+            {isLoading ? (
+              <IsLoading />
+            ) : isError ? (
+              <IsError description={'Failed to initate budget creation'} />
+            ) : (
+              <CreateBudgetForm
+                currency={primaryWallet?.currency}
+                formRecoveryValues={createBudgetFormRecoveryValues}
+                onSubmit={(values) => {
+                  setCreateBudgetFormRecoveryValues((prev) => ({
+                    ...prev!,
+                    ...values,
+                  }));
 
-                setAddBudgetBeneficiariesRecoveryValues((prev) => ({
-                  ...prev!,
-                  budgetAmount: values!.amount,
-                }));
+                  setAddBudgetBeneficiariesRecoveryValues((prev) => ({
+                    ...prev!,
+                    budgetAmount: values!.amount,
+                  }));
 
-                setMode('add_beneficiaries');
-              }}
-            />
+                  setMode('add_beneficiaries');
+                }}
+              />
+            )}
           </AppErrorBoundary>
         )}
       </AnimateLayout>

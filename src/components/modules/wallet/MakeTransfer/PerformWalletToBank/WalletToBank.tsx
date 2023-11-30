@@ -3,6 +3,7 @@ import { IsLoading } from 'components/data-states/IsLoading';
 import { WalletToBankForm } from 'components/forms/wallet/make-transfer/WalletToBankForm';
 import { WalletToBankFormRecoveryValues } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank/index';
 import { useGetInstitutions } from 'hooks/api/wallet/useGetInstitutions';
+import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { FormRecoveryProps } from 'types/forms/form_recovery';
 
 export const WalletToBank = (
@@ -12,20 +13,21 @@ export const WalletToBank = (
   } & FormRecoveryProps<WalletToBankFormRecoveryValues>
 ) => {
   const { isLoading, isError, data } = useGetInstitutions();
+  const {
+    isLoading: loadingWallet,
+    isError: walletErrored,
+    primaryWallet,
+  } = useManageWallets();
 
-  if (isLoading) return <IsLoading />;
+  if (isLoading || loadingWallet) return <IsLoading />;
 
-  if (isError)
-    return (
-      <IsError
-        title='An error occurred'
-        description='Failed to get institutions'
-      />
-    );
+  if (isError || walletErrored)
+    return <IsError description='An error occurred' />;
 
   return (
     <WalletToBankForm
       {...props}
+      currency={primaryWallet?.currency}
       institutions={data?.map(({ bank, id, type }) => ({
         id,
         type,

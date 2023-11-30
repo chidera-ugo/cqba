@@ -1,3 +1,5 @@
+import { IsError } from 'components/data-states/IsError';
+import { IsLoading } from 'components/data-states/IsLoading';
 import { CreateBudgetForm } from 'components/forms/budgeting/CreateBudgetForm';
 import { initialValues } from 'components/forms/wallet/make-transfer/WalletToBankForm/initialValues';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
@@ -16,7 +18,7 @@ export type WalletToBankFormRecoveryValues = typeof initialValues | null;
 export const PerformWalletToBank = ({ close, show }: Props) => {
   const [mode, setMode] = useState<'transfer' | 'create_budget'>('transfer');
 
-  const { primaryWallet } = useManageWallets();
+  const { primaryWallet, isError, isLoading } = useManageWallets();
 
   const [formRecoveryValues, setFormRecoveryValues] =
     useState<WalletToBankFormRecoveryValues>(null);
@@ -41,7 +43,7 @@ export const PerformWalletToBank = ({ close, show }: Props) => {
       >
         {mode === 'create_budget' ? (
           <CreateBudgetForm
-            currency={primaryWallet.currency}
+            currency={primaryWallet?.currency}
             onSuccess={(budgetId) => {
               setMode('transfer');
 
@@ -52,11 +54,19 @@ export const PerformWalletToBank = ({ close, show }: Props) => {
             }}
           />
         ) : (
-          <WalletToBank
-            close={closeModal}
-            createBudget={() => setMode('create_budget')}
-            {...{ formRecoveryValues, setFormRecoveryValues }}
-          />
+          <>
+            {isLoading ? (
+              <IsLoading />
+            ) : isError ? (
+              <IsError />
+            ) : (
+              <WalletToBank
+                close={closeModal}
+                createBudget={() => setMode('create_budget')}
+                {...{ formRecoveryValues, setFormRecoveryValues }}
+              />
+            )}
+          </>
         )}
       </AnimateLayout>
     </RightModalWrapper>
