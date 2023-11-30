@@ -29,7 +29,6 @@ export const BudgetCard = ({ getColor, showActions, ...budget }: Props) => {
 
   const {
     _id,
-    paused,
     // description,
     amountUsed,
     expiry,
