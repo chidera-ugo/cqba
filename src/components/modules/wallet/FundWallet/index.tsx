@@ -20,7 +20,7 @@ export const FundWallet = () => {
       <button
         type={'button'}
         onClick={() => setShowModal(true)}
-        className='dark-button block h-11 w-full min-w-[163px] border border-neutral-200 bg-white px-4 text-sm font-semibold text-neutral-1000 hover:bg-gray-100 640:bg-black 640:text-white 1180:w-auto'
+        className='dark-button hover:bg-gray-1000 block h-11 w-full min-w-[163px] border border-neutral-200 bg-white px-4 text-sm font-semibold text-neutral-1000 640:bg-black 640:text-white 640:hover:bg-gray-100 1180:w-auto'
       >
         <div className='x-center'>
           <span className='my-auto mr-2'>Fund wallet</span>

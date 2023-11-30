@@ -1,6 +1,6 @@
 import { useAppContext } from 'context/AppContext';
 import { PaginationDetails } from 'types/Table';
-import { Dispatch, useState, SetStateAction } from 'react';
+import { Dispatch, useState, SetStateAction, useEffect } from 'react';
 import { PaginationState } from '@tanstack/react-table';
 import clsx from 'clsx';
 import ReactPaginate from 'react-paginate';
@@ -28,6 +28,10 @@ export const Pagination = ({
   const disabled = typeof pageNumber === 'undefined' || !totalPages;
 
   const [page, setPage] = useState(pagination.pageIndex);
+
+  useEffect(() => {
+    setPage(pagination.pageIndex);
+  }, [pagination.pageIndex]);
 
   const { screenSize } = useAppContext().state;
 

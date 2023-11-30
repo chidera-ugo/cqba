@@ -80,7 +80,7 @@ export const Form = ({
       {!isActive && (
         <>
           <div className='gap-4 880:flex'>
-            <Input autoFocus label='First Name' name='firstName' />
+            <Input lazyFocus label='First Name' name='firstName' />
             <Input label='Last Name' name='lastName' />
           </div>
 

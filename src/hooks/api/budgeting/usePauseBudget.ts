@@ -6,7 +6,6 @@ export function usePauseBudget(
   options?: UseMutationOptions<any, unknown, void, unknown>
 ) {
   return useTMutation({
-    method: 'patch',
     url: `/${budgetId}/pause`,
     service: 'budgets',
     options,

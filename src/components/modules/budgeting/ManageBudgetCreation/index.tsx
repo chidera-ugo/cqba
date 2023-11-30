@@ -1,27 +1,22 @@
 import { useQueryClient } from '@tanstack/react-query';
+import { AuthorizeActionWithPin } from 'components/core/AuthorizeActionWithPin';
 import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
-import { CodeInput } from 'components/form-elements/CodeInput';
-import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { AddBudgetBeneficiariesForm } from 'components/forms/budgeting/AddBudgetBeneficiariesForm';
 import { CreateBudgetForm } from 'components/forms/budgeting/CreateBudgetForm';
 import { initialValues } from 'components/forms/budgeting/CreateBudgetForm/initialValues';
 import { initialValues as _initialValues } from 'components/forms/budgeting/AddBudgetBeneficiariesForm/initialValues';
-import { GreenCheck } from 'components/illustrations/Success';
+import { UpdateEmployeeForm } from 'components/forms/employees/UpdateEmployeeForm';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
-import { SimpleInformation } from 'components/modules/commons/SimpleInformation';
-import { AppToast } from 'components/primary/AppToast';
 import { AnimateLayout } from 'components/transition/AnimateLayout';
 import {
   Beneficiary,
   useCreateBudget,
 } from 'hooks/api/budgeting/useCreateBudget';
 import { useHandleError } from 'hooks/api/useHandleError';
-import { useResetter } from 'hooks/commons/useResetter';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import { FormRecoveryProps } from 'types/forms/form_recovery';
 import { sanitizeAmount } from 'utils/formatters/formatAmount';
 
@@ -33,11 +28,8 @@ export const ManageBudgetCreation = ({
   close: () => void;
 }) => {
   const [mode, setMode] = useState<
-    'create' | 'add_beneficiaries' | 'approve' | 'success'
+    'create' | 'add_beneficiaries' | 'create_employee' | 'approve' | 'success'
   >('create');
-
-  const [pin, setPin] = useState('');
-  const [clearCodeInput, setClearCodeInput] = useResetter();
 
   const [createBudgetFormRecoveryValues, setCreateBudgetFormRecoveryValues] =
     useState<FormRecoveryProps<typeof initialValues>['formRecoveryValues']>(
@@ -57,32 +49,25 @@ export const ManageBudgetCreation = ({
   const queryClient = useQueryClient();
   const { handleError } = useHandleError();
 
-  const { isLoading: creatingBudget, mutate } = useCreateBudget({
-    onSuccess() {
-      setMode('success');
-
-      queryClient.invalidateQueries(['budgets']);
-      queryClient.invalidateQueries(['wallets']);
-      queryClient.invalidateQueries(['employees']);
-
-      setCreateBudgetFormRecoveryValues(null);
-      setAddBudgetBeneficiariesRecoveryValues(null);
-      setPin('');
-    },
-    onError(e) {
-      handleError(e);
-      setClearCodeInput(true);
-    },
-  });
+  const { isLoading: creatingBudget, mutate } = useCreateBudget({});
 
   function closeModal() {
-    if (mode === 'approve') return setMode('add_beneficiaries');
+    if (mode === 'approve' || mode === 'create_employee')
+      return setMode('add_beneficiaries');
+
     if (mode === 'add_beneficiaries') return setMode('create');
 
     close();
+    resetFormRecoveryValues();
+    setMode('create');
   }
 
-  function createBudget() {
+  function resetFormRecoveryValues() {
+    setCreateBudgetFormRecoveryValues(null);
+    setAddBudgetBeneficiariesRecoveryValues(null);
+  }
+
+  function createBudget(pin: string, errorCb: () => void) {
     if (
       !createBudgetFormRecoveryValues ||
       !addBudgetBeneficiariesFormRecoveryValues
@@ -105,9 +90,7 @@ export const ManageBudgetCreation = ({
     function getBeneficiaries() {
       const arr: Beneficiary[] = [];
 
-      const count = Object.values(beneficiaries)?.filter(
-        (val) => !!val
-      )?.length;
+      const count = Object.values(beneficiaries)?.filter((val) => val)?.length;
 
       const _budgetAmount = Number(
         sanitizeAmount({ value: budgetAmount, returnTrueAmount: true })
@@ -134,143 +117,138 @@ export const ManageBudgetCreation = ({
       return arr;
     }
 
-    mutate({
-      name: title,
-      description,
-      pin,
-      beneficiaries: getBeneficiaries(),
-      currency: primaryWallet?.currency,
-      amount:
-        parseInt(sanitizeAmount({ value: amount, returnTrueAmount: true })) *
-        100,
-      threshold:
-        parseInt(
-          sanitizeAmount({
-            value: !threshold ? amount : allocation,
-            returnTrueAmount: true,
-          })
-        ) * 100,
-      expiry: expires ? expiryDate.calendarValue : null,
-    });
+    mutate(
+      {
+        name: title,
+        description,
+        pin,
+        beneficiaries: getBeneficiaries(),
+        currency: primaryWallet?.currency,
+        amount:
+          parseInt(sanitizeAmount({ value: amount, returnTrueAmount: true })) *
+          100,
+        threshold:
+          parseInt(
+            sanitizeAmount({
+              value: !threshold ? amount : allocation,
+              returnTrueAmount: true,
+            })
+          ) * 100,
+        expiry: expires ? expiryDate.calendarValue : null,
+      },
+      {
+        onSuccess() {
+          setMode('success');
+
+          queryClient.invalidateQueries(['budgets']);
+          queryClient.invalidateQueries(['wallets']);
+          queryClient.invalidateQueries(['employees']);
+
+          resetFormRecoveryValues();
+        },
+        onError(e) {
+          handleError(e);
+          errorCb();
+        },
+      }
+    );
   }
 
   return (
-    <RightModalWrapper
-      show={show}
-      title={
-        mode === 'create'
-          ? 'Create Budget'
-          : mode === 'add_beneficiaries'
-          ? 'Add Beneficiaries'
-          : mode === 'approve'
-          ? 'Approve Budget'
-          : ''
-      }
-      closeModal={closeModal}
-      closeOnClickOutside
-      childrenClassname='py-0'
-    >
-      <AnimateLayout
-        changeTracker={mode}
-        className={'flex flex-col px-4 640:px-8'}
+    <>
+      <AuthorizeActionWithPin
+        mode={mode}
+        show={show && (mode === 'success' || mode === 'approve')}
+        close={closeModal}
+        processing={creatingBudget}
+        title={mode === 'approve' ? 'Approve Budget' : ''}
+        finish={() => {
+          closeModal();
+        }}
+        successTitle={'Budget Approved'}
+        successMessage={`Congratulations! Your budget has been Approved successfully`}
+        actionMessage={'Approve'}
+        submit={(pin, errorCb) => createBudget(pin, errorCb)}
+      />
+
+      <RightModalWrapper
+        show={show}
+        title={
+          mode === 'create'
+            ? 'Create Budget'
+            : mode === 'add_beneficiaries'
+            ? 'Add Beneficiaries'
+            : mode === 'create_employee'
+            ? 'Invite Employee'
+            : ''
+        }
+        closeModal={closeModal}
+        closeOnClickOutside
+        childrenClassname='py-0'
       >
-        {mode === 'success' ? (
-          <div className='y-center py-20'>
-            <SimpleInformation
-              title={<span className='text-xl'>Budget Approved</span>}
-              description={
-                <div className='mx-auto mt-1 max-w-[325px]'>
-                  Congratulations! Your budget has been Approved successfully
-                </div>
-              }
-              icon={<GreenCheck />}
-              actionButton={{
-                text: 'Thanks chief',
-                action() {
-                  closeModal();
-                },
+        <AnimateLayout
+          changeTracker={mode}
+          className={'flex flex-col px-4 640:px-8'}
+        >
+          {mode === 'approve' || mode === 'success' ? null : mode ===
+            'create_employee' ? (
+            <UpdateEmployeeForm
+              onSuccess={() => {
+                setMode('add_beneficiaries');
               }}
             />
-          </div>
-        ) : mode === 'approve' ? (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-
-              if (pin.length !== 4)
-                return toast(<AppToast>Please provide a valid PIN</AppToast>, {
-                  type: 'error',
-                });
-
-              createBudget();
-            }}
-            className={'py-10'}
-          >
-            <CodeInput
-              charLimit={4}
-              autoComplete='off'
-              label='Transaction Pin'
-              autoFocus
-              type={'password'}
-              submit={(code) => setPin(code)}
-              name='code'
-              clear={clearCodeInput}
-              className='h-[54px] 768:h-[68px]'
-            />
-
-            <div className='mt-4'>
-              <SubmitButton
-                submitting={creatingBudget}
-                disabled={pin.length !== 4}
-                className='primary-button mt-4 w-[128px]'
-              >
-                Approve
-              </SubmitButton>
-            </div>
-          </form>
-        ) : mode === 'add_beneficiaries' ? (
-          <AppErrorBoundary>
-            <AddBudgetBeneficiariesForm
-              currency={primaryWallet?.currency}
-              formRecoveryValues={addBudgetBeneficiariesFormRecoveryValues}
-              onSubmit={(values) => {
-                setAddBudgetBeneficiariesRecoveryValues((prev) => ({
-                  ...prev!,
-                  ...values,
-                }));
-
-                setMode('approve');
-              }}
-            />
-          </AppErrorBoundary>
-        ) : (
-          <AppErrorBoundary>
-            {isLoading ? (
-              <IsLoading />
-            ) : isError ? (
-              <IsError description={'Failed to initate budget creation'} />
-            ) : (
-              <CreateBudgetForm
+          ) : mode === 'add_beneficiaries' ? (
+            <AppErrorBoundary>
+              <AddBudgetBeneficiariesForm
                 currency={primaryWallet?.currency}
-                formRecoveryValues={createBudgetFormRecoveryValues}
-                onSubmit={(values) => {
-                  setCreateBudgetFormRecoveryValues((prev) => ({
+                inviteEmployee={(values) => {
+                  setAddBudgetBeneficiariesRecoveryValues((prev) => ({
                     ...prev!,
                     ...values,
                   }));
 
+                  setMode('create_employee');
+                }}
+                formRecoveryValues={addBudgetBeneficiariesFormRecoveryValues}
+                onSubmit={(values) => {
                   setAddBudgetBeneficiariesRecoveryValues((prev) => ({
                     ...prev!,
-                    budgetAmount: values!.amount,
+                    ...values,
                   }));
 
-                  setMode('add_beneficiaries');
+                  setMode('approve');
                 }}
               />
-            )}
-          </AppErrorBoundary>
-        )}
-      </AnimateLayout>
-    </RightModalWrapper>
+            </AppErrorBoundary>
+          ) : (
+            <AppErrorBoundary>
+              {isLoading ? (
+                <IsLoading />
+              ) : isError ? (
+                <IsError description={'Failed to initate budget creation'} />
+              ) : (
+                <CreateBudgetForm
+                  currency={primaryWallet?.currency}
+                  formRecoveryValues={createBudgetFormRecoveryValues}
+                  onSubmit={(values) => {
+                    setCreateBudgetFormRecoveryValues((prev) => ({
+                      ...prev!,
+                      ...values,
+                    }));
+
+                    setAddBudgetBeneficiariesRecoveryValues((prev) => ({
+                      ...prev!,
+                      budgetAmount: values!.amount,
+                    }));
+
+                    setMode('add_beneficiaries');
+                  }}
+                />
+              )}
+            </AppErrorBoundary>
+          )}
+        </AnimateLayout>
+      </RightModalWrapper>
+    </>
   );
 };

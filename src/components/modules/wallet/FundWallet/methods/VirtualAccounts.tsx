@@ -36,7 +36,7 @@ export const VirtualAccounts = () => {
           return (
             <div key={accountNumber}>
               {!accountNumber ? null : (
-                <div className='w-full rounded-xl border border-neutral-200 p-5'>
+                <div className='w-full rounded-xl border border-neutral-310 p-5'>
                   {accountDetails.map(({ name, canCopy, value }) => {
                     return (
                       <div

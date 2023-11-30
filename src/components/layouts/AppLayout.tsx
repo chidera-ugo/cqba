@@ -12,7 +12,7 @@ import { useCurrentAccountSetupStepUrl } from 'hooks/dashboard/kyc/useCurrentAcc
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useIsKycFlow } from 'hooks/kyc/useIsKycFlow';
 import Link from 'next/link';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, ReactNode } from 'react';
 import { SideNavigation } from 'components/primary/SideNavigation';
 import { AppHeader } from 'components/primary/headers/AppHeader';
 import { useAppContext } from 'context/AppContext';
@@ -26,6 +26,7 @@ export interface Props {
   hideSideNavigation?: boolean;
   childrenClassName?: string;
   breadCrumbs?: { title: string; url?: string }[];
+  breadCrumbsSlot?: ReactNode;
 }
 
 export const AppLayout = ({
@@ -37,6 +38,7 @@ export const AppLayout = ({
   hideSideNavigation,
   childrenClassName,
   breadCrumbs,
+  breadCrumbsSlot,
 }: PropsWithChildren<Props>) => {
   const { userExists } = useProtectedRoutesGuard();
 
@@ -90,43 +92,47 @@ export const AppLayout = ({
             </AppHeader>
 
             {breadCrumbs && (
-              <div className='app-container sticky left-0 top-16 z-[1000] -ml-3 flex h-12 gap-1 overflow-x-auto bg-white bg-opacity-80 backdrop-blur-md 1024:top-20'>
-                {breadCrumbs?.map(({ url, title }, i) => {
-                  return (
-                    <div key={title} className={'flex gap-1'}>
-                      {url ? (
-                        <Link
-                          href={url}
-                          className={clsx(
-                            'my-auto gap-3 px-3 py-2.5 text-center text-sm font-medium transition-colors',
-                            i === breadCrumbs.length - 1
-                              ? 'text-primary-main'
-                              : 'text-neutral-400 hover:text-black'
-                          )}
-                        >
-                          {title}
-                        </Link>
-                      ) : (
-                        <div
-                          className={clsx(
-                            'my-auto gap-3 px-3 py-2.5 text-center text-sm font-medium transition-colors',
-                            i === breadCrumbs.length - 1
-                              ? 'text-primary-main'
-                              : 'text-neutral-400 hover:text-black'
-                          )}
-                        >
-                          {title}
-                        </div>
-                      )}
+              <div className='app-container x-between sticky left-0 top-16 z-[1000] -ml-3 overflow-x-auto bg-white bg-opacity-80 backdrop-blur-md 640:h-16 1024:top-20'>
+                <div className='flex gap-1'>
+                  {breadCrumbs?.map(({ url, title }, i) => {
+                    return (
+                      <div key={title} className={'flex gap-1'}>
+                        {url ? (
+                          <Link
+                            href={url}
+                            className={clsx(
+                              'my-auto gap-3 px-3 py-2.5 text-center text-sm font-medium transition-colors',
+                              i === breadCrumbs.length - 1
+                                ? 'text-primary-main'
+                                : 'text-neutral-400 hover:text-black'
+                            )}
+                          >
+                            {title}
+                          </Link>
+                        ) : (
+                          <div
+                            className={clsx(
+                              'my-auto gap-3 px-3 py-2.5 text-center text-sm font-medium transition-colors',
+                              i === breadCrumbs.length - 1
+                                ? 'text-primary-main'
+                                : 'text-neutral-400 hover:text-black'
+                            )}
+                          >
+                            {title}
+                          </div>
+                        )}
 
-                      {i < breadCrumbs.length - 1 && (
-                        <span className={'my-auto'}>
-                          <ChevronRight />
-                        </span>
-                      )}
-                    </div>
-                  );
-                })}
+                        {i < breadCrumbs.length - 1 && (
+                          <span className={'my-auto'}>
+                            <ChevronRight />
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {breadCrumbsSlot}
               </div>
             )}
 

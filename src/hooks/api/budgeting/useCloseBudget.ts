@@ -6,7 +6,6 @@ export function useCloseBudget(
   options?: UseMutationOptions<any, unknown, void, unknown>
 ) {
   return useTMutation({
-    method: 'delete',
     url: `/${budgetId}`,
     service: 'budgets',
     options,

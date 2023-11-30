@@ -12,12 +12,14 @@ interface Props {
   onSubmit: (values?: AddBudgetBeneficiariesFormRecoveryValues) => void;
   formRecoveryValues?: AddBudgetBeneficiariesFormRecoveryValues;
   currency: string;
+  inviteEmployee: (values?: AddBudgetBeneficiariesFormRecoveryValues) => void;
 }
 
 export const AddBudgetBeneficiariesForm = ({
   onSubmit,
   currency,
   formRecoveryValues,
+  inviteEmployee,
 }: Props) => {
   return (
     <Formik
@@ -32,7 +34,7 @@ export const AddBudgetBeneficiariesForm = ({
         return (
           <Form
             recoveryValues={formRecoveryValues}
-            inviteEmployee={() => null}
+            inviteEmployee={() => inviteEmployee(formikProps.values)}
             {...{
               currency,
               formikProps,

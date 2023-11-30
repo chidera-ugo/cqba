@@ -29,6 +29,7 @@ export const AllBudgets = ({
   status,
   pagination,
   setPagination,
+  search,
 }: Props & TPagination) => {
   const [showPinModal, setShowPinModal] = useState(false);
 
@@ -42,9 +43,10 @@ export const AllBudgets = ({
     data: res,
     isRefetching,
   } = useGetAllBudgets({
-    page: pagination.pageIndex + 1,
+    page: search ? 1 : pagination.pageIndex + 1,
     limit: pagination.pageSize,
     status: status === 'active' ? undefined : status,
+    search,
   });
 
   useEffect(() => {
@@ -52,6 +54,10 @@ export const AllBudgets = ({
 
     setData(res);
   }, [res]);
+
+  useEffect(() => {
+    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+  }, [search]);
 
   const [data, setData] = useState<PaginatedResponse<IBudget> | undefined>(res);
 
@@ -135,12 +141,16 @@ export const AllBudgets = ({
             />
           </div>
 
-          {!!data?.docs.length && (
-            <Pagination
-              {...data}
-              {...{ isLoading, isRefetching, pagination, setPagination }}
-            />
-          )}
+          {pagination &&
+            data?.docs?.length &&
+            (pagination?.pageIndex > 0 || // Hide pagination if first page and items count is less than pageSize
+              (pagination?.pageIndex === 0 &&
+                data?.docs?.length === pagination?.pageSize)) && (
+              <Pagination
+                {...data}
+                {...{ isLoading, isRefetching, pagination, setPagination }}
+              />
+            )}
         </div>
       </AppErrorBoundary>
     </>

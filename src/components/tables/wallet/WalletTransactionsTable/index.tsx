@@ -18,6 +18,7 @@ interface Props {
   slot?: JSX.Element;
   search: string;
   walletId?: string;
+  budgetId?: string;
   isLoading?: boolean;
   isError?: boolean;
 }
@@ -31,6 +32,7 @@ export const WalletTransactionsTable = ({
   setPagination,
   range,
   walletId,
+  budgetId,
   isLoading: _isLoading,
   isError: _isError,
 }: Props & UseUrlManagedState) => {
@@ -59,6 +61,7 @@ export const WalletTransactionsTable = ({
           pageSize: pagination.pageSize,
           search,
           walletId,
+          budgetId,
         }
       : {
           range,
@@ -66,7 +69,7 @@ export const WalletTransactionsTable = ({
           pageIndex: pagination.pageIndex + 1,
           pageSize: pagination.pageSize,
           walletId,
-          budgetId: filters.budgetId,
+          budgetId: budgetId ?? filters.budgetId,
         }
   );
 
