@@ -74,6 +74,7 @@ export const useColumns = () => {
           return (
             <Pill
               config={{
+                failed: 'failed',
                 success: 'successful',
                 pending: 'pending',
               }}

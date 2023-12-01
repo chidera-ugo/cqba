@@ -1,7 +1,9 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { EmptyTable } from 'components/core/Table/EmptyTable';
 import { Confirmation } from 'components/modals/Confirmation';
+import { MobileEmployeesList } from 'components/modules/employees/MobileEmployeesList';
 import { EmployeeAction } from 'components/tables/employees/AllEmployeesTable/EmployeeActions';
+import { useAppContext } from 'context/AppContext';
 import { useBlockEmployee } from 'hooks/api/employees/useBlockEmployee';
 import { useDeleteEmployee } from 'hooks/api/employees/useDeleteEmployee';
 import {
@@ -10,13 +12,10 @@ import {
   useGetAllEmployees,
 } from 'hooks/api/employees/useGetAllEmployees';
 import { useUnblockEmployee } from 'hooks/api/employees/useUnblockEmployee';
+import { TPagination } from 'hooks/client_api/hooks/useUrlManagedState';
 import { EmployeeModalType } from 'hooks/employees/useManageEmployee';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import {
-  ColumnFiltersState,
-  PaginationState,
-  SortingState,
-} from '@tanstack/react-table';
+import { ColumnFiltersState, SortingState } from '@tanstack/react-table';
 import { PaginatedResponse } from 'types/Table';
 import { useColumns } from './useColumns';
 import { Table } from 'components/core/Table';
@@ -40,26 +39,21 @@ export const AllEmployeesTable = ({
   setFilters,
   status = 'active',
   onRowClick,
-}: Props) => {
+  pagination,
+  setPagination,
+}: Props & TPagination) => {
   const queryClient = useQueryClient();
 
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 10,
-  });
+  const { screenSize } = useAppContext().state;
+
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [action, setAction] = useState<EmployeeAction>(null);
+  const [currentSearchColumn, setCurrentSearchColumn] = useState('');
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const [employeeToPerformActionOn, setEmployeeToPerformActionOn] =
     useState<IEmployee | null>(null);
-
-  const [sorting, setSorting] = useState<SortingState>([]);
-
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-
-  const [action, setAction] = useState<EmployeeAction>(null);
-
-  const [currentSearchColumn, setCurrentSearchColumn] = useState('');
-
-  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const { columns } = useColumns({
     handleActionClick(employee, action) {
@@ -74,17 +68,17 @@ export const AllEmployeesTable = ({
   });
 
   const { mutate: blockEmployee, isLoading: blockingEmployee } =
-    useBlockEmployee(employeeToPerformActionOn?.id, {
+    useBlockEmployee(employeeToPerformActionOn?._id, {
       onSuccess,
     });
 
   const { mutate: unblockEmployee, isLoading: unblockingEmployee } =
-    useUnblockEmployee(employeeToPerformActionOn?.id, {
+    useUnblockEmployee(employeeToPerformActionOn?._id, {
       onSuccess,
     });
 
   const { mutate: deleteEmployee, isLoading: deletingEmployee } =
-    useDeleteEmployee(employeeToPerformActionOn?.id, {
+    useDeleteEmployee(employeeToPerformActionOn?._id, {
       onSuccess,
     });
 
@@ -95,9 +89,8 @@ export const AllEmployeesTable = ({
     isRefetching,
   } = useGetAllEmployees({
     status,
-    page: pagination.pageIndex,
+    page: pagination.pageIndex + 1,
     size: pagination.pageSize,
-    departmentId: filters?.['department']?.['value'],
   });
 
   useEffect(() => {
@@ -117,7 +110,7 @@ export const AllEmployeesTable = ({
     setShowConfirmation(false);
   }
 
-  if (!data?.docs?.length)
+  if (data && !data?.docs?.length)
     return (
       <EmptyTable
         processing={isLoading || isRefetching}
@@ -139,7 +132,7 @@ export const AllEmployeesTable = ({
         title={'Remove team member'}
         subTitle={`This means ${employeeToPerformActionOn?.firstName} ${employeeToPerformActionOn?.lastName} will no longer be able to access your dashboard`}
         positive={() => {
-          const id = employeeToPerformActionOn?.id;
+          const id = employeeToPerformActionOn?._id;
 
           if (action === 'unblock') {
             unblockEmployee(id);
@@ -156,43 +149,57 @@ export const AllEmployeesTable = ({
         }}
       />
 
-      <Table<IEmployee>
-        className={'mt-20 640:mt-4'}
-        title='employees'
-        headerSlot={slot}
-        dontScrollToTopOnPageChange
-        onRowClick={(employee) => {
-          onRowClick(employee, 'view_employee');
-        }}
-        returnOriginalOnRowClick
-        accessor='_id'
-        mustHaveRange
-        {...{
-          isLoading,
-          data,
-          setColumnFilters,
-          columnFilters,
-          currentSearchColumn,
-          pagination,
-          columns,
-          setPagination,
-          setCurrentSearchColumn,
-          setSorting,
-          sorting,
-          isError,
-          isRefetching,
-        }}
-        reset={() => {
-          setFilters && setFilters({});
-          setPagination({
-            pageIndex: 0,
-            pageSize: 10,
-          });
-          setSorting([]);
-          reset && reset();
-        }}
-        emptyTableText='You have not added any employees yet.'
-      />
+      {screenSize?.['mobile'] ? (
+        <MobileEmployeesList
+          {...{
+            isLoading,
+            isError,
+            isRefetching,
+            data,
+            setPagination,
+            pagination,
+            onRowClick,
+          }}
+        />
+      ) : (
+        <Table<IEmployee>
+          className={'mt-20 640:mt-4'}
+          title='employees'
+          headerSlot={slot}
+          dontScrollToTopOnPageChange
+          onRowClick={(employee) => {
+            onRowClick(employee, 'view_employee');
+          }}
+          returnOriginalOnRowClick
+          accessor='_id'
+          mustHaveRange
+          {...{
+            isLoading,
+            data,
+            setColumnFilters,
+            columnFilters,
+            currentSearchColumn,
+            pagination,
+            columns,
+            setPagination,
+            setCurrentSearchColumn,
+            setSorting,
+            sorting,
+            isError,
+            isRefetching,
+          }}
+          reset={() => {
+            setFilters && setFilters({});
+            setPagination({
+              pageIndex: 0,
+              pageSize: 10,
+            });
+            setSorting([]);
+            reset && reset();
+          }}
+          emptyTableText='You have not added any employees yet.'
+        />
+      )}
     </>
   );
 };

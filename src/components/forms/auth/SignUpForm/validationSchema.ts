@@ -1,6 +1,6 @@
 import { object, string } from 'yup';
 
-export const signupPasswordValidation: {
+export const passwordValidation: {
   name: string;
   check: (val: string) => boolean;
 }[] = [
@@ -42,8 +42,8 @@ export const validationSchema = object({
     ),
 });
 
-function validatePassword(val: string) {
-  for (const { check } of signupPasswordValidation) {
+export function validatePassword(val: string) {
+  for (const { check } of passwordValidation) {
     if (!check(val)) return false;
   }
 

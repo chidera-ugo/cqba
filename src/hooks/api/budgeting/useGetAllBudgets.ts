@@ -1,4 +1,6 @@
 import { UseQueryOptions } from '@tanstack/react-query';
+import { BudgetStatus } from 'enums/Budget';
+import { EmployeeRole } from 'enums/employee_enum';
 import { useTQuery } from 'hooks/api/useTQuery';
 import { PaginatedResponse } from 'types/Table';
 import { generateUrlParamsFromObject } from 'utils/generators/generateUrlParamsFromObject';
@@ -6,7 +8,7 @@ import { generateUrlParamsFromObject } from 'utils/generators/generateUrlParamsF
 export interface IBudget {
   _id: string;
   description: string;
-  status: string;
+  status: BudgetStatus;
   currency: string;
   amount: number;
   expiry: string;
@@ -16,14 +18,19 @@ export interface IBudget {
   beneficiaries: {
     email: string;
   }[];
-  spentAmount: number;
+  approvedDate?: string;
+  approvedBy?: {
+    email: string;
+    role: EmployeeRole;
+  };
+  amountUsed: number;
   availableAmount: number;
 }
 
 export function useGetAllBudgets(
   params: {
     page?: number;
-    size?: number;
+    limit?: number;
     search?: string;
     departmentId?: string;
     status?: string;
@@ -42,7 +49,6 @@ export function useGetAllBudgets(
     options: {
       ...options,
       meta: { silent: true },
-      staleTime: Infinity,
     },
   });
 }

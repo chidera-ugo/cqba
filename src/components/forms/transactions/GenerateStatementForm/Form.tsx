@@ -27,15 +27,14 @@ export const Form = ({ formikProps, processing }: Props) => {
         name='endDate'
         {...{ setFieldValue }}
         disabled={!values.startDate.calendarValue}
-        minDate={dayjs(values.startDate.calendarValue).add(1, 'day').toDate()}
+        minDate={dayjs(values.startDate.calendarValue).toDate()}
         maxDate={dayjs().toDate()}
       />
 
-      <div className='flex justify-end'>
+      <div className='mt-8 flex'>
         <SubmitButton
-          id='transfer-to-bank-submit-button'
           submitting={processing}
-          className='dark-button ml-auto mt-8 w-full min-w-[120px] 640:w-auto'
+          className='primary-button w-full min-w-[120px] 640:w-auto'
         >
           Continue
         </SubmitButton>

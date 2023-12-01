@@ -205,7 +205,7 @@ export function Table<T>({
   return (
     <div
       className={clsx(
-        `rounded-[10px] border border-neutral-200 bg-white`,
+        `rounded-[10px] border border-neutral-310 bg-white`,
         className
       )}
     >

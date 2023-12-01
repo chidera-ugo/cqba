@@ -17,7 +17,9 @@ export const useGetColorByChar = () => {
     charsArr.push(alphabets.slice(i, i + colors.length).join(''));
   }
 
-  function getColor(char: string | number) {
+  function getColor(char?: string | number) {
+    if (char === undefined) return '#000000';
+
     if (typeof char === 'number') {
       return colors[char] ?? colors[char % colors.length]!;
     }

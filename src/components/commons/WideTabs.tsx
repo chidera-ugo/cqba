@@ -2,15 +2,6 @@ import clsx from 'clsx';
 import { motion } from 'framer-motion';
 import { Dispatch, SetStateAction } from 'react';
 
-export type Props = {
-  tabs: WideTab[];
-  currentTab?: string;
-  setCurrentTab?: Dispatch<SetStateAction<string>>;
-  action?: (tab: WideTab) => void;
-  layoutId?: string;
-  className?: string;
-};
-
 export type WideTab =
   | {
       title: string;
@@ -21,6 +12,16 @@ export type WideTab =
     }
   | string;
 
+export type Props = {
+  tabs: WideTab[];
+  currentTab?: string;
+  setCurrentTab?: Dispatch<SetStateAction<string>>;
+  action?: (tab: WideTab) => void;
+  layoutId?: string;
+  tabClassname?: string;
+  className?: string;
+};
+
 export const WideTabs = ({
   tabs,
   className,
@@ -28,6 +29,7 @@ export const WideTabs = ({
   currentTab,
   layoutId,
   action,
+  tabClassname,
 }: Props) => {
   return (
     <div className={clsx('no-scrollbar h-full', className)}>
@@ -52,12 +54,15 @@ export const WideTabs = ({
                 if (setCurrentTab) setCurrentTab(newTab);
                 if (action) action(tab);
               }}
-              className='relative flex h-full items-center gap-2 align-middle'
+              className={clsx(
+                'relative flex h-full items-center gap-2 align-middle'
+              )}
             >
               <span
                 className={clsx(
-                  `y-center smooth relative z-10 text-sm font-semibold capitalize`,
-                  isActive ? 'text-primary-main' : 'text-black'
+                  `smooth relative z-10 mb-auto text-sm font-medium capitalize`,
+                  isActive ? 'text-primary-main' : 'text-black',
+                  tabClassname
                 )}
               >
                 {isObject ? tab?.title : tab}

@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import { PropsWithChildren } from 'react';
 
@@ -31,7 +32,7 @@ export const AnimateLayout = ({
           duration: 0.3,
         }}
         key={changeTracker}
-        className={className}
+        className={clsx(className, 'flex flex-col')}
       >
         {children}
       </motion.div>

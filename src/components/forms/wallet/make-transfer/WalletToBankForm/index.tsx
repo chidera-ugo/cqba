@@ -1,11 +1,12 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { Transact } from 'components/modules/core/Transact';
-import { WalletToBankFormRecoveryProps } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank';
+import { WalletToBankFormRecoveryValues } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank';
 import { Formik } from 'formik';
 import { useHandleError } from 'hooks/api/useHandleError';
 import { useInititateWalletToBank } from 'hooks/api/wallet/useInititateWalletToBank';
 import { useTransact } from 'hooks/dashboard/core/useTransact';
 import { useState } from 'react';
+import { FormRecoveryProps } from 'types/forms/form_recovery';
 import { sanitizeAmount } from 'utils/formatters/formatAmount';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
@@ -22,15 +23,17 @@ interface Props {
   institutions: Institution[];
   createBudget: () => void;
   close: () => void;
+  currency: string;
 }
 
 export const WalletToBankForm = ({
   institutions,
   createBudget,
   close,
+  currency,
   formRecoveryValues,
   setFormRecoveryValues,
-}: Props & WalletToBankFormRecoveryProps) => {
+}: Props & FormRecoveryProps<WalletToBankFormRecoveryValues>) => {
   const [budgetId, setBudgetId] = useState('');
 
   const queryClient = useQueryClient();
@@ -53,6 +56,7 @@ export const WalletToBankForm = ({
         setBudgetId(values.budget);
         transact.setMode('authorize');
       }}
+      validateOnBlur={false}
     >
       {(formikProps) => {
         // Todo: Handle validation errors, test with minimum amount be mindful of kobo
@@ -101,6 +105,7 @@ export const WalletToBankForm = ({
 
             <Form
               {...{
+                currency,
                 formikProps,
                 institutions,
                 formRecoveryValues,

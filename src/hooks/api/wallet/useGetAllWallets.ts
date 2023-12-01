@@ -1,4 +1,5 @@
 import { useTQuery } from 'hooks/api/useTQuery';
+import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 
 export interface IWallet {
   _id: string;
@@ -18,6 +19,8 @@ export interface VirtualAccount {
 }
 
 export function useGetAllWallets() {
+  const { isVerified } = useIsVerified();
+
   return useTQuery<IWallet[]>({
     queryKey: ['wallets'],
     url: ``,
@@ -26,6 +29,7 @@ export function useGetAllWallets() {
       staleTime: Infinity,
       meta: {
         silent: true,
+        enabled: isVerified,
       },
     },
   });

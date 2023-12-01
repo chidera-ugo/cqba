@@ -24,14 +24,13 @@ export const CreatePin = () => {
   }
 
   return (
-    <>
-      <RightModalWrapper
-        show={showModal}
-        className='bg-white'
-        title={'Create Transaction Pin'}
-      >
-        <CreatePinSteps closeModal={closeModal} />
-      </RightModalWrapper>
-    </>
+    <RightModalWrapper
+      show={showModal}
+      className='bg-white'
+      childrenClassname={'px-0 py-10'}
+      title={'Create Transaction Pin'}
+    >
+      <CreatePinSteps closeModal={closeModal} />
+    </RightModalWrapper>
   );
 };

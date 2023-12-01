@@ -5,7 +5,6 @@ import { Institution } from 'components/forms/wallet/make-transfer/WalletToBankF
 import { WalletToBankFormRecoveryValues } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { useGetAllBudgetsUnpaginated } from 'hooks/api/budgeting/useGetAllBudgets';
-import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { formatAmount } from 'utils/formatters/formatAmount';
 import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
@@ -20,6 +19,7 @@ interface Props {
   institutions: Institution[];
   createBudget: () => void;
   formRecoveryValues: WalletToBankFormRecoveryValues;
+  currency: string;
 }
 
 export const Form = ({
@@ -27,9 +27,8 @@ export const Form = ({
   institutions,
   createBudget,
   formRecoveryValues,
+  currency,
 }: Props) => {
-  const { primaryWallet } = useManageWallets();
-
   const { handleSubmit, setFieldValue, setValues, values } = formikProps;
 
   const { isLoading, isRefetching, isError, data } =
@@ -52,20 +51,20 @@ export const Form = ({
   useEffect(() => {
     if (!values.budget) return;
 
-    setFieldValue(
-      'budgetBalance',
+    const budgetBalance =
       Number(
-        data?.docs.find(({ _id }) => _id === values.budget)!.availableAmount
-      ) / 100
-    );
-  }, [values.budget]);
+        data?.docs.find(({ _id }) => _id === values.budget)?.availableAmount
+      ) / 100;
+
+    setFieldValue('budgetBalance', budgetBalance);
+  }, [values.budget, data]);
 
   return (
     <FormikForm onSubmit={handleSubmit}>
       <Select
         options={
           data?.docs.map(({ name, _id, availableAmount }) => ({
-            name: `${name} - ${primaryWallet.currency} ${formatAmount({
+            name: `${name} - ${currency} ${formatAmount({
               value: availableAmount / 100,
             })}`,
             availableAmount,
@@ -81,7 +80,7 @@ export const Form = ({
         name={'budget'}
         label={'Budget Category'}
       />
-      <div className='mt-3 flex'>
+      <div className='mt-3 flex w-fit'>
         <SecondaryActionButton
           onClick={createBudget}
           text={'Create New Budget'}

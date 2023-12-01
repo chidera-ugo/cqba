@@ -24,19 +24,19 @@
   }
 
   h1 {
-    @apply font-bold;
+    @apply font-semibold;
   }
 
   h3 {
-    @apply text-[44px] font-bold leading-[47px] 640:text-[47px] 640:leading-[52px] 1180:text-[55px] 1180:leading-[58px];
+    @apply text-[44px] font-semibold leading-[47px] 640:text-[47px] 640:leading-[52px] 1180:text-[55px] 1180:leading-[58px];
   }
 
   h4 {
-    @apply text-[24px] font-semibold leading-[24px] 640:text-[32px] 640:leading-[36px];
+    @apply text-[24px] font-medium leading-[24px] 640:text-[32px] 640:leading-[36px];
   }
 
   h5 {
-    @apply text-lg font-semibold text-neutral-1000 640:text-xl;
+    @apply text-lg font-medium text-neutral-1000 640:text-xl;
   }
 
   h6 {
@@ -127,7 +127,7 @@
   }
 
   .primary-button {
-    @apply smooth h-10 rounded-full bg-primary-main px-4 text-center text-sm font-medium text-white transition-colors hover:bg-primary-hmain;
+    @apply smooth h-10 rounded-full bg-primary-main px-4 text-center text-sm font-medium text-white ring-primary-main ring-opacity-30 transition-colors hover:bg-primary-hmain focus:ring-2;
   }
 
   .secondary-button {
@@ -167,7 +167,7 @@
   }
 
   .card {
-    @apply w-full rounded-lg border border-neutral-200 p-3 640:rounded-xl 640:p-5;
+    @apply w-full rounded-lg border border-neutral-310 p-3 640:rounded-xl 640:p-5;
   }
 
   .x-between {
@@ -237,7 +237,7 @@
   }
 
   .red-alt-pill {
-    @apply alt-pill bg-red-600 text-red-700;
+    @apply alt-pill border-red-500 border-opacity-30 bg-red-100 text-red-700;
   }
 
   .yellow-alt-pill {

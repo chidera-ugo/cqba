@@ -1,13 +1,17 @@
 import { useField } from 'formik';
 import clsx from 'clsx';
+import { useLazyFocus } from 'hooks/forms/useLazyFocus';
 
 type Props = JSX.IntrinsicElements['textarea'] & {
   label: string;
+  lazyFocus?: boolean;
 };
 
-export const TextArea = ({ label, className, ...props }: Props) => {
+export const TextArea = ({ label, lazyFocus, className, ...props }: Props) => {
   const [field, meta] = useField(props.name as string);
   const id = props.id ?? props.name;
+
+  useLazyFocus(id, lazyFocus && !props.autoFocus);
 
   return (
     <div className={clsx(className, 'mt-5 w-full')}>

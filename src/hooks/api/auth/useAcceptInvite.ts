@@ -13,7 +13,7 @@ export function useAcceptInvite(
   options?: UseMutationOptions<any, unknown, void, unknown>
 ) {
   return useTMutation<AcceptInviteDto, any>({
-    url: '/activate',
+    url: '/accept-invite',
     service: 'employees',
     options,
   });

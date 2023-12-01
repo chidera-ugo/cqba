@@ -1,4 +1,5 @@
 import { PaginationState } from '@tanstack/react-table';
+import { defaultPageSize } from 'constants/commons';
 import {
   defaultStringifySearch,
   simpleParseSearch,
@@ -16,8 +17,11 @@ import { ZodObject, ZodRawShape } from 'zod';
 export const useUrlManagedState = <T extends ZodRawShape>(
   schema: ZodObject<T>,
   searchParams: ReadonlyURLSearchParams,
-  defaultRangeNumberOfDays?: number
+  defaultRangeNumberOfDays?: number,
+  pageSize?: number
 ) => {
+  const _pageSize = pageSize ?? defaultPageSize;
+
   const schemaKeys = getKeysFromZodSchema(schema);
 
   function validateSearchParams() {
@@ -36,9 +40,10 @@ export const useUrlManagedState = <T extends ZodRawShape>(
     getDateRange({ days: defaultRangeNumberOfDays ?? 0 })
   );
 
-  const [pagination, setPagination] = useState<PaginationState>(
-    {} as PaginationState
-  );
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: _pageSize,
+  } as PaginationState);
 
   const { replace } = useRouter();
 
@@ -72,10 +77,10 @@ export const useUrlManagedState = <T extends ZodRawShape>(
     const pageIndex = parseInt(pagination.pageIndex);
     const pageSize = parseInt(pagination.pageSize);
 
-    if (isNaN(pageIndex) || isNaN(pageSize) || pageSize !== 10)
+    if (isNaN(pageIndex) || isNaN(pageSize) || pageSize !== _pageSize)
       return setPagination({
         pageIndex: 0,
-        pageSize: 10,
+        pageSize: _pageSize,
       });
 
     setPagination({ pageIndex, pageSize });
@@ -85,3 +90,8 @@ export const useUrlManagedState = <T extends ZodRawShape>(
 };
 
 export type UseUrlManagedState = ReturnType<typeof useUrlManagedState>;
+
+export type TPagination = {
+  pagination: UseUrlManagedState['pagination'];
+  setPagination: UseUrlManagedState['setPagination'];
+};

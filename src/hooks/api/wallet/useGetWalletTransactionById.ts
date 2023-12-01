@@ -30,7 +30,6 @@ export interface IWalletTransactionDetails {
   balanceAfter: number;
   balanceBefore: number;
   scope: string;
-  counterparty: CounterParty;
   fee: number;
   paymentMethod: string;
   providerRef: string;
@@ -45,6 +44,7 @@ export interface IWalletTransactionDetails {
 
 interface Meta {
   sourceAccount: SourceAccount;
+  counterparty: CounterParty;
 }
 
 interface SourceAccount {

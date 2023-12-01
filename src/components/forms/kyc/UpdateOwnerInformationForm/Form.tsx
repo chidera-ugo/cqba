@@ -120,7 +120,6 @@ export const Form = ({
         }}
         limit={8}
         shouldValidate
-        disableTyping
         fieldType='dateOfBirth'
         maxDate={dayjs()
           .year(dayjs().year() - 18)

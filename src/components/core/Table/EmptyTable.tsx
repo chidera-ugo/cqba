@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { SimpleToast } from 'components/commons/SimpleToast';
 import { Spinner } from 'components/svgs/dashboard/Spinner';
 import Image, { StaticImageData } from 'next/image';
@@ -7,6 +8,7 @@ interface Props {
   title: string;
   imageSrc: StaticImageData;
   subTitle: string;
+  toastClassname?: string;
 }
 
 export const EmptyTable = ({
@@ -14,12 +16,16 @@ export const EmptyTable = ({
   title,
   subTitle,
   imageSrc,
+  toastClassname,
 }: Props) => {
   return (
     <div className='relative h-full py-20'>
       <SimpleToast
         show={processing}
-        className='bottom-32 left-0 1180:left-[122px]'
+        className={clsx(
+          'left-0 1180:left-[122px]',
+          toastClassname ?? 'bottom-32'
+        )}
       >
         <div className='flex py-2'>
           <Spinner className='my-auto mr-1 h-4 text-white' />

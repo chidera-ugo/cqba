@@ -3,7 +3,7 @@ import { useTQuery } from 'hooks/api/useTQuery';
 
 export function useGetEmployeeById(id?: string) {
   return useTQuery<IEmployee>({
-    queryKey: ['employees', String(id)],
+    queryKey: ['employee', String(id)],
     url: `/${id}`,
     service: 'employees',
     options: {

@@ -4,6 +4,8 @@ export enum BudgetStatuses {
   'paused',
   'approved',
   'declined',
+  'pending',
+  'active',
 }
 
 export type BudgetStatus = keyof typeof BudgetStatuses;

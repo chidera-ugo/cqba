@@ -18,6 +18,9 @@ interface Props {
   slot?: JSX.Element;
   search: string;
   walletId?: string;
+  budgetId?: string;
+  isLoading?: boolean;
+  isError?: boolean;
 }
 
 export const WalletTransactionsTable = ({
@@ -29,6 +32,9 @@ export const WalletTransactionsTable = ({
   setPagination,
   range,
   walletId,
+  budgetId,
+  isLoading: _isLoading,
+  isError: _isError,
 }: Props & UseUrlManagedState) => {
   const [transactionId, setTransactionId] = useState<any | null>(null);
 
@@ -43,8 +49,8 @@ export const WalletTransactionsTable = ({
   }, [filters, columnFilters, search]);
 
   const {
-    isLoading,
-    isError,
+    isLoading: _l,
+    isError: _e,
     data: res,
     isRefetching,
   } = useGetWalletTransactions(
@@ -52,17 +58,23 @@ export const WalletTransactionsTable = ({
       ? {
           range: getDateRange({ days: 90 }),
           pageIndex: 1,
+          pageSize: pagination.pageSize,
           search,
           walletId,
+          budgetId,
         }
       : {
           range,
           type: filters?.transactionType,
           pageIndex: pagination.pageIndex + 1,
+          pageSize: pagination.pageSize,
           walletId,
-          budgetId: filters.budgetId,
+          budgetId: budgetId ?? filters.budgetId,
         }
   );
+
+  const isLoading = _l || _isLoading;
+  const isError = _e || _isError;
 
   useEffect(() => {
     if (!!res) setData(res);
@@ -78,7 +90,7 @@ export const WalletTransactionsTable = ({
     setTransactionId(null);
   }
 
-  if (!isLoading && !data?.docs?.length)
+  if (data && !data?.docs?.length)
     return (
       <EmptyTable
         processing={isLoading || isRefetching}
@@ -106,9 +118,11 @@ export const WalletTransactionsTable = ({
             pagination,
             setPagination,
             data,
+            isLoading,
+            isError,
+            isRefetching,
           }}
           onRowClick={(transactionId) => setTransactionId(transactionId)}
-          fetching={isLoading}
         />
       ) : (
         <Table<IWalletTransaction>

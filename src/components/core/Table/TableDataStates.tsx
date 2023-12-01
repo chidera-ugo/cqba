@@ -34,7 +34,10 @@ export const TableDataStates = ({
         <IsEmpty {...{ emptyTableText, emptyTableIcon, minimal }} />
       ) : isLoading && !res?.docs?.length ? (
         <IsLoading
-          className={clsx(minimal ? 'h-[50px]' : 'h-[200px] 640:h-[300px]')}
+          className={clsx(
+            'text-primary-main',
+            minimal ? 'h-[50px]' : 'h-[200px] 640:h-[300px]'
+          )}
         />
       ) : isError ? (
         <IsError

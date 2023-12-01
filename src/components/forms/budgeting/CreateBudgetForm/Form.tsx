@@ -1,6 +1,8 @@
 import { AlternateCheckInput } from 'components/form-elements/AlternateCheckInput';
 import { TextArea } from 'components/form-elements/Textarea';
+import { CreateBudgetFormRecoveryValues } from 'components/forms/budgeting/CreateBudgetForm/index';
 import { Form as FormikForm, FormikProps } from 'formik';
+import { useEffect } from 'react';
 import { initialValues } from './initialValues';
 import dayjs from 'dayjs';
 import { DatePicker } from 'components/form-elements/DatePicker';
@@ -11,10 +13,26 @@ import { AmountInput } from 'components/form-elements/AmountInput';
 interface Props {
   formikProps: FormikProps<typeof initialValues>;
   processing: boolean;
+  recoveryValues?: CreateBudgetFormRecoveryValues;
+  currency?: string;
 }
 
-export const Form = ({ formikProps, processing }: Props) => {
-  const { handleSubmit, setFieldValue, values } = formikProps;
+export const Form = ({
+  formikProps,
+  currency,
+  recoveryValues,
+  processing,
+}: Props) => {
+  const { handleSubmit, setValues, setFieldValue, values } = formikProps;
+
+  useEffect(() => {
+    if (!recoveryValues) return;
+
+    setValues({
+      ...values,
+      ...recoveryValues,
+    });
+  }, [recoveryValues]);
 
   return (
     <FormikForm onSubmit={handleSubmit}>
@@ -25,12 +43,14 @@ export const Form = ({ formikProps, processing }: Props) => {
       <AmountInput
         label='Budget Amount'
         name='amount'
-        currency='NGN'
+        currency={currency}
         setFieldValue={setFieldValue}
       />
 
       <AlternateCheckInput
         name={'threshold'}
+        next={'allocation'}
+        lazyFocus
         label={'Budget Threshold'}
         description={`This is the maximum you want your team to spend from, in this budget`}
       />
@@ -39,7 +59,7 @@ export const Form = ({ formikProps, processing }: Props) => {
         <AmountInput
           label='Allocation'
           name='allocation'
-          currency='NGN'
+          currency={currency}
           setFieldValue={setFieldValue}
         />
       )}
@@ -54,7 +74,6 @@ export const Form = ({ formikProps, processing }: Props) => {
         <DatePicker
           label='Due Date'
           name='expiryDate'
-          disableTyping
           {...{
             setFieldValue,
           }}

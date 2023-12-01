@@ -1,3 +1,5 @@
+import { EmployeeRole } from 'enums/employee_enum';
+
 export interface IUser {
   KYBStatus?: string;
   lastName?: string;
@@ -9,6 +11,7 @@ export interface IUser {
   emailVerified?: boolean;
   GSI1pKey?: string;
   roles?: string[];
+  role?: EmployeeRole;
   organization?: string;
   updatedAt?: number;
   GSI1sKey?: string;

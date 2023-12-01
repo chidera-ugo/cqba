@@ -1,10 +1,13 @@
 import clsx from 'clsx';
 import { useField } from 'formik';
+import { useEffect, useRef } from 'react';
 
 /* eslint-disable @next/next/no-img-element */
 type Props = JSX.IntrinsicElements['input'] & {
   label: string;
   description?: string;
+  next?: string;
+  lazyFocus?: boolean;
 };
 
 export const AlternateCheckInput = ({
@@ -12,11 +15,31 @@ export const AlternateCheckInput = ({
   className,
   name,
   label,
+  lazyFocus,
+  next,
   description,
   ...props
 }: Props) => {
   const id = _id ?? name;
   const [field] = useField(name as string);
+
+  const timeout = useRef<any>(null);
+
+  useEffect(() => {
+    if (next && !!field.value) {
+      if (lazyFocus) {
+        timeout.current = setTimeout(() => {
+          document.getElementById(next)?.focus();
+        }, 400);
+      } else {
+        document.getElementById(next)?.focus();
+      }
+    }
+
+    return () => {
+      clearTimeout(timeout.current);
+    };
+  }, [field.value]);
 
   return (
     <label
@@ -33,10 +56,10 @@ export const AlternateCheckInput = ({
           {...field}
           checked={!!field.value}
           type='checkbox'
-          className='mr-2 flex-shrink-0'
+          className='mt-0.5 mr-2 flex-shrink-0'
         />
 
-        <div className={'my-auto'}>
+        <div>
           <div className={'pointer-events-none text-sm font-medium text-black'}>
             {label}
           </div>

@@ -19,7 +19,7 @@ export const UpdateEmployeeForm = ({
 }: Props) => {
   const queryClient = useQueryClient();
 
-  const { isLoading, mutate } = useUpdateEmployee(currentEmployee?.id, {
+  const { isLoading, mutate } = useUpdateEmployee(currentEmployee?._id, {
     onSuccess() {
       queryClient.invalidateQueries(['employees']);
       onSuccess();
@@ -30,9 +30,10 @@ export const UpdateEmployeeForm = ({
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={({ email, phoneNumber, ...values }) => {
+      onSubmit={({ email, phoneNumber, role, ...values }) => {
         mutate({
           ...values,
+          role: role.toLowerCase(),
           phone: phoneNumber,
           email: email.trim(),
         });

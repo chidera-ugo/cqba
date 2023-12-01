@@ -1,9 +1,12 @@
+import { IsError } from 'components/data-states/IsError';
+import { IsLoading } from 'components/data-states/IsLoading';
 import { CreateBudgetForm } from 'components/forms/budgeting/CreateBudgetForm';
 import { GreenCheck } from 'components/illustrations/Success';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { CreateBudgetPrompt } from 'components/modules/budgeting/CreateBudgetPrompt';
 import { SimpleInformation } from 'components/modules/commons/SimpleInformation';
-import { AnimateLayout } from 'components/transition/AnimateLayout';
+import { AnimateLayout } from 'components/animations/AnimateLayout';
+import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { useState } from 'react';
 
 export const CreateFirstBudget = ({
@@ -15,6 +18,7 @@ export const CreateFirstBudget = ({
   onSuccess: () => void;
   close: () => void;
 }) => {
+  const { primaryWallet, isLoading, isError } = useManageWallets();
   const [mode, setMode] = useState<'create' | 'success' | 'prompt'>('prompt');
 
   return (
@@ -25,10 +29,7 @@ export const CreateFirstBudget = ({
       closeOnClickOutside={mode !== 'create'}
       childrenClassname={'p-0'}
     >
-      <AnimateLayout
-        changeTracker={mode}
-        className={'flex flex-col px-4 640:px-8'}
-      >
+      <AnimateLayout changeTracker={mode} className={'px-4 640:px-8'}>
         {mode === 'success' ? (
           <SimpleInformation
             className={'mt-20'}
@@ -58,15 +59,24 @@ export const CreateFirstBudget = ({
           />
         ) : mode === 'create' ? (
           <CreateBudgetForm
+            currency={primaryWallet?.currency}
             onSuccess={() => {
               setMode('success');
             }}
           />
         ) : (
-          <CreateBudgetPrompt
-            close={close}
-            createBudget={() => setMode('create')}
-          />
+          <>
+            {isLoading ? (
+              <IsLoading />
+            ) : isError ? (
+              <IsError />
+            ) : (
+              <CreateBudgetPrompt
+                close={close}
+                createBudget={() => setMode('create')}
+              />
+            )}
+          </>
         )}
       </AnimateLayout>
     </RightModalWrapper>

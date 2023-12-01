@@ -19,6 +19,7 @@ interface Props {
   isError?: boolean;
   className?: string;
   normal?: boolean;
+  valueClassname?: string;
 }
 
 export const DisplayValue = ({
@@ -33,12 +34,20 @@ export const DisplayValue = ({
   className,
   titleClassName,
   normal,
+  valueClassname,
 }: Props) => {
   if (normal)
     return (
       <div className={className}>
         <div className={'text-sm text-neutral-600'}>{title}</div>
-        <div className='text-base font-semibold text-neutral-900'>{value}</div>
+        <div
+          className={clsx(
+            'mt-0.5 text-base font-medium text-neutral-900',
+            valueClassname
+          )}
+        >
+          {value}
+        </div>
       </div>
     );
 

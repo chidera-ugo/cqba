@@ -13,7 +13,15 @@ export const EmployeeActions = ({
 }: Props) => {
   return (
     <div className={'flex gap-5'}>
-      {!isEmployeeActive && (
+      {isEmployeeActive ? (
+        <button
+          onClick={() => handleActionClick('delete')}
+          type={'button'}
+          className={'y-center cell-button p-1'}
+        >
+          <Bin />
+        </button>
+      ) : (
         <button
           onClick={() => handleActionClick('edit')}
           type={'button'}
@@ -22,14 +30,6 @@ export const EmployeeActions = ({
           <Edit />
         </button>
       )}
-
-      <button
-        onClick={() => handleActionClick('delete')}
-        type={'button'}
-        className={'y-center cell-button p-1'}
-      >
-        <Bin />
-      </button>
     </div>
   );
 };

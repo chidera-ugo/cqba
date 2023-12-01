@@ -1,4 +1,4 @@
-import { signupPasswordValidation } from 'components/forms/auth/SignUpForm/validationSchema';
+import { passwordValidation } from 'components/forms/auth/SignUpForm/validationSchema';
 import { SmallCheck } from 'components/svgs/others/Check';
 
 export const PasswordRequirementsCheckList = ({
@@ -7,7 +7,7 @@ export const PasswordRequirementsCheckList = ({
   password: string;
 }) => (
   <div className='mt-4 flex flex-wrap gap-2 rounded-xl border p-3 align-middle'>
-    {signupPasswordValidation.map(({ check, name }) => {
+    {passwordValidation.map(({ check, name }) => {
       return (
         <div key={name} className={'flex'}>
           <span className='my-auto mr-1.5'>

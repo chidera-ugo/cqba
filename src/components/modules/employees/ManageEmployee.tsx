@@ -5,6 +5,7 @@ import { EmployeeModalType } from 'hooks/employees/useManageEmployee';
 
 interface Props {
   closeModal: () => void;
+  onSuccess?: () => void;
   modal: EmployeeModalType;
   currentEmployee?: IEmployee | null;
 }
@@ -12,6 +13,7 @@ interface Props {
 export const ManageEmployee = ({
   modal,
   closeModal,
+  onSuccess,
   currentEmployee,
 }: Props) => {
   const isActive = currentEmployee?.status === 'active';
@@ -33,7 +35,12 @@ export const ManageEmployee = ({
     >
       <UpdateEmployeeForm
         currentEmployee={currentEmployee}
-        onSuccess={closeModal}
+        onSuccess={() => {
+          closeModal();
+
+          if (!onSuccess) return;
+          onSuccess();
+        }}
       />
     </RightModalWrapper>
   );
