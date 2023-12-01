@@ -56,10 +56,10 @@ export const AlternateCheckInput = ({
           {...field}
           checked={!!field.value}
           type='checkbox'
-          className='mr-2 flex-shrink-0'
+          className='mt-0.5 mr-2 flex-shrink-0'
         />
 
-        <div className={'my-auto'}>
+        <div>
           <div className={'pointer-events-none text-sm font-medium text-black'}>
             {label}
           </div>

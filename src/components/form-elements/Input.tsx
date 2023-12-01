@@ -1,8 +1,9 @@
 import { useField } from 'formik';
 import clsx from 'clsx';
+import { useLazyFocus } from 'hooks/forms/useLazyFocus';
 import { Field } from 'types/commons';
 import { validateField } from 'utils/validators/validateField';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 type Props = JSX.IntrinsicElements['input'] & Field;
 
@@ -20,7 +21,6 @@ export const Input = ({
 }: Props) => {
   const [field, meta] = useField(props.name as string);
   const id = props.id ?? props.name;
-  const timeout = useRef<any>(null);
 
   useEffect(() => {
     if (next && field.value?.length === limit) {
@@ -28,15 +28,7 @@ export const Input = ({
     }
   }, [field.value]);
 
-  useEffect(() => {
-    if (!lazyFocus || props.autoFocus) return;
-
-    timeout.current = setTimeout(() => {
-      document.getElementById(id!)?.focus();
-    }, 400);
-
-    return () => clearTimeout(timeout.current);
-  }, [lazyFocus]);
+  useLazyFocus(id, lazyFocus && !props.autoFocus);
 
   return (
     <div className={clsx(className, 'mt-5 w-full')}>

@@ -41,50 +41,53 @@ export default function BudgetDetails() {
       breadCrumbs={[
         {
           title: 'Budgeting',
-          url: !data ? '/budgeting' : `/budgeting?_t=${data.status}`,
+          url: '/budgeting',
         },
         {
           title: 'Track Expense',
         },
       ]}
       breadCrumbsSlot={
-        <div className={clsx('my-auto hidden gap-2 1180:flex')}>
-          <SearchInput
-            placeholder='Search by Transaction ID'
-            value={search}
-            wrapperClassname={'640:w-auto w-full'}
-            className='w-full 640:w-[300px]'
-            onChange={(e) => {
-              setSearch(e.target.value);
-            }}
-            clear={() => setSearch('')}
-          />
+        data?.status === 'closed' ? null : (
+          <div className={clsx('my-auto hidden gap-2 1180:flex')}>
+            <SearchInput
+              placeholder='Search by Transaction ID'
+              value={search}
+              wrapperClassname={'640:w-auto w-full'}
+              className='w-full 640:w-[300px]'
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+              clear={() => setSearch('')}
+            />
 
-          <FilterWithRangePreset
-            processing={isLoading}
-            {...{
-              filters,
-              setFilters,
-              range,
-              setRange,
-            }}
-            selectFilters={[
-              {
-                id: 'transactionType',
-                label: 'Transaction Type',
-                options: [
-                  { label: 'Credit', value: 'credit' },
-                  { label: 'Debit', value: 'debit' },
-                ],
-              },
-            ]}
-          />
-        </div>
+            <FilterWithRangePreset
+              processing={isLoading}
+              {...{
+                filters,
+                setFilters,
+                range,
+                setRange,
+              }}
+              selectFilters={[
+                {
+                  id: 'transactionType',
+                  label: 'Transaction Type',
+                  options: [
+                    { label: 'Credit', value: 'credit' },
+                    { label: 'Debit', value: 'debit' },
+                  ],
+                },
+              ]}
+            />
+          </div>
+        )
       }
     >
       {isLoading ? (
         <IsLoading />
-      ) : isError || data?.status !== 'active' ? (
+      ) : isError ||
+        (data?.status !== 'active' && data?.status !== 'closed') ? (
         <IsError description={'Failed to get budget details'} />
       ) : (
         <AppErrorBoundary>

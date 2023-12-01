@@ -4,7 +4,7 @@ import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { EmptyTable } from 'components/core/Table/EmptyTable';
 import { Pagination } from 'components/core/Table/Pagination';
 import { TableDataStates } from 'components/core/Table/TableDataStates';
-import { BudgetCard } from 'components/modules/budgeting/BudgetCard';
+import { ActiveBudgetCard } from 'components/modules/budgeting/ActiveBudgetCard';
 import { Spinner } from 'components/svgs/dashboard/Spinner';
 import {
   IBudget,
@@ -21,12 +21,10 @@ import budgeting from '/public/mockups/budgeting.jpg';
 
 interface Props {
   search: string;
-  status?: string;
   currentTab?: { name: string; value: string };
 }
 
-export const AllBudgets = ({
-  status,
+export const ActiveBudgets = ({
   pagination,
   setPagination,
   search,
@@ -45,7 +43,6 @@ export const AllBudgets = ({
   } = useGetAllBudgets({
     page: search ? 1 : pagination.pageIndex + 1,
     limit: pagination.pageSize,
-    status: status === 'active' ? undefined : status,
     search,
   });
 
@@ -120,7 +117,7 @@ export const AllBudgets = ({
               {showData
                 ? data?.docs?.map((budget) => {
                     return (
-                      <BudgetCard
+                      <ActiveBudgetCard
                         className={'col-span-12 768:col-span-6 1340:col-span-4'}
                         {...{ getColor }}
                         {...budget}

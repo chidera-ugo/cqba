@@ -1,13 +1,23 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { FullScreenLoader } from 'components/commons/FullScreenLoader';
+import { AuthorizeActionWithPin } from 'components/core/AuthorizeActionWithPin';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
-import { BudgetCard } from 'components/modules/budgeting/BudgetCard';
-import { AppToast } from 'components/primary/AppToast';
-import { useApproveOrRejectBudget } from 'hooks/api/budgeting/useApproveOrRejectBudget';
+import { ApproveBudgetForm } from 'components/forms/budgeting/ApproveBudgetForm';
+import { RejectionReasonForm } from 'components/forms/budgeting/RejectionReasonForm';
+import { Cancel } from 'components/illustrations/Cancel';
+import { RightModalWrapper } from 'components/modal/ModalWrapper';
+import { PendingBudgetCard } from 'components/modules/budgeting/PendingBudgetCard';
+import { useAppContext } from 'context/AppContext';
+import {
+  ApproveBudgetDto,
+  useApproveBudget,
+} from 'hooks/api/budgeting/useApproveBudget';
+import { useCloseBudget } from 'hooks/api/budgeting/useCloseBudget';
 import { useGetBudgetById } from 'hooks/api/budgeting/useGetBudgetById';
+import { useHandleError } from 'hooks/api/useHandleError';
 import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
-import { toast } from 'react-toastify';
+import { useManageWallets } from 'hooks/wallet/useManageWallets';
+import { useState } from 'react';
 
 interface Props {
   id: string;
@@ -15,48 +25,143 @@ interface Props {
 }
 
 export const PendingBudgetDetails = ({ id, close }: Props) => {
+  const { user } = useAppContext().state;
+
+  const [mode, setMode] = useState<'success' | 'authorize' | null>(null);
+  const [action, setAction] = useState<'approve' | 'decline' | null>(null);
+  const [reason, setReason] = useState('');
+
   const queryClient = useQueryClient();
   const { getColor } = useGetColorByChar();
+  const { handleError } = useHandleError();
 
   const { isLoading: gettingBudget, isError, data } = useGetBudgetById(id);
+  const { primaryWallet, isError: _e, isLoading: _l } = useManageWallets();
 
-  const { mutate, isLoading } = useApproveOrRejectBudget(id, {
+  const [approveBudgetValues, setApproveBudgetValues] =
+    useState<ApproveBudgetDto | null>(null);
+
+  const { mutate: approve, isLoading: approving } = useApproveBudget(
+    data?._id,
+    {
+      onError: () => null,
+    }
+  );
+
+  const { isLoading: declining, mutate: decline } = useCloseBudget(data?._id, {
     onSuccess() {
-      close();
+      queryClient.invalidateQueries(['budget', data?._id]);
       queryClient.invalidateQueries(['budgets']);
-      toast(<AppToast>Updated budget successfully</AppToast>, {
-        type: 'success',
-        autoClose: 2000,
-      });
+      setMode('success');
     },
   });
 
-  if (gettingBudget) return <IsLoading />;
+  if (gettingBudget || _l) return <IsLoading />;
 
-  if (isError) return <IsError description={'Failed to get budget details'} />;
+  if (isError || _e || !primaryWallet || !data) return <IsError />;
+
+  function dismiss() {
+    setMode(null);
+    setAction(null);
+  }
+
+  console.log(action);
 
   return (
     <>
-      <FullScreenLoader show={isLoading} />
+      <RightModalWrapper
+        closeModal={() => {
+          setAction(null);
+        }}
+        hideBackground
+        title={'Decline Budget'}
+        show={action === 'decline' && !mode}
+        childrenClassname={'pt-4 px-8'}
+      >
+        <RejectionReasonForm
+          proceed={(reason) => {
+            setMode('authorize');
+            setReason(reason);
+          }}
+        />
+      </RightModalWrapper>
 
-      <BudgetCard {...data} {...{ getColor }} showFullDetails />
+      <AuthorizeActionWithPin
+        mode={mode}
+        show={!!mode}
+        icon={action === 'decline' ? <Cancel /> : undefined}
+        title={
+          mode !== 'success'
+            ? action === 'decline'
+              ? 'Authorize Decline'
+              : 'Approve Budget'
+            : ''
+        }
+        close={() => {
+          dismiss();
+          if (mode === 'success') close();
+        }}
+        processing={declining || approving}
+        finish={() => {
+          dismiss();
+          close();
+        }}
+        successTitle={
+          action === 'decline' ? 'Budget Declined' : 'Budget Approved'
+        }
+        successMessage={
+          action === 'approve'
+            ? `Congratulations! Your budget has been Approved successfully`
+            : ''
+        }
+        actionMessage={
+          action === 'decline' ? 'Decline Budget' : 'Approve Budget'
+        }
+        submit={(pin, errorCb) => {
+          if (action === 'decline') {
+            decline({
+              pin,
+              reason,
+            });
+          } else {
+            approve(
+              {
+                ...approveBudgetValues!,
+                pin,
+              },
+              {
+                onSuccess() {
+                  queryClient.invalidateQueries(['budgets']);
+                  queryClient.invalidateQueries(['wallets']);
+                  setMode('success');
+                },
+                onError(e) {
+                  handleError(e);
+                  errorCb();
+                },
+              }
+            );
+          }
+        }}
+      />
 
-      {data.status === 'open' && (
-        <div className='mt-8 gap-3 640:flex'>
-          <button
-            onClick={() => mutate({ status: 'declined' })}
-            className='dark-button block h-11 w-full text-sm 640:w-1/2'
-          >
-            Reject Budget
-          </button>
+      <PendingBudgetCard {...data} {...{ getColor }} showFullDetails />
 
-          <button
-            onClick={() => mutate({ status: 'approved' })}
-            className='primary-button mt-3 block h-11 w-full text-sm 640:mt-0 640:w-1/2'
-          >
-            Approve Budget
-          </button>
-        </div>
+      {user?.role === 'owner' && (
+        <ApproveBudgetForm
+          amount={data?.amount}
+          decline={() => setAction('decline')}
+          onSubmit={(values) => {
+            setApproveBudgetValues((prev) => ({
+              ...prev!,
+              ...values,
+            }));
+
+            setAction('approve');
+            setMode('authorize');
+          }}
+          currency={primaryWallet?.currency}
+        />
       )}
     </>
   );

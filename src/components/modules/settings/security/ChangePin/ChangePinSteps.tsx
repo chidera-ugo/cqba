@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { CodeInput } from 'components/form-elements/CodeInput';
 import { AppToast } from 'components/primary/AppToast';
-import { AnimateLayout } from 'components/transition/AnimateLayout';
+import { AnimateLayout } from 'components/animations/AnimateLayout';
 import { useHandleError } from 'hooks/api/useHandleError';
 import { useMakeDummyHttpRequest } from 'hooks/commons/useMakeDummyHttpRequest';
 import Link from 'next/link';

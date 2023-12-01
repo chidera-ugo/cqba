@@ -4,7 +4,7 @@ import { PropsWithChildren, ReactNode } from 'react';
 
 export interface Props {
   processing?: boolean;
-  icon?: JSX.Element;
+  icon?: ReactNode;
   title?: JSX.Element | string;
   description?: JSX.Element | string;
   actionButton?: {

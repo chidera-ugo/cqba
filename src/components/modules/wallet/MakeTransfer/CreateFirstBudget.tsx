@@ -5,7 +5,7 @@ import { GreenCheck } from 'components/illustrations/Success';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { CreateBudgetPrompt } from 'components/modules/budgeting/CreateBudgetPrompt';
 import { SimpleInformation } from 'components/modules/commons/SimpleInformation';
-import { AnimateLayout } from 'components/transition/AnimateLayout';
+import { AnimateLayout } from 'components/animations/AnimateLayout';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { useState } from 'react';
 
@@ -29,10 +29,7 @@ export const CreateFirstBudget = ({
       closeOnClickOutside={mode !== 'create'}
       childrenClassname={'p-0'}
     >
-      <AnimateLayout
-        changeTracker={mode}
-        className={'flex flex-col px-4 640:px-8'}
-      >
+      <AnimateLayout changeTracker={mode} className={'px-4 640:px-8'}>
         {mode === 'success' ? (
           <SimpleInformation
             className={'mt-20'}

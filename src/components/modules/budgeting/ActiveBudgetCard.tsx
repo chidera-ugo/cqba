@@ -3,6 +3,10 @@ import clsx from 'clsx';
 import { Avatar } from 'components/commons/Avatar';
 import { AuthorizeActionWithPin } from 'components/core/AuthorizeActionWithPin';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
+import { RejectionReasonForm } from 'components/forms/budgeting/RejectionReasonForm';
+import { Cancel } from 'components/illustrations/Cancel';
+import { RightModalWrapper } from 'components/modal/ModalWrapper';
+import { AppToast } from 'components/primary/AppToast';
 import { useAppContext } from 'context/AppContext';
 import { EmployeeRoles } from 'enums/employee_enum';
 import { useCloseBudget } from 'hooks/api/budgeting/useCloseBudget';
@@ -10,32 +14,40 @@ import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
 import { usePauseBudget } from 'hooks/api/budgeting/usePauseBudget';
 import { useRouter } from 'next/router';
 import { Fragment, useState } from 'react';
+import { toast } from 'react-toastify';
 import { formatAmount } from 'utils/formatters/formatAmount';
 import { formatDate } from 'utils/formatters/formatDate';
 
 type Props = IBudget & {
   showFullDetails?: boolean;
-  onItemClick?: (res: any) => void;
   getColor: (char: string) => string;
   className?: string;
   showActions?: boolean;
 };
 
-export const BudgetCard = ({ getColor, showActions, ...budget }: Props) => {
+export const ActiveBudgetCard = ({
+  getColor,
+  showActions,
+  ...budget
+}: Props) => {
   const { screenSize } = useAppContext().state;
-  const [mode, setMode] = useState<'success' | 'authorize' | null>(null);
 
+  const [mode, setMode] = useState<'success' | 'authorize' | null>(null);
+  const [action, setAction] = useState<'pause' | 'close' | null>(null);
+  const [reason, setReason] = useState('');
+  const [paused, setPaused] = useState(budget.paused);
+
+  const { replace } = useRouter();
   const queryClient = useQueryClient();
 
   const {
     _id,
-    // description,
     amountUsed,
     expiry,
     name,
     currency,
     beneficiaries,
-    // status,
+    status,
     amount,
     approvedBy,
     approvedDate,
@@ -44,8 +56,6 @@ export const BudgetCard = ({ getColor, showActions, ...budget }: Props) => {
   } = budget;
 
   const { push } = useRouter();
-
-  // const budgetIsActive = status !== 'open' && status !== 'declined';
 
   function getWidth(val: number) {
     return `${Math.round((val * 100) / amount)}%`;
@@ -72,12 +82,22 @@ export const BudgetCard = ({ getColor, showActions, ...budget }: Props) => {
 
   const { isLoading: pausing, mutate: pause } = usePauseBudget(budget._id, {
     onSuccess() {
+      setPaused(true);
       queryClient.invalidateQueries(['budget', budget._id]);
-      setMode(null);
+      queryClient.invalidateQueries(['budgets']);
+      setMode('success');
     },
   });
 
-  const { isLoading: closing, mutate: close } = useCloseBudget(budget._id);
+  const { isLoading: closing, mutate: close } = useCloseBudget(budget._id, {
+    onSuccess(res) {
+      replace('/budgeting').then(() => {
+        toast(<AppToast>{res.message}</AppToast>, { type: 'success' });
+        queryClient.invalidateQueries(['budget', budget._id]);
+        queryClient.invalidateQueries(['budgets']);
+      });
+    },
+  });
 
   return (
     <>
@@ -85,17 +105,53 @@ export const BudgetCard = ({ getColor, showActions, ...budget }: Props) => {
         mode={mode}
         show={!!mode}
         showBackground
-        title={mode !== 'success' ? 'Pause Budget' : ''}
-        close={() => setMode(null)}
-        processing={pausing}
+        icon={action === 'close' ? <Cancel /> : undefined}
+        title={
+          mode !== 'success'
+            ? action === 'close'
+              ? 'Authorize Close Budget'
+              : 'Authorize Pause Budget'
+            : ''
+        }
+        close={() => {
+          setMode(null);
+          setAction(null);
+        }}
+        processing={pausing || closing}
         finish={() => {
           setMode(null);
+          setAction(null);
         }}
         successTitle={'Budget Paused'}
         successMessage={`You have paused this budget successfully`}
-        actionMessage={'Pause Budget'}
-        submit={(pin) => pause({ pin })}
+        actionMessage={action === 'close' ? 'Close Budget' : 'Pause Budget'}
+        submit={(pin) => {
+          if (action === 'close') {
+            close({
+              pin,
+              reason,
+            });
+          } else {
+            pause({ pin });
+          }
+        }}
       />
+
+      <RightModalWrapper
+        closeModal={() => {
+          setAction(null);
+        }}
+        title={'Close Budget'}
+        show={action === 'close' && !mode}
+        childrenClassname={'pt-4 px-8'}
+      >
+        <RejectionReasonForm
+          proceed={(reason) => {
+            setMode('authorize');
+            setReason(reason);
+          }}
+        />
+      </RightModalWrapper>
 
       <button
         type={'button'}
@@ -106,6 +162,8 @@ export const BudgetCard = ({ getColor, showActions, ...budget }: Props) => {
             : 'cursor-pointer hover:border-neutral-300'
         )}
         onClick={() => {
+          if (showActions) return;
+
           push(`/budgeting/${_id}`);
         }}
       >
@@ -119,16 +177,18 @@ export const BudgetCard = ({ getColor, showActions, ...budget }: Props) => {
             <div className={clsx(showActions ? 'hidden' : 'block')}>
               <div className={'text-sm font-medium 640:text-base'}>{name}</div>
 
-              {showActions && approvedDate && approvedBy ? (
-                <div className={'text-[10px] text-neutral-500'}>
-                  Approve by {EmployeeRoles[approvedBy!.role]}:{' '}
-                  {formatDate(approvedDate, 'semi-full')}
-                </div>
-              ) : expiry ? (
-                <div className={'text-[10px] text-neutral-500'}>
-                  Due Date: {formatDate(expiry, 'semi-full')}
-                </div>
-              ) : null}
+              <div className='min-h-[15px]'>
+                {showActions && approvedDate && approvedBy ? (
+                  <div className={'text-[10px] text-neutral-500'}>
+                    Approve by {EmployeeRoles[approvedBy!.role]}:{' '}
+                    {formatDate(approvedDate, 'semi-full')}
+                  </div>
+                ) : expiry ? (
+                  <div className={'text-[10px] text-neutral-500'}>
+                    Due Date: {formatDate(expiry, 'semi-full')}
+                  </div>
+                ) : null}
+              </div>
             </div>
 
             <div className={clsx('relative flex', showActions && 'ml-2')}>
@@ -245,23 +305,47 @@ export const BudgetCard = ({ getColor, showActions, ...budget }: Props) => {
 
         {showActions && (
           <div className='right-5 top-5 mt-5 flex w-full gap-3 375:w-auto 768:absolute 768:mt-0'>
-            <SubmitButton
-              submitting={pausing}
-              onClick={() => setMode('authorize')}
-              type={'button'}
-              className={'primary-button w-full 360:min-w-[125px] 425:w-auto'}
-            >
-              Pause Budget
-            </SubmitButton>
+            {status === 'closed' ? (
+              <div
+                className={
+                  'primary-button y-center rounded-full bg-red-600 hover:bg-red-600'
+                }
+              >
+                Budget Closed
+              </div>
+            ) : (
+              <>
+                {paused ? (
+                  <div className={'dark-button y-center rounded-full'}>
+                    Budget Paused
+                  </div>
+                ) : (
+                  <SubmitButton
+                    submitting={pausing}
+                    onClick={() => {
+                      setAction('pause');
+                      setMode('authorize');
+                    }}
+                    type={'button'}
+                    className={
+                      'primary-button w-full 360:min-w-[125px] 425:w-auto'
+                    }
+                  >
+                    Pause Budget
+                  </SubmitButton>
+                )}
 
-            <SubmitButton
-              submitting={closing}
-              onClick={() => close(null)}
-              type={'button'}
-              className={'secondary-button w-full 360:min-w-[125px] 425:w-auto'}
-            >
-              Close Budget
-            </SubmitButton>
+                <button
+                  onClick={() => setAction('close')}
+                  type={'button'}
+                  className={
+                    'secondary-button w-full 360:min-w-[125px] 425:w-auto'
+                  }
+                >
+                  Close Budget
+                </button>
+              </>
+            )}
           </div>
         )}
       </button>

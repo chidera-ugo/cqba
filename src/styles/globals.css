@@ -127,7 +127,7 @@
   }
 
   .primary-button {
-    @apply smooth h-10 rounded-full bg-primary-main px-4 text-center text-sm font-medium text-white transition-colors hover:bg-primary-hmain;
+    @apply smooth h-10 rounded-full bg-primary-main px-4 text-center text-sm font-medium text-white ring-primary-main ring-opacity-30 transition-colors hover:bg-primary-hmain focus:ring-2;
   }
 
   .secondary-button {

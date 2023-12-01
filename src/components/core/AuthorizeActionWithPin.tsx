@@ -4,9 +4,9 @@ import { GreenCheck } from 'components/illustrations/Success';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { SimpleInformation } from 'components/modules/commons/SimpleInformation';
 import { AppToast } from 'components/primary/AppToast';
-import { AnimateLayout } from 'components/transition/AnimateLayout';
+import { AnimateLayout } from 'components/animations/AnimateLayout';
 import { useResetter } from 'hooks/commons/useResetter';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { toast } from 'react-toastify';
 
 type Props = {
@@ -21,6 +21,7 @@ type Props = {
   close: () => void;
   actionMessage: string;
   showBackground?: boolean;
+  icon?: ReactNode;
 };
 
 export const AuthorizeActionWithPin = ({
@@ -29,6 +30,7 @@ export const AuthorizeActionWithPin = ({
   submit,
   title,
   mode,
+  icon,
   show,
   close,
   successMessage,
@@ -46,7 +48,7 @@ export const AuthorizeActionWithPin = ({
       show={show}
       closeModal={close}
     >
-      <AnimateLayout changeTracker={String(mode)} className={'flex flex-col'}>
+      <AnimateLayout changeTracker={String(mode)}>
         {mode === 'success' ? (
           <div className='y-center py-20'>
             <SimpleInformation
@@ -56,7 +58,7 @@ export const AuthorizeActionWithPin = ({
                   {successMessage}
                 </div>
               }
-              icon={<GreenCheck />}
+              icon={icon ?? <GreenCheck />}
               actionButton={{
                 text: 'Thanks chief',
                 action: finish,
@@ -97,7 +99,7 @@ export const AuthorizeActionWithPin = ({
                 submitting={processing}
                 type={'submit'}
                 disabled={pin.length !== 4}
-                className='primary-button mt-4 w-[128px]'
+                className='primary-button mt-4 min-w-[128px]'
               >
                 {actionMessage}
               </SubmitButton>

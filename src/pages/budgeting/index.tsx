@@ -3,8 +3,9 @@ import { WideTabs } from 'components/commons/WideTabs';
 import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { SearchInput } from 'components/form-elements/SearchInput';
 import { AppLayout } from 'components/layouts/AppLayout';
-import { AllBudgets } from 'components/modules/budgeting/AllBudgets';
+import { ActiveBudgets } from 'components/modules/budgeting/ActiveBudgets';
 import { ManageBudgetCreation } from 'components/modules/budgeting/ManageBudgetCreation';
+import { PendingBudgets } from 'components/modules/budgeting/PendingBudgets';
 import { SimplePlus } from 'components/svgs/others/Plus';
 import { budgetingFilterOptions } from 'constants/budgeting/filters';
 import { useUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
@@ -100,14 +101,23 @@ export default function Budgeting() {
 
       <div className={'mt-5 px-3 640:mt-0 640:px-8'}>
         <AppErrorBoundary>
-          <AllBudgets
-            search={debouncedSearch}
-            status={filters?.status?.value}
-            {...{
-              pagination,
-              setPagination,
-            }}
-          />
+          {filters?.status?.value === 'pending' ? (
+            <PendingBudgets
+              search={debouncedSearch}
+              {...{
+                pagination,
+                setPagination,
+              }}
+            />
+          ) : (
+            <ActiveBudgets
+              search={debouncedSearch}
+              {...{
+                pagination,
+                setPagination,
+              }}
+            />
+          )}
         </AppErrorBoundary>
       </div>
     </AppLayout>

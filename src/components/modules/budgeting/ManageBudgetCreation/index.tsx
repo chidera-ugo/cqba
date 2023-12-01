@@ -9,7 +9,9 @@ import { initialValues } from 'components/forms/budgeting/CreateBudgetForm/initi
 import { initialValues as _initialValues } from 'components/forms/budgeting/AddBudgetBeneficiariesForm/initialValues';
 import { UpdateEmployeeForm } from 'components/forms/employees/UpdateEmployeeForm';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
-import { AnimateLayout } from 'components/transition/AnimateLayout';
+import { AnimateLayout } from 'components/animations/AnimateLayout';
+import { useAppContext } from 'context/AppContext';
+import { BudgetStatus } from 'enums/Budget';
 import {
   Beneficiary,
   useCreateBudget,
@@ -31,6 +33,10 @@ export const ManageBudgetCreation = ({
     'create' | 'add_beneficiaries' | 'create_employee' | 'approve' | 'success'
   >('create');
 
+  const { user } = useAppContext().state;
+
+  const [budgetStatus, setBudgetStatus] = useState<BudgetStatus | null>(null);
+
   const [createBudgetFormRecoveryValues, setCreateBudgetFormRecoveryValues] =
     useState<FormRecoveryProps<typeof initialValues>['formRecoveryValues']>(
       null
@@ -49,7 +55,9 @@ export const ManageBudgetCreation = ({
   const queryClient = useQueryClient();
   const { handleError } = useHandleError();
 
-  const { isLoading: creatingBudget, mutate } = useCreateBudget({});
+  const { isLoading: creatingBudget, mutate } = useCreateBudget({
+    onError: () => null,
+  });
 
   function closeModal() {
     if (mode === 'approve' || mode === 'create_employee')
@@ -137,7 +145,8 @@ export const ManageBudgetCreation = ({
         expiry: expires ? expiryDate.calendarValue : null,
       },
       {
-        onSuccess() {
+        onSuccess(res) {
+          setBudgetStatus(res.status);
           setMode('success');
 
           queryClient.invalidateQueries(['budgets']);
@@ -161,12 +170,24 @@ export const ManageBudgetCreation = ({
         show={show && (mode === 'success' || mode === 'approve')}
         close={closeModal}
         processing={creatingBudget}
-        title={mode === 'approve' ? 'Approve Budget' : ''}
+        title={
+          mode === 'approve'
+            ? user?.role === 'owner'
+              ? 'Approve Budget'
+              : 'Submit Request'
+            : ''
+        }
         finish={() => {
           closeModal();
         }}
-        successTitle={'Budget Approved'}
-        successMessage={`Congratulations! Your budget has been Approved successfully`}
+        successTitle={
+          budgetStatus === 'active' ? 'Budget Approved' : 'Successful'
+        }
+        successMessage={
+          budgetStatus === 'active'
+            ? `Congratulations! Your budget has been Approved successfully`
+            : 'Your budget request has been sent successfully'
+        }
         actionMessage={'Approve'}
         submit={(pin, errorCb) => createBudget(pin, errorCb)}
       />
@@ -186,10 +207,7 @@ export const ManageBudgetCreation = ({
         closeOnClickOutside
         childrenClassname='py-0'
       >
-        <AnimateLayout
-          changeTracker={mode}
-          className={'flex flex-col px-4 640:px-8'}
-        >
+        <AnimateLayout changeTracker={mode} className={'px-4 640:px-8'}>
           {mode === 'approve' || mode === 'success' ? null : mode ===
             'create_employee' ? (
             <UpdateEmployeeForm

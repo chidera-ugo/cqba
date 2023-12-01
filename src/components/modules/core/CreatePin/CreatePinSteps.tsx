@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { CodeInput } from 'components/form-elements/CodeInput';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { AppToast } from 'components/primary/AppToast';
-import { AnimateLayout } from 'components/transition/AnimateLayout';
+import { AnimateLayout } from 'components/animations/AnimateLayout';
 import { useAppContext } from 'context/AppContext';
 import { useCreatePin } from 'hooks/api/settings/useCreatePin';
 import { useHandleError } from 'hooks/api/useHandleError';

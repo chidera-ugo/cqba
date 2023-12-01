@@ -4,7 +4,7 @@ import { CreateBudgetForm } from 'components/forms/budgeting/CreateBudgetForm';
 import { initialValues } from 'components/forms/wallet/make-transfer/WalletToBankForm/initialValues';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { WalletToBank } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank/WalletToBank';
-import { AnimateLayout } from 'components/transition/AnimateLayout';
+import { AnimateLayout } from 'components/animations/AnimateLayout';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { useState } from 'react';
 
@@ -37,10 +37,7 @@ export const PerformWalletToBank = ({ close, show }: Props) => {
       }
       childrenClassname={'p-0'}
     >
-      <AnimateLayout
-        changeTracker={mode}
-        className={'flex flex-col px-4 640:px-8'}
-      >
+      <AnimateLayout changeTracker={mode} className={'px-4 640:px-8'}>
         {mode === 'create_budget' ? (
           <CreateBudgetForm
             currency={primaryWallet?.currency}

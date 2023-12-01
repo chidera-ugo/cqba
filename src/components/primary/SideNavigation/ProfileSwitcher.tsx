@@ -1,10 +1,12 @@
 import clsx from 'clsx';
+import { Avatar } from 'components/commons/Avatar';
 import { Dropdown } from 'components/commons/Dropdown';
 import { ChevronDown } from 'components/svgs/navigation/Chevrons';
 import { Exit } from 'components/svgs/navigation/Exit';
 import { useAppContext } from 'context/AppContext';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useDestroySession } from 'hooks/app/useDestroySession';
+import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { useState } from 'react';
 
 export const ProfileSwitcher = ({
@@ -27,6 +29,8 @@ export const ProfileSwitcher = ({
 
   const { data } = useGetOrganizationInformation();
 
+  const { getColor } = useGetColorByChar();
+
   return (
     <div
       className={clsx(
@@ -36,13 +40,15 @@ export const ProfileSwitcher = ({
     >
       <div id={id} className='relative'>
         <button
-          className='x-between relative z-[25] w-full rounded-2xl bg-neutral-200 p-2.5'
+          className='x-between relative z-[25] w-full rounded-2xl bg-white p-2.5'
           onClick={() => setShowDropdown((prev) => !prev)}
         >
           <div className='flex'>
-            <div className='y-center mr-2.5 h-12 w-12 flex-shrink-0 rounded-full bg-white font-semibold uppercase'>
-              {data?.businessName?.charAt(0)}
-            </div>
+            <Avatar
+              size={48}
+              className={'mr-2.5'}
+              getBackgroundColor={getColor}
+            />
 
             <div className='my-auto text-left'>
               <div className='break-all text-base font-semibold text-neutral-1000 line-clamp-1'>
@@ -57,7 +63,7 @@ export const ProfileSwitcher = ({
           <div className='my-auto text-primary-main'>
             <ChevronDown
               className={clsx(
-                'h-6 w-6 duration-200',
+                'h-5 w-5 duration-200',
                 showDropdown ? 'rotate-180' : 'rotate-0'
               )}
             />
@@ -66,7 +72,7 @@ export const ProfileSwitcher = ({
 
         <Dropdown
           show={showDropdown}
-          className='border-none bg-neutral-200 p-4'
+          className='border-none bg-white p-4'
           dismiss={() => setShowDropdown(false)}
           anchorPosition={top ? 'top' : 'bottom'}
           wrapperId={id}
