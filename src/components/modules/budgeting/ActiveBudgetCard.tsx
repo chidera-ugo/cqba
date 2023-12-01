@@ -33,7 +33,9 @@ export const ActiveBudgetCard = ({
   const { screenSize } = useAppContext().state;
 
   const [mode, setMode] = useState<'success' | 'authorize' | null>(null);
-  const [action, setAction] = useState<'pause' | 'close' | null>(null);
+  const [action, setAction] = useState<'pause_and_unpause' | 'close' | null>(
+    null
+  );
   const [reason, setReason] = useState('');
   const [paused, setPaused] = useState(budget.paused);
 
@@ -81,8 +83,8 @@ export const ActiveBudgetCard = ({
   ];
 
   const { isLoading: pausing, mutate: pause } = usePauseBudget(budget._id, {
-    onSuccess() {
-      setPaused(true);
+    onSuccess(res) {
+      setPaused(res.paused);
       queryClient.invalidateQueries(['budget', budget._id]);
       queryClient.invalidateQueries(['budgets']);
       setMode('success');
@@ -109,8 +111,8 @@ export const ActiveBudgetCard = ({
         title={
           mode !== 'success'
             ? action === 'close'
-              ? 'Authorize Close Budget'
-              : 'Authorize Pause Budget'
+              ? 'Close Budget'
+              : `${paused ? 'Unpause' : 'Pause'} Budget`
             : ''
         }
         close={() => {
@@ -122,9 +124,17 @@ export const ActiveBudgetCard = ({
           setMode(null);
           setAction(null);
         }}
-        successTitle={'Budget Paused'}
-        successMessage={`You have paused this budget successfully`}
-        actionMessage={action === 'close' ? 'Close Budget' : 'Pause Budget'}
+        successTitle={!paused ? 'Budget Unpaused' : 'Budget Paused'}
+        successMessage={`You have ${
+          !paused ? 'unpaused' : 'paused'
+        } this budget successfully`}
+        actionMessage={
+          action === 'close'
+            ? 'Close Budget'
+            : paused
+            ? 'Unpause Budget'
+            : 'Pause Budget'
+        }
         submit={(pin) => {
           if (action === 'close') {
             close({
@@ -132,7 +142,7 @@ export const ActiveBudgetCard = ({
               reason,
             });
           } else {
-            pause({ pin });
+            pause({ pin, pause: !paused });
           }
         }}
       />
@@ -315,25 +325,19 @@ export const ActiveBudgetCard = ({
               </div>
             ) : (
               <>
-                {paused ? (
-                  <div className={'dark-button y-center rounded-full'}>
-                    Budget Paused
-                  </div>
-                ) : (
-                  <SubmitButton
-                    submitting={pausing}
-                    onClick={() => {
-                      setAction('pause');
-                      setMode('authorize');
-                    }}
-                    type={'button'}
-                    className={
-                      'primary-button w-full 360:min-w-[125px] 425:w-auto'
-                    }
-                  >
-                    Pause Budget
-                  </SubmitButton>
-                )}
+                <SubmitButton
+                  submitting={pausing}
+                  onClick={() => {
+                    setAction('pause_and_unpause');
+                    setMode('authorize');
+                  }}
+                  type={'button'}
+                  className={
+                    'primary-button w-full 360:min-w-[125px] 425:w-auto'
+                  }
+                >
+                  {paused ? 'Unpause' : 'Pause'} Budget
+                </SubmitButton>
 
                 <button
                   onClick={() => setAction('close')}
