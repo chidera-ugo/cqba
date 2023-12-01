@@ -49,7 +49,7 @@ export const AlternateCheckInput = ({
       )}
       htmlFor={id}
     >
-      <div className='flex h-full align-middle'>
+      <div className='flex h-full p-1 align-middle'>
         <input
           id={id}
           {...props}

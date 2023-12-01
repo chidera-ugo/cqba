@@ -54,6 +54,10 @@
     @apply _input min-h-[44px];
   }
 
+  input {
+    @apply placeholder-neutral-400 !important;
+  }
+
   ._input {
     @apply smooth block appearance-none rounded-lg border border-neutral-100 bg-neutral-100 px-3.5 text-neutral-1000 placeholder-neutral-400 transition-colors focus:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-200 640:focus:ring-4;
     box-shadow: 0 2px 5px rgba(103, 110, 118, 0.08),
@@ -65,7 +69,7 @@
   }
 
   input[type='checkbox'] {
-    @apply h-[18px] w-[18px] cursor-pointer appearance-none rounded-[4px] border-2 border-neutral-300 text-primary-main ring-0 checked:border-primary-main checked:bg-primary-main focus:ring-0 focus:ring-offset-0;
+    @apply h-[18px] w-[18px] cursor-pointer appearance-none rounded-[4px] border-2 border-neutral-300 text-primary-main ring-0 checked:border-primary-main checked:bg-primary-main focus:ring-1 focus:ring-offset-1;
     border: 2px solid rgba(111, 118, 126, 0.4);
   }
 

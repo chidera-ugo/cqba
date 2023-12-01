@@ -8,6 +8,7 @@ export const useHandleError = () => {
     const statusCode = e?.response?.data?.statusCode;
 
     const _message = e?.response?.data?.message;
+    const errors = e?.response?.data?.errors;
 
     const statusCodesForWhichToContactSupport = [500, 405, 403];
 
@@ -17,6 +18,16 @@ export const useHandleError = () => {
       message = `An error occurred, please contact support`;
     } else if (e?.message?.includes('timeout of ')) {
       message = 'Request timed out, please check your internet';
+    } else if (!!errors?.length) {
+      const arr: string[] = [];
+
+      for (const i of errors) {
+        if (!!i.message) {
+          arr.push(i.message);
+        }
+      }
+
+      message = arr.join(', ');
     } else if (!_message) {
       message = e?.message;
     } else if (typeof _message === 'string') {

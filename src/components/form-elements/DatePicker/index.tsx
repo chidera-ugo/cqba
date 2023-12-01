@@ -27,6 +27,7 @@ export const DatePicker = ({
   minDate,
   setFieldValue,
   disabled,
+  placeholder,
   ...props
 }: Props) => {
   const [field, meta] = useField(name as string);
@@ -46,6 +47,7 @@ export const DatePicker = ({
           <AntdDatePicker
             disabled={disabled}
             rootClassName={'z-[2000]'}
+            placeholder={placeholder}
             className={clsx(
               'input y-center w-full',
               !!field.value.calendarValue ? 'bg-white' : 'bg-neutral-100'

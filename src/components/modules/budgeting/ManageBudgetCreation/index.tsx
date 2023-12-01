@@ -34,6 +34,7 @@ export const ManageBudgetCreation = ({
   >('create');
 
   const { user } = useAppContext().state;
+  const isOwner = user?.role === 'owner';
 
   const [budgetStatus, setBudgetStatus] = useState<BudgetStatus | null>(null);
 
@@ -60,8 +61,10 @@ export const ManageBudgetCreation = ({
   });
 
   function closeModal() {
-    if (mode === 'approve' || mode === 'create_employee')
-      return setMode('add_beneficiaries');
+    if (mode === 'approve' || mode === 'create_employee') {
+      if (isOwner) return setMode('add_beneficiaries');
+      else return setMode('create');
+    }
 
     if (mode === 'add_beneficiaries') return setMode('create');
 
@@ -90,6 +93,7 @@ export const ManageBudgetCreation = ({
       description,
       expires,
       threshold,
+      priority,
     } = createBudgetFormRecoveryValues;
 
     const { splittingRules, beneficiaries, allocations, budgetAmount } =
@@ -129,6 +133,7 @@ export const ManageBudgetCreation = ({
       {
         name: title,
         description,
+        priority,
         pin,
         beneficiaries: getBeneficiaries(),
         currency: primaryWallet?.currency,
@@ -243,7 +248,7 @@ export const ManageBudgetCreation = ({
               {isLoading ? (
                 <IsLoading />
               ) : isError ? (
-                <IsError description={'Failed to initate budget creation'} />
+                <IsError description={'Failed to initiate budget creation'} />
               ) : (
                 <CreateBudgetForm
                   currency={primaryWallet?.currency}
@@ -254,13 +259,26 @@ export const ManageBudgetCreation = ({
                       ...values,
                     }));
 
+                    const extraValues =
+                      isOwner || !user
+                        ? {}
+                        : {
+                            beneficiaries: { [user._id]: true },
+                          };
+
                     setAddBudgetBeneficiariesRecoveryValues((prev) => ({
                       ...prev!,
                       budgetAmount: values!.amount,
+                      ...extraValues,
                     }));
 
-                    setMode('add_beneficiaries');
+                    if (isOwner) {
+                      setMode('add_beneficiaries');
+                    } else {
+                      setMode('approve');
+                    }
                   }}
+                  isOwner={isOwner}
                 />
               )}
             </AppErrorBoundary>

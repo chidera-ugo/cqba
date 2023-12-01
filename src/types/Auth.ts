@@ -1,4 +1,4 @@
-import { EmployeeRole } from 'enums/employee_enum';
+import { UserRole } from 'enums/employee_enum';
 
 export interface IUser {
   KYBStatus?: string;
@@ -11,12 +11,12 @@ export interface IUser {
   emailVerified?: boolean;
   GSI1pKey?: string;
   roles?: string[];
-  role?: EmployeeRole;
+  role?: UserRole;
   organization?: string;
   updatedAt?: number;
   GSI1sKey?: string;
   hashRt?: string;
-  id?: string;
+  _id: string;
   phone?: string;
   pinSet?: boolean;
   defaultCategoryIds?: string[];

@@ -10,6 +10,9 @@ import {
   Users,
   Wallet,
 } from 'components/svgs/dashboard/Icons_NavigationItems';
+import { UserRole } from 'enums/employee_enum';
+import { useRouter } from 'next/router';
+import { convertToUrlString } from 'utils/converters/convertToUrlString';
 
 interface NavigationItem {
   icon: JSX.Element;
@@ -20,8 +23,12 @@ interface NavigationItem {
   showWhenUnverified?: boolean;
 }
 
-export const useNavigationItems = () => {
-  const navigationItems = {
+type NavigationItems = Record<string, NavigationItem[]>;
+
+export const useNavigationItems = (role?: UserRole) => {
+  const { pathname } = useRouter();
+
+  const ownerNavigationItems = {
     Home: [
       {
         icon: <BadgeCheck />,
@@ -76,9 +83,62 @@ export const useNavigationItems = () => {
         title: 'Settings',
       },
     ],
-  } as Record<string, NavigationItem[]>;
+  } as NavigationItems;
+
+  const noneOwnerNavigationItems = {
+    '': [
+      {
+        icon: <Home />,
+        title: 'Overview',
+        isRoot: true,
+      },
+      {
+        icon: <PieChart />,
+        title: 'Budgeting',
+      },
+      {
+        icon: <Refund />,
+        title: 'Reimbursement',
+      },
+      {
+        icon: <Card />,
+        title: 'Cards',
+      },
+      {
+        icon: <Cog />,
+        title: 'Settings',
+      },
+    ],
+  } as NavigationItems;
+
+  const navigationItems =
+    role === 'owner' ? ownerNavigationItems : noneOwnerNavigationItems;
+
+  function isValidRoute() {
+    const arr: NavigationItem[] = [];
+
+    for (const i in navigationItems) {
+      arr.push(...navigationItems[i]!);
+    }
+
+    if (pathname === '/') return true;
+
+    let isValid = false;
+
+    for (const i of arr) {
+      if (
+        !!pathname
+          .split('/')[1]
+          ?.includes(i?.url ?? convertToUrlString(i?.title))
+      )
+        isValid = true;
+    }
+
+    return isValid;
+  }
 
   return {
     navigationItems,
+    isValidRoute,
   };
 };

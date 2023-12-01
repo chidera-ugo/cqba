@@ -1,6 +1,6 @@
 import { UseQueryOptions } from '@tanstack/react-query';
 import { BudgetStatus } from 'enums/Budget';
-import { EmployeeRole } from 'enums/employee_enum';
+import { UserRole } from 'enums/employee_enum';
 import { useTQuery } from 'hooks/api/useTQuery';
 import { PaginatedResponse } from 'types/Table';
 import { generateUrlParamsFromObject } from 'utils/generators/generateUrlParamsFromObject';
@@ -21,7 +21,7 @@ export interface IBudget {
   approvedDate?: string;
   approvedBy?: {
     email: string;
-    role: EmployeeRole;
+    role: UserRole;
   };
   amountUsed: number;
   availableAmount: number;

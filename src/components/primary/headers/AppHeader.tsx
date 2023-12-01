@@ -1,4 +1,5 @@
 import logo from '/public/logos/main-logo.svg';
+import white_logo from '/public/logos/white_logo.svg';
 import clsx from 'clsx';
 import { CurrentUserAvatar } from 'components/modules/app/CurrentUserAvatar';
 import { Notifications } from 'components/modules/app/Notifications';
@@ -66,18 +67,18 @@ export const AppHeader = ({
   );
 };
 
-export const Logo = () => {
+export const Logo = ({ white }: { white?: boolean }) => {
   return (
     <div className='flex'>
       <Link href='/' className='my-auto flex gap-2'>
         <Image
-          src={logo}
+          src={white ? white_logo : logo}
           priority
           alt='chequebase-logo'
           className='my-auto w-[100px] object-contain 640:w-[160px]'
         />
 
-        <div className='rounded-full border border-neutral-200 bg-neutral-100 py-0.5 px-1.5 text-[10px] shadow-sm 640:px-2 640:py-1 640:text-sm'>
+        <div className='rounded-full border border-neutral-200 bg-neutral-100 py-0.5 px-1.5 text-[10px] text-black shadow-sm 640:px-2 640:py-1 640:text-sm'>
           Beta
         </div>
       </Link>

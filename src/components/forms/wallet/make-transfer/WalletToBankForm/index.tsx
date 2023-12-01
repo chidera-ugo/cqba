@@ -2,6 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Transact } from 'components/modules/core/Transact';
 import { WalletToBankFormRecoveryValues } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank';
 import { Formik } from 'formik';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
 import { useHandleError } from 'hooks/api/useHandleError';
 import { useInititateWalletToBank } from 'hooks/api/wallet/useInititateWalletToBank';
 import { useTransact } from 'hooks/dashboard/core/useTransact';
@@ -24,6 +25,7 @@ interface Props {
   createBudget: () => void;
   close: () => void;
   currency: string;
+  budget?: IBudget;
 }
 
 export const WalletToBankForm = ({
@@ -33,6 +35,7 @@ export const WalletToBankForm = ({
   currency,
   formRecoveryValues,
   setFormRecoveryValues,
+  budget,
 }: Props & FormRecoveryProps<WalletToBankFormRecoveryValues>) => {
   const [budgetId, setBudgetId] = useState('');
 
@@ -59,8 +62,6 @@ export const WalletToBankForm = ({
       validateOnBlur={false}
     >
       {(formikProps) => {
-        // Todo: Handle validation errors, test with minimum amount be mindful of kobo
-
         function authorize(pin: string, onError: () => void) {
           const { bank, amount, accountNumber } = formikProps?.values;
 
@@ -83,6 +84,10 @@ export const WalletToBankForm = ({
                 transact.setMode('success');
                 queryClient.invalidateQueries(['wallets']);
                 queryClient.invalidateQueries(['budgets']);
+                queryClient.invalidateQueries([
+                  'budget',
+                  formikProps.values.budget,
+                ]);
                 queryClient.invalidateQueries(['wallet_transactions']);
               },
               onError(e) {
@@ -105,6 +110,7 @@ export const WalletToBankForm = ({
 
             <Form
               {...{
+                budget,
                 currency,
                 formikProps,
                 institutions,

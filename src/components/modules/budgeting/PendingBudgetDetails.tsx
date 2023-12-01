@@ -147,7 +147,7 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
 
       <PendingBudgetCard {...data} {...{ getColor }} showFullDetails />
 
-      {user?.role === 'owner' && (
+      {user?.role === 'owner' ? (
         <ApproveBudgetForm
           amount={data?.amount}
           decline={() => setAction('decline')}
@@ -162,6 +162,19 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
           }}
           currency={primaryWallet?.currency}
         />
+      ) : (
+        <div className='mt-8 flex gap-3'>
+          <button type={'button'} className={'primary-button'}>
+            Edit Budget
+          </button>
+
+          <button
+            type={'button'}
+            className='secondary-button w-full min-w-[120px] 640:w-auto'
+          >
+            Cancel Budget
+          </button>
+        </div>
       )}
     </>
   );

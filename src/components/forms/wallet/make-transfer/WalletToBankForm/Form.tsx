@@ -2,9 +2,13 @@ import { SecondaryActionButton } from 'components/form-elements/CustomSelect/Sec
 import { Input } from 'components/form-elements/Input';
 import { Select } from 'components/form-elements/Select';
 import { Institution } from 'components/forms/wallet/make-transfer/WalletToBankForm/index';
+import { ActiveBudgetCard } from 'components/modules/budgeting/ActiveBudgetCard';
 import { WalletToBankFormRecoveryValues } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank';
 import { Form as FormikForm, FormikProps } from 'formik';
-import { useGetAllBudgetsUnpaginated } from 'hooks/api/budgeting/useGetAllBudgets';
+import {
+  IBudget,
+  useGetAllBudgetsUnpaginated,
+} from 'hooks/api/budgeting/useGetAllBudgets';
 import { formatAmount } from 'utils/formatters/formatAmount';
 import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
@@ -20,6 +24,7 @@ interface Props {
   createBudget: () => void;
   formRecoveryValues: WalletToBankFormRecoveryValues;
   currency: string;
+  budget?: IBudget;
 }
 
 export const Form = ({
@@ -28,6 +33,7 @@ export const Form = ({
   createBudget,
   formRecoveryValues,
   currency,
+  budget,
 }: Props) => {
   const { handleSubmit, setFieldValue, setValues, values } = formikProps;
 
@@ -49,6 +55,13 @@ export const Form = ({
   }, [formRecoveryValues]);
 
   useEffect(() => {
+    if (!budget) return;
+
+    setFieldValue('budget', budget._id);
+    setFieldValue('budgetBalance', budget.amount / 100);
+  }, [budget]);
+
+  useEffect(() => {
     if (!values.budget) return;
 
     const budgetBalance =
@@ -61,31 +74,39 @@ export const Form = ({
 
   return (
     <FormikForm onSubmit={handleSubmit}>
-      <Select
-        options={
-          data?.docs.map(({ name, _id, availableAmount }) => ({
-            name: `${name} - ${currency} ${formatAmount({
-              value: availableAmount / 100,
-            })}`,
-            availableAmount,
-            _id,
-          })) ?? []
-        }
-        isError={isError}
-        isLoading={isLoading || isRefetching}
-        className={'mt-0'}
-        displayValueKey={'name'}
-        next={'amount'}
-        trueValueKey={'_id'}
-        name={'budget'}
-        label={'Budget Category'}
-      />
-      <div className='mt-3 flex w-fit'>
-        <SecondaryActionButton
-          onClick={createBudget}
-          text={'Create New Budget'}
-        />
-      </div>
+      {budget ? (
+        <div className='mt-8'>
+          <ActiveBudgetCard showOnlyBreakdown {...budget} />
+        </div>
+      ) : (
+        <>
+          <Select
+            options={
+              data?.docs.map(({ name, _id, availableAmount }) => ({
+                name: `${name} - ${currency} ${formatAmount({
+                  value: availableAmount / 100,
+                })}`,
+                availableAmount,
+                _id,
+              })) ?? []
+            }
+            isError={isError}
+            isLoading={isLoading || isRefetching}
+            className={'mt-0'}
+            displayValueKey={'name'}
+            next={'amount'}
+            trueValueKey={'_id'}
+            name={'budget'}
+            label={'Budget Category'}
+          />
+          <div className='mt-3 flex w-fit'>
+            <SecondaryActionButton
+              onClick={createBudget}
+              text={'Create New Budget'}
+            />
+          </div>
+        </>
+      )}
 
       <AmountInput
         label='Amount'

@@ -6,7 +6,7 @@ import { IsLoading } from 'components/data-states/IsLoading';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { Confirmation } from 'components/modals/Confirmation';
 import { AppToast } from 'components/primary/AppToast';
-import { EmployeeRoles } from 'enums/employee_enum';
+import { UserRoles } from 'enums/employee_enum';
 import { useDeleteEmployee } from 'hooks/api/employees/useDeleteEmployee';
 import { useDeleteInvite } from 'hooks/api/employees/useDeleteInvite';
 import { IEmployee } from 'hooks/api/employees/useGetAllEmployees';
@@ -74,7 +74,7 @@ export const EmployeeDetails = ({
   const payload = [
     { title: 'Phone Number', value: phone },
     { title: 'Date Added', value: formatDate(createdAt, 'short') },
-    { title: 'Role', value: EmployeeRoles[role] },
+    { title: 'Role', value: UserRoles[role] },
   ];
 
   const isActive = status === 'active';

@@ -10,8 +10,10 @@ import { LineInfo } from 'components/svgs/others/Info';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import { useCurrentAccountSetupStepUrl } from 'hooks/dashboard/kyc/useCurrentAccountSetupStepUrl';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
+import { useNavigationItems } from 'hooks/dashboard/useNavigationItems';
 import { useIsKycFlow } from 'hooks/kyc/useIsKycFlow';
 import Link from 'next/link';
+import NotFound from 'pages/404';
 import { PropsWithChildren, ReactNode } from 'react';
 import { SideNavigation } from 'components/primary/SideNavigation';
 import { AppHeader } from 'components/primary/headers/AppHeader';
@@ -42,14 +44,18 @@ export const AppLayout = ({
 }: PropsWithChildren<Props>) => {
   const { userExists } = useProtectedRoutesGuard();
 
-  const { screenSize } = useAppContext().state;
+  const { screenSize, user } = useAppContext().state;
 
   const { isVerified } = useIsVerified();
   const { isKycFlow } = useIsKycFlow();
 
+  const { isValidRoute } = useNavigationItems(user?.role);
+
   const { getCurrentAccountSetupStepUrl } = useCurrentAccountSetupStepUrl();
 
   const { isUnderReview } = useAccountVerificationStatus();
+
+  if (!isValidRoute()) return <NotFound />;
 
   if (!userExists) return <FullScreenLoader asPage />;
 

@@ -16,6 +16,7 @@ interface Props {
   onSubmit?: (values: CreateBudgetFormRecoveryValues) => void;
   formRecoveryValues?: CreateBudgetFormRecoveryValues;
   currency: string;
+  isOwner?: boolean;
 }
 
 export const CreateBudgetForm = ({
@@ -23,6 +24,7 @@ export const CreateBudgetForm = ({
   onSubmit,
   formRecoveryValues,
   currency,
+  isOwner,
 }: Props) => {
   const queryClient = useQueryClient();
 
@@ -80,6 +82,7 @@ export const CreateBudgetForm = ({
           <Form
             recoveryValues={formRecoveryValues}
             {...{
+              isOwner,
               currency,
               formikProps,
               processing: creatingPersonalBudget,
