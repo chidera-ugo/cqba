@@ -6,9 +6,10 @@ import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { RejectionReasonForm } from 'components/forms/budgeting/RejectionReasonForm';
 import { Cancel } from 'components/illustrations/Cancel';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
+import { MakeTransfer } from 'components/modules/wallet/MakeTransfer';
 import { AppToast } from 'components/primary/AppToast';
 import { useAppContext } from 'context/AppContext';
-import { EmployeeRoles } from 'enums/employee_enum';
+import { UserRoles } from 'enums/employee_enum';
 import { useCloseBudget } from 'hooks/api/budgeting/useCloseBudget';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
 import { usePauseBudget } from 'hooks/api/budgeting/usePauseBudget';
@@ -17,20 +18,23 @@ import { Fragment, useState } from 'react';
 import { toast } from 'react-toastify';
 import { formatAmount } from 'utils/formatters/formatAmount';
 import { formatDate } from 'utils/formatters/formatDate';
+import { handleSort } from 'utils/handlers/handleSort';
 
 type Props = IBudget & {
   showFullDetails?: boolean;
-  getColor: (char: string) => string;
+  getColor?: (char: string) => string;
   className?: string;
   showActions?: boolean;
+  showOnlyBreakdown?: boolean;
 };
 
 export const ActiveBudgetCard = ({
   getColor,
   showActions,
+  showOnlyBreakdown,
   ...budget
 }: Props) => {
-  const { screenSize } = useAppContext().state;
+  const { screenSize, user } = useAppContext().state;
 
   const [mode, setMode] = useState<'success' | 'authorize' | null>(null);
   const [action, setAction] = useState<'pause_and_unpause' | 'close' | null>(
@@ -39,8 +43,27 @@ export const ActiveBudgetCard = ({
   const [reason, setReason] = useState('');
   const [paused, setPaused] = useState(budget.paused);
 
-  const { replace } = useRouter();
+  const { replace, push } = useRouter();
   const queryClient = useQueryClient();
+
+  const { isLoading: pausing, mutate: pause } = usePauseBudget(budget._id, {
+    onSuccess(res) {
+      setPaused(res.paused);
+      queryClient.invalidateQueries(['budget', budget._id]);
+      queryClient.invalidateQueries(['budgets']);
+      setMode('success');
+    },
+  });
+
+  const { isLoading: closing, mutate: close } = useCloseBudget(budget._id, {
+    onSuccess(res) {
+      replace('/budgeting').then(() => {
+        toast(<AppToast>{res.message}</AppToast>, { type: 'success' });
+        queryClient.invalidateQueries(['budget', budget._id]);
+        queryClient.invalidateQueries(['budgets']);
+      });
+    },
+  });
 
   const {
     _id,
@@ -57,11 +80,7 @@ export const ActiveBudgetCard = ({
     threshold,
   } = budget;
 
-  const { push } = useRouter();
-
-  function getWidth(val: number) {
-    return `${Math.round((val * 100) / amount)}%`;
-  }
+  const isOwner = user?.role === 'owner';
 
   const breakdown = [
     {
@@ -82,24 +101,9 @@ export const ActiveBudgetCard = ({
     },
   ];
 
-  const { isLoading: pausing, mutate: pause } = usePauseBudget(budget._id, {
-    onSuccess(res) {
-      setPaused(res.paused);
-      queryClient.invalidateQueries(['budget', budget._id]);
-      queryClient.invalidateQueries(['budgets']);
-      setMode('success');
-    },
-  });
-
-  const { isLoading: closing, mutate: close } = useCloseBudget(budget._id, {
-    onSuccess(res) {
-      replace('/budgeting').then(() => {
-        toast(<AppToast>{res.message}</AppToast>, { type: 'success' });
-        queryClient.invalidateQueries(['budget', budget._id]);
-        queryClient.invalidateQueries(['budgets']);
-      });
-    },
-  });
+  function getWidth(val: number) {
+    return `${Math.round((val * 100) / amount)}%`;
+  }
 
   return (
     <>
@@ -167,30 +171,88 @@ export const ActiveBudgetCard = ({
         type={'button'}
         className={clsx(
           'card relative col-span-12 block w-full text-left 640:col-span-6 1280:col-span-4',
-          showActions
+          showActions || showOnlyBreakdown
             ? 'cursor-default'
             : 'cursor-pointer hover:border-neutral-300'
         )}
         onClick={() => {
-          if (showActions) return;
+          if (showActions || showOnlyBreakdown) return;
 
           push(`/budgeting/${_id}`);
         }}
       >
-        <div className={clsx(showActions && 'x-between')}>
-          <div
-            className={clsx(
-              'flex gap-2 align-middle 640:gap-3',
-              !showActions && 'justify-between'
-            )}
-          >
-            <div className={clsx(showActions ? 'hidden' : 'block')}>
-              <div className={'text-sm font-medium 640:text-base'}>{name}</div>
+        {!showOnlyBreakdown && (
+          <div className={clsx(showActions && 'x-between')}>
+            <div
+              className={clsx(
+                'flex gap-2 align-middle 640:gap-3',
+                !showActions && 'justify-between'
+              )}
+            >
+              <div className={clsx(showActions ? 'hidden' : 'block')}>
+                <div className={'text-sm font-medium 640:text-base'}>
+                  {name}
+                </div>
 
-              <div className='min-h-[15px]'>
+                <div className='min-h-[15px]'>
+                  {showActions && approvedDate && approvedBy ? (
+                    <div className={'text-[10px] text-neutral-500'}>
+                      Approve by {UserRoles[approvedBy!.role]}:{' '}
+                      {formatDate(approvedDate, 'semi-full')}
+                    </div>
+                  ) : expiry ? (
+                    <div className={'text-[10px] text-neutral-500'}>
+                      Due Date: {formatDate(expiry, 'semi-full')}
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+
+              {getColor && (
+                <div className={clsx('relative flex', showActions && 'ml-2')}>
+                  {handleSort({
+                    data: beneficiaries,
+                    sortBy: 'email',
+                  })?.map(({ email }, i) => {
+                    return (
+                      <div
+                        key={email}
+                        className={clsx(
+                          showActions ? 'block' : 'absolute',
+                          'right-0 top-0 z-10'
+                        )}
+                        style={{
+                          zIndex: 10 + i,
+                          right: 23 * i,
+                        }}
+                      >
+                        <Avatar
+                          className={clsx('-ml-2 ring-2 ring-white')}
+                          size={
+                            showActions
+                              ? screenSize?.['mobile']
+                                ? 33
+                                : 44
+                              : 27
+                          }
+                          key={email}
+                          char={email.charAt(0)}
+                          getBackgroundColor={getColor}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              <div className={clsx(!showActions ? 'hidden' : 'block')}>
+                <div className={'text-sm font-medium 640:text-base'}>
+                  {name}
+                </div>
+
                 {showActions && approvedDate && approvedBy ? (
                   <div className={'text-[10px] text-neutral-500'}>
-                    Approve by {EmployeeRoles[approvedBy!.role]}:{' '}
+                    Approve by {UserRoles[approvedBy!.role]}:{' '}
                     {formatDate(approvedDate, 'semi-full')}
                   </div>
                 ) : expiry ? (
@@ -200,55 +262,15 @@ export const ActiveBudgetCard = ({
                 ) : null}
               </div>
             </div>
-
-            <div className={clsx('relative flex', showActions && 'ml-2')}>
-              {beneficiaries?.map(({ email }, i) => {
-                return (
-                  <div
-                    key={email}
-                    className={clsx(
-                      showActions ? 'block' : 'absolute',
-                      'right-0 top-0 z-10'
-                    )}
-                    style={{
-                      zIndex: 10 + i,
-                      right: 23 * i,
-                    }}
-                  >
-                    <Avatar
-                      className={clsx('-ml-2 ring-2 ring-white')}
-                      size={
-                        showActions ? (screenSize?.['mobile'] ? 33 : 44) : 27
-                      }
-                      key={email}
-                      char={email.charAt(0)}
-                      getBackgroundColor={getColor}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className={clsx(!showActions ? 'hidden' : 'block')}>
-              <div className={'text-sm font-medium 640:text-base'}>{name}</div>
-
-              {showActions && approvedDate && approvedBy ? (
-                <div className={'text-[10px] text-neutral-500'}>
-                  Approve by {EmployeeRoles[approvedBy!.role]}:{' '}
-                  {formatDate(approvedDate, 'semi-full')}
-                </div>
-              ) : expiry ? (
-                <div className={'text-[10px] text-neutral-500'}>
-                  Due Date: {formatDate(expiry, 'semi-full')}
-                </div>
-              ) : null}
-            </div>
           </div>
-        </div>
+        )}
 
-        <div className={'mt-6 text-sm font-medium'}>
-          Total Budget: {currency}
-          {formatAmount({ value: amount / 100 })}
+        <div className={clsx('text-sm', !showOnlyBreakdown && 'mt-6')}>
+          <span className={'text-neutral-500'}>Total Budget:</span>{' '}
+          <span className='font-medium text-black'>
+            {currency}
+            {formatAmount({ value: amount / 100 })}
+          </span>
         </div>
 
         <div className='relative mt-3 h-2 w-full overflow-hidden rounded-full bg-neutral-200'>
@@ -323,6 +345,8 @@ export const ActiveBudgetCard = ({
               >
                 Budget Closed
               </div>
+            ) : !isOwner ? (
+              <MakeTransfer budget={budget} />
             ) : (
               <>
                 <SubmitButton
@@ -333,7 +357,7 @@ export const ActiveBudgetCard = ({
                   }}
                   type={'button'}
                   className={
-                    'primary-button w-full 360:min-w-[125px] 425:w-auto'
+                    'primary-button h-11 w-full 360:min-w-[125px] 425:w-auto'
                   }
                 >
                   {paused ? 'Unpause' : 'Pause'} Budget
@@ -343,7 +367,7 @@ export const ActiveBudgetCard = ({
                   onClick={() => setAction('close')}
                   type={'button'}
                   className={
-                    'secondary-button w-full 360:min-w-[125px] 425:w-auto'
+                    'secondary-button h-11 w-full 360:min-w-[125px] 425:w-auto'
                   }
                 >
                   Close Budget

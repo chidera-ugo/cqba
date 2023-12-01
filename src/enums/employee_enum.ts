@@ -1,7 +1,7 @@
-export enum EmployeeRoles {
+export enum UserRoles {
   cfo = 'CFO',
   employee = 'Employee',
   owner = 'Owner',
 }
 
-export type EmployeeRole = keyof typeof EmployeeRoles;
+export type UserRole = keyof typeof UserRoles;

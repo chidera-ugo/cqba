@@ -1,3 +1,4 @@
+import { useAppContext } from 'context/AppContext';
 import { useCurrentAccountSetupStepUrl } from 'hooks/dashboard/kyc/useCurrentAccountSetupStepUrl';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useNavigationItems } from 'hooks/dashboard/useNavigationItems';
@@ -6,15 +7,15 @@ import { useRouter } from 'next/router';
 import { convertToUrlString } from 'utils/converters/convertToUrlString';
 import clsx from 'clsx';
 import { Fragment } from 'react';
-import { TooltipWrapper } from 'components/commons/Tooltip';
-import { useDismiss } from 'hooks/commons/useDismiss';
 
 export const SideNavigationItems = () => {
   const { pathname } = useRouter();
-  const { navigationItems } = useNavigationItems();
 
-  const [dismiss, isDismissed, checkIsSideNavItemToolTipDismissed] =
-    useDismiss('side_nav_tooltip');
+  const { user } = useAppContext().state;
+
+  const { navigationItems } = useNavigationItems(user?.role);
+
+  const isOwner = user?.role === 'owner';
 
   const { isVerified } = useIsVerified();
 
@@ -25,7 +26,12 @@ export const SideNavigationItems = () => {
       {Object.keys(navigationItems).map((item, i) => {
         return (
           <div key={item} className={clsx(i > 0 && 'mt-8')}>
-            <div className='mb-3 text-sm font-medium text-neutral-1000'>
+            <div
+              className={clsx(
+                'mb-3 text-sm font-medium',
+                isOwner ? 'text-neutral-1000' : 'font-medium text-neutral-400'
+              )}
+            >
               {item}
             </div>
 
@@ -39,11 +45,6 @@ export const SideNavigationItems = () => {
 
                   const isActive = checkIsActive(pathname, title, isRoot, url);
 
-                  const tooltipId = `side_nav_tooltip_id_${route?.replaceAll(
-                    '/',
-                    ''
-                  )}`;
-
                   return (
                     <div key={title}>
                       <Link
@@ -55,10 +56,15 @@ export const SideNavigationItems = () => {
                             : route
                         }
                         className={clsx(
-                          'x-between relative w-full py-1.5',
+                          'x-between relative w-full',
+                          isOwner ? 'py-1.5' : 'py-2.5',
                           isActive
-                            ? 'text-primary-main'
-                            : 'smooth text-neutral-400 transition-colors hover:text-neutral-600'
+                            ? isOwner
+                              ? 'text-primary-main'
+                              : 'text-white'
+                            : isOwner
+                            ? 'smooth text-neutral-500 transition-colors hover:text-black'
+                            : 'smooth text-neutral-500 transition-colors hover:text-neutral-100'
                         )}
                       >
                         <div className='flex flex-shrink-0'>
@@ -67,32 +73,16 @@ export const SideNavigationItems = () => {
                         </div>
 
                         {isActive && (
-                          <div
-                            id={tooltipId}
-                            className='y-center relative my-auto p-2'
-                          >
-                            <div className='relative my-auto h-1.5 w-1.5 rounded-full bg-primary-main'></div>
+                          <div className='y-center relative my-auto p-2'>
+                            <div
+                              className={clsx(
+                                'relative my-auto h-1.5 w-1.5 rounded-full',
+                                isOwner ? 'bg-primary-main' : 'bg-white'
+                              )}
+                            ></div>
                           </div>
                         )}
                       </Link>
-
-                      {isActive && (
-                        <TooltipWrapper
-                          anchorId={tooltipId}
-                          show={
-                            isActive &&
-                            !checkIsSideNavItemToolTipDismissed(route) &&
-                            !isDismissed
-                          }
-                          close={() => {
-                            dismiss(route);
-                          }}
-                          title={title}
-                        >
-                          Here is some helpful explainer text to assist or guide
-                          the user in understanding how a certain feature works.
-                        </TooltipWrapper>
-                      )}
                     </div>
                   );
                 }

@@ -5,17 +5,19 @@ import { initialValues } from 'components/forms/wallet/make-transfer/WalletToBan
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { WalletToBank } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank/WalletToBank';
 import { AnimateLayout } from 'components/animations/AnimateLayout';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { useState } from 'react';
+
+export type WalletToBankFormRecoveryValues = typeof initialValues | null;
 
 interface Props {
   close: () => void;
   show: boolean;
+  budget?: IBudget;
 }
 
-export type WalletToBankFormRecoveryValues = typeof initialValues | null;
-
-export const PerformWalletToBank = ({ close, show }: Props) => {
+export const PerformWalletToBank = ({ close, budget, show }: Props) => {
   const [mode, setMode] = useState<'transfer' | 'create_budget'>('transfer');
 
   const { primaryWallet, isError, isLoading } = useManageWallets();
@@ -58,6 +60,7 @@ export const PerformWalletToBank = ({ close, show }: Props) => {
               <IsError />
             ) : (
               <WalletToBank
+                budget={budget}
                 close={closeModal}
                 createBudget={() => setMode('create_budget')}
                 {...{ formRecoveryValues, setFormRecoveryValues }}

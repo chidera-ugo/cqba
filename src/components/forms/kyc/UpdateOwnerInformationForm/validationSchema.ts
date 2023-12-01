@@ -15,7 +15,6 @@ export function validationSchema(type: OwnerType) {
     email: string()
       .required('Please provide email')
       .email('Please provide a valid email'),
-    // Todo: Validate dob
     dateOfBirth: object().test(
       'required',
       'Please provide date of birth',

@@ -1,4 +1,5 @@
 import { AlternateCheckInput } from 'components/form-elements/AlternateCheckInput';
+import { Select } from 'components/form-elements/Select';
 import { TextArea } from 'components/form-elements/Textarea';
 import { CreateBudgetFormRecoveryValues } from 'components/forms/budgeting/CreateBudgetForm/index';
 import { Form as FormikForm, FormikProps } from 'formik';
@@ -15,6 +16,7 @@ interface Props {
   processing: boolean;
   recoveryValues?: CreateBudgetFormRecoveryValues;
   currency?: string;
+  isOwner?: boolean;
 }
 
 export const Form = ({
@@ -22,6 +24,7 @@ export const Form = ({
   currency,
   recoveryValues,
   processing,
+  isOwner,
 }: Props) => {
   const { handleSubmit, setValues, setFieldValue, values } = formikProps;
 
@@ -36,9 +39,18 @@ export const Form = ({
 
   return (
     <FormikForm onSubmit={handleSubmit}>
-      <Input label='Budget Title' lazyFocus name='title' />
+      <Input
+        label='Budget Title'
+        lazyFocus
+        placeholder={'Add title'}
+        name='title'
+      />
 
-      <TextArea label={'Description'} name={'description'} />
+      <TextArea
+        label={'Description'}
+        name={'description'}
+        placeholder={'Add description'}
+      />
 
       <AmountInput
         label='Budget Amount'
@@ -47,21 +59,25 @@ export const Form = ({
         setFieldValue={setFieldValue}
       />
 
-      <AlternateCheckInput
-        name={'threshold'}
-        next={'allocation'}
-        lazyFocus
-        label={'Budget Threshold'}
-        description={`This is the maximum you want your team to spend from, in this budget`}
-      />
+      {isOwner && (
+        <>
+          <AlternateCheckInput
+            name={'threshold'}
+            next={'allocation'}
+            lazyFocus
+            label={'Budget Threshold'}
+            description={`This is the maximum you want your team to spend from, in this budget`}
+          />
 
-      {values.threshold && (
-        <AmountInput
-          label='Allocation'
-          name='allocation'
-          currency={currency}
-          setFieldValue={setFieldValue}
-        />
+          {values.threshold && (
+            <AmountInput
+              label='Allocation'
+              name='allocation'
+              currency={currency}
+              setFieldValue={setFieldValue}
+            />
+          )}
+        </>
       )}
 
       <AlternateCheckInput
@@ -78,6 +94,15 @@ export const Form = ({
             setFieldValue,
           }}
           minDate={dayjs().toDate()}
+        />
+      )}
+
+      {!isOwner && (
+        <Select
+          placeholder={'Select priority'}
+          options={['Low', 'Medium', 'High']}
+          name={'priority'}
+          label={'Priority'}
         />
       )}
 

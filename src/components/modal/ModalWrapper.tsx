@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { CrossSubtract } from 'components/svgs/navigation/Exit';
+import { useAppContext } from 'context/AppContext';
 import { FC, PropsWithChildren, useState } from 'react';
 import { Modal } from '.';
 import { useDragControls, motion } from 'framer-motion';
@@ -45,6 +46,10 @@ export const MobileMenuWrapper = ({
   className,
   ...rest
 }: PropsWithChildren<ModalWrapperProps>) => {
+  const { user } = useAppContext().state;
+
+  const isOwner = user?.role === 'owner';
+
   return (
     <Modal
       show={show}
@@ -58,7 +63,11 @@ export const MobileMenuWrapper = ({
       <div
         className={clsx(
           `hidden-scrollbar relative h-full w-full min-w-full overflow-clip overflow-y-auto overflow-x-hidden 640:w-auto 640:min-w-[450px]`,
-          className ? className : 'w-full bg-white'
+          className
+            ? className
+            : isOwner
+            ? 'w-full bg-neutral-100'
+            : 'w-full bg-neutral-1000'
         )}
       >
         <div className={clsx('560:min-w-[400px]')}>{children}</div>

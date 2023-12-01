@@ -31,16 +31,22 @@ export const ProfileSwitcher = ({
 
   const { getColor } = useGetColorByChar();
 
+  const isOwner = user?.role === 'owner';
+
   return (
     <div
       className={clsx(
-        'sticky top-0 left-0 z-[100] bg-white p-5 pb-0 640:p-8 1024:bg-neutral-100',
-        className
+        'sticky top-0 left-0 z-[100] p-5 pb-0 640:p-8',
+        className,
+        isOwner ? 'bg-neutral-100' : 'bg-neutral-1000'
       )}
     >
       <div id={id} className='relative'>
         <button
-          className='x-between relative z-[25] w-full rounded-2xl bg-white p-2.5'
+          className={clsx(
+            'x-between relative z-[25] w-full rounded-2xl p-2.5',
+            isOwner ? 'bg-white' : 'bg-neutral-900'
+          )}
           onClick={() => setShowDropdown((prev) => !prev)}
         >
           <div className='flex'>
@@ -51,10 +57,20 @@ export const ProfileSwitcher = ({
             />
 
             <div className='my-auto text-left'>
-              <div className='break-all text-base font-semibold text-neutral-1000 line-clamp-1'>
+              <div
+                className={clsx(
+                  'break-all text-base font-semibold line-clamp-1',
+                  isOwner ? 'text-neutral-1000' : 'text-white'
+                )}
+              >
                 {data?.businessName ?? '----'}
               </div>
-              <div className='break-all text-xs text-neutral-600 line-clamp-1'>
+              <div
+                className={clsx(
+                  'break-all text-xs line-clamp-1',
+                  isOwner ? 'text-neutral-600' : 'text-neutral-400'
+                )}
+              >
                 {user?.email}
               </div>
             </div>
@@ -72,7 +88,10 @@ export const ProfileSwitcher = ({
 
         <Dropdown
           show={showDropdown}
-          className='border-none bg-white p-4'
+          className={clsx(
+            'border-none p-4',
+            isOwner ? 'bg-white' : 'bg-neutral-900'
+          )}
           dismiss={() => setShowDropdown(false)}
           anchorPosition={top ? 'top' : 'bottom'}
           wrapperId={id}
@@ -81,7 +100,12 @@ export const ProfileSwitcher = ({
             <span className='my-auto mr-2'>
               <Exit />
             </span>
-            <span className='my-auto text-sm font-semibold text-neutral-1000'>
+            <span
+              className={clsx(
+                'my-auto text-sm font-semibold',
+                isOwner ? 'text-neutral-1000' : 'text-white'
+              )}
+            >
               Logout
             </span>
           </button>

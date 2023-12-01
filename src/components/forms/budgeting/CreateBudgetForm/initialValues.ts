@@ -7,5 +7,6 @@ export const initialValues = {
   description: '',
   allocation: '',
   expires: false,
+  priority: '',
   threshold: false,
 };

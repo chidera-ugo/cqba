@@ -3,6 +3,7 @@ import { Avatar } from 'components/commons/Avatar';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
 import { formatAmount } from 'utils/formatters/formatAmount';
 import { formatDate } from 'utils/formatters/formatDate';
+import { handleSort } from 'utils/handlers/handleSort';
 
 type Props = IBudget & {
   showFullDetails?: boolean;
@@ -42,7 +43,10 @@ export const PendingBudgetCard = ({ getColor, onClick, ...budget }: Props) => {
         </div>
 
         <div className={clsx('relative flex')}>
-          {beneficiaries?.map(({ email }, i) => {
+          {handleSort({
+            data: beneficiaries,
+            sortBy: 'email',
+          })?.map(({ email }, i) => {
             return (
               <div
                 key={email}

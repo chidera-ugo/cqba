@@ -67,7 +67,7 @@ export const Select = ({
         {placeholder && (!field.value || isError || isLoading) && (
           <div
             className={
-              'y-center pointer-events-none absolute left-0 top-0 min-h-[44px] px-3.5 opacity-40'
+              'y-center pointer-events-none absolute left-0 top-0 min-h-[44px] px-3.5 text-neutral-400'
             }
           >
             {placeholder}

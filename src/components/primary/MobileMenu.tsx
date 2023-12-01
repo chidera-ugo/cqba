@@ -1,5 +1,6 @@
 import { MobileMenuWrapper } from 'components/modal/ModalWrapper';
 import { Hamburger } from 'components/svgs/navigation/Menu';
+import { useAppContext } from 'context/AppContext';
 import { useState } from 'react';
 import { SideNavigationContent } from 'components/primary/SideNavigation';
 
@@ -9,6 +10,8 @@ export const MobileMenu = () => {
   function closeModal() {
     setShow(false);
   }
+
+  const { user } = useAppContext().state;
 
   return (
     <div className='y-center block 1024:hidden'>
@@ -29,7 +32,11 @@ export const MobileMenu = () => {
           closeModal,
         }}
       >
-        <SideNavigationContent {...{ closeModal }} mobile />
+        <SideNavigationContent
+          {...{ closeModal }}
+          isOwner={user?.role === 'owner'}
+          mobile
+        />
       </MobileMenuWrapper>
     </div>
   );
