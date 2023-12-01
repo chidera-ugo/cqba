@@ -11,7 +11,7 @@ import { UpdateEmployeeForm } from 'components/forms/employees/UpdateEmployeeFor
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { AnimateLayout } from 'components/animations/AnimateLayout';
 import { useAppContext } from 'context/AppContext';
-import { BudgetStatus } from 'enums/Budget';
+import { BudgetStatus } from 'enums/budget';
 import {
   Beneficiary,
   useCreateBudget,
