@@ -100,13 +100,7 @@ export const Form = ({
       {!isOwner && (
         <Select
           placeholder={'Select priority'}
-          trueValueKey={'value'}
-          displayValueKey={'title'}
-          options={[
-            { title: 'Low', value: 1 },
-            { title: 'Medium', value: 2 },
-            { title: 'High', value: 3 },
-          ]}
+          options={['Low', 'Medium', 'High']}
           name={'priority'}
           label={'Priority'}
         />

@@ -12,7 +12,7 @@ export interface CreateBudgetDto {
   threshold: number;
   expiry: Date | null;
   currency: string;
-  priority?: string;
+  priority?: BudgetPriorities;
 }
 
 export interface Beneficiary {
