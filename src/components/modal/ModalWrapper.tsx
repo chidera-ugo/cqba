@@ -113,6 +113,7 @@ export const CentredModalWrapper = ({
   fullscreen,
   undraggable,
   withGutter,
+
   mustShowIsDraggable: _,
   backgroundClassname,
   hideHeader,

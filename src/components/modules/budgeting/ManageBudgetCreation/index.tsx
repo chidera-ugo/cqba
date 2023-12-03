@@ -16,6 +16,7 @@ import {
   Beneficiary,
   useCreateBudget,
 } from 'hooks/api/budgeting/useCreateBudget';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
 import { useHandleError } from 'hooks/api/useHandleError';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { useState } from 'react';
@@ -25,9 +26,15 @@ import { sanitizeAmount } from 'utils/formatters/formatAmount';
 export const ManageBudgetCreation = ({
   show,
   close,
+  budget,
+  hideBackground,
+  onFinish,
 }: {
   show: boolean;
   close: () => void;
+  budget?: IBudget;
+  onFinish?: () => void;
+  hideBackground?: boolean;
 }) => {
   const [mode, setMode] = useState<
     'create' | 'add_beneficiaries' | 'create_employee' | 'approve' | 'success'
@@ -56,7 +63,7 @@ export const ManageBudgetCreation = ({
   const queryClient = useQueryClient();
   const { handleError } = useHandleError();
 
-  const { isLoading: creatingBudget, mutate } = useCreateBudget({
+  const { isLoading: creatingBudget, mutate } = useCreateBudget(budget?._id, {
     onError: () => null,
   });
 
@@ -157,6 +164,7 @@ export const ManageBudgetCreation = ({
           queryClient.invalidateQueries(['budgets']);
           queryClient.invalidateQueries(['wallets']);
           queryClient.invalidateQueries(['employees']);
+          queryClient.invalidateQueries(['budget', budget?._id]);
 
           resetFormRecoveryValues();
         },
@@ -184,6 +192,10 @@ export const ManageBudgetCreation = ({
         }
         finish={() => {
           closeModal();
+
+          if (!onFinish) return;
+
+          onFinish();
         }}
         successTitle={
           budgetStatus === 'active' ? 'Budget Approved' : 'Successful'
@@ -208,7 +220,10 @@ export const ManageBudgetCreation = ({
             ? 'Invite Employee'
             : ''
         }
-        closeModal={closeModal}
+        {...{
+          hideBackground,
+          closeModal,
+        }}
         closeOnClickOutside
         childrenClassname='py-0'
       >
@@ -251,6 +266,7 @@ export const ManageBudgetCreation = ({
                 <IsError description={'Failed to initiate budget creation'} />
               ) : (
                 <CreateBudgetForm
+                  {...{ budget }}
                   currency={primaryWallet?.currency}
                   formRecoveryValues={createBudgetFormRecoveryValues}
                   onSubmit={(values) => {

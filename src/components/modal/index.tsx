@@ -46,7 +46,7 @@ export const Modal = ({
               onClick={
                 closeOnClickOutside
                   ? closeModal
-                  : hideBackground
+                  : hideBackground && type !== 'center'
                   ? undefined
                   : () => setGrow(true)
               }
@@ -103,7 +103,7 @@ export const Modal = ({
                 if (e.target.id === 'modal-child-wrapper') {
                   if (closeOnClickOutside && closeModal) {
                     closeModal();
-                  } else if (!hideBackground) {
+                  } else if (!hideBackground && type !== 'center') {
                     setGrow(true);
                   }
                 }
