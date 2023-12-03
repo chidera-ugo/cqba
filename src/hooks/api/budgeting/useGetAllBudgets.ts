@@ -1,5 +1,5 @@
 import { UseQueryOptions } from '@tanstack/react-query';
-import { BudgetStatus } from 'enums/Budget';
+import { BudgetStatus } from 'enums/budget';
 import { UserRole } from 'enums/employee_enum';
 import { useTQuery } from 'hooks/api/useTQuery';
 import { PaginatedResponse } from 'types/Table';

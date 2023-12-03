@@ -11,7 +11,7 @@ import { UpdateEmployeeForm } from 'components/forms/employees/UpdateEmployeeFor
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { AnimateLayout } from 'components/animations/AnimateLayout';
 import { useAppContext } from 'context/AppContext';
-import { BudgetStatus } from 'enums/Budget';
+import { BudgetPriorities, BudgetPriority, BudgetStatus } from 'enums/budget';
 import {
   Beneficiary,
   useCreateBudget,
@@ -133,7 +133,7 @@ export const ManageBudgetCreation = ({
       {
         name: title,
         description,
-        priority,
+        priority: BudgetPriorities[priority as BudgetPriority],
         pin,
         beneficiaries: getBeneficiaries(),
         currency: primaryWallet?.currency,
