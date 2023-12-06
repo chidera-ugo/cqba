@@ -23,6 +23,7 @@ export const useSettingsTabs = () => {
       isRoot: true,
     },
     'License',
+    'User Permissions',
     'Security',
   ];
 

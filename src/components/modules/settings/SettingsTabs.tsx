@@ -19,7 +19,7 @@ export const SettingsTabs = () => {
               href={isRoot ? '/settings' : `/settings/${url ?? _url}`}
               id={`settings_tab-${_url}`}
               className={clsx(
-                'my-auto gap-3 px-3 py-2.5 text-center text-sm font-medium transition-colors',
+                'my-auto gap-3 px-2 py-2.5 text-center text-sm font-medium transition-colors',
                 isActive
                   ? 'text-primary-main'
                   : 'text-neutral-400 hover:text-black'

@@ -1,6 +1,5 @@
 import { AppLayout } from 'components/layouts/AppLayout';
 import { CancelPlan } from 'components/modules/settings/license/CancelPlan';
-import { ComparePlans } from 'components/modules/settings/license/ComparePlans';
 import { PlanCard } from 'components/modules/settings/license/PlanCard';
 import { Cross } from 'components/svgs/navigation/Exit';
 import { usePlanBenefits } from 'hooks/settings/license/usePlanBenefits';
@@ -8,7 +7,7 @@ import Link from 'next/link';
 import NotFound from 'pages/404';
 import { useState } from 'react';
 
-export default function ManageSubscription() {
+export default function ChangePlan() {
   const { planBenefits: benefits } = usePlanBenefits();
 
   const [showModal, setShowModal] = useState(false);
@@ -110,8 +109,6 @@ export default function ManageSubscription() {
           }
         )}
       </div>
-
-      <ComparePlans />
     </AppLayout>
   );
 }

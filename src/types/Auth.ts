@@ -6,6 +6,7 @@ export interface IUser {
   emailVerifyCode?: string;
   status?: string;
   email?: string;
+  avatar?: string;
   firstName?: string;
   sKey?: string;
   emailVerified?: boolean;

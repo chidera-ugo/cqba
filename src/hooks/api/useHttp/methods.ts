@@ -10,6 +10,8 @@ export function urlModifier(url?: Service) {
       return '/v1/organizations';
     case 'transactions':
       return '/v1/transactions';
+    case 'billing':
+      return '/v1/billing';
     case 'auth':
       return '/v1/auth';
     case 'budgets':

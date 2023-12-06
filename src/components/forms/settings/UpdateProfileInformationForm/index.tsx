@@ -1,20 +1,19 @@
-import { useQueryClient } from '@tanstack/react-query';
-import { FullScreenLoader } from 'components/commons/FullScreenLoader';
-import { SubmitButton } from 'components/form-elements/SubmitButton';
+import { UpdateAvatar } from 'components/forms/settings/UpdateProfileInformationForm/UpdateAvatar';
 import { AppToast } from 'components/primary/AppToast';
+import { useAppContext } from 'context/AppContext';
 import { Formik } from 'formik';
-import { useMakeDummyHttpRequest } from 'hooks/commons/useMakeDummyHttpRequest';
+import { useUpdateProfile } from 'hooks/api/settings/useUpdateProfile';
 import { toast } from 'react-toastify';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
 
 export const UpdateProfileInformationForm = () => {
-  const queryClient = useQueryClient();
+  const { getCurrentUser } = useAppContext();
 
-  const { isLoading, mutate } = useMakeDummyHttpRequest({
+  const { isLoading, mutate } = useUpdateProfile({
     onSuccess() {
-      queryClient.invalidateQueries(['organization-information']);
+      getCurrentUser!(null);
       toast(<AppToast>Update successful</AppToast>, { type: 'success' });
     },
   });
@@ -23,31 +22,28 @@ export const UpdateProfileInformationForm = () => {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={(values) => {
-        mutate(values);
+      onSubmit={({ role: _, phoneNumber, ...values }) => {
+        mutate({
+          ...values,
+          phone: phoneNumber,
+          avatar: values.avatar.base64Url,
+        });
       }}
       validateOnBlur={false}
     >
       {(formikProps) => {
+        const avatar = formikProps.values.avatar.url;
+
         return (
           <>
-            <FullScreenLoader show={isLoading} />
-
-            <div className='x-between mb-3'>
-              <h6 className={'my-auto'}>Profile</h6>
-              <SubmitButton
-                submitting={isLoading}
-                className={'dark-button h-10 text-sm'}
-              >
-                Submit
-              </SubmitButton>
-            </div>
-
-            <Form
-              {...{
-                formikProps,
-              }}
+            <UpdateAvatar
+              avatar={avatar}
+              setFieldValue={formikProps?.setFieldValue}
             />
+
+            <div className={'mt-8 border-t border-neutral-200 pt-5'}>
+              <Form submitting={isLoading} formikProps={formikProps} />
+            </div>
           </>
         );
       }}

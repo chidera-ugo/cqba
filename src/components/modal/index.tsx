@@ -86,13 +86,13 @@ export const Modal = ({
                 hide: {
                   y:
                     type === 'center'
-                      ? '75vh'
+                      ? '100%'
                       : type === 'center-top'
                       ? '-100%'
                       : 0,
                   x: type === 'right' ? '100%' : type === 'left' ? '-200%' : 0,
-                  scale: type === 'zoom' ? 0 : 1,
-                  opacity: type === 'fade' ? 0 : 1,
+                  scale: type === 'zoom' ? 0.5 : 1,
+                  opacity: type === 'fade' || type === 'zoom' ? 0 : 1,
                 },
               }}
               transition={{

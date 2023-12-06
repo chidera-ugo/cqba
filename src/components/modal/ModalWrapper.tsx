@@ -113,10 +113,10 @@ export const CentredModalWrapper = ({
   fullscreen,
   undraggable,
   withGutter,
-
   mustShowIsDraggable: _,
   backgroundClassname,
   hideHeader,
+  type = 'center',
   ...props
 }: PropsWithChildren<CenteredModalWrapperProps>) => {
   const mobile = useMediaQuery('(max-width: 640px)');
@@ -131,7 +131,7 @@ export const CentredModalWrapper = ({
       )}
       {...{ duration, show }}
       {...props}
-      type='center'
+      type={type}
     >
       <div className='block 640:hidden'></div>
 
@@ -186,7 +186,10 @@ export const CentredModalWrapper = ({
         </div>
 
         <div
-          className={clsx('560:min-w-[400px]', className ?? 'px-4 640:px-8')}
+          className={clsx(
+            'overflow-y-auto 560:min-w-[400px]',
+            className ?? 'px-4 640:px-8'
+          )}
         >
           {children}
         </div>
