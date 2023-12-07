@@ -1,4 +1,5 @@
 import { UseQueryOptions } from '@tanstack/react-query';
+import { Business_typeEnum } from 'enums/business_type.enum';
 import { IOwner } from 'hooks/api/kyc/useUpdateOwnerInformation';
 import { useTQuery } from 'hooks/api/useTQuery';
 import { useAppContext } from 'context/AppContext';
@@ -31,9 +32,13 @@ export interface IOrganization {
   cacBn1: string;
   address: string;
   gender: string;
-  businessType: string;
+  businessType: Business_typeEnum;
   updatedAt: number;
   postalCode: string;
+  tin: string;
+  businessNumber: string;
+  rcNumber: string;
+  cacItNumber: string;
   documents: {
     cacBn1?: string;
     utilityBill?: string;

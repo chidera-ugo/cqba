@@ -10,11 +10,16 @@ export const useAuthenticationRoutesGuard = (noRedirect?: boolean) => {
 
   const { isVerified } = useIsVerified();
 
-  const url = isVerified ? '/' : '/kyc';
+  const url = '/';
 
   useEffect(() => {
-    // Redirect to saved url if http session is valid
+    // Redirect to saved url if auth session is valid
     if (!user || noRedirect) return;
+
+    if (!isVerified) {
+      replace('/kyc');
+      return;
+    }
 
     if (redirectUrl === 'no_redirect' || redirectUrl === '/') {
       replace(url);

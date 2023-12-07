@@ -1,11 +1,16 @@
 import clsx from 'clsx';
+import { Spinner } from 'components/svgs/dashboard/Spinner';
+import {
+  CompletedStepCheck,
+  NotProvidedUnchecked,
+} from 'components/svgs/kyc/StepsCompletion';
 import { useKycSteps } from 'hooks/kyc/useKycSteps';
 import Link from 'next/link';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import { Fragment } from 'react';
 import { convertToUrlString } from 'utils/converters/convertToUrlString';
 
-export const KycSteps = () => {
+export const KycSteps = ({ isRecap }: { isRecap?: boolean }) => {
   const { currentTab, kycSteps } = useKycSteps();
 
   const {
@@ -13,6 +18,7 @@ export const KycSteps = () => {
     hasProvidedCompanyInformation,
     hasProvidedOwnerInformationRequirements,
     isUnderReview,
+    refetchingOrganization,
   } = useAccountVerificationStatus();
 
   function checkIfStepCompleted(query: string) {
@@ -30,8 +36,8 @@ export const KycSteps = () => {
   }
 
   return (
-    <div>
-      {kycSteps.map(({ title, description, actionText, hidden }, i) => {
+    <div className={'mt-10'}>
+      {kycSteps.map(({ label, title, description, hidden }) => {
         const url = convertToUrlString(title);
         const isActive = currentTab === url;
         const isCompleted = checkIfStepCompleted(title);
@@ -43,25 +49,36 @@ export const KycSteps = () => {
             href={`/kyc?tab=${isUnderReview ? 'review-and-submit' : url}`}
             key={title}
             className={clsx(
-              'smooth group mt-5 block w-full py-1.5 text-left font-medium transition-colors',
-              isActive ? 'text-primary-main' : 'text-neutral-1000'
+              'smooth x-between group mt-4 w-full border border-neutral-140 px-4 py-3 text-left font-medium transition-colors',
+              isActive ? 'text-primary-main' : 'text-neutral-1000',
+              isRecap ? 'rounded-lg' : 'rounded-xl'
             )}
           >
-            <div className={clsx('my-auto mx-auto text-[10px] font-semibold')}>
-              Step {i + 1}
-            </div>
-
-            <div className='my-auto mt-1 text-base font-semibold group-hover:underline'>
-              {title}
-            </div>
-
-            <p className={'text-sm'}>{description}</p>
-
-            <div className='mt-3 flex'>
-              <div className={clsx(isCompleted ? 'pill_yellow' : 'pill_gray')}>
-                {isCompleted ? 'Pending Verification' : actionText}
+            <div className={'my-auto'}>
+              <div
+                className={clsx(
+                  'my-auto group-hover:text-primary-main',
+                  isRecap ? 'text-sm font-medium' : 'text-base font-semibold'
+                )}
+              >
+                {label}
               </div>
+              {!isRecap && <p className={'text-[13px]'}>{description}</p>}
             </div>
+
+            {isRecap ? (
+              <div className='pill_gray my-auto'>View</div>
+            ) : (
+              <div className={'my-auto'}>
+                {isCompleted ? (
+                  <CompletedStepCheck />
+                ) : refetchingOrganization ? (
+                  <Spinner className={'text-primary-main'} />
+                ) : (
+                  <NotProvidedUnchecked />
+                )}
+              </div>
+            )}
           </Link>
         );
       })}

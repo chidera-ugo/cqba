@@ -93,6 +93,7 @@ export const WalletTransactions = ({
       <WalletTransactionsTable
         search={debouncedSearch}
         walletId={showAllTransactions ? undefined : primaryWallet?._id}
+        canNotShowData={!primaryWallet}
         {...{
           filters,
           isLoading: gettingWallet,

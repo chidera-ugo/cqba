@@ -7,6 +7,7 @@ import { Form as FormikForm, FormikProps } from 'formik';
 import { useEffect } from 'react';
 import { IFile } from 'types/commons';
 import { formatPhoneNumber } from 'utils/formatters/formatPhoneNumber';
+import { appendBase64Prefix } from 'utils/getters/getBase64String';
 import { sanitizeRecordToRemoveUndefinedAndNulls } from 'utils/sanitizers/sanitizeRecordToRemoveUndefinedAndNulls';
 import { initialValues } from './initialValues';
 
@@ -32,7 +33,7 @@ export const Form = ({ submitting, formikProps }: Props) => {
       phoneNumber: formatPhoneNumber(phone) ?? '',
       avatar: (!!avatar
         ? {
-            webUrl: avatar,
+            webUrl: appendBase64Prefix(avatar),
           }
         : {}) as IFile,
     });
@@ -49,7 +50,7 @@ export const Form = ({ submitting, formikProps }: Props) => {
 
           <SubmitButton
             submitting={submitting}
-            className={'primary-button mt-5'}
+            className={'primary-button mt-5 w-[128px]'}
           >
             Save Changes
           </SubmitButton>

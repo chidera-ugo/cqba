@@ -1,26 +1,28 @@
+import { companyInformationDocuments } from 'constants/kyc/company_information_documents';
+import { Business_typeEnum } from 'enums/business_type.enum';
 import { validateFile } from 'utils/validators/validateField';
-import { object, string } from 'yup';
+import { object } from 'yup';
 
-export const validationSchema = object({
-  bnNumber: string().required('Please provide your BN number'),
-  creationDate: object().test(
-    'required',
-    'Provide company creation date',
-    (val: any) => {
-      return !!val.value && !!val.calendarValue;
-    }
-  ),
-  utilityBill: object().test(
-    'invalidFile',
-    'Please upload your utility bill',
-    (val) => validateFile(val)
-  ),
-  businessNameCert: object().test(
-    'invalidFile',
-    'Upload business name certificate',
-    (val) => validateFile(val)
-  ),
-  cacBn1: object().test('invalidFile', 'Upload your CAC BN1', (val) =>
-    validateFile(val)
-  ),
-});
+export function validationSchema(businessType?: Business_typeEnum) {
+  const spec: Record<string, any> = {
+    creationDate: object().test(
+      'required',
+      'Provide company creation date',
+      (val: any) => {
+        return !!val.value && !!val.calendarValue;
+      }
+    ),
+  };
+
+  for (const item of companyInformationDocuments?.[
+    businessType ?? Business_typeEnum.individual
+  ]) {
+    spec[item?.id] = object().test(
+      'invalidFile',
+      `Upload ${item.name}`,
+      (val) => validateFile(val)
+    );
+  }
+
+  return object(spec);
+}

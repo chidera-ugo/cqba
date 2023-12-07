@@ -47,7 +47,7 @@ export const UpdateAvatar = ({ avatar, setFieldValue }: Props) => {
               onChange={() =>
                 fileSelector({
                   id: id,
-                  maximumFileSizeInMB: 4,
+                  maximumFileSizeInMB: 2,
                   successCb: (val) => setFieldValue(id, val),
                   errorCb,
                   extensions: imageExtensions,
@@ -67,7 +67,7 @@ export const UpdateAvatar = ({ avatar, setFieldValue }: Props) => {
         <div className='y-center h-[128px] w-[128px] overflow-hidden rounded-full bg-neutral-200'>
           {avatar ? (
             <Image
-              className={'my-auto object-contain object-center'}
+              className={'my-auto h-full w-full object-cover object-center'}
               src={avatar}
               height={128}
               width={128}

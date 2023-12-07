@@ -21,6 +21,7 @@ interface Props {
   budgetId?: string;
   isLoading?: boolean;
   isError?: boolean;
+  canNotShowData?: boolean;
 }
 
 export const WalletTransactionsTable = ({
@@ -32,6 +33,7 @@ export const WalletTransactionsTable = ({
   setPagination,
   range,
   walletId,
+  canNotShowData,
   budgetId,
   isLoading: _isLoading,
   isError: _isError,
@@ -139,9 +141,11 @@ export const WalletTransactionsTable = ({
           }
           accessor='_id'
           mustHaveRange
+          emptyTableText={'No wallet transactions yet'}
           {...{
             isLoading,
             data,
+            canNotShowData,
             setColumnFilters,
             columnFilters,
             currentSearchColumn,

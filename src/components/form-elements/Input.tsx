@@ -13,6 +13,7 @@ export const Input = ({
   fieldType,
   limit,
   shouldValidate,
+  placeholder,
   type = 'text',
   next,
   label,
@@ -42,6 +43,7 @@ export const Input = ({
         {...props}
         {...field}
         {...{ id, type }}
+        placeholder={placeholder?.replace('$1', label?.toLowerCase() ?? '')}
         value={field.value ?? ''}
         onChange={
           setFieldValue

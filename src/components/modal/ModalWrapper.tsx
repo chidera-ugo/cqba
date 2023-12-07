@@ -23,6 +23,7 @@ export type ModalWrapperProps = ModalProps &
 export type ModalProps = {
   type?: 'right' | 'left' | 'center' | 'center-top' | 'zoom' | 'fade';
   show: boolean;
+  portalClassname?: string;
   closeOnClickOutside?: boolean;
   className?: string;
   duration?: number;

@@ -45,7 +45,7 @@ export const Form = ({
   useEffect(() => {
     if (!budget) return;
 
-    const { amount, expiry, name, description, threshold } = budget;
+    const { amount, expiry, name, description } = budget;
 
     const expiryDate = new Date(expiry);
 

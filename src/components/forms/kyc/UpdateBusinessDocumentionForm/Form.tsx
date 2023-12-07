@@ -1,25 +1,31 @@
-import { IsLoading } from 'components/data-states/IsLoading';
 import { DatePicker } from 'components/form-elements/DatePicker';
-import { Input } from 'components/form-elements/Input';
+import { FileInput } from 'components/form-elements/FileInput';
+import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { ImageViewer } from 'components/modals/ImageViewer';
+import { companyInformationDocuments } from 'constants/kyc/company_information_documents';
+import { Business_typeEnum } from 'enums/business_type.enum';
 import { Form as FormikForm, FormikProps } from 'formik';
-import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
+import { IOrganization } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useScrollToFormError } from 'hooks/forms/useScrollToFormError';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { DatePickerValue, IFile } from 'types/commons';
 import { sanitizeRecordToRemoveUndefinedAndNulls } from 'utils/sanitizers/sanitizeRecordToRemoveUndefinedAndNulls';
-import { initialValues } from './initialValues';
-import { SubmitButton } from 'components/form-elements/SubmitButton';
-import { useEffect, useState } from 'react';
-import { FileInput } from 'components/form-elements/FileInput';
+import { UpdateBusinessDocumentationInitialValues } from './initialValues';
 
 interface Props {
-  formikProps: FormikProps<typeof initialValues>;
+  formikProps: FormikProps<UpdateBusinessDocumentationInitialValues>;
   processing: boolean;
   redirectUrl?: string;
+  organization?: IOrganization;
 }
 
-export const Form = ({ processing, formikProps, redirectUrl }: Props) => {
+export const Form = ({
+  processing,
+  formikProps,
+  redirectUrl,
+  organization,
+}: Props) => {
   const {
     handleSubmit,
     setValues,
@@ -35,8 +41,6 @@ export const Form = ({ processing, formikProps, redirectUrl }: Props) => {
 
   const [previewImageUrl, setPreviewImageUrl] = useState('');
 
-  const { data, isLoading } = useGetOrganizationInformation();
-
   function prefillDocuments(documents: Record<string, string>): any {
     const res: Record<string, IFile> = {};
 
@@ -51,10 +55,10 @@ export const Form = ({ processing, formikProps, redirectUrl }: Props) => {
   }
 
   useEffect(() => {
-    if (!data) return;
+    if (!organization) return;
 
-    const { bnNumber, regDate, documents } =
-      sanitizeRecordToRemoveUndefinedAndNulls(data);
+    const { regDate, documents } =
+      sanitizeRecordToRemoveUndefinedAndNulls(organization);
 
     const date = new Date(regDate);
 
@@ -68,15 +72,15 @@ export const Form = ({ processing, formikProps, redirectUrl }: Props) => {
     setValues(
       {
         ...values,
-        bnNumber,
         creationDate: creationDate as DatePickerValue,
         ...prefillDocuments(documents),
       },
       false
     );
-  }, [data]);
+  }, [organization]);
 
-  if (isLoading) return <IsLoading />;
+  const businessType =
+    organization?.businessType ?? Business_typeEnum.individual;
 
   return (
     <FormikForm onSubmit={handleSubmit}>
@@ -87,8 +91,6 @@ export const Form = ({ processing, formikProps, redirectUrl }: Props) => {
       />
 
       <div className='gap-5 480:flex'>
-        <Input label='BN Number' name='bnNumber' />
-
         <DatePicker
           label='Company Registration Date'
           name='creationDate'
@@ -101,17 +103,22 @@ export const Form = ({ processing, formikProps, redirectUrl }: Props) => {
         />
       </div>
 
-      <FileInput
-        label='Proof of Address / Utility Bill'
-        name='utilityBill'
-        fileType='all'
-        maximumFileSizeInMB={2}
-        {...{
-          setFieldValue,
-        }}
-        openImagePreviewModal={(src) => setPreviewImageUrl(src)}
-        getFile={(id) => v[id]}
-      />
+      {companyInformationDocuments[businessType].map(({ id, name }) => {
+        return (
+          <FileInput
+            key={name}
+            label={name}
+            name={id}
+            fileType='all'
+            maximumFileSizeInMB={2}
+            {...{
+              setFieldValue,
+            }}
+            openImagePreviewModal={(src) => setPreviewImageUrl(src)}
+            getFile={(id) => v[id]}
+          />
+        );
+      })}
 
       <div className='mt-4'>
         <p className={'text-xs text-neutral-500'}>
@@ -125,30 +132,6 @@ export const Form = ({ processing, formikProps, redirectUrl }: Props) => {
           </li>
         </ul>
       </div>
-
-      <FileInput
-        label='Certificate of Business Name'
-        name='businessNameCert'
-        fileType='all'
-        maximumFileSizeInMB={2}
-        {...{
-          setFieldValue,
-        }}
-        openImagePreviewModal={(src) => setPreviewImageUrl(src)}
-        getFile={(id) => v[id]}
-      />
-
-      <FileInput
-        label='CAC-BN1'
-        name='cacBn1'
-        fileType='all'
-        maximumFileSizeInMB={2}
-        {...{
-          setFieldValue,
-        }}
-        openImagePreviewModal={(src) => setPreviewImageUrl(src)}
-        getFile={(id) => v[id]}
-      />
 
       <div className={'mt-10 pb-8'}>
         <div className='relative flex'>

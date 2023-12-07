@@ -4,15 +4,12 @@ import { CreatePin } from 'components/modules/core/CreatePin';
 import { IdleTimer } from 'components/modules/IdleTimer';
 import { VerifyYourAccount } from 'components/modules/kyc/VerifyYourAccount';
 import { PageHead } from 'components/primary/PageHead';
-import { Right } from 'components/svgs/navigation/Arrows';
 import { ChevronRight } from 'components/svgs/navigation/Chevrons';
-import { LineInfo } from 'components/svgs/others/Info';
-import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
-import { useCurrentAccountSetupStepUrl } from 'hooks/dashboard/kyc/useCurrentAccountSetupStepUrl';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useNavigationItems } from 'hooks/dashboard/useNavigationItems';
 import { useIsKycFlow } from 'hooks/kyc/useIsKycFlow';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import NotFound from 'pages/404';
 import { PropsWithChildren, ReactNode } from 'react';
 import { SideNavigation } from 'components/primary/SideNavigation';
@@ -48,14 +45,12 @@ export const AppLayout = ({
 
   const { isVerified } = useIsVerified();
   const { isKycFlow } = useIsKycFlow();
+  const { pathname } = useRouter();
 
   const { isValidRoute } = useNavigationItems(user?.role);
 
-  const { getCurrentAccountSetupStepUrl } = useCurrentAccountSetupStepUrl();
-
-  const { isUnderReview } = useAccountVerificationStatus();
-
-  if (!isValidRoute()) return <NotFound />;
+  if ((!isVerified && pathname !== '/kyc') || !isValidRoute())
+    return <NotFound />;
 
   if (!userExists) return <FullScreenLoader asPage />;
 
@@ -139,41 +134,6 @@ export const AppLayout = ({
                 </div>
 
                 {breadCrumbsSlot}
-              </div>
-            )}
-
-            {!isVerified && !isKycFlow && (
-              <div className='x-between block bg-warning-600 p-4 text-white 690:flex 690:p-6'>
-                <div className='flex'>
-                  <span className={'mt-1 mr-2 hidden 640:mr-3 690:block'}>
-                    <LineInfo />
-                  </span>
-
-                  <div>
-                    <h6
-                      className={'text-base font-medium text-white'}
-                    >{`You're currently in test mode`}</h6>
-                    <p className={'mt-2 text-sm text-white'}>
-                      {isUnderReview
-                        ? `We're reviewing your application, this may take a while. You will be notified once this process has been completed.`
-                        : 'Activate your business to start using Chequebase in live mode'}
-                    </p>
-                  </div>
-                </div>
-
-                {!isUnderReview && (
-                  <div className='mt-4 flex 690:mt-0'>
-                    <Link
-                      href={getCurrentAccountSetupStepUrl()}
-                      className='light-button x-center h-10 border-none px-3 text-sm text-black 690:h-12 690:px-5'
-                    >
-                      <span className={'my-auto mr-1'}>Activate Business</span>
-                      <span className={'my-auto'}>
-                        <Right />
-                      </span>
-                    </Link>
-                  </div>
-                )}
               </div>
             )}
 

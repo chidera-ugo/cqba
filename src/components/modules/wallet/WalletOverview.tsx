@@ -7,13 +7,13 @@ export const WalletOverview = () => {
   const { isLoading, isError, primaryWallet } = useManageWallets();
 
   if (isLoading) return <IsLoadingIsError isLoading />;
-  if (isError || !primaryWallet) return <IsLoadingIsError />;
+  if (isError) return <IsLoadingIsError />;
 
   return (
     <div className='grid-cols-2 gap-4 640:grid'>
       <div className='card'>
         <DisplayValue
-          value={primaryWallet.availableBalance}
+          value={!primaryWallet ? 0 : primaryWallet.availableBalance}
           isAmount
           title='Account Balance'
           moreInfo='Your main wallet balance'
@@ -22,7 +22,11 @@ export const WalletOverview = () => {
 
       <div className='card relative mt-4 640:mt-0'>
         <DisplayValue
-          value={primaryWallet.balance - primaryWallet.availableBalance}
+          value={
+            !primaryWallet
+              ? 0
+              : primaryWallet.balance - primaryWallet.availableBalance
+          }
           isAmount
           title='Budget Balance'
           moreInfo='Your total budget balance'

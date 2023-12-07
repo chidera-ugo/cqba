@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { Modal } from 'components/modal';
+import { ModalProps } from 'components/modal/ModalWrapper';
 import { PageHead } from 'components/primary/PageHead';
 import { Spinner } from 'components/svgs/dashboard/Spinner';
 
@@ -17,12 +18,13 @@ export const FullScreenLoader = ({
   asPage,
   id,
   show = true,
-}: Props) => {
+  ...props
+}: Props & Partial<ModalProps>) => {
   return (
     <div>
       {asPage && <PageHead />}
 
-      <Modal type='fade' {...{ show }} white={white || asPage}>
+      <Modal type='fade' {...{ show }} {...props} white={white || asPage}>
         <div
           className={clsx(
             white && 'white',
@@ -39,7 +41,7 @@ export const FullScreenLoader = ({
           <div className='y-center'>
             <Spinner
               className={clsx(
-                'mx-auto h-6 w-6 animate-spin',
+                'mx-auto h-8 w-8 animate-spin',
                 asPage || white ? 'text-primary-main' : 'text-white'
               )}
             />

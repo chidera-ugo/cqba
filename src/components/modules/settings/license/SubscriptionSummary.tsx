@@ -50,7 +50,10 @@ export const SubscriptionSummary = () => {
 
           <div>
             <div className='flex'>
-              <Link href={'/license/change-plan'} className='text_link'>
+              <Link
+                href={'/settings/license/change-plan'}
+                className='text_link'
+              >
                 Change Plan
               </Link>
             </div>

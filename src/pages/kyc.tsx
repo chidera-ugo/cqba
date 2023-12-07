@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { LogoutButton } from 'components/buttons/Logout';
 import { SimpleToast } from 'components/commons/SimpleToast';
 import { UpdateBusinessDocumentionForm } from 'components/forms/kyc/UpdateBusinessDocumentionForm';
 import { UpdateCompanyInformationForm } from 'components/forms/kyc/UpdateCompanyInformationForm';
@@ -8,13 +9,11 @@ import { SimpleInformation } from 'components/modules/commons/SimpleInformation'
 import { KycSteps } from 'components/modules/kyc/KycSteps';
 import { ManageBusinessOwnersAndDirectors } from 'components/modules/kyc/ManageBusinessOwnersAndDirectors';
 import { ReviewAndSubmit } from 'components/modules/kyc/ReviewAndSubmit';
-import { Cross } from 'components/svgs/navigation/Exit';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import { useCurrentAccountSetupStepUrl } from 'hooks/dashboard/kyc/useCurrentAccountSetupStepUrl';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useKycSteps } from 'hooks/kyc/useKycSteps';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
@@ -28,7 +27,8 @@ export default function Kyc() {
 
   const { getCurrentAccountSetupStepUrl } = useCurrentAccountSetupStepUrl();
 
-  const { isUnderReview } = useAccountVerificationStatus();
+  const { isUnderReview, hasProvidedCompanyInformation } =
+    useAccountVerificationStatus();
 
   const { isRefetching } = useGetOrganizationInformation();
 
@@ -70,36 +70,25 @@ export default function Kyc() {
     <AppLayout
       title='Get Started'
       hideSideNavigation
-      headerSlot={
-        <Link href={'/'} className={'group flex'}>
-          <span
-            className={
-              'my-auto mr-1 text-xs font-medium group-hover:underline 640:text-sm'
-            }
-          >
-            Skip for Later
-          </span>
-          <span className='my-auto'>
-            <Cross className={'h-5 w-5 text-primary-main'} />
-          </span>
-        </Link>
-      }
+      headerSlot={<LogoutButton />}
     >
       <SimpleToast show={isRefetching && showSteps}>Updating...</SimpleToast>
 
       <div className='relative gap-5 768:flex'>
         <div className='sticky top-[108px] h-full w-[360px]'>
           <div className={clsx(showSteps ? 'block' : 'hidden 768:block')}>
-            <h4>Activate your account</h4>
-            <p className='mt-2 text-sm font-normal text-neutral-500'>
-              Based on your business type, you will be required to submit the
-              documents below during the business activation process.{' '}
+            <h4 className={'text-2xl font-medium'}>Activate your account</h4>
+            <p className='mt-2 text-[13px] font-normal leading-5 text-neutral-500 640:mt-1'>
+              Welcome to Chequebase, your account is almost ready. We just need
+              a few final details about your company to validate your account.
             </p>
 
             <div className={clsx(showSteps ? 'block' : 'hidden 768:block')}>
               <KycSteps />
             </div>
           </div>
+
+          {/*  Todo: Add support */}
         </div>
 
         <div
@@ -113,7 +102,26 @@ export default function Kyc() {
               {currentTab === 'review-and-submit' ? (
                 <ReviewAndSubmit />
               ) : currentTab === 'business-documentation' ? (
-                <UpdateBusinessDocumentionForm />
+                <>
+                  {hasProvidedCompanyInformation ? (
+                    <UpdateBusinessDocumentionForm />
+                  ) : (
+                    <div className={'py-10'}>
+                      <SimpleInformation
+                        title={'Missed a step'}
+                        description={
+                          <span className={'mt-2 block'}>
+                            You need to provide business information first
+                          </span>
+                        }
+                        actionButton={{
+                          action: () => goToNextAccountSetupStep(),
+                          text: 'Continue',
+                        }}
+                      />
+                    </div>
+                  )}
+                </>
               ) : currentTab === 'owners-information' ? (
                 <div>
                   <h5>{`Owners' Information`}</h5>

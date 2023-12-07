@@ -32,7 +32,9 @@ export const UpdateProfileInformationForm = () => {
       validateOnBlur={false}
     >
       {(formikProps) => {
-        const avatar = formikProps.values.avatar.url;
+        const _avatar = formikProps.values.avatar;
+
+        const avatar = _avatar?.url ?? _avatar?.webUrl;
 
         return (
           <>

@@ -14,6 +14,7 @@ export const Modal = ({
   closeOnClickOutside,
   white,
   hideBackground,
+  portalClassname,
 }: PropsWithChildren<ModalProps>) => {
   const [grow, setGrow] = useState(false);
 
@@ -35,7 +36,8 @@ export const Modal = ({
           <div
             id={'portal-presence'}
             className={clsx(
-              `disable-scrolling fixed inset-0 z-[1200] w-screen`,
+              `disable-scrolling fixed inset-0 w-screen`,
+              portalClassname ?? 'z-[1200]',
               type !== 'right' && type !== 'left' ? 'y-center' : ''
             )}
           >

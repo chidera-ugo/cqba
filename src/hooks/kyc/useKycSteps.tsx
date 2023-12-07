@@ -7,27 +7,32 @@ export const useKycSteps = () => {
   const currentTab = typeof _t === 'string' ? _t : 'company-information';
 
   const accountSetupSteps: {
+    label: string;
     title: string;
     description: string;
     actionText: string;
     hidden?: boolean;
   }[] = [
     {
+      label: 'Business Information',
       title: 'Company Information',
-      description: 'Complete your company information',
+      description: 'Provide business information',
       actionText: 'Verify Company',
     },
     {
+      label: "Owners' Information",
       title: "Owners' Information",
-      description: 'Submit business owners information',
+      description: 'Business owners information',
       actionText: 'Verify Owners',
     },
     {
+      label: 'Business Documents',
       title: 'Business Documentation',
-      description: 'Upload business documents for verification',
+      description: 'Upload business documents',
       actionText: 'Upload Documents',
     },
     {
+      label: 'Review',
       title: 'Review and Submit',
       description: "Review all the information you're provided",
       actionText: 'Review and Submit',

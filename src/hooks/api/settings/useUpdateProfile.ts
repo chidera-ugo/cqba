@@ -8,6 +8,7 @@ export function useUpdateProfile(
     { firstName: string; lastName: string; phone: string; avatar: string },
     null
   >({
+    method: 'put',
     url: '/profile',
     service: 'auth',
     options,

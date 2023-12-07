@@ -1,5 +1,4 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { AppToast } from 'components/primary/AppToast';
 import { Formik } from 'formik';
 import {
@@ -47,18 +46,14 @@ export const UpdateOwnerInformationForm = ({
     >
       {(formikProps) => {
         return (
-          <>
-            <FullScreenLoader show={isLoading} />
-
-            <Form
-              {...{
-                currentOwner,
-                type,
-                formikProps,
-                processing: isLoading,
-              }}
-            />
-          </>
+          <Form
+            {...{
+              currentOwner,
+              type,
+              formikProps,
+              processing: isLoading,
+            }}
+          />
         );
       }}
     </Formik>

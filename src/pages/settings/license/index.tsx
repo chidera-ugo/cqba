@@ -7,6 +7,7 @@ export default function License() {
   return (
     <SettingsLayout title={'License'}>
       <SubscriptionSummary />
+
       <div className='mt-6 grid min-h-[500px] grid-cols-12 gap-5'>
         <div className={'card col-span-8'}>
           <PlanFeatures />

@@ -5,6 +5,7 @@ import { CurrentUserAvatar } from 'components/modules/app/CurrentUserAvatar';
 import { Notifications } from 'components/modules/app/Notifications';
 import { MobileMenu } from 'components/primary/MobileMenu';
 import { PointerLeft } from 'components/svgs/navigation/Arrows';
+import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useIsKycFlow } from 'hooks/kyc/useIsKycFlow';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -68,9 +69,11 @@ export const AppHeader = ({
 };
 
 export const Logo = ({ white }: { white?: boolean }) => {
+  const { isVerified } = useIsVerified();
+
   return (
     <div className='flex'>
-      <Link href='/' className='my-auto flex gap-2'>
+      <Link href={isVerified ? '/' : '/kyc'} className='my-auto flex gap-2'>
         <Image
           src={white ? white_logo : logo}
           priority

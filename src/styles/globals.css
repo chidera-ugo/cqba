@@ -83,7 +83,7 @@
   }
 
   .text_link {
-    @apply text-base font-medium underline hover:text-primary-main
+    @apply text-base font-medium underline hover:text-primary-main;
   }
 
   button,
@@ -102,7 +102,7 @@
   }
 
   ul {
-    @apply pl-4 !important;
+    @apply pl-4 font-light !important;
     list-style-type: disc;
   }
 
@@ -135,7 +135,7 @@
   }
 
   .primary-button {
-    @apply smooth h-10 rounded-full bg-primary-main px-4 text-center text-sm font-medium text-white ring-primary-main ring-opacity-30 transition-colors hover:bg-primary-hmain focus:ring-2;
+    @apply smooth h-11 rounded-full bg-primary-main px-4 text-center text-sm font-medium text-white ring-primary-main ring-opacity-30 transition-colors hover:bg-primary-hmain focus:ring-2;
   }
 
   .secondary-button {
