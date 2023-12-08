@@ -8,7 +8,6 @@
 @layer base {
   html {
     scroll-behavior: smooth !important;
-    /*background-color: black;*/
   }
 
   body {
@@ -41,6 +40,15 @@
 
   h6 {
     @apply text-base font-medium text-neutral-1000;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply tracking-[-0.5px];
   }
 
   label,
@@ -134,20 +142,28 @@
     @apply app-container max-w-[1340px];
   }
 
+  .nav_bar {
+    @apply bg-white bg-opacity-90 backdrop-blur-md;
+  }
+
+  .button {
+    @apply smooth h-11 rounded-full px-4 text-center text-sm transition-colors focus:ring-2;
+  }
+
   .primary-button {
-    @apply smooth h-11 rounded-full bg-primary-main px-4 text-center text-sm font-medium text-white ring-primary-main ring-opacity-30 transition-colors hover:bg-primary-hmain focus:ring-2;
+    @apply button bg-primary-main font-medium text-white ring-primary-main ring-opacity-30 hover:bg-primary-hmain;
   }
 
   .secondary-button {
-    @apply smooth h-10 rounded-full border border-neutral-200 bg-white px-4 text-sm font-semibold text-neutral-1000 hover:bg-gray-100;
+    @apply button border border-neutral-200 bg-white font-semibold text-neutral-1000 hover:bg-gray-100;
   }
 
   .light-button {
-    @apply smooth h-10 rounded-full border border-primary-main bg-white px-4 text-center text-sm font-medium text-primary-main transition-colors hover:bg-gray-100;
+    @apply border border-primary-main bg-white font-medium text-primary-main transition-colors hover:bg-gray-100;
   }
 
   .dark-button {
-    @apply smooth h-10 rounded-full border border-black bg-black px-4 text-center text-sm font-medium text-white transition-colors hover:bg-gray-900;
+    @apply smooth h-11 rounded-full border border-black bg-black px-4 text-center text-sm font-medium text-white transition-colors hover:bg-gray-900;
   }
 
   .action-button {
@@ -175,7 +191,7 @@
   }
 
   .card {
-    @apply w-full rounded-lg border border-neutral-310 p-3 640:rounded-xl 640:p-5;
+    @apply w-full rounded-xl border border-neutral-310 p-3 640:p-5;
   }
 
   .x-between {
@@ -192,6 +208,10 @@
 
   .y-center {
     @apply flex flex-col justify-center align-middle;
+  }
+
+  .table_border {
+    @apply border-l border-neutral-100;
   }
 }
 
@@ -281,11 +301,19 @@
   }
 
   .tpill {
-    @apply y-center h-[18px] rounded-full px-1.5 text-[10px] shadow-sm 640:h-[22px] 640:px-2 640:py-1 640:text-xs;
+    @apply y-center h-[18px] rounded-full px-1.5 text-[10px] font-medium capitalize shadow-sm 640:h-[22px] 640:px-2 640:py-1 640:text-xs;
+  }
+
+  .pill_green {
+    @apply tpill bg-green-200 text-green-700 ring-2 ring-green-600 ring-opacity-30;
   }
 
   .pill_gray {
     @apply tpill bg-neutral-100 text-neutral-900 ring-1 ring-neutral-600 ring-opacity-20 640:ring-2;
+  }
+
+  .pill_red {
+    @apply tpill bg-red-200 text-red-900 ring-1 ring-red-600 ring-opacity-20 640:ring-2;
   }
 
   .pill_yellow {

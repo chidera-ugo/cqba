@@ -1,13 +1,12 @@
 import { useTQuery } from 'hooks/api/useTQuery';
-import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 
-export interface Plan {
+export interface SubscriptionPlan {
   _id: string;
   code: string;
   name: string;
   amount: Amount;
   description: string;
-  features: Feature[];
+  features: PlanFeature[];
   createdAt: string;
   updatedAt: string;
   __v: number;
@@ -17,20 +16,18 @@ export interface Amount {
   NGN: number;
 }
 
-export interface Feature {
+export interface PlanFeature {
   code: string;
   name: string;
   description: string;
   freeUnits: number;
   available: boolean;
   maxUnits: number;
-  costPerUnit: number;
+  costPerUnit: Amount;
 }
 
-export function useGetAllPlans() {
-  const { isVerified } = useIsVerified();
-
-  return useTQuery<Plan[]>({
+export function useGetAllSubscriptionPlans() {
+  return useTQuery<SubscriptionPlan[]>({
     queryKey: ['all_plans'],
     url: `/plans`,
     service: 'billing',
@@ -38,7 +35,6 @@ export function useGetAllPlans() {
       staleTime: Infinity,
       meta: {
         silent: true,
-        enabled: isVerified,
       },
     },
   });

@@ -1,4 +1,4 @@
-import { NothingHere } from 'components/illustrations/NothingHere';
+import { NotFoundFace } from 'components/illustrations/NotFound';
 import {
   SimpleInformation,
   Props as PropsSimpleInformation,
@@ -28,7 +28,7 @@ export const IsError = ({
         </span>
       }
       {...{ actionButton, className }}
-      icon={noIcon ? undefined : <NothingHere />}
+      icon={noIcon ? undefined : <NotFoundFace />}
     />
   );
 };

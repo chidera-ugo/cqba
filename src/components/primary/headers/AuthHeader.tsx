@@ -10,7 +10,7 @@ export const AuthHeader = () => {
   return (
     <header
       className={clsx(
-        'sticky -top-[1px] left-0 z-[1000] h-14 border-b border-neutral-200 bg-white bg-opacity-80 backdrop-blur-md 640:h-20'
+        'nav_bar sticky -top-[1px] left-0 z-[1000] h-14 border-b border-neutral-200 640:h-20'
       )}
     >
       <div className='x-between app-container relative z-10 my-auto h-full'>

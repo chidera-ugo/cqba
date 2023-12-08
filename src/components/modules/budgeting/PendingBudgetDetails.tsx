@@ -90,7 +90,7 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
         closeModal={() => {
           setAction(null);
         }}
-        hideBackground
+        hideBackdrop
         title={'Decline Budget'}
         show={action === 'decline' && !mode}
         childrenClassname={'pt-4 px-8'}

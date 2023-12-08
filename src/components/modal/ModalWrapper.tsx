@@ -26,10 +26,11 @@ export type ModalProps = {
   portalClassname?: string;
   closeOnClickOutside?: boolean;
   className?: string;
+  backdropClassname?: string;
   duration?: number;
   white?: boolean;
   closeModal?: () => void;
-  hideBackground?: boolean;
+  hideBackdrop?: boolean;
 };
 
 export type CenteredModalWrapperProps = ModalWrapperProps & {

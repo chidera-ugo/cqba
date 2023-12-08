@@ -73,7 +73,7 @@ export const AmountInput = ({
             }
           }}
           className={clsx(
-            `input w-full border pl-[56px] pr-12`,
+            `input w-full border pl-[32px] pr-12`,
             submitCount > 0 && meta.error && 'border-error-main',
             !!field.value ? 'bg-white' : 'bg-neutral-100'
           )}

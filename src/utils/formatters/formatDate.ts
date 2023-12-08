@@ -28,7 +28,7 @@ export const formatDate = (
   const time12Hour = d.format('A');
   const ordinalDate = d.format('Do');
   const month = months[d.month()];
-  const short = `${month} ${d.date()}, ${d.year()}`;
+  const short = `${ordinalDate} ${month}, ${d.year()}`;
   const time = `${hour12Hour}:${minutes2Digits} ${time12Hour}`;
   const timeWithMilliseconds = `${hour12Hour}:${minutes2Digits}:${milliseconds} ${time12Hour}`;
 
@@ -38,7 +38,7 @@ export const formatDate = (
     case 'time':
       return time;
     case 'semi-full':
-      return `${ordinalDate} ${month}, ${time}`;
+      return `${month} ${ordinalDate}, ${time}`;
     default:
       return `${short}, ${timeWithMilliseconds}`;
   }

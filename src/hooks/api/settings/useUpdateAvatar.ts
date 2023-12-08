@@ -1,15 +1,11 @@
 import { UseMutationOptions } from '@tanstack/react-query';
 import { useTMutation } from 'hooks/api/useTMutation';
 
-export function useUpdateProfile(
+export function useUpdateAvatar(
   options?: UseMutationOptions<any, unknown, void, unknown>
 ) {
-  return useTMutation<
-    { firstName: string; lastName: string; phone: string },
-    null
-  >({
-    method: 'put',
-    url: '/profile',
+  return useTMutation({
+    url: '/profile/avatar',
     service: 'auth',
     options,
   });

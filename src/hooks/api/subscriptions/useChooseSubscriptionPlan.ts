@@ -1,16 +1,19 @@
 import { UseMutationOptions } from '@tanstack/react-query';
 import { useTMutation } from 'hooks/api/useTMutation';
 
-export function useUpdateProfile(
+export function useChooseSubscriptionPlan(
   options?: UseMutationOptions<any, unknown, void, unknown>
 ) {
   return useTMutation<
-    { firstName: string; lastName: string; phone: string },
-    null
+    {
+      plan?: string;
+      months: number;
+      paymentMethod: string;
+    },
+    any
   >({
-    method: 'put',
-    url: '/profile',
-    service: 'auth',
+    url: '/subscription/initiate',
+    service: 'billing',
     options,
   });
 }

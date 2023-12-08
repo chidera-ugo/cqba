@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { IsEmpty } from 'components/data-states/IsEmpty';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
 import { useCopyToClipboard } from 'hooks/commons/useCopyToClipboard';
@@ -10,8 +11,9 @@ export const VirtualAccounts = () => {
   const { copyToClipboard } = useCopyToClipboard();
 
   if (isLoading) return <IsLoading />;
-  if (isError || !primaryWallet)
-    return <IsError description={'Failed to get your accounts'} />;
+  if (isError) return <IsError description={'Failed to get your accounts'} />;
+
+  if (!primaryWallet) return <IsEmpty text={'No virtual acccounts yet'} />;
 
   return (
     <>

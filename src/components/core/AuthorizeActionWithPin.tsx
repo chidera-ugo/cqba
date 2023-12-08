@@ -44,7 +44,7 @@ export const AuthorizeActionWithPin = ({
   return (
     <RightModalWrapper
       title={title}
-      hideBackground={!showBackground}
+      hideBackdrop={!showBackground}
       show={show}
       closeModal={close}
     >

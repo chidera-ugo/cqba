@@ -18,6 +18,7 @@ const initialState: State = {
   user: null,
   redirectUrl: '',
   hasSetPin: false,
+  hasChoosenPlan: false,
   isInitializing: true,
   screenSize: null,
   tokens: null,

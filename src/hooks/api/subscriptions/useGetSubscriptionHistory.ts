@@ -1,11 +1,29 @@
 import { useTQuery } from 'hooks/api/useTQuery';
-import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { PaginatedResponse } from 'types/Table';
 
-export function useGetSubscriptionHistory() {
-  const { isVerified } = useIsVerified();
+export enum SubscriptionStatus {
+  Active = 'active',
+  Expired = 'expired',
+  RenewalFailed = 'renewal_failed',
+}
 
-  return useTQuery<PaginatedResponse<any>>({
+export interface SubscriptionHistory {
+  _id: string;
+  plan: Plan;
+  status: SubscriptionStatus;
+  trial: boolean;
+  endingAt: string;
+  startedAt: string;
+  renewAt: string;
+}
+
+interface Plan {
+  _id: string;
+  name: string;
+}
+
+export function useGetSubscriptionHistory() {
+  return useTQuery<PaginatedResponse<SubscriptionHistory>>({
     queryKey: ['subscription_history'],
     url: `/subscription/history`,
     service: 'billing',
@@ -13,7 +31,6 @@ export function useGetSubscriptionHistory() {
       staleTime: Infinity,
       meta: {
         silent: true,
-        enabled: isVerified,
       },
     },
   });

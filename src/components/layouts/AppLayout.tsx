@@ -1,10 +1,12 @@
 import clsx from 'clsx';
+import { LogoutButton } from 'components/buttons/Logout';
 import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { CreatePin } from 'components/modules/core/CreatePin';
+import { ChoosePlan } from 'components/modules/subscriptions/ChoosePlan';
 import { IdleTimer } from 'components/modules/IdleTimer';
-import { VerifyYourAccount } from 'components/modules/kyc/VerifyYourAccount';
 import { PageHead } from 'components/primary/PageHead';
 import { ChevronRight } from 'components/svgs/navigation/Chevrons';
+import { copyrightText } from 'constants/copyrightText';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useNavigationItems } from 'hooks/dashboard/useNavigationItems';
 import { useIsKycFlow } from 'hooks/kyc/useIsKycFlow';
@@ -20,7 +22,6 @@ import { useProtectedRoutesGuard } from 'hooks/app/useProtectedRoutesGuard';
 export interface Props {
   title?: string;
   headerSlot?: JSX.Element;
-  requiresVerification?: boolean;
   back?: string;
   hideSideNavigation?: boolean;
   childrenClassName?: string;
@@ -33,15 +34,17 @@ export const AppLayout = ({
   headerSlot,
   title,
   back,
-  requiresVerification,
-  hideSideNavigation,
   childrenClassName,
   breadCrumbs,
   breadCrumbsSlot,
+  ...props
 }: PropsWithChildren<Props>) => {
   const { userExists } = useProtectedRoutesGuard();
 
-  const { screenSize, user } = useAppContext().state;
+  const { screenSize, user, hasChoosenPlan } = useAppContext().state;
+
+  const shouldSelectFirstPlan = !hasChoosenPlan && !user?.hasActivePlan;
+  const hideSideNavigation = props.hideSideNavigation || shouldSelectFirstPlan;
 
   const { isVerified } = useIsVerified();
   const { isKycFlow } = useIsKycFlow();
@@ -69,7 +72,9 @@ export const AppLayout = ({
         <IdleTimer />
 
         <div className='disable-scrolling 1024:flex'>
-          {!hideSideNavigation && (!screenSize || screenSize?.['desktop']) ? (
+          {!hideSideNavigation &&
+          !shouldSelectFirstPlan &&
+          (!screenSize || screenSize?.['desktop']) ? (
             <div className='hidden w-[324px] 1024:block'>
               <SideNavigation />
             </div>
@@ -84,16 +89,16 @@ export const AppLayout = ({
             <AppHeader
               {...{
                 back,
-                hideSideNavigation,
                 title,
+                hideSideNavigation,
               }}
-              className={!isKycFlow ? 'border-b' : ''}
+              className={!isKycFlow || shouldSelectFirstPlan ? 'border-b' : ''}
             >
-              {headerSlot}
+              {shouldSelectFirstPlan ? <LogoutButton /> : headerSlot}
             </AppHeader>
 
-            {breadCrumbs && (
-              <div className='app-container x-between sticky left-0 top-16 z-[1000] -ml-3 overflow-x-auto bg-white bg-opacity-80 backdrop-blur-md 640:h-16 1024:top-20'>
+            {breadCrumbs && !shouldSelectFirstPlan && (
+              <div className='app-container x-between nav_bar sticky left-0 top-14 z-[1000] -ml-2 overflow-x-auto 640:h-16 1024:top-20'>
                 <div className='flex gap-1'>
                   {breadCrumbs?.map(({ url, title }, i) => {
                     return (
@@ -102,7 +107,7 @@ export const AppLayout = ({
                           <Link
                             href={url}
                             className={clsx(
-                              'my-auto gap-3 px-3 py-2.5 text-center text-sm font-medium transition-colors',
+                              'my-auto gap-3 px-2 py-2.5 text-center text-sm font-medium transition-colors',
                               i === breadCrumbs.length - 1
                                 ? 'text-primary-main'
                                 : 'text-neutral-400 hover:text-black'
@@ -113,7 +118,7 @@ export const AppLayout = ({
                         ) : (
                           <div
                             className={clsx(
-                              'my-auto gap-3 px-3 py-2.5 text-center text-sm font-medium transition-colors',
+                              'my-auto gap-3 px-2 py-2.5 text-center text-sm font-medium transition-colors',
                               i === breadCrumbs.length - 1
                                 ? 'text-primary-main'
                                 : 'text-neutral-400 hover:text-black'
@@ -139,19 +144,26 @@ export const AppLayout = ({
 
             <div
               className={clsx(
-                !!childrenClassName
+                shouldSelectFirstPlan
+                  ? 'my-5 640:my-7'
+                  : !!childrenClassName
                   ? childrenClassName
                   : !!breadCrumbs
                   ? 'app-container mb-5 mt-3 640:mb-7'
-                  : 'app-container my-5 640:my-7'
+                  : 'app-container my-5 640:my-7',
+                'relative z-10 min-h-screen'
               )}
             >
-              {requiresVerification && !isVerified ? (
-                <VerifyYourAccount />
-              ) : (
-                children
-              )}
+              {shouldSelectFirstPlan ? <ChoosePlan /> : children}
             </div>
+
+            <p
+              className={
+                'mt-auto pb-3 text-center text-xs text-neutral-700 640:text-sm'
+              }
+            >
+              {copyrightText}
+            </p>
           </main>
         </div>
       </div>

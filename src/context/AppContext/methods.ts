@@ -14,6 +14,8 @@ export function reducer(state: State, action: Action): State {
     }
     case 'update_has_set_pin':
       return { ...state, hasSetPin: action.payload };
+    case 'update_has_choosen_plan':
+      return { ...state, hasChoosenPlan: action.payload };
     case 'saveTokens': {
       const tokens = action.payload;
 

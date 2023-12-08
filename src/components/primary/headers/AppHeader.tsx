@@ -6,7 +6,6 @@ import { Notifications } from 'components/modules/app/Notifications';
 import { MobileMenu } from 'components/primary/MobileMenu';
 import { PointerLeft } from 'components/svgs/navigation/Arrows';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
-import { useIsKycFlow } from 'hooks/kyc/useIsKycFlow';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PropsWithChildren } from 'react';
@@ -25,12 +24,10 @@ export const AppHeader = ({
   hideSideNavigation,
   className,
 }: PropsWithChildren<Props>) => {
-  const { isKycFlow } = useIsKycFlow();
-
   return (
     <header
       className={clsx(
-        'sticky top-0 left-0 z-[1000] h-14 border-neutral-310 bg-white bg-opacity-80 backdrop-blur-md 1024:h-20',
+        'nav_bar sticky top-0 left-0 z-[1000] h-14 border-neutral-310 1024:h-20',
         className
       )}
     >
@@ -54,7 +51,7 @@ export const AppHeader = ({
         )}
 
         <div className='flex'>
-          {!isKycFlow && (
+          {!hideSideNavigation && (
             <div className={'hidden gap-4 1024:flex'}>
               <Notifications />
               <CurrentUserAvatar />

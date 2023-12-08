@@ -1,7 +1,9 @@
 import { UpdateAvatar } from 'components/forms/settings/UpdateProfileInformationForm/UpdateAvatar';
 import { AppToast } from 'components/primary/AppToast';
 import { useAppContext } from 'context/AppContext';
+import FormData from 'form-data';
 import { Formik } from 'formik';
+import { useUpdateAvatar } from 'hooks/api/settings/useUpdateAvatar';
 import { useUpdateProfile } from 'hooks/api/settings/useUpdateProfile';
 import { toast } from 'react-toastify';
 import { initialValues } from './initialValues';
@@ -10,6 +12,9 @@ import { Form } from './Form';
 
 export const UpdateProfileInformationForm = () => {
   const { getCurrentUser } = useAppContext();
+
+  const { isLoading: uploadingAvatar, mutate: uploadAvatar } =
+    useUpdateAvatar();
 
   const { isLoading, mutate } = useUpdateProfile({
     onSuccess() {
@@ -22,12 +27,26 @@ export const UpdateProfileInformationForm = () => {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={({ role: _, phoneNumber, ...values }) => {
-        mutate({
-          ...values,
-          phone: phoneNumber,
-          avatar: values.avatar.base64Url,
-        });
+      onSubmit={({ role: _, avatar, phoneNumber, ...values }) => {
+        if (avatar.file) {
+          const body = new FormData();
+
+          body.append('avatar', avatar?.file);
+
+          uploadAvatar(body, {
+            onSuccess() {
+              mutate({
+                ...values,
+                phone: phoneNumber,
+              });
+            },
+          });
+        } else {
+          mutate({
+            ...values,
+            phone: phoneNumber,
+          });
+        }
       }}
       validateOnBlur={false}
     >
@@ -44,7 +63,10 @@ export const UpdateProfileInformationForm = () => {
             />
 
             <div className={'mt-8 border-t border-neutral-200 pt-5'}>
-              <Form submitting={isLoading} formikProps={formikProps} />
+              <Form
+                submitting={isLoading || uploadingAvatar}
+                formikProps={formikProps}
+              />
             </div>
           </>
         );

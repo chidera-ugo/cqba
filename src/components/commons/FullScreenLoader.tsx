@@ -24,7 +24,13 @@ export const FullScreenLoader = ({
     <div>
       {asPage && <PageHead />}
 
-      <Modal type='fade' {...{ show }} {...props} white={white || asPage}>
+      <Modal
+        type='fade'
+        backdropClassname={'bg-black bg-opacity-80'}
+        {...{ show }}
+        {...props}
+        white={white || asPage}
+      >
         <div
           className={clsx(
             white && 'white',

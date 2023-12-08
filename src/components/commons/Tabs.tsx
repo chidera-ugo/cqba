@@ -10,6 +10,8 @@ type Props = {
   currentTab: TabOption;
   setCurrentTab: Dispatch<SetStateAction<TabOption>>;
   layoutId?: string; // To track the tab animation
+  sliderClassname?: string;
+  tabClassname?: string;
 };
 
 export const Tabs = ({
@@ -18,15 +20,17 @@ export const Tabs = ({
   layoutId,
   currentTab,
   setCurrentTab,
+  sliderClassname,
+  tabClassname,
 }: Props) => {
   return (
     <div
       className={clsx(
-        className,
-        'hidden-scrollbar w-full overflow-x-auto rounded-lg border border-neutral-300 bg-white'
+        className ?? 'rounded-lg',
+        'hidden-scrollbar w-full overflow-x-auto bg-neutral-100'
       )}
     >
-      <div className={`my-auto flex h-full w-full p-[1px] align-middle`}>
+      <div className={`my-auto flex h-full w-full p-1 align-middle`}>
         {tabs.map((tab) => {
           const displayValue = tab.name;
 
@@ -38,12 +42,15 @@ export const Tabs = ({
               id={`tabs-${displayValue}`}
               key={displayValue}
               type='button'
-              className='relative w-full transition-none'
+              className={clsx(
+                'relative h-9 px-3 transition-none',
+                tabClassname ?? 'w-full'
+              )}
             >
               <span
                 className={clsx(
-                  `y-center smooth relative z-10 h-full flex-shrink-0 text-xs font-semibold 340:text-sm`,
-                  isActive ? 'text-white' : 'text-neutral-700'
+                  `y-center smooth relative z-10 h-full flex-shrink-0 text-xs font-medium 340:text-sm`,
+                  isActive ? 'text-white' : 'text-neutral-500'
                 )}
               >
                 {displayValue}
@@ -51,11 +58,17 @@ export const Tabs = ({
 
               {isActive && (
                 <motion.div
-                  className='absolute inset-0 z-0 h-full w-full'
+                  className='absolute inset-0 z-0 h-9 w-full'
+                  transition={{
+                    duration: 0.1,
+                  }}
                   layoutId={layoutId}
                 >
                   <div
-                    className={`h-full w-full rounded-md bg-black shadow-sm`}
+                    className={clsx(
+                      `h-full w-full bg-black shadow-sm`,
+                      sliderClassname ?? 'rounded-md'
+                    )}
                   ></div>
                 </motion.div>
               )}
