@@ -136,7 +136,7 @@ export const SubscriptionSummary = () => {
                 onClick={() => {
                   mutate({
                     plan: data?.plan?._id,
-                    // Todo: Send correct number of months
+                    // Todo: Pass correct number of months
                     months: 1,
                     paymentMethod: 'wallet',
                   });

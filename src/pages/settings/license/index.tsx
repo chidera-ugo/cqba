@@ -5,7 +5,7 @@ import { SubscriptionSummary } from 'components/modules/subscriptions/Subscripti
 
 export default function License() {
   return (
-    <SettingsLayout title={'License'}>
+    <SettingsLayout>
       <SubscriptionSummary />
 
       <div className='mt-6 min-h-[500px] grid-cols-12 gap-5 1180:grid'>

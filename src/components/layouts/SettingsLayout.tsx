@@ -14,7 +14,7 @@ export const SettingsLayout = ({
     <AppLayout childrenClassName={'mb-5 640:mb-7'} title={title ?? 'Settings'}>
       <SettingsTabs />
 
-      <div className='app-container mt-5'>{children}</div>
+      <div className='app-container mt-2'>{children}</div>
     </AppLayout>
   );
 };

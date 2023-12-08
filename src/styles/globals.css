@@ -48,7 +48,7 @@
   h4,
   h5,
   h6 {
-    @apply tracking-[-0.5px];
+    @apply tracking-[-0.4px];
   }
 
   label,

@@ -8,11 +8,13 @@ interface Props {
   choosePlan: (planId: string) => void;
   plans?: SubscriptionPlan[];
   className?: string;
+  isEligibleForTrial?: boolean;
 }
 
 export const PlanCards = ({
   currentTab,
   choosePlan,
+  isEligibleForTrial,
   plans,
   className,
 }: Props) => {
@@ -30,6 +32,7 @@ export const PlanCards = ({
               isMostPopular && 'bg-primary-main',
               className
             )}
+            isEligibleForTrial={isEligibleForTrial}
             isActive={_id === data?.plan?._id}
             isMostPopular={isMostPopular}
             duration={currentTab}
@@ -38,7 +41,9 @@ export const PlanCards = ({
             planName={name}
             amount={amount.NGN}
             choosePlan={() => choosePlan(_id)}
-            buttonClassname={i === 2 ? 'dark-button' : 'secondary-button'}
+            buttonClassname={
+              i === plans?.length - 1 ? 'dark-button' : 'secondary-button'
+            }
             description={description}
           />
         );

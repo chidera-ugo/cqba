@@ -15,6 +15,7 @@ interface Props {
   buttonClassname?: string;
   choosePlan: () => void;
   processing?: boolean;
+  isEligibleForTrial?: boolean;
 }
 
 export const PlanCard = ({
@@ -29,6 +30,7 @@ export const PlanCard = ({
   choosePlan,
   isActive,
   processing,
+  isEligibleForTrial,
 }: PropsWithChildren<Props>) => {
   return (
     <div className={clsx('card y-between relative rounded-2xl', className)}>
@@ -120,14 +122,16 @@ export const PlanCard = ({
           </button>
         )}
 
-        <p
-          className={clsx(
-            'mt-3 text-center text-sm italic',
-            isMostPopular ? 'text-white' : 'text-neutral-500'
-          )}
-        >
-          5 days free trial
-        </p>
+        {isEligibleForTrial && (
+          <p
+            className={clsx(
+              'mt-3 text-center text-sm italic',
+              isMostPopular ? 'text-white' : 'text-neutral-500'
+            )}
+          >
+            5 days free trial
+          </p>
+        )}
       </div>
     </div>
   );

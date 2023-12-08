@@ -14,10 +14,12 @@ interface Props {
   processing: boolean;
   formRecoveryValues?: Record<string, any> | null;
   currentEmployee?: IEmployee | null;
+  role?: string;
 }
 
 export const Form = ({
   processing,
+  role,
   formikProps,
   currentEmployee,
   formRecoveryValues,
@@ -38,7 +40,7 @@ export const Form = ({
   useEffect(() => {
     if (!formRecoveryValues) return;
 
-    const { firstName, lastName, email, role, phoneNumber } =
+    const { email, role, phoneNumber } =
       sanitizeRecordToRemoveUndefinedAndNulls(
         formRecoveryValues as typeof initialValues
       );
@@ -46,8 +48,6 @@ export const Form = ({
     setValues(
       {
         ...values,
-        firstName,
-        lastName,
         email,
         role,
         phoneNumber,
@@ -57,16 +57,20 @@ export const Form = ({
   }, [formRecoveryValues]);
 
   useEffect(() => {
+    if (!role) return;
+
+    setFieldValue('role', role);
+  }, [role]);
+
+  useEffect(() => {
     if (!currentEmployee) return;
 
-    const { firstName, lastName, email, role, phone } =
+    const { email, role, phone } =
       sanitizeRecordToRemoveUndefinedAndNulls(currentEmployee);
 
     setValues(
       {
         ...values,
-        firstName,
-        lastName,
         email,
         phoneNumber: phone,
         role: role === 'owner' ? '' : role,
@@ -79,12 +83,7 @@ export const Form = ({
     <FormikForm onSubmit={handleSubmit}>
       {!isActive && (
         <>
-          <div className='gap-4 880:flex'>
-            <Input lazyFocus label='First Name' name='firstName' />
-            <Input label='Last Name' name='lastName' />
-          </div>
-
-          <Input label='Email' name='email' />
+          <Input lazyFocus label='Email' name='email' />
 
           <PhoneNumberInput
             label='Phone Number (Optional)'

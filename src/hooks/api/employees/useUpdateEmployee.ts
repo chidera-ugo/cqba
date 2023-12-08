@@ -2,8 +2,6 @@ import { UseMutationOptions } from '@tanstack/react-query';
 import { useTMutation } from 'hooks/api/useTMutation';
 
 interface UpdateEmployeeDto {
-  firstName: string;
-  lastName: string;
   email: string;
   phone: string;
   role: string;

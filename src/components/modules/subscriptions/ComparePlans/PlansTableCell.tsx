@@ -3,7 +3,21 @@ import { RowPlan } from 'components/modules/subscriptions/ComparePlans/getPlansR
 export const PlansTableCell = ({ plan }: { plan?: RowPlan }) => {
   if (!plan) return <></>;
 
-  return <>{!plan.available ? <Cross /> : <Check />}</>;
+  const { available, freeUnits, featureName } = plan;
+
+  return (
+    <>
+      {!available ? (
+        <Cross />
+      ) : freeUnits && freeUnits === -1 ? (
+        'Unlimited'
+      ) : freeUnits && freeUnits > 1 ? (
+        `Up to ${freeUnits} ${featureName}`
+      ) : (
+        <Check />
+      )}
+    </>
+  );
 };
 
 const Cross = () => {

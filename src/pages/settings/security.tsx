@@ -1,73 +1,101 @@
 import clsx from 'clsx';
+import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { SettingsLayout } from 'components/layouts/SettingsLayout';
 import { ChangePassword } from 'components/modules/settings/security/ChangePassword';
 import { ChangePin } from 'components/modules/settings/security/ChangePin';
 import { ResetPin } from 'components/modules/settings/security/ResetPin';
 import { useAppContext } from 'context/AppContext';
+import { useLogout } from 'hooks/api/auth/useLogout';
+import { useDestroySession } from 'hooks/app/useDestroySession';
 import { useRouter } from 'next/router';
-import { Fragment } from 'react';
+import { Fragment, ReactNode } from 'react';
 
 export default function Security() {
   const { replace, pathname } = useRouter();
 
   const { user } = useAppContext().state;
 
+  const { destroySession } = useDestroySession();
+
+  const { mutate, isLoading } = useLogout({
+    onSuccess: destroySession,
+  });
+
   const securitySettings: {
-    buttonText: string;
+    button: ReactNode;
     title: string;
     description: string;
     disabled?: boolean;
-    onClick: () => void;
   }[] = [
     {
       title: 'Change Password',
       description: `When changing your password, we strongly recommend using a secure password you don't use anywhere else.`,
-      buttonText: 'Change Password',
-      onClick: () => replace({ pathname, query: { _m: 'password' } }),
+      button: (
+        <button
+          onClick={() => replace({ pathname, query: { _m: 'password' } })}
+          className='primary-button h-10 px-3 text-sm'
+        >
+          Change Password
+        </button>
+      ),
     },
     {
       title: 'Transaction Pin',
       description: `When changing your pin, we strongly recommend using a secure pin you don't use anywhere else.`,
-      buttonText: 'Change Pin',
       disabled: !user?.pinSet,
-      onClick: () => replace({ pathname, query: { _m: 'pin' } }),
+      button: (
+        <button
+          onClick={() => replace({ pathname, query: { _m: 'pin' } })}
+          className='dark-button h-10 px-3 text-sm'
+        >
+          Change Pin
+        </button>
+      ),
+    },
+    {
+      title: 'Log Out',
+      description: `Log out of all existing sessions`,
+      button: (
+        <button
+          type={'button'}
+          onClick={() => mutate(null)}
+          className='h-10 w-[100px] rounded-full bg-red-600 px-3 text-sm text-white hover:bg-red-500'
+        >
+          Logout
+        </button>
+      ),
     },
   ];
 
   return (
     <SettingsLayout>
+      <FullScreenLoader show={isLoading} id={'security'} />
+
       <ChangePin hasSetPin={!!user?.pinSet} />
       <ResetPin hasSetPin={!!user?.pinSet} />
       <ChangePassword />
 
-      {securitySettings.map(
-        ({ title, description, buttonText, disabled, onClick }) => {
-          if (disabled) return <Fragment key={title}></Fragment>;
+      {securitySettings.map(({ title, description, disabled, button }) => {
+        if (disabled) return <Fragment key={title}></Fragment>;
 
-          return (
-            <div
-              className={clsx(
-                'x-between mb-5 block w-full rounded-xl border border-neutral-200 p-5 640:flex'
-              )}
-              key={title}
-            >
-              <div>
-                <h6>{title}</h6>
-                <p className='mt-1 max-w-[500px] font-normal leading-6 text-neutral-500'>
-                  {description}
-                </p>
-              </div>
-
-              <button
-                onClick={onClick}
-                className='dark-button mt-4 h-10 px-3 text-sm 640:my-auto'
-              >
-                {buttonText}
-              </button>
+        return (
+          <div
+            className={clsx(
+              'justify-between-between card mb-5 w-full 640:flex'
+            )}
+            key={title}
+          >
+            <div className={'w-full'}>
+              <h6 className={'text-[20px]'}>{title}</h6>
+              <p className='mt-1 max-w-[500px] leading-6 text-neutral-500'>
+                {description}
+              </p>
             </div>
-          );
-        }
-      )}
+
+            <div className={'mt-4 flex-shrink-0 640:my-auto'}>{button}</div>
+          </div>
+        );
+      })}
     </SettingsLayout>
   );
 }

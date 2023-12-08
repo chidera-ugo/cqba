@@ -4,7 +4,7 @@ import { ChoosePlan } from 'components/modules/subscriptions/ChoosePlan';
 export default function ChangePlan() {
   return (
     <AppLayout
-      title={'Change Plan'}
+      title={'Settings'}
       breadCrumbs={[
         {
           title: 'License',

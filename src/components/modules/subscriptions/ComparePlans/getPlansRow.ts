@@ -4,6 +4,7 @@ import {
 } from 'hooks/api/subscriptions/useGetAllSubscriptionPlans';
 
 export type RowPlan = {
+  featureName?: string;
   freeUnits?: number;
   available?: boolean;
   maxUnits?: number;
@@ -64,6 +65,7 @@ export function getPlansRows(data: SubscriptionPlan[]) {
     costPerUnit,
     available,
     maxUnits,
+    name,
   } of features) {
     const existingCode = codes[code];
 
@@ -72,6 +74,7 @@ export function getPlansRows(data: SubscriptionPlan[]) {
       plans: {
         ...existingCode?.plans,
         [planCode]: {
+          featureName: name,
           freeUnits,
           maxUnits,
           available,

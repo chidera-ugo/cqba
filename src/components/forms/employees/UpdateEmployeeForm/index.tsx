@@ -1,4 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
+import { UserRole } from 'enums/employee_enum';
 import { Formik } from 'formik';
 import { useUpdateEmployee } from 'hooks/api/employees/useUpdateEmployee';
 import { IEmployee } from 'hooks/api/employees/useGetAllEmployees';
@@ -10,10 +11,12 @@ interface Props {
   onSuccess: () => void;
   formRecoveryValues?: Record<string, any> | null;
   currentEmployee?: IEmployee | null;
+  role?: UserRole;
 }
 
 export const UpdateEmployeeForm = ({
   onSuccess,
+  role,
   currentEmployee,
   formRecoveryValues,
 }: Props) => {
@@ -22,6 +25,7 @@ export const UpdateEmployeeForm = ({
   const { isLoading, mutate } = useUpdateEmployee(currentEmployee?._id, {
     onSuccess() {
       queryClient.invalidateQueries(['employees']);
+      queryClient.invalidateQueries(['permission_group_users']);
       onSuccess();
     },
   });
@@ -30,9 +34,8 @@ export const UpdateEmployeeForm = ({
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={({ email, phoneNumber, role, ...values }) => {
+      onSubmit={({ email, phoneNumber, role }) => {
         mutate({
-          ...values,
           role: role.toLowerCase(),
           phone: phoneNumber,
           email: email.trim(),
@@ -44,6 +47,7 @@ export const UpdateEmployeeForm = ({
         return (
           <Form
             {...{
+              role,
               formikProps,
               processing: isLoading,
               currentEmployee,

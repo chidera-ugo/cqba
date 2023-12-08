@@ -43,7 +43,9 @@ export const AppLayout = ({
 
   const { screenSize, user, hasChoosenPlan } = useAppContext().state;
 
-  const shouldSelectFirstPlan = !hasChoosenPlan && !user?.hasActivePlan;
+  const shouldSelectFirstPlan =
+    !hasChoosenPlan && !user?.hasActivePlan && user?.role === 'owner';
+
   const hideSideNavigation = props.hideSideNavigation || shouldSelectFirstPlan;
 
   const { isVerified } = useIsVerified();
