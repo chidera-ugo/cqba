@@ -116,9 +116,9 @@ export const Form = ({
       />
       <GetTransactionFee
         amount={values.amount}
+        budgetId={values.budget}
         minimumAmount={10}
-        transactionType='other-bank-transfer'
-        getValue={(val) => setFieldValue('fee', val)}
+        emitValue={(val) => setFieldValue('fee', val)}
         emitIsProcessing={(val) =>
           setIsProcessing((prev) => ({
             ...prev,

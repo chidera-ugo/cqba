@@ -133,7 +133,7 @@ export const ActiveBudgets = ({
               {...{
                 isLoading,
                 isError,
-                data,
+                data: res,
               }}
             />
           </div>

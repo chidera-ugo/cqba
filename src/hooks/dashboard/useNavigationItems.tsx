@@ -33,7 +33,6 @@ export const useNavigationItems = (role?: UserRole) => {
       {
         icon: <BadgeCheck />,
         title: 'Get Started',
-        url: '/kyc',
         id: 'kyc',
         showWhenUnverified: true,
       },
@@ -129,7 +128,7 @@ export const useNavigationItems = (role?: UserRole) => {
       if (
         !!pathname
           .split('/')[1]
-          ?.includes(i?.url ?? convertToUrlString(i?.title))
+          ?.includes(i?.id ?? convertToUrlString(i?.title))
       )
         isValid = true;
     }

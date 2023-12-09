@@ -6,6 +6,7 @@ export type Service =
   | 'transactions'
   | 'employees'
   | 'overview'
+  | 'billing'
   | 'category'
   | 'wallet'
   | 'settings'

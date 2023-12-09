@@ -1,3 +1,4 @@
+import { useAppContext } from 'context/AppContext';
 import { AnimatePresence, motion } from 'framer-motion';
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { Portal } from './Portal';
@@ -13,9 +14,12 @@ export const Modal = ({
   duration = 0.2,
   closeOnClickOutside,
   white,
-  hideBackground,
+  hideBackdrop,
+  portalClassname,
+  backdropClassname,
 }: PropsWithChildren<ModalProps>) => {
   const [grow, setGrow] = useState(false);
+  const screenSizes = useAppContext().state.screenSize;
 
   useEffect(() => {
     let timeout: any;
@@ -35,7 +39,8 @@ export const Modal = ({
           <div
             id={'portal-presence'}
             className={clsx(
-              `disable-scrolling fixed inset-0 z-[1200] w-screen`,
+              `disable-scrolling fixed inset-0 w-screen`,
+              portalClassname ?? 'z-[1200]',
               type !== 'right' && type !== 'left' ? 'y-center' : ''
             )}
           >
@@ -46,7 +51,7 @@ export const Modal = ({
               onClick={
                 closeOnClickOutside
                   ? closeModal
-                  : hideBackground
+                  : hideBackdrop && type !== 'center'
                   ? undefined
                   : () => setGrow(true)
               }
@@ -64,11 +69,11 @@ export const Modal = ({
               className={clsx(
                 `no-highlight absolute inset-0 h-full w-full`,
                 closeOnClickOutside && 'cursor-pointer',
-                hideBackground
+                hideBackdrop
                   ? 'bg-transparent'
                   : white
                   ? 'bg-white'
-                  : 'bg-black bg-opacity-60'
+                  : backdropClassname ?? 'bg-black bg-opacity-60'
               )}
             />
 
@@ -85,14 +90,18 @@ export const Modal = ({
                 },
                 hide: {
                   y:
-                    type === 'center'
-                      ? '75vh'
+                    type === 'center' ||
+                    (type === 'zoom' && screenSizes?.mobile)
+                      ? '100%'
                       : type === 'center-top'
                       ? '-100%'
                       : 0,
                   x: type === 'right' ? '100%' : type === 'left' ? '-200%' : 0,
-                  scale: type === 'zoom' ? 0 : 1,
-                  opacity: type === 'fade' ? 0 : 1,
+                  scale: type === 'zoom' && !screenSizes?.mobile ? 0.5 : 1,
+                  opacity:
+                    type === 'fade' || (type === 'zoom' && !screenSizes?.mobile)
+                      ? 0
+                      : 1,
                 },
               }}
               transition={{
@@ -103,7 +112,7 @@ export const Modal = ({
                 if (e.target.id === 'modal-child-wrapper') {
                   if (closeOnClickOutside && closeModal) {
                     closeModal();
-                  } else if (!hideBackground) {
+                  } else if (!hideBackdrop && type !== 'center') {
                     setGrow(true);
                   }
                 }

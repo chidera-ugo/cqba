@@ -153,7 +153,7 @@ export function phoneNumberTest(
   }
 }
 
-export function validateFile(val?: any) {
-  if (!val.file) return true;
-  return !!val.file && !!val.id && !!val.url;
+export function validateFile(val?: any, required?: boolean) {
+  if (!val?.file && !required) return true;
+  return !!val?.file && !!val?.id && !!val?.url;
 }

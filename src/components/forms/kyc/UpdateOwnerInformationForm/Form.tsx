@@ -99,6 +99,8 @@ export const Form = ({
     );
   }, [currentOwner]);
 
+  const maxDob = dayjs().year(dayjs().year() - 18);
+
   return (
     <FormikForm onSubmit={handleSubmit}>
       <ImageViewer
@@ -121,9 +123,8 @@ export const Form = ({
         limit={8}
         shouldValidate
         fieldType='dateOfBirth'
-        maxDate={dayjs()
-          .year(dayjs().year() - 18)
-          .toDate()}
+        defaultCalendarValue={maxDob}
+        maxDate={maxDob.toDate()}
       />
 
       <PhoneNumberInput

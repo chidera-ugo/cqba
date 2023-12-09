@@ -17,7 +17,7 @@ export const Form = ({ processing, formikProps }: Props) => {
     <FormikForm onSubmit={handleSubmit} className='mt-7'>
       <Input
         label='Business Name'
-        placeholder={'Enter company name'}
+        placeholder={'Enter business name'}
         name='businessName'
         className='w-full'
       />

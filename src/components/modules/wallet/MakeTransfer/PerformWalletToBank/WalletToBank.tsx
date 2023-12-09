@@ -15,6 +15,7 @@ export const WalletToBank = (
   } & FormRecoveryProps<WalletToBankFormRecoveryValues>
 ) => {
   const { isLoading, isError, data } = useGetInstitutions();
+
   const {
     isLoading: loadingWallet,
     isError: walletErrored,

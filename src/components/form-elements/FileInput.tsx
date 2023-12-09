@@ -1,4 +1,5 @@
 import { SmallCheck } from 'components/svgs/others/Check';
+import { imageExtensions } from 'constants/files/image_extensions';
 import { useField, useFormikContext } from 'formik';
 import clsx from 'clsx';
 import { useDropFile } from 'hooks/forms/useDropFile';
@@ -6,6 +7,7 @@ import { useFileSelector } from 'hooks/forms/useFileSelector';
 import { FileField } from 'types/commons';
 import { FileUpload } from 'components/svgs/forms/FileUpload';
 import { ViewUploadedImage } from 'components/modules/commons/ViewUploadedImage';
+import { constructAcceptedFileTypeList } from 'utils/constructors/constructAcceptedFileTypeList';
 
 type Props = JSX.IntrinsicElements['input'] &
   FileField & {
@@ -26,8 +28,6 @@ export const FileInput = ({
   ...props
 }: Props) => {
   const { fileSelector, errorCb } = useFileSelector();
-
-  const imageExtensions = ['jpg', 'png', 'jpeg'];
 
   const extensions = _extensions
     ? _extensions
@@ -57,13 +57,6 @@ export const FileInput = ({
     const extension = chunks[chunks?.length - 1]?.toLowerCase();
 
     return !!(extension && imageExtensions.includes(extension));
-  }
-
-  function constructAcceptList() {
-    if (!extensions?.length) return '';
-    const arr = [];
-    for (const item of extensions) arr.push(`.${item}`);
-    return arr.join(', ');
   }
 
   return (
@@ -144,7 +137,7 @@ export const FileInput = ({
           }}
           disabled={props.disabled}
           className='hidden'
-          accept={constructAcceptList()}
+          accept={constructAcceptedFileTypeList(extensions)}
         />
       </label>
 

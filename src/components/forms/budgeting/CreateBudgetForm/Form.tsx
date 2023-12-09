@@ -3,7 +3,10 @@ import { Select } from 'components/form-elements/Select';
 import { TextArea } from 'components/form-elements/Textarea';
 import { CreateBudgetFormRecoveryValues } from 'components/forms/budgeting/CreateBudgetForm/index';
 import { Form as FormikForm, FormikProps } from 'formik';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
 import { useEffect } from 'react';
+import { DatePickerValue } from 'types/commons';
+import { formatAmount } from 'utils/formatters/formatAmount';
 import { initialValues } from './initialValues';
 import dayjs from 'dayjs';
 import { DatePicker } from 'components/form-elements/DatePicker';
@@ -17,6 +20,7 @@ interface Props {
   recoveryValues?: CreateBudgetFormRecoveryValues;
   currency?: string;
   isOwner?: boolean;
+  budget?: IBudget;
 }
 
 export const Form = ({
@@ -25,6 +29,7 @@ export const Form = ({
   recoveryValues,
   processing,
   isOwner,
+  budget,
 }: Props) => {
   const { handleSubmit, setValues, setFieldValue, values } = formikProps;
 
@@ -36,6 +41,27 @@ export const Form = ({
       ...recoveryValues,
     });
   }, [recoveryValues]);
+
+  useEffect(() => {
+    if (!budget) return;
+
+    const { amount, expiry, name, description } = budget;
+
+    const expiryDate = new Date(expiry);
+
+    setValues({
+      ...values,
+      title: name,
+      expires: !!expiry,
+      expiryDate: !expiry
+        ? ({} as DatePickerValue)
+        : { value: expiryDate.toISOString(), calendarValue: expiryDate },
+      amount: formatAmount({
+        value: amount / 100,
+      }),
+      description,
+    });
+  }, [budget]);
 
   return (
     <FormikForm onSubmit={handleSubmit}>

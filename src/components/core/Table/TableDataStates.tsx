@@ -1,8 +1,7 @@
 import clsx from 'clsx';
+import { IsEmpty } from 'components/data-states/IsEmpty';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
-import { NothingHere } from 'components/illustrations/NothingHere';
-import { SimpleInformation } from 'components/modules/commons/SimpleInformation';
 import { PaginatedResponse } from 'types/Table';
 
 type Props = {
@@ -31,7 +30,11 @@ export const TableDataStates = ({
   return (
     <>
       {canNotShowData ? (
-        <IsEmpty {...{ emptyTableText, emptyTableIcon, minimal }} />
+        <IsEmpty
+          text={emptyTableText}
+          icon={emptyTableIcon}
+          minimal={minimal}
+        />
       ) : isLoading && !res?.docs?.length ? (
         <IsLoading
           className={clsx(
@@ -56,37 +59,5 @@ export const TableDataStates = ({
         <IsEmpty {...{ emptyTableText, emptyTableIcon, minimal }} />
       ) : null}
     </>
-  );
-};
-
-export const IsEmpty = ({
-  emptyTableText,
-  emptyTableIcon,
-  minimal,
-}: {
-  emptyTableText?: string;
-  emptyTableIcon?: JSX.Element;
-  minimal?: boolean;
-}) => {
-  return (
-    <div className={clsx('y-center h-full px-5', minimal ? 'py-10' : 'py-20')}>
-      {emptyTableText && (
-        <SimpleInformation
-          title={
-            minimal ? undefined : (
-              <span className='text-xl'>Nothing to show (yet)</span>
-            )
-          }
-          description={<span className='block 640:mt-1'>{emptyTableText}</span>}
-          icon={
-            emptyTableIcon ? (
-              emptyTableIcon
-            ) : minimal ? undefined : (
-              <NothingHere />
-            )
-          }
-        />
-      )}
-    </div>
   );
 };

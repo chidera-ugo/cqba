@@ -18,7 +18,7 @@ export const AmountInput = ({
   className,
   note,
   onChange,
-  currency = '₦',
+  currency = 'NGN',
   errorBorders,
   setFieldValue,
   error,

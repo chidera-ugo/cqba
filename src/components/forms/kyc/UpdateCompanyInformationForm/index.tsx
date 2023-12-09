@@ -68,8 +68,8 @@ export const UpdateCompanyInformationForm = () => {
           <>
             <FullScreenLoader show={isLoading} />
 
-            <h5>Company Information</h5>
-            <p className='mt-1 font-normal text-neutral-400'>
+            <h5>Business Information</h5>
+            <p className='mt-1 mb-7 text-neutral-500'>
               Provide your company information
             </p>
 

@@ -23,12 +23,14 @@ export type ModalWrapperProps = ModalProps &
 export type ModalProps = {
   type?: 'right' | 'left' | 'center' | 'center-top' | 'zoom' | 'fade';
   show: boolean;
+  portalClassname?: string;
   closeOnClickOutside?: boolean;
   className?: string;
+  backdropClassname?: string;
   duration?: number;
   white?: boolean;
   closeModal?: () => void;
-  hideBackground?: boolean;
+  hideBackdrop?: boolean;
 };
 
 export type CenteredModalWrapperProps = ModalWrapperProps & {
@@ -116,6 +118,7 @@ export const CentredModalWrapper = ({
   mustShowIsDraggable: _,
   backgroundClassname,
   hideHeader,
+  type = 'center',
   ...props
 }: PropsWithChildren<CenteredModalWrapperProps>) => {
   const mobile = useMediaQuery('(max-width: 640px)');
@@ -130,7 +133,7 @@ export const CentredModalWrapper = ({
       )}
       {...{ duration, show }}
       {...props}
-      type='center'
+      type={type}
     >
       <div className='block 640:hidden'></div>
 
@@ -185,7 +188,10 @@ export const CentredModalWrapper = ({
         </div>
 
         <div
-          className={clsx('560:min-w-[400px]', className ?? 'px-4 640:px-8')}
+          className={clsx(
+            'overflow-y-auto 560:min-w-[400px]',
+            className ?? 'px-4 640:px-8'
+          )}
         >
           {children}
         </div>

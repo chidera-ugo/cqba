@@ -15,6 +15,7 @@ type Props = JSX.IntrinsicElements['input'] &
     maxDate?: Date;
     minDate?: Date;
     label: string;
+    defaultCalendarValue?: dayjs.Dayjs;
     name: string;
     setFieldValue: SetFieldValue;
   };
@@ -26,6 +27,7 @@ export const DatePicker = ({
   maxDate,
   minDate,
   setFieldValue,
+  defaultCalendarValue,
   disabled,
   placeholder,
   ...props
@@ -33,6 +35,7 @@ export const DatePicker = ({
   const [field, meta] = useField(name as string);
   const { submitCount } = useFormikContext();
   const id = props.id ?? name;
+  const calendarValue = field?.value?.calendarValue;
 
   return (
     <div className={clsx(className, 'mt-5 w-full')}>
@@ -50,13 +53,10 @@ export const DatePicker = ({
             placeholder={placeholder}
             className={clsx(
               'input y-center w-full',
-              !!field.value.calendarValue ? 'bg-white' : 'bg-neutral-100'
+              !!calendarValue ? 'bg-white' : 'bg-neutral-100'
             )}
-            value={
-              !field.value.calendarValue
-                ? undefined
-                : dayjs(field.value.calendarValue)
-            }
+            defaultPickerValue={defaultCalendarValue}
+            value={!calendarValue ? undefined : dayjs(calendarValue)}
             disabledDate={(d) =>
               !d ||
               (!!maxDate && d.isAfter(dayjs(maxDate))) ||
@@ -66,8 +66,8 @@ export const DatePicker = ({
               if (!value) return;
 
               setFieldValue(name, {
-                value: value.toISOString(),
-                calendarValue: value.toDate(),
+                value: value?.toISOString(),
+                calendarValue: value?.toDate(),
               });
             }}
             size={'large'}

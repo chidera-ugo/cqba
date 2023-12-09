@@ -1,11 +1,11 @@
 import clsx from 'clsx';
-import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { CodeInput } from 'components/form-elements/CodeInput';
+import { SubmitButton } from 'components/form-elements/SubmitButton';
+import { GreenCheck } from 'components/illustrations/Success';
+import { SimpleInformation } from 'components/modules/commons/SimpleInformation';
 import { AppToast } from 'components/primary/AppToast';
 import { AnimateLayout } from 'components/animations/AnimateLayout';
-import { useHandleError } from 'hooks/api/useHandleError';
-import { useMakeDummyHttpRequest } from 'hooks/commons/useMakeDummyHttpRequest';
-import Link from 'next/link';
+import { useChangePin } from 'hooks/api/settings/useChangePin';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -14,35 +14,66 @@ interface Props {
 }
 
 export const ChangePinSteps = ({ closeModal }: Props) => {
-  const [pins, setPins] = useState<Record<string, any>>({});
+  const [pins, setPins] = useState<{
+    current?: string;
+    old?: string;
+    new?: string;
+  }>({
+    current: '',
+    old: '',
+    new: '',
+  });
 
-  const [mode, setMode] = useState<'new' | 'current' | 'confirm'>('current');
+  const [mode, setMode] = useState<'new' | 'current' | 'confirm' | 'success'>(
+    'current'
+  );
 
-  const { handleError } = useHandleError();
-
-  const { mutate, isLoading } = useMakeDummyHttpRequest({
-    onSuccess() {
-      toast(<AppToast>Successfully changed PIN</AppToast>, {
+  const { mutate, isLoading } = useChangePin({
+    onSuccess(res) {
+      toast(<AppToast>{res.message}</AppToast>, {
         type: 'success',
       });
 
-      closeModal();
-    },
-    onError(e) {
-      handleError(e);
-      setPins({});
-      setMode('current');
+      setMode('success');
     },
   });
 
+  const canSubmit = pins?.current?.length === pins?.new?.length;
+
   return (
     <>
-      <FullScreenLoader show={isLoading} />
-
       <div className={clsx('y-center smooth relative w-full overflow-hidden')}>
-        <AnimateLayout changeTracker={mode} className='mx-auto w-full pb-40'>
-          {mode === 'current' ? (
-            <>
+        <AnimateLayout
+          changeTracker={mode}
+          className='mx-auto min-h-[400px] w-full p-4 pb-40 pt-0 640:p-8 640:pt-0'
+        >
+          {mode === 'success' ? (
+            <SimpleInformation
+              className={'mt-20'}
+              icon={<GreenCheck />}
+              title={
+                <span className='mx-auto block max-w-[240px] text-xl'>
+                  Pin Change Successful
+                </span>
+              }
+              actionButton={{
+                text: 'Well done',
+                action: () => {
+                  closeModal();
+                },
+              }}
+            />
+          ) : mode === 'current' ? (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+
+                if (pins?.current?.length !== 4) return;
+
+                setMode('new');
+              }}
+            >
+              <h5>Change PIN</h5>
               <p>Enter Your Current PIN</p>
 
               <div className={clsx('mx-auto mt-4 max-w-[300px]')}>
@@ -59,25 +90,26 @@ export const ChangePinSteps = ({ closeModal }: Props) => {
                 />
 
                 <button
-                  type='button'
-                  onClick={() => setMode('new')}
+                  disabled={pins?.current?.length !== 4}
+                  type='submit'
                   className='dark-button mt-5 px-10'
                 >
                   Continue
                 </button>
 
-                <div className='mt-5 text-center text-sm text-neutral-600'>
-                  <Link
-                    href='/settings/security?_m=reset-pin'
-                    className='text-button ml-1 text-left font-medium'
-                  >
-                    Forgot Transaction Pin?
-                  </Link>
-                </div>
+                {/*<div className='mt-5 text-center text-sm text-neutral-600'>*/}
+                {/*  <Link*/}
+                {/*    href='/settings/security?_m=reset-pin'*/}
+                {/*    className='text-button ml-1 text-left font-medium'*/}
+                {/*  >*/}
+                {/*    Forgot Transaction Pin?*/}
+                {/*  </Link>*/}
+                {/*</div>*/}
               </div>
-            </>
+            </form>
           ) : mode === 'new' ? (
             <>
+              <h5>Change PIN</h5>
               <p>Enter your new PIN</p>
               <div className={clsx('mx-auto mt-4 max-w-[300px]')}>
                 <CodeInput
@@ -95,7 +127,19 @@ export const ChangePinSteps = ({ closeModal }: Props) => {
               </div>
             </>
           ) : (
-            <>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+
+                if (!canSubmit) return;
+
+                mutate({
+                  currentPin: pins?.current,
+                  newPin: pins?.new,
+                });
+              }}
+            >
+              <h5>Change PIN</h5>
               <p>Confirm your new PIN</p>
               <div className={clsx('mx-auto mt-4 max-w-[300px]')}>
                 <CodeInput
@@ -122,20 +166,15 @@ export const ChangePinSteps = ({ closeModal }: Props) => {
                   className='x-center h-[54px] 768:h-[68px]'
                 />
 
-                <button
-                  type='button'
-                  onClick={() =>
-                    mutate({
-                      oldPin: pins.current,
-                      newPin: pins.new,
-                    })
-                  }
-                  className='dark-button mt-5'
+                <SubmitButton
+                  submitting={isLoading}
+                  disabled={!canSubmit}
+                  className='dark-button mt-5 w-[140px]'
                 >
                   Proceed
-                </button>
+                </SubmitButton>
               </div>
-            </>
+            </form>
           )}
         </AnimateLayout>
       </div>

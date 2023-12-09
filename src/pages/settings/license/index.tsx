@@ -1,43 +1,37 @@
 import { SettingsLayout } from 'components/layouts/SettingsLayout';
-import { ActivePlan } from 'components/modules/settings/license/ActivePlan';
-import { CancelPlan } from 'components/modules/settings/license/CancelPlan';
-import { useState } from 'react';
+import { PlanFeatures } from 'components/modules/settings/license/PlanFeatures';
+import { SubscriptionHistory } from 'components/modules/subscriptions/SubscriptionHistory';
+import { SubscriptionSummary } from 'components/modules/subscriptions/SubscriptionSummary';
 
 export default function License() {
-  const [showModal, setShowModal] = useState(false);
-
   return (
-    <SettingsLayout title={'License'}>
-      <CancelPlan {...{ showModal, setShowModal }} />
+    <SettingsLayout>
+      <SubscriptionSummary />
 
-      <div className='x-between card block 1024:flex'>
-        <ActivePlan />
+      <div className='mt-6 min-h-[500px] grid-cols-12 gap-5 1180:grid'>
+        <div className={'col-span-8'}>
+          <PlanFeatures />
+        </div>
 
-        {/*<div className='y-between mt-8 border-t border-neutral-200 pt-4 1024:border-t-0'>*/}
-        {/*  <div></div>*/}
+        <div className={'col-span-4 mt-5 1180:mt-0'}>
+          <div className='card overflow-hidden border-neutral-200 p-0'>
+            <p
+              className={
+                'y-center my-auto h-14 bg-neutral-100 px-5 text-sm font-medium text-primary-main'
+              }
+            >
+              Subscription History
+            </p>
 
-        {/*  <div className={'text-left 1024:text-right'}>*/}
-        {/*    <Link*/}
-        {/*      href={'/settings/license/manage-subscription'}*/}
-        {/*      className={'text-button block py-1 font-medium text-black'}*/}
-        {/*    >*/}
-        {/*      Manage my subscription*/}
-        {/*    </Link>*/}
-
-        {/*    <div className={'text-button py-1 font-medium text-black'}>*/}
-        {/*      I need help with a billing issue*/}
-        {/*    </div>*/}
-
-        {/*    <button*/}
-        {/*      onClick={() => setShowModal(true)}*/}
-        {/*      className={*/}
-        {/*        'text-button inline-block py-1 font-medium text-red-500'*/}
-        {/*      }*/}
-        {/*    >*/}
-        {/*      Cancel Plan*/}
-        {/*    </button>*/}
-        {/*  </div>*/}
-        {/*</div>*/}
+            <div
+              className={
+                'h-[320px] overflow-y-auto px-5 py-2 640:px-5 640:py-3'
+              }
+            >
+              <SubscriptionHistory />
+            </div>
+          </div>
+        </div>
       </div>
     </SettingsLayout>
   );

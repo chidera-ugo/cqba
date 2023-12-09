@@ -63,6 +63,7 @@ export const Confirmation = ({
       hideHeader
       {...{
         show,
+        hideBackground,
       }}
       className='bg-white p-0'
     >

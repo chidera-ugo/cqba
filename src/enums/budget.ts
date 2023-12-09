@@ -11,7 +11,7 @@ export enum BudgetStatuses {
 export enum BudgetPriorities {
   High = 1,
   Medium = 2,
-  Low = 3
+  Low = 3,
 }
 
 export type BudgetStatus = keyof typeof BudgetStatuses;

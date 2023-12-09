@@ -3,12 +3,16 @@ import { Restrictor } from 'components/commons/Restrictor';
 import { NotFoundFace } from 'components/illustrations/NotFound';
 import { AuthLayout } from 'components/layouts/AuthLayout';
 import { PageHead } from 'components/primary/PageHead';
+import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 
 const NotFound = () => {
+  const { isVerified } = useIsVerified();
+
   return (
     <AuthLayout noRedirect>
       <PageHead title='Page Not Found' />
-      <div className='y-center h-screen bg-white'>
+
+      <div className='y-center bg-white py-20'>
         <Restrictor
           icon={<NotFoundFace />}
           subTitle={
@@ -21,7 +25,7 @@ const NotFound = () => {
             title: <span>Page not found...</span>,
 
             action: {
-              link: '/',
+              link: !isVerified ? '/kyc' : '/',
               text: 'Go Home',
             },
           }}

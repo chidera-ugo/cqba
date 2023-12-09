@@ -1,17 +1,19 @@
+import clsx from 'clsx';
 import { IsLoading } from 'components/data-states/IsLoading';
 import { AddressInputGroup } from 'components/form-elements/AddressInputGroup';
 import { Input } from 'components/form-elements/Input';
 import { PhoneNumberInput } from 'components/form-elements/PhoneNumberInput';
+import { Select } from 'components/form-elements/Select';
+import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { industries } from 'constants/kyc/industries';
+import { Business_typeEnum } from 'enums/business_type.enum';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { IOrganization } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useScrollToFormError } from 'hooks/forms/useScrollToFormError';
 import Link from 'next/link';
+import { useEffect } from 'react';
 import { sanitizeRecordToRemoveUndefinedAndNulls } from 'utils/sanitizers/sanitizeRecordToRemoveUndefinedAndNulls';
 import { initialValues } from './initialValues';
-import { SubmitButton } from 'components/form-elements/SubmitButton';
-import { Select } from 'components/form-elements/Select';
-import { useEffect } from 'react';
 
 interface Props {
   formikProps: FormikProps<typeof initialValues>;
@@ -52,6 +54,10 @@ export const Form = ({
       businessType,
       phone,
       postalCode,
+      tin,
+      businessNumber,
+      rcNumber,
+      cacItNumber,
     } = sanitizeRecordToRemoveUndefinedAndNulls(organizationInformation);
 
     setValues(
@@ -64,6 +70,10 @@ export const Form = ({
         employees: numberOfEmployees,
         city,
         state,
+        tin,
+        businessNumber,
+        rcNumber,
+        cacItNumber,
         country,
         postalCode,
         businessName,
@@ -75,35 +85,55 @@ export const Form = ({
 
   if (gettingOrganizationInformation) return <IsLoading />;
 
+  const isPrivateOrPublic =
+    values.companyType === Business_typeEnum.private ||
+    values.companyType === Business_typeEnum.public;
+
   return (
     <FormikForm onSubmit={handleSubmit}>
       <Input
-        label='Company Name'
-        placeholder={'Enter company name'}
+        label={clsx(
+          values.companyType === Business_typeEnum.individual
+            ? 'Trading Name'
+            : 'Business Name'
+        )}
+        placeholder={`Enter $1`}
         name='businessName'
       />
 
-      <div className='gap-5 480:flex'>
-        <Select
-          label='Business Type'
-          name='companyType'
-          options={[
-            { name: 'BUSINESS NAME REGISTRATION', id: 'Business_Name' },
-            { name: 'INCORPORATED TRUSTEES', id: 'Incorporated_Trustees' },
-            { name: 'PRIVATE LIMITED', id: 'Private_Incorporated' },
-            { name: 'PUBLIC LIMITED', id: 'Public_Incorporated' },
-            { name: 'UNREGISTERED INDIVIDUAL', id: 'Free_Zone' },
-          ]}
-          displayValueKey={'name'}
-          trueValueKey={'id'}
-        />
+      <Select
+        label='Business Type'
+        name='companyType'
+        options={[
+          { name: 'BUSINESS NAME REGISTRATION', id: 'Business_Name' },
+          { name: 'INCORPORATED TRUSTEES', id: 'Incorporated_Trustees' },
+          { name: 'PRIVATE LIMITED', id: 'Private_Incorporated' },
+          { name: 'PUBLIC LIMITED', id: 'Public_Incorporated' },
+          { name: 'UNREGISTERED INDIVIDUAL', id: 'Free_Zone' },
+        ]}
+        displayValueKey={'name'}
+        trueValueKey={'id'}
+      />
 
-        <Select
-          label='Business Industry'
-          name='businessIndustry'
-          options={industries}
-        />
-      </div>
+      <Select
+        label='Business Industry'
+        name='businessIndustry'
+        options={industries}
+      />
+
+      {isPrivateOrPublic ? (
+        <Input label='Tax Identification Number' name='tin' />
+      ) : null}
+
+      {values.companyType === Business_typeEnum.businessName && (
+        <Input label='Business Number (BN)' name='businessNumber' />
+      )}
+
+      {isPrivateOrPublic ? <Input label='RC Number' name='rcNumber' /> : null}
+
+      {values.companyType === Business_typeEnum.trustees && (
+        <Input label='CAC/IT Number' name='cacItNumber' />
+      )}
 
       <PhoneNumberInput
         label='Phone Number'

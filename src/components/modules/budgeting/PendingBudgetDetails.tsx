@@ -2,22 +2,28 @@ import { useQueryClient } from '@tanstack/react-query';
 import { AuthorizeActionWithPin } from 'components/core/AuthorizeActionWithPin';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
+import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { ApproveBudgetForm } from 'components/forms/budgeting/ApproveBudgetForm';
 import { RejectionReasonForm } from 'components/forms/budgeting/RejectionReasonForm';
 import { Cancel } from 'components/illustrations/Cancel';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
+import { Confirmation } from 'components/modals/Confirmation';
+import { ManageBudgetCreation } from 'components/modules/budgeting/ManageBudgetCreation';
 import { PendingBudgetCard } from 'components/modules/budgeting/PendingBudgetCard';
+import { AppToast } from 'components/primary/AppToast';
 import { useAppContext } from 'context/AppContext';
 import {
   ApproveBudgetDto,
   useApproveBudget,
 } from 'hooks/api/budgeting/useApproveBudget';
+import { useCancelBudget } from 'hooks/api/budgeting/useCancelBudget';
 import { useCloseBudget } from 'hooks/api/budgeting/useCloseBudget';
 import { useGetBudgetById } from 'hooks/api/budgeting/useGetBudgetById';
 import { useHandleError } from 'hooks/api/useHandleError';
 import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 interface Props {
   id: string;
@@ -28,7 +34,9 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
   const { user } = useAppContext().state;
 
   const [mode, setMode] = useState<'success' | 'authorize' | null>(null);
-  const [action, setAction] = useState<'approve' | 'decline' | null>(null);
+  const [action, setAction] = useState<
+    'approve' | 'decline' | 'edit_budget' | 'confirm_cancel' | null
+  >(null);
   const [reason, setReason] = useState('');
 
   const queryClient = useQueryClient();
@@ -56,6 +64,17 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
     },
   });
 
+  const { isLoading: cancelling, mutate: cancel } = useCancelBudget(data?._id, {
+    onSuccess() {
+      queryClient.invalidateQueries(['budget', data?._id]);
+      queryClient.invalidateQueries(['budgets']);
+      close();
+      toast(<AppToast>Canceled budget successfully</AppToast>, {
+        type: 'success',
+      });
+    },
+  });
+
   if (gettingBudget || _l) return <IsLoading />;
 
   if (isError || _e || !primaryWallet || !data) return <IsError />;
@@ -65,15 +84,13 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
     setAction(null);
   }
 
-  console.log(action);
-
   return (
     <>
       <RightModalWrapper
         closeModal={() => {
           setAction(null);
         }}
-        hideBackground
+        hideBackdrop
         title={'Decline Budget'}
         show={action === 'decline' && !mode}
         childrenClassname={'pt-4 px-8'}
@@ -145,6 +162,29 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
         }}
       />
 
+      <ManageBudgetCreation
+        budget={data}
+        hideBackground
+        onFinish={close}
+        show={action === 'edit_budget'}
+        close={() => setAction(null)}
+      />
+
+      <Confirmation
+        hideBackground
+        show={action === 'confirm_cancel'}
+        buttonTexts={['Cancel', 'Continue']}
+        title='Cancel Budget'
+        subTitle={
+          'Are you sure you want to cancel this budget? This cannot be reversed'
+        }
+        positive={() => {
+          setAction(null);
+          cancel(null);
+        }}
+        negative={() => setAction(null)}
+      />
+
       <PendingBudgetCard {...data} {...{ getColor }} showFullDetails />
 
       {user?.role === 'owner' ? (
@@ -164,16 +204,22 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
         />
       ) : (
         <div className='mt-8 flex gap-3'>
-          <button type={'button'} className={'primary-button'}>
+          <button
+            onClick={() => setAction('edit_budget')}
+            type={'button'}
+            className={'primary-button'}
+          >
             Edit Budget
           </button>
 
-          <button
+          <SubmitButton
             type={'button'}
+            submitting={cancelling}
+            onClick={() => setAction('confirm_cancel')}
             className='secondary-button w-full min-w-[120px] 640:w-auto'
           >
             Cancel Budget
-          </button>
+          </SubmitButton>
         </div>
       )}
     </>

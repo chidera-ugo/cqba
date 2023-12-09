@@ -21,10 +21,12 @@ export interface Beneficiary {
 }
 
 export function useCreateBudget(
+  id?: string,
   options?: UseMutationOptions<any, unknown, void, unknown>
 ) {
   return useTMutation<CreateBudgetDto, IBudget>({
-    url: '',
+    method: !!id ? 'put' : 'post',
+    url: `${!!id ? `/${id}` : ''}`,
     service: 'budgets',
     options,
   });

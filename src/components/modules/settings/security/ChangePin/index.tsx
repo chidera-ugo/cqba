@@ -19,9 +19,9 @@ export const ChangePin = ({ hasSetPin }: { hasSetPin: boolean }) => {
         show={showModal}
         {...{ closeModal }}
         className='bg-white'
+        childrenClassname={'p-0'}
       >
-        <div className='text-center'>
-          <h5>Change PIN</h5>
+        <div className='mt-8 text-center'>
           <ChangePinSteps closeModal={closeModal} />
         </div>
       </RightModalWrapper>

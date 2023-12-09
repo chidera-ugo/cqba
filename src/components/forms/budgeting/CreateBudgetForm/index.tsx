@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { Formik } from 'formik';
 import { useCreatePersonalBudget } from 'hooks/api/budgeting/useCreatePersonalBudget';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
 import { FormRecoveryProps } from 'types/forms/form_recovery';
 import { sanitizeAmount } from 'utils/formatters/formatAmount';
 import { Form } from './Form';
@@ -17,6 +18,7 @@ interface Props {
   formRecoveryValues?: CreateBudgetFormRecoveryValues;
   currency: string;
   isOwner?: boolean;
+  budget?: IBudget;
 }
 
 export const CreateBudgetForm = ({
@@ -25,6 +27,7 @@ export const CreateBudgetForm = ({
   formRecoveryValues,
   currency,
   isOwner,
+  budget,
 }: Props) => {
   const queryClient = useQueryClient();
 
@@ -82,6 +85,7 @@ export const CreateBudgetForm = ({
           <Form
             recoveryValues={formRecoveryValues}
             {...{
+              budget,
               isOwner,
               currency,
               formikProps,

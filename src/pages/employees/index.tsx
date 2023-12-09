@@ -21,8 +21,6 @@ import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { employeesFiltersSchema } from 'zod_schemas/employees_schema';
 
-// Todo: Disable button clicks for unverified users
-
 export default function Employees() {
   const searchParams = useSearchParams();
 

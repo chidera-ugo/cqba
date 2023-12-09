@@ -5,7 +5,7 @@ import { CurrentUserAvatar } from 'components/modules/app/CurrentUserAvatar';
 import { Notifications } from 'components/modules/app/Notifications';
 import { MobileMenu } from 'components/primary/MobileMenu';
 import { PointerLeft } from 'components/svgs/navigation/Arrows';
-import { useIsKycFlow } from 'hooks/kyc/useIsKycFlow';
+import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PropsWithChildren } from 'react';
@@ -24,12 +24,10 @@ export const AppHeader = ({
   hideSideNavigation,
   className,
 }: PropsWithChildren<Props>) => {
-  const { isKycFlow } = useIsKycFlow();
-
   return (
     <header
       className={clsx(
-        'sticky top-0 left-0 z-[1000] h-14 border-neutral-310 bg-white bg-opacity-80 backdrop-blur-md 1024:h-20',
+        'nav_bar sticky top-0 left-0 z-[1000] h-14 border-neutral-310 1024:h-20',
         className
       )}
     >
@@ -53,7 +51,7 @@ export const AppHeader = ({
         )}
 
         <div className='flex'>
-          {!isKycFlow && (
+          {!hideSideNavigation && (
             <div className={'hidden gap-4 1024:flex'}>
               <Notifications />
               <CurrentUserAvatar />
@@ -68,9 +66,11 @@ export const AppHeader = ({
 };
 
 export const Logo = ({ white }: { white?: boolean }) => {
+  const { isVerified } = useIsVerified();
+
   return (
     <div className='flex'>
-      <Link href='/' className='my-auto flex gap-2'>
+      <Link href={isVerified ? '/' : '/kyc'} className='my-auto flex gap-2'>
         <Image
           src={white ? white_logo : logo}
           priority

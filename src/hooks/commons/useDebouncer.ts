@@ -21,16 +21,12 @@ export const useDebouncer = <T>({
   useEffect(() => {
     clearTimeout(timeout.current);
 
-    if (onChange) {
-      onChange(value);
-    }
+    if (onChange) onChange(value);
 
     setDebouncedValue('');
 
     timeout.current = setTimeout(() => {
-      if (!value) return;
-
-      setDebouncedValue(value);
+      setDebouncedValue(value ?? '');
 
       if (!performDebouncedAction) return;
 
