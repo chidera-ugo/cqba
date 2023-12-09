@@ -5,6 +5,7 @@ export interface SubscriptionPlan {
   code: string;
   name: string;
   amount: Amount;
+  mostPopular: boolean;
   description: string;
   features: PlanFeature[];
   createdAt: string;

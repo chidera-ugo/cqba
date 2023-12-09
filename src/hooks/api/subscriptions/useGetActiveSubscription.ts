@@ -1,6 +1,5 @@
 import { SubscriptionPlan } from 'hooks/api/subscriptions/useGetAllSubscriptionPlans';
 import { useTQuery } from 'hooks/api/useTQuery';
-import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 
 export interface ActiveSubscription {
   _id: string;
@@ -13,8 +12,6 @@ export interface ActiveSubscription {
 }
 
 export function useGetActiveSubscription() {
-  const { isVerified } = useIsVerified();
-
   return useTQuery<ActiveSubscription>({
     queryKey: ['current_subscription_plan'],
     url: `/subscription`,
@@ -23,7 +20,6 @@ export function useGetActiveSubscription() {
       staleTime: Infinity,
       meta: {
         silent: true,
-        enabled: isVerified,
       },
     },
   });

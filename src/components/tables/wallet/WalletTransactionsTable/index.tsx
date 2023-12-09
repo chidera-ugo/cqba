@@ -92,7 +92,7 @@ export const WalletTransactionsTable = ({
     setTransactionId(null);
   }
 
-  if (data && !data?.docs?.length)
+  if (res && !res?.docs?.length)
     return (
       <EmptyTable
         processing={isLoading || isRefetching}

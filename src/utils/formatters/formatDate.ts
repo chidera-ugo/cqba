@@ -6,7 +6,8 @@ dayjs.extend(advancedFormat);
 
 export const formatDate = (
   value: string | number,
-  type: 'full' | 'short' | 'time' | 'semi-full'
+  type: 'full' | 'short' | 'time' | 'semi-full',
+  shortenedMonth?: boolean
 ) => {
   let d;
 
@@ -27,7 +28,8 @@ export const formatDate = (
   const milliseconds = d.format('ss');
   const time12Hour = d.format('A');
   const ordinalDate = d.format('Do');
-  const month = months[d.month()];
+  const _month = months[d.month()];
+  const month = shortenedMonth ? _month?.slice(0, 3) : _month;
   const short = `${ordinalDate} ${month}, ${d.year()}`;
   const time = `${hour12Hour}:${minutes2Digits} ${time12Hour}`;
   const timeWithMilliseconds = `${hour12Hour}:${minutes2Digits}:${milliseconds} ${time12Hour}`;

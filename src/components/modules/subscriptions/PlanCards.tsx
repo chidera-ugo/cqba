@@ -22,8 +22,8 @@ export const PlanCards = ({
 
   return (
     <div className='grid grid-cols-12 gap-4'>
-      {plans?.map(({ name, description, _id, amount }, i) => {
-        const isMostPopular = i === plans?.length - 2;
+      {plans?.map(({ name, description, _id, mostPopular, amount }) => {
+        const isMostPopular = mostPopular;
 
         return (
           <PlanCard
@@ -42,7 +42,9 @@ export const PlanCards = ({
             amount={amount.NGN}
             choosePlan={() => choosePlan(_id)}
             buttonClassname={
-              i === plans?.length - 1 ? 'dark-button' : 'secondary-button'
+              !mostPopular && amount.NGN > 0
+                ? 'dark-button'
+                : 'secondary-button'
             }
             description={description}
           />

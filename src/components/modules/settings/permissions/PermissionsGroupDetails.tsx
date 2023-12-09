@@ -2,9 +2,11 @@ import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
 import { ManageEmployee } from 'components/modules/employees/ManageEmployee';
 import { PermissionGroupCard } from 'components/modules/settings/permissions/PermissionsGroupCard';
+import { AppToast } from 'components/primary/AppToast';
 import { useGetAllPermissionsGroups } from 'hooks/api/permissions/useGetAllPermissionsGroups';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 export const PermissionsGroupDetails = () => {
   const { query } = useRouter();
@@ -18,13 +20,16 @@ export const PermissionsGroupDetails = () => {
 
   if (!permissionsGroup) return <IsError className={'py-20'} />;
 
-  const permissions = permissionsGroup!.permissions;
+  const { permissions, role } = permissionsGroup;
 
   return (
     <>
       <ManageEmployee
-        role={'employee'}
+        role={role}
         modal={showModal ? 'add_employee' : null}
+        onSuccess={() =>
+          toast(<AppToast>Invitation sent</AppToast>, { type: 'success' })
+        }
         closeModal={() => setShowModal(false)}
       />
 
@@ -33,13 +38,15 @@ export const PermissionsGroupDetails = () => {
           <div className='card'>
             <PermissionGroupCard {...permissionsGroup} detailed />
 
-            <button
-              type={'button'}
-              onClick={() => setShowModal(true)}
-              className={'primary-button mt-8'}
-            >
-              Send Invitation
-            </button>
+            {role !== 'owner' && (
+              <button
+                type={'button'}
+                onClick={() => setShowModal(true)}
+                className={'primary-button mt-8'}
+              >
+                Send Invitation
+              </button>
+            )}
           </div>
         </div>
 
@@ -66,8 +73,6 @@ export const PermissionsGroupDetails = () => {
           })}
         </div>
       </div>
-
-      {/* Todo: Hide for owners */}
     </>
   );
 };

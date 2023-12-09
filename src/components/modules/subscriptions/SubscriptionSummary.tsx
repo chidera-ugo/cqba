@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { CentredModalWrapper } from 'components/modal/ModalWrapper';
@@ -41,9 +42,13 @@ export const SubscriptionSummary = () => {
   const { isLoading, isError, data } = useGetActiveSubscription();
   const { getCurrentUser } = useAppContext();
 
+  const queryClient = useQueryClient();
+
   const { mutate, isLoading: choosingPlan } = useChooseSubscriptionPlan({
     onSuccess() {
       getCurrentUser!(null);
+      queryClient.invalidateQueries(['subscription_history']);
+      queryClient.invalidateQueries(['current_subscription_plan']);
     },
   });
 

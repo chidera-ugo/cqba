@@ -97,7 +97,7 @@ function AppContextProvider({ children, ...props }: PropsWithChildren<any>) {
     getCurrentUser(token);
   }
 
-  if (state.isInitializing) return <FullScreenLoader id='app-context' asPage />;
+  if (state.isInitializing) return <FullScreenLoader id='app_context' asPage />;
 
   return (
     <AppContext.Provider value={value} {...props}>

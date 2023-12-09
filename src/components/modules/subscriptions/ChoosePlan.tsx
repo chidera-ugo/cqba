@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { Tabs } from 'components/commons/Tabs';
@@ -27,6 +28,8 @@ export const ChoosePlan = ({ minimal }: { minimal?: boolean }) => {
   const { data: organization } = useGetOrganizationInformation();
   const { isLoading, isError, data } = useGetAllSubscriptionPlans();
 
+  const queryClient = useQueryClient();
+
   const { mutate, isLoading: choosingPlan } = useChooseSubscriptionPlan({
     onSuccess(res) {
       dispatch({ type: 'update_has_choosen_plan', payload: true });
@@ -34,8 +37,17 @@ export const ChoosePlan = ({ minimal }: { minimal?: boolean }) => {
       toast(<AppToast>{res.message}</AppToast>, { type: 'success' });
 
       getCurrentUser!(null);
+
+      queryClient.invalidateQueries(['subscription_history']);
+      queryClient.invalidateQueries(['current_subscription_plan']);
     },
   });
+
+  if (isLoading) {
+    if (minimal) return <IsLoading />;
+
+    return <FullScreenLoader id={'choose_plan'} white show />;
+  }
 
   if (isError)
     return (
@@ -53,15 +65,9 @@ export const ChoosePlan = ({ minimal }: { minimal?: boolean }) => {
     });
   }
 
-  if (minimal && isLoading) return <IsLoading />;
-
   return (
     <div className={clsx(!minimal && 'app-container mx-auto max-w-[1168px]')}>
-      <FullScreenLoader
-        id={'select_first_plan'}
-        white={!choosingPlan}
-        show={isLoading || choosingPlan}
-      />
+      <FullScreenLoader id={'choosing_plan'} show={choosingPlan} />
 
       <div>
         <div className={clsx(minimal ? 'mb-10' : 'py-10')}>

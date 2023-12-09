@@ -14,12 +14,13 @@ type Props = {
 
 export const PermissionGroupCard = ({
   name,
-  _id,
   className,
   description,
   detailed,
+  role,
+  _id,
 }: Props) => {
-  const { isLoading, data } = useGetPermissionGroupUsers(_id);
+  const { isLoading, data } = useGetPermissionGroupUsers(role);
 
   const { getColor } = useGetColorByChar();
 
@@ -44,43 +45,45 @@ export const PermissionGroupCard = ({
         </div>
       </div>
 
-      <div className={clsx('x-between h-12', detailed && 'mt-10')}>
+      <div className={clsx('x-between', detailed && 'mt-10')}>
         <div className={'mt-auto'}>
           {detailed && (
-            <p className={'mb-1 text-neutral-400'}>
+            <p className={'mb-2 text-neutral-400'}>
               Team members with this role
             </p>
           )}
 
-          {isLoading ? (
-            <Spinner className={'text-primary-main'} />
-          ) : data ? (
-            <div className={clsx('relative flex')}>
-              {handleSort({
-                data: data,
-                sortBy: 'email',
-              })?.map(({ email }, i) => {
-                return (
-                  <div
-                    key={email}
-                    className={clsx('absolute', 'right-0 top-0 z-10')}
-                    style={{
-                      zIndex: 10 + i,
-                      right: 23 * i,
-                    }}
-                  >
-                    <Avatar
-                      className={clsx('-ml-2 ring-2 ring-white')}
-                      size={27}
+          <div className={'h-10'}>
+            {isLoading ? (
+              <Spinner className={'h-full text-primary-main'} />
+            ) : data ? (
+              <div className={clsx('relative flex h-full')}>
+                {handleSort({
+                  data: data.slice(0, 5),
+                  sortBy: 'email',
+                })?.map(({ email }, i) => {
+                  return (
+                    <div
                       key={email}
-                      char={email.charAt(0)}
-                      getBackgroundColor={getColor}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          ) : null}
+                      className={clsx('absolute', 'bottom-0 z-10')}
+                      style={{
+                        zIndex: 10 + i,
+                        left: 32 * i,
+                      }}
+                    >
+                      <Avatar
+                        className={clsx('ring-2 ring-white')}
+                        size={40}
+                        key={email}
+                        char={email.charAt(0)}
+                        getBackgroundColor={getColor}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            ) : null}
+          </div>
         </div>
 
         {!detailed && (

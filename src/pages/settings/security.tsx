@@ -4,11 +4,13 @@ import { SettingsLayout } from 'components/layouts/SettingsLayout';
 import { ChangePassword } from 'components/modules/settings/security/ChangePassword';
 import { ChangePin } from 'components/modules/settings/security/ChangePin';
 import { ResetPin } from 'components/modules/settings/security/ResetPin';
+import { AppToast } from 'components/primary/AppToast';
 import { useAppContext } from 'context/AppContext';
 import { useLogout } from 'hooks/api/auth/useLogout';
 import { useDestroySession } from 'hooks/app/useDestroySession';
 import { useRouter } from 'next/router';
 import { Fragment, ReactNode } from 'react';
+import { toast } from 'react-toastify';
 
 export default function Security() {
   const { replace, pathname } = useRouter();
@@ -18,7 +20,12 @@ export default function Security() {
   const { destroySession } = useDestroySession();
 
   const { mutate, isLoading } = useLogout({
-    onSuccess: destroySession,
+    onSuccess() {
+      toast(<AppToast>You successfully logged out</AppToast>, {
+        type: 'success',
+      });
+      destroySession();
+    },
   });
 
   const securitySettings: {
@@ -33,7 +40,7 @@ export default function Security() {
       button: (
         <button
           onClick={() => replace({ pathname, query: { _m: 'password' } })}
-          className='primary-button h-10 px-3 text-sm'
+          className='dark-button h-10 px-3 text-sm'
         >
           Change Password
         </button>

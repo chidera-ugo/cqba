@@ -19,10 +19,12 @@ export const SubscriptionHistory = () => {
 
   return (
     <>
-      {data.docs.slice(0, 8).map(({ _id, startedAt, status }) => {
+      {data.docs.slice(0, 8).map(({ _id, startedAt, plan, status }) => {
         return (
           <div key={_id} className={clsx('x-between h-10')}>
-            <span className={'my-auto'}>{formatDate(startedAt, 'short')}</span>
+            <span className={'my-auto'}>
+              {formatDate(startedAt, 'short', true)} - {plan?.name}
+            </span>
 
             <span
               className={clsx(

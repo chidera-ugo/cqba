@@ -1,6 +1,8 @@
 import clsx from 'clsx';
+import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { getPlansRows } from 'components/modules/subscriptions/ComparePlans/getPlansRow';
 import { PlansTableCell } from 'components/modules/subscriptions/ComparePlans/PlansTableCell';
+import { useGetActiveSubscription } from 'hooks/api/subscriptions/useGetActiveSubscription';
 import { useGetAllSubscriptionPlans } from 'hooks/api/subscriptions/useGetAllSubscriptionPlans';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
@@ -22,6 +24,8 @@ export const ComparePlansTable = ({
   titleClassname,
 }: Props) => {
   const { isLoading, isError, data: _data } = useGetAllSubscriptionPlans();
+  const { data: activePlan, isLoading: gettingActivePlan } =
+    useGetActiveSubscription();
 
   if (isLoading) return <IsLoading />;
   if (isError) return <IsError className={'py-16'} />;
@@ -138,31 +142,36 @@ export const ComparePlansTable = ({
                   className='max-w-[220px] bg-white py-4 px-5'
                 ></td>
 
-                {[
-                  { type: 'secondary-button', isFree: true },
-                  { type: 'primary-button' },
-                  { type: 'dark-button' },
-                ]
-                  .slice(showOnlyPaidPlans ? 1 : 0, 3)
-                  .map(({ type, isFree }, i) => {
-                    return (
-                      <td
-                        key={type}
-                        className='table_border bg-white px-5 text-center font-semibold text-neutral-800'
+                {data?.map(({ amount, mostPopular, _id }, i) => {
+                  const isActive = _id === activePlan?.plan?._id;
+
+                  return (
+                    <td
+                      key={_id}
+                      className='table_border bg-white px-5 text-center font-semibold text-neutral-800'
+                    >
+                      <SubmitButton
+                        submitting={gettingActivePlan}
+                        type={'button'}
+                        onClick={() =>
+                          isActive ? null : choosePlan(getPlanCode(i + 1))
+                        }
+                        className={clsx(
+                          'mx-auto block min-w-[180px] flex-shrink-0',
+                          amount.NGN > 0
+                            ? !mostPopular
+                              ? 'dark-button'
+                              : 'primary-button'
+                            : 'secondary-button'
+                        )}
                       >
-                        <button
-                          type={'button'}
-                          onClick={() => choosePlan(getPlanCode(i + 1))}
-                          className={clsx(
-                            type,
-                            'mx-auto block min-w-[180px] flex-shrink-0'
-                          )}
-                        >
-                          Get Started{isFree && ` For Free`}
-                        </button>
-                      </td>
-                    );
-                  })}
+                        {isActive
+                          ? 'Current Plan'
+                          : `Get Started${amount.NGN === 0 ? ` For Free` : ''}`}
+                      </SubmitButton>
+                    </td>
+                  );
+                })}
               </tr>
             )}
           </tbody>
