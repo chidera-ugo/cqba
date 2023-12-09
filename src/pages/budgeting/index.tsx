@@ -11,16 +11,12 @@ import { budgetingFilterOptions } from 'constants/budgeting/filters';
 import { useUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
 import { useDebouncer } from 'hooks/commons/useDebouncer';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
-import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { budgetingFiltersSchema } from 'zod_schemas/budgeting_schema';
 
 export default function Budgeting() {
-  const searchParams = useSearchParams();
-
   const { filters, setFilters, pagination, setPagination } = useUrlManagedState(
     budgetingFiltersSchema,
-    searchParams,
     undefined,
     9
   );

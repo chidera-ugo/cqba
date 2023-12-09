@@ -1,3 +1,4 @@
+import { budgetingFilterOptions } from 'constants/budgeting/filters';
 import { z } from 'zod';
 import { paginationAndRangeZodSchema } from 'zod_schemas/commons';
 
@@ -8,9 +9,6 @@ export const budgetingFiltersSchema = z
         title: z.string(),
         value: z.string().nullable(),
       })
-      .catch({
-        title: 'Active Budgets',
-        value: 'active',
-      }),
+      .catch(budgetingFilterOptions[0]!),
   })
   .merge(paginationAndRangeZodSchema);

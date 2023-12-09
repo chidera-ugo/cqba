@@ -17,13 +17,10 @@ import {
   EmployeeModalType,
   useManageEmployee,
 } from 'hooks/employees/useManageEmployee';
-import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { employeesFiltersSchema } from 'zod_schemas/employees_schema';
 
 export default function Employees() {
-  const searchParams = useSearchParams();
-
   const [search, setSearch] = useState('');
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [debouncedSearch] = useDebouncer({
@@ -31,8 +28,7 @@ export default function Employees() {
   });
 
   const { filters, setFilters, pagination, setPagination } = useUrlManagedState(
-    employeesFiltersSchema,
-    searchParams
+    employeesFiltersSchema
   );
 
   const { isVerified } = useIsVerified();

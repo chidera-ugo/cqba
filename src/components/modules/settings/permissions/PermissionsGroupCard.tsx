@@ -45,39 +45,50 @@ export const PermissionGroupCard = ({
         </div>
       </div>
 
-      <div className={clsx('x-between', detailed && 'mt-10')}>
-        <div className={'mt-auto'}>
+      <div className={clsx('x-between w-full', detailed && 'mt-10')}>
+        <div className={'mt-auto w-full'}>
           {detailed && (
             <p className={'mb-2 text-neutral-400'}>
               Team members with this role
             </p>
           )}
 
-          <div className={'h-10'}>
+          <div className={clsx(!detailed && 'h-10')}>
             {isLoading ? (
               <Spinner className={'h-full text-primary-main'} />
             ) : data ? (
-              <div className={clsx('relative flex h-full')}>
+              <div
+                className={clsx('relative h-full w-full', !detailed && 'flex')}
+              >
                 {handleSort({
                   data: data.slice(0, 5),
                   sortBy: 'email',
-                })?.map(({ email }, i) => {
+                })?.map(({ email, firstName, lastName }, i) => {
                   return (
                     <div
                       key={email}
-                      className={clsx('absolute', 'bottom-0 z-10')}
+                      className={clsx(
+                        !detailed ? 'absolute' : 'mt-2',
+                        'bottom-0 z-10 flex gap-2'
+                      )}
                       style={{
                         zIndex: 10 + i,
                         left: 32 * i,
                       }}
                     >
                       <Avatar
-                        className={clsx('ring-2 ring-white')}
-                        size={40}
+                        className={clsx('my-auto ring-2 ring-white')}
+                        size={detailed ? 32 : 40}
                         key={email}
                         char={email.charAt(0)}
                         getBackgroundColor={getColor}
                       />
+
+                      {detailed && (
+                        <span className={'my-auto font-normal'}>
+                          {!!firstName ? `${firstName} ${lastName}` : email}
+                        </span>
+                      )}
                     </div>
                   );
                 })}
@@ -89,7 +100,7 @@ export const PermissionGroupCard = ({
         {!detailed && (
           <Link
             className={
-              'mt-auto -mr-4 -mb-4 p-4 text-sm font-medium text-primary-main'
+              'mt-auto -mr-4 -mb-4 flex-shrink-0 p-4 text-sm font-medium text-primary-main'
             }
             href={`/settings/user-permissions/${_id}`}
           >

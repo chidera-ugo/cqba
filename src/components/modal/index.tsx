@@ -99,7 +99,9 @@ export const Modal = ({
                   x: type === 'right' ? '100%' : type === 'left' ? '-200%' : 0,
                   scale: type === 'zoom' && !screenSizes?.mobile ? 0.5 : 1,
                   opacity:
-                    type === 'fade' || (type === 'zoom' && !screenSizes?.mobile)
+                    type === 'fade' ||
+                    type === 'center' ||
+                    (type === 'zoom' && !screenSizes?.mobile)
                       ? 0
                       : 1,
                 },

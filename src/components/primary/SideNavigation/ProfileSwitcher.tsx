@@ -49,10 +49,10 @@ export const ProfileSwitcher = ({
           )}
           onClick={() => setShowDropdown((prev) => !prev)}
         >
-          <div className='flex'>
+          <div className='flex gap-2.5'>
             <Avatar
+              avatar={user?.avatar}
               size={48}
-              className={'mr-2.5'}
               getBackgroundColor={getColor}
             />
 

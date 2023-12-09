@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { EmptyTable } from 'components/core/Table/EmptyTable';
+import { NoData } from 'components/core/Table/NoData';
 import { Confirmation } from 'components/modals/Confirmation';
 import { MobileEmployeesList } from 'components/modules/employees/MobileEmployeesList';
 import { EmployeeAction } from 'components/tables/employees/AllEmployeesTable/EmployeeActions';
@@ -112,7 +112,7 @@ export const AllEmployeesTable = ({
 
   if (data && !data?.docs?.length)
     return (
-      <EmptyTable
+      <NoData
         processing={isLoading || isRefetching}
         imageSrc={clock}
         title={status === 'active' ? 'Invite Employee' : 'No pending invites'}

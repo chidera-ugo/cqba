@@ -16,6 +16,7 @@ interface Props<T> {
   withChevron?: boolean;
   filterKey: string;
   icon?: JSX.Element;
+  buttonClassname?: string;
   secondaryAction?: (option: T) => void;
 }
 
@@ -27,6 +28,7 @@ export const Filter = <T extends Record<string, any>>({
   withChevron,
   options,
   filters,
+  buttonClassname,
   dropdownClassName,
   setFilters,
   secondaryAction,
@@ -38,8 +40,8 @@ export const Filter = <T extends Record<string, any>>({
       <button
         onClick={() => setShowDropdown((prev) => !prev)}
         className={clsx(
-          'x-between z-50 w-full bg-white',
-          !withChevron && 'rounded-full border border-neutral-300 px-3 py-2'
+          'x-between z-50 w-full rounded-full border border-neutral-200 bg-white px-3 py-2',
+          buttonClassname
         )}
       >
         {!withChevron && (

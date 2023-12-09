@@ -44,7 +44,9 @@ export const AppLayout = ({
   const { screenSize, user, hasChoosenPlan } = useAppContext().state;
 
   const shouldSelectFirstPlan =
-    !hasChoosenPlan && !user?.hasActivePlan && user?.role === 'owner';
+    !hasChoosenPlan &&
+    !user?.organization?.subscription?.object &&
+    user?.role === 'owner';
 
   const hideSideNavigation = props.hideSideNavigation || shouldSelectFirstPlan;
 
@@ -60,7 +62,7 @@ export const AppLayout = ({
   if (!userExists) return <FullScreenLoader asPage />;
 
   return (
-    <div className={'min-w-screen min-h-screen bg-black'}>
+    <div className={'min-w-screen min-h-screen'}>
       <div
         id={'app_wrapper'}
         style={{
@@ -153,19 +155,21 @@ export const AppLayout = ({
                   : !!breadCrumbs
                   ? 'app-container mb-5 mt-3 640:mb-7'
                   : 'app-container my-5 640:my-7',
-                'relative z-10 min-h-screen'
+                'relative z-10'
               )}
             >
               {shouldSelectFirstPlan ? <ChoosePlan /> : children}
             </div>
 
-            <p
-              className={
-                'mt-auto pb-3 text-center text-xs text-neutral-700 640:text-sm'
-              }
-            >
-              {copyrightText}
-            </p>
+            {hideSideNavigation && (
+              <p
+                className={
+                  'absolute bottom-0 w-full pb-3 text-center text-xs text-neutral-700 640:text-sm'
+                }
+              >
+                {copyrightText}
+              </p>
+            )}
           </main>
         </div>
       </div>

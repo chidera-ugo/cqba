@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export const CurrentUserAvatar = () => {
+export const CurrentUserAvatar = ({ size = 36 }: { size?: number }) => {
   return (
     <Link href={'/settings'} className={'my-auto'}>
       <svg
@@ -8,6 +8,10 @@ export const CurrentUserAvatar = () => {
         height='36'
         viewBox='0 0 36 36'
         fill='none'
+        style={{
+          width: size,
+          height: size,
+        }}
         xmlns='http://www.w3.org/2000/svg'
       >
         <rect

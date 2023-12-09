@@ -1,10 +1,12 @@
 import logo from '/public/logos/main-logo.svg';
 import white_logo from '/public/logos/white_logo.svg';
 import clsx from 'clsx';
-import { CurrentUserAvatar } from 'components/modules/app/CurrentUserAvatar';
+import { Avatar } from 'components/commons/Avatar';
 import { Notifications } from 'components/modules/app/Notifications';
 import { MobileMenu } from 'components/primary/MobileMenu';
 import { PointerLeft } from 'components/svgs/navigation/Arrows';
+import { useAppContext } from 'context/AppContext';
+import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -24,6 +26,9 @@ export const AppHeader = ({
   hideSideNavigation,
   className,
 }: PropsWithChildren<Props>) => {
+  const { user } = useAppContext().state;
+  const { getColor } = useGetColorByChar();
+
   return (
     <header
       className={clsx(
@@ -54,7 +59,12 @@ export const AppHeader = ({
           {!hideSideNavigation && (
             <div className={'hidden gap-4 1024:flex'}>
               <Notifications />
-              <CurrentUserAvatar />
+
+              <Avatar
+                avatar={user?.avatar}
+                getBackgroundColor={getColor}
+                char={user?.email}
+              />
             </div>
           )}
 

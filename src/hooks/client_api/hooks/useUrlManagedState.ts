@@ -4,22 +4,21 @@ import {
   defaultStringifySearch,
   simpleParseSearch,
 } from 'hooks/client_api/search_params';
-import {
-  ReadonlyURLSearchParams,
-  usePathname,
-  useRouter,
-} from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getDateRange } from 'utils/getters/getDateRange';
+import { getDeepNestedObjectValue } from 'utils/getters/getDeepNestedObjectValue';
 import { getKeysFromZodSchema } from 'utils/getters/getKeysFromZodSchema';
 import { ZodObject, ZodRawShape } from 'zod';
 
 export const useUrlManagedState = <T extends ZodRawShape>(
   schema: ZodObject<T>,
-  searchParams: ReadonlyURLSearchParams,
-  defaultRangeNumberOfDays?: number,
+  defaultRangeInDays?: number,
+  defaultRangeAccessorKey?: string, // You can pass the location of a range value present in "filters" as an accessorKey
   pageSize?: number
 ) => {
+  const searchParams = useSearchParams();
+
   const _pageSize = pageSize ?? defaultPageSize;
 
   const schemaKeys = getKeysFromZodSchema(schema);
@@ -37,7 +36,7 @@ export const useUrlManagedState = <T extends ZodRawShape>(
   const [filters, setFilters] = useState<Record<string, any>>({});
 
   const [range, setRange] = useState(
-    getDateRange({ days: defaultRangeNumberOfDays ?? 0 })
+    getDateRange({ days: defaultRangeInDays ?? 0 })
   );
 
   const [pagination, setPagination] = useState<PaginationState>({
@@ -54,6 +53,23 @@ export const useUrlManagedState = <T extends ZodRawShape>(
 
     setFilters(search);
     getPaginationFromUrl(pagination);
+
+    if (defaultRangeAccessorKey) {
+      const rangeInDays = getDeepNestedObjectValue(
+        search,
+        defaultRangeAccessorKey
+      );
+
+      if (rangeInDays) {
+        setRange(
+          getDateRange({
+            days: rangeInDays,
+          })
+        );
+
+        return;
+      }
+    }
 
     if (!search?.range) return;
 
@@ -73,15 +89,21 @@ export const useUrlManagedState = <T extends ZodRawShape>(
     replace(`${pathname}${defaultStringifySearch({ ...filters, pagination })}`);
   }, [filters, pagination]);
 
+  function resetPagination() {
+    setPagination({
+      pageIndex: 0,
+      pageSize: _pageSize,
+    });
+  }
+
   function getPaginationFromUrl(pagination: any) {
-    const pageIndex = parseInt(pagination.pageIndex);
-    const pageSize = parseInt(pagination.pageSize);
+    if (!pagination) return resetPagination();
+
+    const pageIndex = parseInt(pagination?.pageIndex);
+    const pageSize = parseInt(pagination?.pageSize);
 
     if (isNaN(pageIndex) || isNaN(pageSize) || pageSize !== _pageSize)
-      return setPagination({
-        pageIndex: 0,
-        pageSize: _pageSize,
-      });
+      return resetPagination();
 
     setPagination({ pageIndex, pageSize });
   }

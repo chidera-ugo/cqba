@@ -5,11 +5,12 @@ import { useGetDashboardSummary } from 'hooks/api/dashboard/useGetDashboardSumma
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { formatAmount } from 'utils/formatters/formatAmount';
 import { generatePlaceholderArray } from 'utils/generators/generatePlaceholderArray';
+import { DateRange } from 'utils/getters/getDateRange';
 
-export const Overview = () => {
+export const SummaryCards = ({ range }: { range: DateRange }) => {
   const { isVerified } = useIsVerified();
 
-  const { isLoading, isError, data } = useGetDashboardSummary({
+  const { isLoading, isError, data } = useGetDashboardSummary(range, {
     enabled: isVerified,
   });
 
@@ -26,7 +27,7 @@ export const Overview = () => {
   }[] = [
     {
       name: 'Account Balance',
-      value: 0,
+      value: data?.budgetBalance,
       isAmount: true,
       moreInfo: 'Total amount in your wallet',
       variance: 20,
@@ -43,26 +44,6 @@ export const Overview = () => {
       value: data?.requestsCount,
       isAmount: true,
       variance: 20,
-    },
-    {
-      name: 'Approved Budgets',
-      value: 0,
-      moreInfo: 'Total amount in your wallet',
-      hideInMobile: true,
-      variance: 20,
-    },
-    {
-      name: 'Approved Budget Balance',
-      value: data?.budgetBalance,
-      isAmount: true,
-      hideInMobile: true,
-      moreInfo: 'Total amount in your budget balance',
-      variance: 20,
-    },
-    {
-      name: 'No. of Employees',
-      hideInMobile: true,
-      value: 0,
     },
   ];
 
@@ -87,7 +68,9 @@ export const Overview = () => {
                   )}
                 >
                   <div>{name}</div>
-                  {moreInfo && <MoreInfo>{moreInfo}</MoreInfo>}
+                  {moreInfo && (
+                    <MoreInfo className={'my-auto'}>{moreInfo}</MoreInfo>
+                  )}
                 </div>
 
                 <div
@@ -137,7 +120,7 @@ export const Overview = () => {
 const IsLoadingIsError = ({ type }: { type: 'loading' | 'error' }) => {
   return (
     <div className='grid grid-cols-12 gap-5'>
-      {generatePlaceholderArray(6).map((id) => {
+      {generatePlaceholderArray(3).map((id) => {
         return (
           <div
             className={clsx(
