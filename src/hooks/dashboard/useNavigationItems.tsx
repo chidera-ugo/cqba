@@ -92,6 +92,10 @@ export const useNavigationItems = (role?: UserRole) => {
         isRoot: true,
       },
       {
+        icon: <Wallet />,
+        title: 'Wallet',
+      },
+      {
         icon: <PieChart />,
         title: 'Budgeting',
       },

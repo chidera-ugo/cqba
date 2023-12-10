@@ -2,19 +2,26 @@ import clsx from 'clsx';
 import { SummaryWithVariance } from 'components/modules/overview/Overview/SummaryWithVariance';
 import { useGetDashboardSummary } from 'hooks/api/dashboard/useGetDashboardSummary';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
+import { useUserRole } from 'hooks/rbac/useUserRole';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
+import { Fragment } from 'react';
 import { formatAmount } from 'utils/formatters/formatAmount';
 import { generatePlaceholderArray } from 'utils/generators/generatePlaceholderArray';
 import { DateRange } from 'utils/getters/getDateRange';
 
 export const SummaryCards = ({ range }: { range: DateRange }) => {
   const { isVerified } = useIsVerified();
+  const { isOwner } = useUserRole();
 
   const { primaryWallet } = useManageWallets();
 
-  const { isLoading, isError, data } = useGetDashboardSummary(range, {
-    enabled: isVerified,
-  });
+  const { isLoading, isError, data } = useGetDashboardSummary(
+    range,
+    primaryWallet?.currency,
+    {
+      enabled: isVerified,
+    }
+  );
 
   if (isLoading) return <IsLoadingIsError type='loading' />;
   if (isError) return <IsLoadingIsError type='error' />;
@@ -23,61 +30,69 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
     name: string;
     value: any;
     isAmount?: boolean;
+    disabled?: boolean;
     moreInfo?: string;
-    hideInMobile?: boolean;
     variance?: number;
   }[] = [
     {
       name: 'Account Balance',
-      value: data?.budgetBalance,
+      value: data?.budgetBalance?.value,
       isAmount: true,
       moreInfo: 'Total amount in your wallet',
-      variance: 20,
+      variance: data?.budgetBalance?.percentageDiff,
     },
     {
       name: 'Budget Balance',
-      value: 0,
+      value: data?.budgetBalance?.value,
       isAmount: true,
       moreInfo: 'Total amount in your budget balance',
-      variance: 20,
+      variance: data?.budgetBalance?.percentageDiff,
     },
     {
-      name: 'Total Payouts',
-      value: data?.requestsCount,
+      name: 'Total Spend',
+      value: data?.totalSpend?.value,
       isAmount: true,
-      variance: 20,
+      disabled: !isOwner,
+      variance: data?.totalSpend?.percentageDiff,
     },
   ];
 
   return (
     <div className='grid grid-cols-12 gap-5'>
-      {payload.map(({ name, value, variance, moreInfo, isAmount }, i) => {
-        return (
-          <div
-            className={clsx(
-              'card y-center col-span-12 h-[132px] 640:col-span-6 1280:col-span-4',
-              i === 0 && 'bg-primary-main text-white'
-            )}
-            key={name}
-          >
-            <SummaryWithVariance
-              className={i === 0 ? 'text-white' : 'text-neutral-500'}
-              currency={primaryWallet?.currency}
-              value={formatAmount({
-                value: value,
-                decimalPlaces: isAmount ? 2 : 0,
-                kFormatter: value > 999999,
-              })}
-              {...{
-                name,
-                variance,
-                moreInfo,
-                isAmount,
-              }}
-            />
-          </div>
-        );
-      })}
+      {payload.map(
+        ({ name, value, disabled, variance, moreInfo, isAmount }, i) => {
+          if (disabled) return <Fragment key={name} />;
+
+          const _val = Number(value ?? 0) / 100;
+
+          return (
+            <div
+              className={clsx(
+                'card y-center col-span-12 h-[116px] 640:col-span-6 640:h-[132px]',
+                isOwner && '1280:col-span-4',
+                i === 0 && 'bg-primary-main text-white'
+              )}
+              key={name}
+            >
+              <SummaryWithVariance
+                className={i === 0 ? 'text-white' : 'text-neutral-500'}
+                currency={data?.currency}
+                value={formatAmount({
+                  value: _val,
+                  decimalPlaces: isAmount ? 2 : 0,
+                  kFormatter: _val > 999999,
+                })}
+                {...{
+                  name,
+                  variance,
+                  moreInfo,
+                  isAmount,
+                }}
+              />
+            </div>
+          );
+        }
+      )}
     </div>
   );
 };
@@ -89,7 +104,7 @@ const IsLoadingIsError = ({ type }: { type: 'loading' | 'error' }) => {
         return (
           <div
             className={clsx(
-              'card y-center col-span-12 h-[132px] 640:col-span-6 1280:col-span-4'
+              'card y-center col-span-12 h-[116px] 640:col-span-6 640:h-[132px] 1280:col-span-4'
             )}
             key={id}
           >

@@ -32,11 +32,11 @@ export const BudgetsOverview = () => {
                 id={id}
                 key={id}
                 type='button'
-                className={clsx('relative h-full w-1/2 px-2 transition-none')}
+                className={clsx('relative h-full w-1/2')}
               >
                 <span
                   className={clsx(
-                    `y-center smooth relative z-10 h-full flex-shrink-0 px-1 text-xs font-medium 340:text-sm`,
+                    `y-center smooth relative z-10 h-full flex-shrink-0 text-xs font-medium 340:text-sm`,
                     isActive ? 'text-primary-main' : 'text-neutral-500'
                   )}
                 >

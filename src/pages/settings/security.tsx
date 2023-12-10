@@ -35,19 +35,7 @@ export default function Security() {
     disabled?: boolean;
   }[] = [
     {
-      title: 'Change Password',
-      description: `When changing your password, we strongly recommend using a secure password you don't use anywhere else.`,
-      button: (
-        <button
-          onClick={() => replace({ pathname, query: { _m: 'password' } })}
-          className='dark-button h-10 px-3 text-sm'
-        >
-          Change Password
-        </button>
-      ),
-    },
-    {
-      title: 'Transaction Pin',
+      title: 'Change Transaction Pin',
       description: `When changing your pin, we strongly recommend using a secure pin you don't use anywhere else.`,
       disabled: !user?.pinSet,
       button: (

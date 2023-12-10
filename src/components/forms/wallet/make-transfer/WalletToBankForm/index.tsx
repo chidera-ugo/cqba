@@ -88,6 +88,7 @@ export const WalletToBankForm = ({
                   'budget',
                   formikProps.values.budget,
                 ]);
+                queryClient.invalidateQueries(['cash_flow_chart']);
                 queryClient.invalidateQueries(['wallet_transactions']);
               },
               onError(e) {

@@ -57,8 +57,8 @@ export const CashflowOverview = ({
 
   return (
     <div className='card p-0'>
-      <div className='relative justify-between p-5 768:flex 768:h-[140px]'>
-        <div>
+      <div className='relative gap-3 p-5 768:flex 768:h-[140px] 1280:block 1340:flex'>
+        <div className={'mb-auto flex w-full justify-between'}>
           <SummaryWithVariance
             name={`Total ${
               transactionType === 'credit' ? 'Income' : 'Expense'
@@ -73,20 +73,23 @@ export const CashflowOverview = ({
               kFormatter: amount > 99999999,
             })}
           />
+
+          <div className='flex flex-col'>
+            <Filter
+              filterKey='transactionType'
+              withChevron
+              className={'mt-auto 768:mt-0 1280:mt-auto 1340:mt-0'}
+              buttonClassname={'h-9'}
+              id='cashflow_chart_duration_filter'
+              {...{ filters, setFilters }}
+              dropdownClassName='min-w-[170px] right-0'
+              options={transactionTypeFilterOptions}
+            />
+          </div>
         </div>
 
-        <div className='mb-auto mt-2 flex gap-3 768:mt-0'>
-          <Filter
-            filterKey='transactionType'
-            withChevron
-            buttonClassname={'h-9'}
-            id='cashflow_chart_duration_filter'
-            {...{ filters, setFilters }}
-            dropdownClassName='min-w-[170px] left-0 768:right-0'
-            options={transactionTypeFilterOptions}
-          />
-
-          <div className='h-9 cursor-pointer overflow-hidden rounded-full border border-neutral-200'>
+        <div className='mb-auto mt-2 flex flex-shrink-0 gap-3 768:mt-0 768:w-auto 1280:mt-2 1340:mt-0'>
+          <div className='flex h-9 w-full cursor-pointer overflow-hidden rounded-full border border-neutral-200 768:w-auto'>
             {periodPresetOptions.map(({ value, name }, i) => {
               const isActive = filters?.rangePreset?.value === value;
               const id = `range_preset_${name}`;
@@ -108,13 +111,13 @@ export const CashflowOverview = ({
                   key={id}
                   type='button'
                   className={clsx(
-                    'relative h-full w-[90px] transition-none',
+                    'relative flex h-full w-full transition-none 768:w-auto',
                     i > 0 && 'border-l border-neutral-200'
                   )}
                 >
                   <span
                     className={clsx(
-                      `y-center smooth relative z-10 h-full flex-shrink-0 px-1 text-xs font-medium 340:text-sm`,
+                      `y-center smooth relative z-10 h-full w-full px-3 text-xs font-medium 340:text-sm`,
                       isActive ? 'text-black' : 'text-neutral-500'
                     )}
                   >

@@ -12,7 +12,6 @@ import { useDeleteInvite } from 'hooks/api/employees/useDeleteInvite';
 import { IEmployee } from 'hooks/api/employees/useGetAllEmployees';
 import { useGetEmployeeById } from 'hooks/api/employees/useGetEmployeeById';
 import { useResendInvite } from 'hooks/api/employees/useResendInvite';
-import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { formatDate } from 'utils/formatters/formatDate';
@@ -58,8 +57,6 @@ export const EmployeeDetails = ({
       },
     });
 
-  const { getColor } = useGetColorByChar();
-
   if (isLoading && !currentEmployee) return <IsLoading />;
 
   if (isError && !currentEmployee)
@@ -68,8 +65,6 @@ export const EmployeeDetails = ({
   const data = !!currentEmployee ? currentEmployee : _data!;
 
   const { firstName, lastName, status, email, role, phone, createdAt } = data;
-
-  const char = firstName?.charAt(0);
 
   const payload = [
     { title: 'Phone Number', value: phone },
@@ -98,11 +93,7 @@ export const EmployeeDetails = ({
       <div className={'rounded-xl border border-neutral-310 p-5'}>
         <div className='flex gap-2 border-b border-neutral-310 pb-4'>
           <div className='y-center'>
-            <Avatar
-              size={42}
-              getBackgroundColor={() => getColor(char)}
-              {...{ char }}
-            />
+            <Avatar size={42} />
           </div>
 
           <div className={'my-auto'}>

@@ -14,6 +14,7 @@ export default function PermissionsGroupDetailsPage() {
           title: 'Permission Details',
         },
       ]}
+      enabledFor={'owner'}
     >
       <PermissionsGroupDetails />
     </AppLayout>

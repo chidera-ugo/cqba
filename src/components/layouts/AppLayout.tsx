@@ -7,6 +7,7 @@ import { IdleTimer } from 'components/modules/IdleTimer';
 import { PageHead } from 'components/primary/PageHead';
 import { ChevronRight } from 'components/svgs/navigation/Chevrons';
 import { copyrightText } from 'constants/copyrightText';
+import { UserRole } from 'enums/employee_enum';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useNavigationItems } from 'hooks/dashboard/useNavigationItems';
 import { useIsKycFlow } from 'hooks/kyc/useIsKycFlow';
@@ -27,6 +28,7 @@ export interface Props {
   childrenClassName?: string;
   breadCrumbs?: { title: string; url?: string }[];
   breadCrumbsSlot?: ReactNode;
+  enabledFor?: UserRole;
 }
 
 export const AppLayout = ({
@@ -36,6 +38,7 @@ export const AppLayout = ({
   back,
   childrenClassName,
   breadCrumbs,
+  enabledFor,
   breadCrumbsSlot,
   ...props
 }: PropsWithChildren<Props>) => {
@@ -43,10 +46,12 @@ export const AppLayout = ({
 
   const { screenSize, user, hasChoosenPlan } = useAppContext().state;
 
+  const role = user?.role;
+
   const shouldSelectFirstPlan =
     !hasChoosenPlan &&
     !user?.organization?.subscription?.object &&
-    user?.role === 'owner';
+    role === 'owner';
 
   const hideSideNavigation = props.hideSideNavigation || shouldSelectFirstPlan;
 
@@ -54,7 +59,10 @@ export const AppLayout = ({
   const { isKycFlow } = useIsKycFlow();
   const { pathname } = useRouter();
 
-  const { isValidRoute } = useNavigationItems(user?.role);
+  const { isValidRoute } = useNavigationItems(role);
+
+  if (!enabledFor) {
+  } else if (enabledFor !== role) return <NotFound />;
 
   if ((!isVerified && pathname !== '/kyc') || !isValidRoute())
     return <NotFound />;
