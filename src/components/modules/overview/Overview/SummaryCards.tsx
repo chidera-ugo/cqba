@@ -1,8 +1,8 @@
 import clsx from 'clsx';
-import { MoreInfo } from 'components/commons/MoreInfo';
-import { Outbound } from 'components/svgs/navigation/Arrows';
+import { SummaryWithVariance } from 'components/modules/overview/Overview/SummaryWithVariance';
 import { useGetDashboardSummary } from 'hooks/api/dashboard/useGetDashboardSummary';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
+import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { formatAmount } from 'utils/formatters/formatAmount';
 import { generatePlaceholderArray } from 'utils/generators/generatePlaceholderArray';
 import { DateRange } from 'utils/getters/getDateRange';
@@ -10,11 +10,13 @@ import { DateRange } from 'utils/getters/getDateRange';
 export const SummaryCards = ({ range }: { range: DateRange }) => {
   const { isVerified } = useIsVerified();
 
+  const { primaryWallet } = useManageWallets();
+
   const { isLoading, isError, data } = useGetDashboardSummary(range, {
     enabled: isVerified,
   });
 
-  if (isVerified && isLoading) return <IsLoadingIsError type='loading' />;
+  if (isLoading) return <IsLoadingIsError type='loading' />;
   if (isError) return <IsLoadingIsError type='error' />;
 
   const payload: {
@@ -49,70 +51,33 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
 
   return (
     <div className='grid grid-cols-12 gap-5'>
-      {payload.map(
-        ({ name, value, variance, hideInMobile, moreInfo, isAmount }, i) => {
-          return (
-            <div
-              className={clsx(
-                'card y-center col-span-12 py-4 640:col-span-6 1280:col-span-4',
-                i === 0 && 'bg-primary-main text-white',
-                hideInMobile && 'hidden 640:block'
-              )}
-              key={name}
-            >
-              <div className='my-auto'>
-                <div
-                  className={clsx(
-                    'flex text-sm 640:text-base',
-                    i === 0 ? 'text-white' : 'text-neutral-500'
-                  )}
-                >
-                  <div>{name}</div>
-                  {moreInfo && (
-                    <MoreInfo className={'my-auto'}>{moreInfo}</MoreInfo>
-                  )}
-                </div>
-
-                <div
-                  className={clsx(
-                    'mt-2 text-2xl font-semibold 640:mt-3 640:text-3xl'
-                  )}
-                >
-                  {isAmount && <span className='mr-1.5'>₦</span>}
-                  {formatAmount({
-                    value: value,
-                    decimalPlaces: isAmount ? 2 : 0,
-                    kFormatter: value > 999999,
-                  })}
-                </div>
-
-                <div className={'mt-2'}>
-                  {variance && (
-                    <div
-                      className={clsx(
-                        'flex gap-1',
-                        i === 0 ? 'text-white' : 'text-neutral-550'
-                      )}
-                    >
-                      <span
-                        className={clsx(
-                          'my-auto',
-                          variance > 0 ? 'text-green-500' : 'text-red-500'
-                        )}
-                      >
-                        <Outbound />
-                      </span>
-                      <span className={'text-sm font-medium'}>
-                        {Math.abs(variance)}% in selected period
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          );
-        }
-      )}
+      {payload.map(({ name, value, variance, moreInfo, isAmount }, i) => {
+        return (
+          <div
+            className={clsx(
+              'card y-center col-span-12 h-[132px] 640:col-span-6 1280:col-span-4',
+              i === 0 && 'bg-primary-main text-white'
+            )}
+            key={name}
+          >
+            <SummaryWithVariance
+              className={i === 0 ? 'text-white' : 'text-neutral-500'}
+              currency={primaryWallet?.currency}
+              value={formatAmount({
+                value: value,
+                decimalPlaces: isAmount ? 2 : 0,
+                kFormatter: value > 999999,
+              })}
+              {...{
+                name,
+                variance,
+                moreInfo,
+                isAmount,
+              }}
+            />
+          </div>
+        );
+      })}
     </div>
   );
 };
@@ -124,7 +89,7 @@ const IsLoadingIsError = ({ type }: { type: 'loading' | 'error' }) => {
         return (
           <div
             className={clsx(
-              'card y-center col-span-12 h-[134px] 640:col-span-6 640:h-[134px] 1280:col-span-4'
+              'card y-center col-span-12 h-[132px] 640:col-span-6 1280:col-span-4'
             )}
             key={id}
           >
@@ -137,13 +102,13 @@ const IsLoadingIsError = ({ type }: { type: 'loading' | 'error' }) => {
               ></div>
               <div
                 className={clsx(
-                  'mt-4 h-8 w-[70%] 640:mt-4',
+                  'mt-2 h-8 w-[70%]',
                   type === 'loading' ? 'skeleton' : 'skeleton-error'
                 )}
               ></div>
               <div
                 className={clsx(
-                  'mt-3 h-4 w-[50%]',
+                  'mt-2 h-4 w-[50%]',
                   type === 'loading' ? 'skeleton' : 'skeleton-error'
                 )}
               ></div>

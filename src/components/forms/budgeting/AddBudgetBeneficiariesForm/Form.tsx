@@ -57,12 +57,16 @@ export const Form = ({
         placeholder={'Select beneficiaries'}
         name={'beneficiaries'}
         options={
-          data?.map(({ _id, firstName, lastName }) => {
-            return {
-              name: `${firstName} ${lastName}`,
-              id: _id,
-            };
-          }) ?? []
+          data
+            ?.filter(({ firstName, lastName }) => {
+              return !!firstName && !!lastName;
+            })
+            ?.map(({ _id, firstName, lastName }) => {
+              return {
+                name: `${firstName} ${lastName}`,
+                id: _id,
+              };
+            }) ?? []
         }
         itemCountAdjustment={1}
       >

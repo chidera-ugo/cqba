@@ -8,10 +8,11 @@ type Props = {
 };
 
 export const IdNavigator = ({ id, autoFocus, className }: Props) => {
+  const _id = `id_nav_${id}`;
   useEffect(() => {
     if (!autoFocus) return;
 
-    document.getElementById(`id_nav_${id}`)?.scrollIntoView();
+    document.getElementById(_id)?.scrollIntoView();
   }, []);
 
   return (
@@ -21,7 +22,7 @@ export const IdNavigator = ({ id, autoFocus, className }: Props) => {
           'absolute z-0 h-1 w-full bg-transparent',
           className ?? '-top-[85px]'
         )}
-        id={`id_nav_${id}`}
+        id={_id}
       ></div>
     </div>
   );

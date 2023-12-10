@@ -6,7 +6,6 @@ import { Exit } from 'components/svgs/navigation/Exit';
 import { useAppContext } from 'context/AppContext';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useDestroySession } from 'hooks/app/useDestroySession';
-import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { useState } from 'react';
 
 export const ProfileSwitcher = ({
@@ -29,8 +28,6 @@ export const ProfileSwitcher = ({
 
   const { data } = useGetOrganizationInformation();
 
-  const { getColor } = useGetColorByChar();
-
   const isOwner = user?.role === 'owner';
 
   return (
@@ -50,11 +47,7 @@ export const ProfileSwitcher = ({
           onClick={() => setShowDropdown((prev) => !prev)}
         >
           <div className='flex gap-2.5'>
-            <Avatar
-              avatar={user?.avatar}
-              size={48}
-              getBackgroundColor={getColor}
-            />
+            <Avatar avatar={user?.avatar} size={48} />
 
             <div className='my-auto text-left'>
               <div

@@ -185,7 +185,7 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
         negative={() => setAction(null)}
       />
 
-      <PendingBudgetCard {...data} {...{ getColor }} showFullDetails />
+      <PendingBudgetCard {...data} {...{ getColor }} />
 
       {user?.role === 'owner' ? (
         <ApproveBudgetForm

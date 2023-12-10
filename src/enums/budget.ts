@@ -14,5 +14,18 @@ export enum BudgetPriorities {
   Low = 3,
 }
 
+export function getPriorityAsText(priority: BudgetPriorities) {
+  switch (priority) {
+    case BudgetPriorities.High:
+      return 'High';
+    case BudgetPriorities.Low:
+      return 'Low';
+    case BudgetPriorities.Medium:
+      return 'Medium';
+    default:
+      return '';
+  }
+}
+
 export type BudgetStatus = keyof typeof BudgetStatuses;
 export type BudgetPriority = keyof typeof BudgetPriorities;

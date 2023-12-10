@@ -56,7 +56,7 @@ export const Filter = <T extends Record<string, any>>({
           <span className='my-auto ml-1'>
             <div
               className={clsx(
-                'duration-100',
+                'text-primary-main duration-100',
                 showDropdown ? 'rotate-180' : 'rotate-0'
               )}
             >

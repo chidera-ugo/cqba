@@ -53,9 +53,7 @@ export const TopCategoriesChart = ({ chartData }: Props) => {
         <CartesianGrid horizontal={false} strokeDasharray='3 3' />
 
         <Tooltip
-          content={
-            <CustomTooltip formatValue={(value: number) => `${value}%`} />
-          }
+          content={<CustomTooltip formatValue={(value) => `${value}%`} />}
         />
 
         <Bar dataKey='value'>

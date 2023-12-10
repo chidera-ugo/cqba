@@ -6,7 +6,6 @@ import { Notifications } from 'components/modules/app/Notifications';
 import { MobileMenu } from 'components/primary/MobileMenu';
 import { PointerLeft } from 'components/svgs/navigation/Arrows';
 import { useAppContext } from 'context/AppContext';
-import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -27,7 +26,6 @@ export const AppHeader = ({
   className,
 }: PropsWithChildren<Props>) => {
   const { user } = useAppContext().state;
-  const { getColor } = useGetColorByChar();
 
   return (
     <header
@@ -60,11 +58,7 @@ export const AppHeader = ({
             <div className={'hidden gap-4 1024:flex'}>
               <Notifications />
 
-              <Avatar
-                avatar={user?.avatar}
-                getBackgroundColor={getColor}
-                char={user?.email}
-              />
+              <Avatar avatar={user?.avatar} />
             </div>
           )}
 

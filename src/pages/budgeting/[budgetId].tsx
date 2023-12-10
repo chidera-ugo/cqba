@@ -66,6 +66,7 @@ export default function BudgetDetails() {
                 range,
                 setRange,
               }}
+              buttonClassname={'h-10'}
               selectFilters={[
                 {
                   id: 'transactionType',

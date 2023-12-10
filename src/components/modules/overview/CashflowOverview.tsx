@@ -5,9 +5,9 @@ import { NoData } from 'components/core/Table/NoData';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
 import { Filter } from 'components/form-elements/Filter';
+import { SummaryWithVariance } from 'components/modules/overview/Overview/SummaryWithVariance';
 import { EmptyChart } from 'components/svgs/overview/EmptyChart';
 import { Spinner } from 'components/svgs/dashboard/Spinner';
-import { CalendarIcon } from 'components/svgs/others/CalendarIcon';
 import {
   periodPresetOptions,
   transactionTypeFilterOptions,
@@ -18,6 +18,8 @@ import { usePopulateEmptyChartData } from 'hooks/charts/usePopulateEmptyChartDat
 import { UseUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
+import Link from 'next/link';
+import { formatAmount } from 'utils/formatters/formatAmount';
 import { getDateRange } from 'utils/getters/getDateRange';
 
 export const CashflowOverview = ({
@@ -51,26 +53,36 @@ export const CashflowOverview = ({
     };
   });
 
+  const amount = Number(data?.amount?.value ?? 0) / 100;
+
   return (
     <div className='card p-0'>
-      <div className='x-between relative flex p-5'>
-        <h5 className={'text-base font-medium'}>Cashflow Overview</h5>
+      <div className='relative justify-between p-5 768:flex 768:h-[140px]'>
+        <div>
+          <SummaryWithVariance
+            name={`Total ${
+              transactionType === 'credit' ? 'Income' : 'Expense'
+            }`}
+            isAmount
+            currency={primaryWallet?.currency}
+            className={'text-neutral-500'}
+            variance={data?.amount?.percentageDiff}
+            value={formatAmount({
+              value: amount,
+              decimalPlaces: 2,
+              kFormatter: amount > 99999999,
+            })}
+          />
+        </div>
 
-        <div className='flex gap-3'>
-          {isFetching && (
-            <div className='my-auto'>
-              <Spinner className={'h-5 w-5 text-primary-main'} />
-            </div>
-          )}
-
+        <div className='mb-auto mt-2 flex gap-3 768:mt-0'>
           <Filter
-            icon={<CalendarIcon />}
             filterKey='transactionType'
             withChevron
             buttonClassname={'h-9'}
             id='cashflow_chart_duration_filter'
             {...{ filters, setFilters }}
-            dropdownClassName='min-w-[170px] right-0'
+            dropdownClassName='min-w-[170px] left-0 768:right-0'
             options={transactionTypeFilterOptions}
           />
 
@@ -127,7 +139,7 @@ export const CashflowOverview = ({
         </div>
       </div>
 
-      <div className='y-center h-[520px]'>
+      <div className='y-centers h-[400px]'>
         {isVerified && isLoading && !data ? (
           <IsLoading />
         ) : isError ? (
@@ -143,15 +155,30 @@ export const CashflowOverview = ({
           </div>
         ) : (
           <div className='x-thin-scrollbar h-full overflow-x-auto px-3'>
-            <AppErrorBoundary className='h-full min-w-[700px]'>
+            <AppErrorBoundary className='relative h-full min-w-[700px]'>
+              {isFetching && (
+                <div className='absolute right-3 top-3'>
+                  <Spinner className={'mx-auto h-5 w-5 text-primary-main'} />
+                </div>
+              )}
+
               <AnalyticsChart
-                color={transactionType === 'credit' ? '#1A44ED' : '#b20000'}
+                color={transactionType !== 'credit' ? '#1A44ED' : '#30b902'}
                 period={period}
                 chartData={chartData?.length ? chartData : getChartData(7)}
               />
             </AppErrorBoundary>
           </div>
         )}
+      </div>
+
+      <div className='x-center w-full border-t border-neutral-200 p-3'>
+        <Link
+          href={'/analytics'}
+          className={'w-full text-center text-sm font-medium text-primary-main'}
+        >
+          View Expense Report
+        </Link>
       </div>
     </div>
   );

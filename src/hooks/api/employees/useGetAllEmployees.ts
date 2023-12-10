@@ -13,6 +13,7 @@ export interface IEmployee {
   firstName: string;
   sKey: string;
   role: UserRole;
+  emailVerified?: boolean;
   organizationId: string;
   userId: string;
   updatedAt: number;

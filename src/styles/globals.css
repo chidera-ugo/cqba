@@ -191,7 +191,7 @@
   }
 
   .card {
-    @apply w-full rounded-xl border border-neutral-310 p-3 640:p-5;
+    @apply w-full rounded-xl border border-neutral-310 p-4 640:p-6;
   }
 
   .x-between {
@@ -313,7 +313,7 @@
   }
 
   .pill_red {
-    @apply tpill bg-red-200 text-red-900 ring-1 ring-red-600 ring-opacity-20 640:ring-2;
+    @apply tpill bg-red-100 text-red-700 ring-2 ring-red-600 ring-opacity-30;
   }
 
   .pill_yellow {

@@ -11,7 +11,7 @@ export interface TCashFlowChart {
 
 interface Amount {
   value: number;
-  percentageDiff: number | null;
+  percentageDiff?: number;
 }
 
 interface Trend {

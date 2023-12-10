@@ -4,11 +4,10 @@ import { CurrentUserAvatar } from 'components/modules/app/CurrentUserAvatar';
 interface Props {
   char?: string;
   avatar?: string;
-  getBackgroundColor: (char: string) => string;
+  getBackgroundColor?: (char: string) => string;
   clickable?: boolean;
   size?: number;
   className?: string;
-  generic?: boolean;
 }
 
 export const Avatar = ({
@@ -18,15 +17,16 @@ export const Avatar = ({
   getBackgroundColor,
   size = 40,
   className,
-  generic,
 }: Props) => {
-  const color = getBackgroundColor(char ?? 'R');
+  const color = getBackgroundColor
+    ? getBackgroundColor(char ?? 'R')
+    : '#989898';
 
   return (
     <div className={'my-auto flex-shrink-0'}>
       {!avatar ? (
         <>
-          {!generic ? (
+          {!getBackgroundColor ? (
             <CurrentUserAvatar size={size} />
           ) : (
             <div

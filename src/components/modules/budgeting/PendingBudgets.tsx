@@ -136,7 +136,7 @@ export const PendingBudgets = ({
                 {...{
                   isLoading,
                   isError,
-                  data,
+                  data: res,
                 }}
               />
             </div>

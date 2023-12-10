@@ -17,7 +17,6 @@ import { budgetingFiltersSchema } from 'zod_schemas/budgeting_schema';
 export default function Budgeting() {
   const { filters, setFilters, pagination, setPagination } = useUrlManagedState(
     budgetingFiltersSchema,
-    undefined,
     9
   );
 

@@ -37,7 +37,7 @@ export const AnalyticsChart = ({ chartData, period, color }: Props) => {
           primary:
             period === 'months'
               ? dayjs(item.primary).format("MMM 'YY")
-              : dayjs(item.primary).format('D MMM'),
+              : dayjs(item.primary).format('MMM D'),
           secondary: item.secondary,
         };
       }),
@@ -75,12 +75,12 @@ export const AnalyticsChart = ({ chartData, period, color }: Props) => {
           tickFormatter={(val) => {
             return formatAmount({
               value: val,
-              kFormatter: val > 99999,
+              kFormatter: val > 9999,
               decimalPlaces: 0,
             });
           }}
           fontSize={11}
-          width={35}
+          width={40}
           dataKey='secondary'
         />
 
@@ -88,8 +88,8 @@ export const AnalyticsChart = ({ chartData, period, color }: Props) => {
           strokeWidth={3}
           dataKey='secondary'
           stroke={color}
-          fillOpacity={0.05}
-          type={'monotone'}
+          fillOpacity={0.04}
+          // type={'monotone'}
           fill={color}
         />
 

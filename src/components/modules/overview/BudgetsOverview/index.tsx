@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { AppErrorBoundary } from 'components/core/ErrorBoundary';
-import { ActiveBudgetsOverview } from 'components/modules/overview/BudgetsOverview/ActiveBudgetsOverview';
+import { PendingAndActiveBudgetsOverview } from 'components/modules/overview/BudgetsOverview/PendingAndActiveBudgetsOverview';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -18,58 +18,68 @@ export const BudgetsOverview = () => {
 
   return (
     <div className='card p-0'>
-      <h5 className={'p-5 text-base font-medium'}>Budgets</h5>
+      <div className='h-[120px] p-5 pb-2'>
+        <h5 className={'text-base font-medium'}>Budgets</h5>
 
-      <div className='h-9 overflow-hidden rounded-full border border-neutral-200'>
-        {tabs.map(({ value, title }, i) => {
-          const isActive = currentTab?.value === value;
-          const id = `budget_overview_${title}`;
+        <div className='mt-4 h-12 overflow-hidden rounded-xl bg-[#F9FAFB] p-1'>
+          {tabs.map(({ value, title }) => {
+            const isActive = currentTab?.value === value;
+            const id = `budget_overview_${title}`;
 
-          return (
-            <button
-              onClick={() => setCurrentTab({ value, title })}
-              id={id}
-              key={id}
-              type='button'
-              className={clsx(
-                'relative h-full px-2 transition-none',
-                i > 0 && 'border-l border-neutral-200'
-              )}
-            >
-              <span
-                className={clsx(
-                  `y-center smooth relative z-10 h-full flex-shrink-0 px-1 text-xs font-medium 340:text-sm`,
-                  isActive ? 'text-black' : 'text-neutral-500'
-                )}
+            return (
+              <button
+                onClick={() => setCurrentTab({ value, title })}
+                id={id}
+                key={id}
+                type='button'
+                className={clsx('relative h-full w-1/2 px-2 transition-none')}
               >
-                {title}
-              </span>
-
-              {isActive && (
-                <motion.div
-                  className='absolute inset-0 z-0 h-full w-full'
-                  transition={{
-                    duration: 0.3,
-                  }}
-                  layoutId={'budgets_type_tab'}
+                <span
+                  className={clsx(
+                    `y-center smooth relative z-10 h-full flex-shrink-0 px-1 text-xs font-medium 340:text-sm`,
+                    isActive ? 'text-primary-main' : 'text-neutral-500'
+                  )}
                 >
-                  <div className={clsx(`h-full w-full bg-[#F0F2F5]`)}></div>
-                </motion.div>
-              )}
-            </button>
-          );
-        })}
+                  {title}
+                </span>
+
+                {isActive && (
+                  <motion.div
+                    className='absolute inset-0 z-0 h-full w-full'
+                    transition={{
+                      duration: 0.3,
+                    }}
+                    layoutId={'budgets_type_tab'}
+                  >
+                    <div
+                      className={clsx(
+                        `h-full w-full rounded-lg border border-neutral-200 bg-white shadow-sm`
+                      )}
+                    ></div>
+                  </motion.div>
+                )}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      <div className='h-[400px]'>
+      <div
+        className={'hidden-scrollbar block h-[420px] overflow-y-auto py-3 px-6'}
+      >
         <AppErrorBoundary>
-          {currentTab?.value === 'active' ? <ActiveBudgetsOverview /> : <></>}
+          <PendingAndActiveBudgetsOverview status={currentTab?.value} />
         </AppErrorBoundary>
       </div>
 
-      <Link href={`/budgets`} className='border-t border-neutral-200 p-4'>
-        View Budgets
-      </Link>
+      <div className='x-center w-full border-t border-neutral-200 p-3'>
+        <Link
+          href={'/budgeting'}
+          className={'w-full text-center text-sm font-medium text-primary-main'}
+        >
+          View Budgets
+        </Link>
+      </div>
     </div>
   );
 };
