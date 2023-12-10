@@ -1,19 +1,25 @@
 import clsx from 'clsx';
 import { ChevronRight } from 'components/svgs/navigation/Chevrons';
 import { useHorizontalScrollIntoView } from 'hooks/commons/useHorizontalScrollIntoView';
+import { useUserRole } from 'hooks/rbac/useUserRole';
 import { useSettingsTabs } from 'hooks/settings/useSettingsTabs';
 import { useRouter } from 'next/router';
+import { Fragment } from 'react';
 import { convertToUrlString } from 'utils/converters/convertToUrlString';
 
 export const SettingsTabs = () => {
   const { settingsTabs, checkIsActive } = useSettingsTabs();
   const { push } = useRouter();
   const { scrollIntoView } = useHorizontalScrollIntoView();
+  const { role } = useUserRole();
 
   return (
     <div className='app-container x-between nav_bar sticky left-0 top-14 z-[1000] -ml-2 overflow-x-auto 640:h-16 1024:top-20'>
       <div className='flex w-full min-w-max flex-shrink-0'>
-        {settingsTabs.map(({ isRoot, url, name }, i) => {
+        {settingsTabs.map(({ isRoot, url, name, enabledFor }, i) => {
+          if (!enabledFor) {
+          } else if (enabledFor !== role) return <Fragment key={name} />;
+
           const _url = convertToUrlString(name);
           const isActive = !!checkIsActive(name, isRoot, url);
           const id = `settings_tab-${_url}`;

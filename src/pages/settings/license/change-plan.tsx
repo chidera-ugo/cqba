@@ -14,6 +14,7 @@ export default function ChangePlan() {
           title: 'Change Plan',
         },
       ]}
+      enabledFor={'owner'}
     >
       <ChoosePlan minimal />
     </AppLayout>

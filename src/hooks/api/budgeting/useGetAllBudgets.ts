@@ -13,6 +13,7 @@ export interface IBudget {
   amount: number;
   expiry: string;
   name: string;
+  priority: number;
   threshold: number;
   paused: boolean;
   beneficiaries: {
@@ -54,11 +55,14 @@ export function useGetAllBudgets(
 }
 
 export function useGetAllBudgetsUnpaginated(
+  status?: string,
   options?: UseQueryOptions<any, any, any, string[]>
 ) {
+  const _status = !status ? 'active' : status;
+
   return useTQuery<PaginatedResponse<IBudget>>({
-    queryKey: ['budgets', 'unpaginated'],
-    url: `?paginated=false`,
+    queryKey: ['budgets', 'unpaginated', _status],
+    url: `?paginated=false&status=${_status}`,
     service: 'budgets',
     options: {
       ...options,

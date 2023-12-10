@@ -37,3 +37,5 @@ export const useGetColorByChar = () => {
     getColor,
   };
 };
+
+export type GetColorByChar = ReturnType<typeof useGetColorByChar>['getColor'];

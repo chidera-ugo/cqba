@@ -13,13 +13,21 @@ export interface IUser {
   GSI1pKey?: string;
   roles?: string[];
   role?: UserRole;
-  organization?: string;
+  organization?: Organization;
   updatedAt?: number;
   GSI1sKey?: string;
   hashRt?: string;
-  hasActivePlan?: boolean;
   _id: string;
   phone?: string;
   pinSet?: boolean;
   defaultCategoryIds?: string[];
+}
+
+interface Organization {
+  _id: '6571d4f0f769a3c8587d22e7';
+  subscription: {
+    months: number;
+    gracePeriod: number;
+    object?: string;
+  };
 }

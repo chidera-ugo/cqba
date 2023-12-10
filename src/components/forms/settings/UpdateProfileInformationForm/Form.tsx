@@ -40,7 +40,7 @@ export const Form = ({ submitting, formikProps }: Props) => {
 
   return (
     <FormikForm onSubmit={handleSubmit}>
-      <div className='grid grid-cols-12'>
+      <div className='grid-cols-12 gap-5 640:grid'>
         <div className='col-span-4'>
           <h6>Personal Information</h6>
           <p className={'mt-1 max-w-[300px] text-sm'}>
@@ -49,14 +49,14 @@ export const Form = ({ submitting, formikProps }: Props) => {
 
           <SubmitButton
             submitting={submitting}
-            className={'primary-button mt-5 w-[128px]'}
+            className={'primary-button mt-5 hidden w-[128px] 640:block'}
           >
             Save Changes
           </SubmitButton>
         </div>
 
         <div className='col-span-8'>
-          <div className='max-w-[600px]'>
+          <div className='mt-0 max-w-[600px] 640:-mt-5'>
             <div className='gap-4 880:flex'>
               <Input label='First Name' name='firstName' />
               <Input label='Last Name' name='lastName' />
@@ -83,6 +83,13 @@ export const Form = ({ submitting, formikProps }: Props) => {
             />
           </div>
         </div>
+
+        <SubmitButton
+          submitting={submitting}
+          className={'primary-button mt-5 block w-[128px] 640:hidden'}
+        >
+          Save Changes
+        </SubmitButton>
       </div>
     </FormikForm>
   );

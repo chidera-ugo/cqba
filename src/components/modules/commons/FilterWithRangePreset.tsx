@@ -25,6 +25,7 @@ interface Props {
   selectFilters?: SelectFilterItem[];
   hideDateRange?: boolean;
   processing?: boolean;
+  buttonClassname?: string;
 }
 
 export const FilterWithRangePreset = ({
@@ -35,6 +36,7 @@ export const FilterWithRangePreset = ({
   filters,
   selectFilters,
   processing,
+  buttonClassname,
   hideDateRange,
 }: Props & Omit<UseUrlManagedState, 'pagination' | 'setPagination'>) => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -177,11 +179,12 @@ export const FilterWithRangePreset = ({
         }}
         type='button'
         className={clsx(
-          'secondary-button z-50 flex h-11 w-[94px] px-4',
+          'secondary-button x-center z-50 gap-1 px-3',
+          buttonClassname ?? 'h-11 w-[94px]',
           showDropdown && 'active-input'
         )}
       >
-        <div className='my-auto mr-2'>
+        <div className='my-auto'>
           <Funnel />
         </div>
 
@@ -190,6 +193,7 @@ export const FilterWithRangePreset = ({
 
       <CentredModalWrapper
         show={showDropdown}
+        closeOnClickOutside
         closeModal={dismiss}
         title={'Filter'}
         className={'p-0'}

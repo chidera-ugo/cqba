@@ -1,9 +1,11 @@
+import { UserRole } from 'enums/employee_enum';
 import { useRouter } from 'next/router';
 import { convertToUrlString } from 'utils/converters/convertToUrlString';
 
 export type SettingsTab = {
   name: string;
   url?: string;
+  enabledFor?: UserRole;
   isRoot?: boolean;
 };
 
@@ -17,25 +19,20 @@ export const useSettingsTabs = () => {
     return null;
   }
 
-  const _settingsTabs = [
+  const settingsTabs: SettingsTab[] = [
     {
       name: 'Profile',
       isRoot: true,
     },
-    'License',
-    'User Permissions',
-    'Security',
+    {
+      name: 'License',
+      enabledFor: 'owner',
+    },
+    { name: 'User Permissions', enabledFor: 'owner' },
+    {
+      name: 'Security',
+    },
   ];
-
-  const settingsTabs: SettingsTab[] = _settingsTabs.map((tab) => {
-    if (typeof tab === 'string') {
-      return {
-        name: tab,
-      };
-    }
-
-    return tab;
-  });
 
   return {
     settingsTabs,

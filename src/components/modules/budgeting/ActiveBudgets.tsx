@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { SimpleToast } from 'components/commons/SimpleToast';
 import { AppErrorBoundary } from 'components/core/ErrorBoundary';
-import { EmptyTable } from 'components/core/Table/EmptyTable';
+import { NoData } from 'components/core/Table/NoData';
 import { Pagination } from 'components/core/Table/Pagination';
 import { TableDataStates } from 'components/core/Table/TableDataStates';
 import { ActiveBudgetCard } from 'components/modules/budgeting/ActiveBudgetCard';
@@ -65,7 +65,7 @@ export const ActiveBudgets = ({
 
   if (data && !data?.docs?.length)
     return (
-      <EmptyTable
+      <NoData
         processing={isLoading || isRefetching}
         imageSrc={budgeting}
         title='Create Budget'

@@ -7,6 +7,7 @@ import { IdleTimer } from 'components/modules/IdleTimer';
 import { PageHead } from 'components/primary/PageHead';
 import { ChevronRight } from 'components/svgs/navigation/Chevrons';
 import { copyrightText } from 'constants/copyrightText';
+import { UserRole } from 'enums/employee_enum';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useNavigationItems } from 'hooks/dashboard/useNavigationItems';
 import { useIsKycFlow } from 'hooks/kyc/useIsKycFlow';
@@ -27,6 +28,7 @@ export interface Props {
   childrenClassName?: string;
   breadCrumbs?: { title: string; url?: string }[];
   breadCrumbsSlot?: ReactNode;
+  enabledFor?: UserRole;
 }
 
 export const AppLayout = ({
@@ -36,6 +38,7 @@ export const AppLayout = ({
   back,
   childrenClassName,
   breadCrumbs,
+  enabledFor,
   breadCrumbsSlot,
   ...props
 }: PropsWithChildren<Props>) => {
@@ -43,8 +46,12 @@ export const AppLayout = ({
 
   const { screenSize, user, hasChoosenPlan } = useAppContext().state;
 
+  const role = user?.role;
+
   const shouldSelectFirstPlan =
-    !hasChoosenPlan && !user?.hasActivePlan && user?.role === 'owner';
+    !hasChoosenPlan &&
+    !user?.organization?.subscription?.object &&
+    role === 'owner';
 
   const hideSideNavigation = props.hideSideNavigation || shouldSelectFirstPlan;
 
@@ -52,7 +59,10 @@ export const AppLayout = ({
   const { isKycFlow } = useIsKycFlow();
   const { pathname } = useRouter();
 
-  const { isValidRoute } = useNavigationItems(user?.role);
+  const { isValidRoute } = useNavigationItems(role);
+
+  if (!enabledFor) {
+  } else if (enabledFor !== role) return <NotFound />;
 
   if ((!isVerified && pathname !== '/kyc') || !isValidRoute())
     return <NotFound />;
@@ -60,7 +70,7 @@ export const AppLayout = ({
   if (!userExists) return <FullScreenLoader asPage />;
 
   return (
-    <div className={'min-w-screen min-h-screen bg-black'}>
+    <div className={'min-w-screen min-h-screen'}>
       <div
         id={'app_wrapper'}
         style={{
@@ -153,19 +163,21 @@ export const AppLayout = ({
                   : !!breadCrumbs
                   ? 'app-container mb-5 mt-3 640:mb-7'
                   : 'app-container my-5 640:my-7',
-                'relative z-10 min-h-screen'
+                'relative z-10'
               )}
             >
               {shouldSelectFirstPlan ? <ChoosePlan /> : children}
             </div>
 
-            <p
-              className={
-                'mt-auto pb-3 text-center text-xs text-neutral-700 640:text-sm'
-              }
-            >
-              {copyrightText}
-            </p>
+            {hideSideNavigation && (
+              <p
+                className={
+                  'absolute bottom-0 w-full pb-3 text-center text-xs text-neutral-700 640:text-sm'
+                }
+              >
+                {copyrightText}
+              </p>
+            )}
           </main>
         </div>
       </div>

@@ -3,7 +3,7 @@ import { UserPermissions } from 'components/modules/settings/permissions/UserPer
 
 export default function UserPermissionsPage() {
   return (
-    <SettingsLayout>
+    <SettingsLayout enabledFor={'owner'}>
       <UserPermissions />
     </SettingsLayout>
   );

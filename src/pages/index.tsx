@@ -1,32 +1,28 @@
 import { AppLayout } from 'components/layouts/AppLayout';
-import { Analytics } from 'components/modules/overview/Analytics';
+import { BudgetsOverview } from 'components/modules/overview/BudgetsOverview';
+import { CashflowOverview } from 'components/modules/overview/CashflowOverview';
 import { Overview } from 'components/modules/overview/Overview';
-import { TopCategories } from 'components/modules/overview/TopCategories';
-import { useAppContext } from 'context/AppContext';
+import { useUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
+import { overviewFiltersSchema } from 'zod_schemas/overview_schema';
 
 export default function Home() {
-  const { user } = useAppContext().state;
+  const { filters, setFilters, range, setRange } = useUrlManagedState(
+    overviewFiltersSchema,
+    undefined,
+    'rangePreset.value'
+  );
 
   return (
     <AppLayout title='Overview'>
-      <div className='x-between block 640:flex'>
-        <h5>
-          Hi {user?.firstName},{' '}
-          <span className={'text-neutral-400'}>Welcome to ChequeBase</span>
-        </h5>
-      </div>
+      <Overview />
 
-      <div className='mt-4'>
-        <Overview />
-      </div>
-
-      <div className='mt-5  grid-cols-12 gap-5 1280:grid'>
+      <div className='mt-5 grid-cols-12 gap-5 1280:grid'>
         <div className='col-span-8'>
-          <Analytics />
+          <CashflowOverview {...{ setFilters, filters, setRange, range }} />
         </div>
 
         <div className='col-span-4 mt-5 1280:mt-0'>
-          <TopCategories />
+          <BudgetsOverview />
         </div>
       </div>
     </AppLayout>

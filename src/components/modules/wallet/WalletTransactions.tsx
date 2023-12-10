@@ -6,7 +6,6 @@ import { useGetAllBudgetsUnpaginated } from 'hooks/api/budgeting/useGetAllBudget
 import { useUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
 import { useDebouncer } from 'hooks/commons/useDebouncer';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
-import { useSearchParams } from 'next/navigation';
 import { PropsWithChildren, useState } from 'react';
 import { formatAmount } from 'utils/formatters/formatAmount';
 import { walletFiltersSchema } from 'zod_schemas/wallet_schema';
@@ -17,8 +16,6 @@ export const WalletTransactions = ({
 }: PropsWithChildren<{
   showAllTransactions?: boolean;
 }>) => {
-  const searchParams = useSearchParams();
-
   const {
     primaryWallet,
     isLoading: gettingWallet,
@@ -26,7 +23,7 @@ export const WalletTransactions = ({
   } = useManageWallets();
 
   const { filters, setFilters, pagination, setPagination, range, setRange } =
-    useUrlManagedState(walletFiltersSchema, searchParams, 7);
+    useUrlManagedState(walletFiltersSchema, 7);
 
   const [search, setSearch] = useState('');
 

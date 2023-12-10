@@ -14,7 +14,7 @@ export const UserPermissions = () => {
       {data?.map((group) => {
         return (
           <PermissionGroupCard
-            className={'card col-span-12 640:col-span-6 1180:col-span-4 '}
+            className={'card col-span-12 768:col-span-6 1180:col-span-4 '}
             key={group._id}
             {...group}
           />

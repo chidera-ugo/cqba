@@ -71,7 +71,7 @@ export const MobileEmployeesList = ({
           {data?.docs?.map((employee, i) => {
             const { firstName, lastName, email, _id } = employee;
 
-            const char = firstName.charAt(0);
+            const char = email?.charAt(0);
 
             return (
               <button

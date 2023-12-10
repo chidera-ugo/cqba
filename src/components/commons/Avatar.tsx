@@ -1,10 +1,10 @@
 import clsx from 'clsx';
-import Image from 'next/image';
+import { CurrentUserAvatar } from 'components/modules/app/CurrentUserAvatar';
 
 interface Props {
   char?: string;
   avatar?: string;
-  getBackgroundColor: (char: string) => string;
+  getBackgroundColor?: (char: string) => string;
   clickable?: boolean;
   size?: number;
   className?: string;
@@ -13,32 +13,44 @@ interface Props {
 export const Avatar = ({
   avatar,
   clickable,
-  char = 'A',
+  char,
   getBackgroundColor,
   size = 40,
   className,
 }: Props) => {
-  const color = getBackgroundColor(char);
+  const color = getBackgroundColor
+    ? getBackgroundColor(char ?? 'R')
+    : '#989898';
 
   return (
-    <>
+    <div className={'my-auto flex-shrink-0'}>
       {!avatar ? (
-        <div
-          className={clsx(
-            'y-center flex-shrink-0 rounded-full text-center text-sm font-semibold text-black',
-            className
+        <>
+          {!getBackgroundColor ? (
+            <CurrentUserAvatar size={size} />
+          ) : (
+            <div
+              className={clsx(
+                'y-center rounded-full text-center text-sm font-semibold text-black',
+                className
+              )}
+              style={{
+                backgroundColor: `${color}30`,
+                color,
+                height: size,
+                width: size,
+              }}
+            >
+              {char ? char?.toUpperCase() : '-'}
+            </div>
           )}
-          style={{
-            backgroundColor: `${color}30`,
-            color,
-            height: size,
-            width: size,
-          }}
-        >
-          {char ? char?.toUpperCase() : '-'}
-        </div>
+        </>
       ) : (
-        <Image
+        <img
+          style={{
+            width: size,
+            height: size,
+          }}
           src={avatar}
           onClick={() => clickable && window.open(avatar, '_blank')}
           className={clsx(
@@ -46,13 +58,9 @@ export const Avatar = ({
             clickable && 'cursor-pointer',
             className
           )}
-          style={{
-            height: size,
-            width: size,
-          }}
           alt='user'
         />
       )}
-    </>
+    </div>
   );
 };

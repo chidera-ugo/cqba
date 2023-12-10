@@ -3,9 +3,13 @@ export const CustomTooltip = ({
   payload,
   label,
   formatValue,
-}: any & { formatValue: (value: string) => string }) => {
+  payloadIndex = 0,
+}: Record<string, any> & {
+  payloadIndex?: number;
+  formatValue: (value: string) => string;
+}) => {
   if (active && payload && payload.length) {
-    const value = payload[0].value;
+    const value = payload[payloadIndex].value;
 
     return (
       <div className='rounded-lg bg-neutral-1000 p-2 text-white'>

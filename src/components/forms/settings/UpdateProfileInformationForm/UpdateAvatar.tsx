@@ -17,8 +17,8 @@ export const UpdateAvatar = ({ avatar, setFieldValue }: Props) => {
   const id = 'avatar';
 
   return (
-    <div className='mb-3 grid w-full grid-cols-12'>
-      <div className={'y-between col-span-4'}>
+    <div className='mb-3 w-full grid-cols-12 gap-5 425:grid'>
+      <div className={'y-between col-span-6 640:col-span-4'}>
         <div>
           <h6>Profile photo</h6>
           <p className={'mt-1 max-w-[200px] text-sm'}>
@@ -63,7 +63,7 @@ export const UpdateAvatar = ({ avatar, setFieldValue }: Props) => {
         </div>
       </div>
 
-      <div className='col-span-8'>
+      <div className='col-span-6 mt-5 425:mt-0 640:col-span-8'>
         <div className='y-center h-[128px] w-[128px] overflow-hidden rounded-full bg-neutral-200'>
           {avatar ? (
             <Image

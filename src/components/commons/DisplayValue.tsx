@@ -36,6 +36,8 @@ export const DisplayValue = ({
   normal,
   valueClassname,
 }: Props) => {
+  if (!value) return <></>;
+
   if (normal)
     return (
       <div className={className}>

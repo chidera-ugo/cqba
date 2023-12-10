@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { SimpleToast } from 'components/commons/SimpleToast';
 import { AppErrorBoundary } from 'components/core/ErrorBoundary';
-import { EmptyTable } from 'components/core/Table/EmptyTable';
+import { NoData } from 'components/core/Table/NoData';
 import { Pagination } from 'components/core/Table/Pagination';
 import { TableDataStates } from 'components/core/Table/TableDataStates';
 import { PendingBudgetCard } from 'components/modules/budgeting/PendingBudgetCard';
@@ -87,7 +87,7 @@ export const PendingBudgets = ({
       </RightModalWrapper>
 
       {isEmpty ? (
-        <EmptyTable
+        <NoData
           processing={isLoading || isRefetching}
           imageSrc={budgeting}
           title='Create Budget'
@@ -136,7 +136,7 @@ export const PendingBudgets = ({
                 {...{
                   isLoading,
                   isError,
-                  data,
+                  data: res,
                 }}
               />
             </div>

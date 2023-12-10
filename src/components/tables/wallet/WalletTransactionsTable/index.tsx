@@ -1,4 +1,4 @@
-import { EmptyTable } from 'components/core/Table/EmptyTable';
+import { NoData } from 'components/core/Table/NoData';
 import { MobileWalletTransactionsList } from 'components/modules/transactions/MobileWalletTransactionsList';
 import { TransactionReceipt } from 'components/modules/transactions/TransactionReceipt';
 import { useAppContext } from 'context/AppContext';
@@ -94,7 +94,7 @@ export const WalletTransactionsTable = ({
 
   if (res && !res?.docs?.length)
     return (
-      <EmptyTable
+      <NoData
         processing={isLoading || isRefetching}
         title='Stay on top of your transactions'
         imageSrc={card}

@@ -9,7 +9,6 @@ import { FilterWithRangePreset } from 'components/modules/commons/FilterWithRang
 import { useGetBudgetById } from 'hooks/api/budgeting/useGetBudgetById';
 import { useUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
 import { useDebouncer } from 'hooks/commons/useDebouncer';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { walletFiltersSchema } from 'zod_schemas/wallet_schema';
@@ -24,10 +23,8 @@ export default function BudgetDetails() {
     enabled: !!budgetId,
   });
 
-  const searchParams = useSearchParams();
-
   const { filters, setFilters, pagination, setPagination, range, setRange } =
-    useUrlManagedState(walletFiltersSchema, searchParams, 7);
+    useUrlManagedState(walletFiltersSchema, 7);
 
   const [search, setSearch] = useState('');
 
@@ -69,6 +66,7 @@ export default function BudgetDetails() {
                 range,
                 setRange,
               }}
+              buttonClassname={'h-10'}
               selectFilters={[
                 {
                   id: 'transactionType',
