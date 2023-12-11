@@ -38,7 +38,13 @@ export const useColumns = () => {
         header: 'Amount',
         accessorKey: 'amount',
         enableColumnFilter: false,
-        cell: (props) => <TableCell isAmount {...props} />,
+        cell: (props) => (
+          <TableCell
+            isAmount
+            {...props}
+            currency={props?.row?.original?.currency}
+          />
+        ),
       },
       {
         header: 'Budget',

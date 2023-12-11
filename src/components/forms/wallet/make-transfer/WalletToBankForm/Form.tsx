@@ -65,9 +65,8 @@ export const Form = ({
     if (!values.budget) return;
 
     const budgetBalance =
-      Number(
-        data?.docs.find(({ _id }) => _id === values.budget)?.availableAmount
-      ) / 100;
+      Number(data?.docs.find(({ _id }) => _id === values.budget)?.balance) /
+      100;
 
     setFieldValue('budgetBalance', budgetBalance);
   }, [values.budget, data]);
@@ -82,11 +81,11 @@ export const Form = ({
         <>
           <Select
             options={
-              data?.docs.map(({ name, _id, availableAmount }) => ({
+              data?.docs.map(({ name, _id, balance }) => ({
                 name: `${name} - ${currency} ${formatAmount({
-                  value: availableAmount / 100,
+                  value: balance / 100,
                 })}`,
-                availableAmount,
+                balance: balance,
                 _id,
               })) ?? []
             }
@@ -111,12 +110,13 @@ export const Form = ({
       <AmountInput
         label='Amount'
         name='amount'
-        currency='NGN'
+        currency={currency}
         setFieldValue={setFieldValue}
       />
       <GetTransactionFee
         amount={values.amount}
         budgetId={values.budget}
+        currency={currency}
         minimumAmount={10}
         emitValue={(val) => setFieldValue('fee', val)}
         emitIsProcessing={(val) =>

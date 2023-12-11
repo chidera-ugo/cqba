@@ -1,13 +1,13 @@
 import clsx from 'clsx';
 import { MoreInfo } from 'components/commons/MoreInfo';
 import { Outbound } from 'components/svgs/navigation/Arrows';
+import { formatAmount } from 'utils/formatters/formatAmount';
 
 interface Props {
   currency?: string;
-  isAmount?: boolean;
   moreInfo?: string;
   name: string;
-  value: string;
+  value: number;
   variance?: number;
   className?: string;
 }
@@ -17,7 +17,6 @@ export const SummaryWithVariance = ({
   name,
   moreInfo,
   currency,
-  isAmount,
   value,
   className,
 }: Props) => {
@@ -31,15 +30,22 @@ export const SummaryWithVariance = ({
 
         <div
           className={clsx(
-            'mt-1 flex gap-0.5 text-2xl font-semibold 640:mt-1 640:text-3xl'
+            'mt-1 flex gap-1 text-2xl font-semibold 640:mt-1 640:text-3xl'
           )}
         >
-          {isAmount && (
-            <span className={'block h-full pt-1 text-xl font-semibold'}>
+          {currency && (
+            <span
+              className={
+                'block h-full pt-0.5 text-lg font-semibold 640:pt-1 640:text-xl'
+              }
+            >
               {currency}
             </span>
           )}
-          {value}
+          {formatAmount({
+            value,
+            decimalPlaces: 2,
+          })}
         </div>
 
         <div className={'mt-1'}>

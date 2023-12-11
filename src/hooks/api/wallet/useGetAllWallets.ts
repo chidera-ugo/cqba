@@ -7,7 +7,6 @@ export interface IWallet {
   balance: number;
   primary: boolean;
   virtualAccounts: VirtualAccount[];
-  availableBalance: number;
 }
 
 export interface VirtualAccount {

@@ -27,7 +27,7 @@ interface Props {
   color: string;
 }
 
-export const AnalyticsChart = ({ chartData, period, color }: Props) => {
+export const CashflowChart = ({ chartData, period, color }: Props) => {
   const { primaryWallet } = useManageWallets();
 
   const data: Data[] = useMemo(

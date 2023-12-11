@@ -65,9 +65,9 @@ export const WalletTransactions = ({
                 id: 'budgetId',
                 label: 'Budget',
                 options:
-                  data?.docs.map(({ name, availableAmount, _id }) => ({
+                  data?.docs.map(({ name, balance, _id }) => ({
                     label: `${name} - ${formatAmount({
-                      value: availableAmount,
+                      value: balance,
                     })}`,
                     value: _id,
                   })) ?? [],

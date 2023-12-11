@@ -13,8 +13,7 @@ export const BudgetOverviewAccordionContent = ({
   currentTab,
   ...budget
 }: IBudget & { currentTab?: string; getColor: GetColorByChar }) => {
-  const { amount, availableAmount, beneficiaries, status, currency, expiry } =
-    budget;
+  const { amount, balance, beneficiaries, status, currency, expiry } = budget;
 
   if (currentTab === 'pending')
     return <PendingBudgetCard {...budget} stripDown />;
@@ -26,11 +25,11 @@ export const BudgetOverviewAccordionContent = ({
     },
     {
       label: 'Available',
-      value: availableAmount,
+      value: balance,
     },
     {
       label: 'Spent',
-      value: amount - availableAmount,
+      value: amount - balance,
     },
     {
       label: 'Due Date',
@@ -101,7 +100,6 @@ export const BudgetOverviewAccordionContent = ({
                   <span className={'my-auto'}>
                     {formatAmount({
                       value: value / 100,
-                      kFormatter: value / 100 > 99999,
                     })}
                   </span>
                 </span>

@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { AnalyticsChart } from 'components/charts/overview/AnalyticsChart';
+import { CashflowChart } from 'components/charts/overview/CashflowChart';
 import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { NoData } from 'components/core/Table/NoData';
 import { IsError } from 'components/data-states/IsError';
@@ -19,7 +19,6 @@ import { UseUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import Link from 'next/link';
-import { formatAmount } from 'utils/formatters/formatAmount';
 import { getDateRange } from 'utils/getters/getDateRange';
 
 export const CashflowOverview = ({
@@ -63,15 +62,10 @@ export const CashflowOverview = ({
             name={`Total ${
               transactionType === 'credit' ? 'Income' : 'Expense'
             }`}
-            isAmount
             currency={primaryWallet?.currency}
             className={'text-neutral-500'}
             variance={data?.amount?.percentageDiff}
-            value={formatAmount({
-              value: amount,
-              decimalPlaces: 2,
-              kFormatter: amount > 99999999,
-            })}
+            value={amount}
           />
 
           <div className='flex flex-col'>
@@ -157,7 +151,7 @@ export const CashflowOverview = ({
             />
           </div>
         ) : (
-          <div className='x-thin-scrollbar h-full overflow-x-auto px-3'>
+          <div className='x-thin-scrollbar h-full overflow-x-auto overflow-y-hidden px-3'>
             <AppErrorBoundary className='relative h-full min-w-[700px]'>
               {isFetching && (
                 <div className='absolute right-3 top-3'>
@@ -165,7 +159,7 @@ export const CashflowOverview = ({
                 </div>
               )}
 
-              <AnalyticsChart
+              <CashflowChart
                 color={transactionType !== 'credit' ? '#1A44ED' : '#30b902'}
                 period={period}
                 chartData={chartData?.length ? chartData : getChartData(7)}

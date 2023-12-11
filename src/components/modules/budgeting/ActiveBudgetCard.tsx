@@ -76,7 +76,7 @@ export const ActiveBudgetCard = ({
     amount,
     approvedBy,
     approvedDate,
-    availableAmount,
+    balance,
     threshold,
   } = budget;
 
@@ -91,7 +91,7 @@ export const ActiveBudgetCard = ({
     {
       title: 'Available',
       className: 'bg-neutral-200',
-      value: availableAmount,
+      value: balance,
     },
     {
       title: 'Budget Threshold',
@@ -327,7 +327,6 @@ export const ActiveBudgetCard = ({
                   {currency}
                   {formatAmount({
                     value: value / 100,
-                    kFormatter: value > 99999999,
                   })}
                 </div>
               </div>

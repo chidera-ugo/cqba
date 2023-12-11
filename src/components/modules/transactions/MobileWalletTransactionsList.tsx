@@ -64,50 +64,55 @@ export const MobileWalletTransactionsList = ({
             </h4>
           </div>
 
-          {data?.docs?.map(({ status, _id, budget, createdAt, amount }, i) => {
-            return (
-              <button
-                key={_id}
-                type={'button'}
-                className={clsx(
-                  `x-between h-[60px] w-full gap-3 border-b border-gray-100 px-3 text-sm`,
-                  i % 2 === 0 && 'bg-neutral-100'
-                )}
-                onClick={() => onRowClick(_id)}
-              >
-                <div className={'my-auto text-left'}>
-                  <div className={'break-all text-sm text-black line-clamp-1'}>
-                    {budget?.name ?? '----'}
+          {data?.docs?.map(
+            ({ status, _id, budget, currency, createdAt, amount }, i) => {
+              return (
+                <button
+                  key={_id}
+                  type={'button'}
+                  className={clsx(
+                    `x-between h-[60px] w-full gap-3 border-b border-gray-100 px-3 text-sm`,
+                    i % 2 === 0 && 'bg-neutral-100'
+                  )}
+                  onClick={() => onRowClick(_id)}
+                >
+                  <div className={'my-auto text-left'}>
+                    <div
+                      className={'break-all text-sm text-black line-clamp-1'}
+                    >
+                      {budget?.name ?? '----'}
+                    </div>
+
+                    <div className={'text-xs text-neutral-500 line-clamp-1'}>
+                      {formatDate(createdAt, 'semi-full')}
+                    </div>
                   </div>
 
-                  <div className={'text-xs text-neutral-500 line-clamp-1'}>
-                    {formatDate(createdAt, 'semi-full')}
-                  </div>
-                </div>
+                  <div className={'my-auto w-fit'}>
+                    <div className={clsx('text-right text-sm')}>
+                      {currency}
+                      {formatAmount({ value: amount / 100 })}
+                    </div>
 
-                <div className={'my-auto w-fit'}>
-                  <div className={clsx('text-right text-sm')}>
-                    ₦{formatAmount({ value: amount / 100 })}
+                    <div
+                      className={clsx(
+                        status === 'failed'
+                          ? 'text-red-600'
+                          : status === 'pending'
+                          ? 'text-yellow-600'
+                          : status === 'successful'
+                          ? 'text-green-600'
+                          : 'text-black',
+                        'text-right text-xs capitalize'
+                      )}
+                    >
+                      {status}
+                    </div>
                   </div>
-
-                  <div
-                    className={clsx(
-                      status === 'failed'
-                        ? 'text-red-600'
-                        : status === 'pending'
-                        ? 'text-yellow-600'
-                        : status === 'successful'
-                        ? 'text-green-600'
-                        : 'text-black',
-                      'text-right text-xs capitalize'
-                    )}
-                  >
-                    {status}
-                  </div>
-                </div>
-              </button>
-            );
-          })}
+                </button>
+              );
+            }
+          )}
 
           {pagination &&
             data?.docs?.length &&

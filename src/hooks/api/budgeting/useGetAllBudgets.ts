@@ -25,7 +25,7 @@ export interface IBudget {
     role: UserRole;
   };
   amountUsed: number;
-  availableAmount: number;
+  balance: number;
 }
 
 export function useGetAllBudgets(

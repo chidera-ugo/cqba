@@ -1,11 +1,11 @@
 import clsx from 'clsx';
-import { DisplayValue } from 'components/commons/DisplayValue';
-import { useAppContext } from 'context/AppContext';
+import { SummaryWithVariance } from 'components/modules/overview/Overview/SummaryWithVariance';
+import { useUserRole } from 'hooks/rbac/useUserRole';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import Link from 'next/link';
 
 export const WalletOverview = () => {
-  const { user } = useAppContext().state;
+  const { isOwner } = useUserRole();
 
   const { isLoading, isError, primaryWallet } = useManageWallets();
 
@@ -14,26 +14,22 @@ export const WalletOverview = () => {
 
   return (
     <div className='grid-cols-2 gap-4 640:grid'>
-      {user?.role === 'owner' && (
+      {isOwner && (
         <div className='card'>
-          <DisplayValue
-            value={!primaryWallet ? 0 : primaryWallet.availableBalance}
-            isAmount
-            title='Account Balance'
+          <SummaryWithVariance
+            value={!primaryWallet ? 0 : primaryWallet?.balance}
+            currency={primaryWallet?.currency}
+            name='Account Balance'
             moreInfo='Your main wallet balance'
           />
         </div>
       )}
 
       <div className='card relative mt-4 640:mt-0'>
-        <DisplayValue
-          value={
-            !primaryWallet
-              ? 0
-              : primaryWallet.balance - primaryWallet.availableBalance
-          }
-          isAmount
-          title='Budget Balance'
+        <SummaryWithVariance
+          value={!primaryWallet ? 0 : primaryWallet.balance}
+          currency={primaryWallet?.currency}
+          name='Budget Balance'
           moreInfo='Your total budget balance'
         />
 
