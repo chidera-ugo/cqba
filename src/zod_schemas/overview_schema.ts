@@ -8,7 +8,7 @@ import { defaultFilterObjectSchema, rangeZodSchema } from 'zod_schemas/commons';
 export const overviewFiltersSchema = z.object({
   transactionType: z
     .object(defaultFilterObjectSchema)
-    .catch(transactionTypeFilterOptions[1]!),
+    .catch(transactionTypeFilterOptions[0]!),
   range: rangeZodSchema,
   rangePreset: z
     .object({ value: z.number(), name: z.string() })

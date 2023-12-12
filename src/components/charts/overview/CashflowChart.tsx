@@ -17,22 +17,21 @@ import { formatAmount } from 'utils/formatters/formatAmount';
 dayjs.extend(advancedFormat);
 dayjs().format('Do');
 
-type Series = { primary: string; secondary: any }[];
-
-type Data = { primary: any; secondary: any };
+type Data = { date: string; expense: any; income: any };
+type Series = Data[];
 
 interface Props {
   chartData: Series;
   period: string;
-  color: string;
+  transactionType: string;
   showYAxis?: boolean;
 }
 
 export const CashflowChart = ({
   chartData,
+  transactionType,
   showYAxis,
   period,
-  color,
 }: Props) => {
   const { primaryWallet } = useManageWallets();
 
@@ -40,11 +39,12 @@ export const CashflowChart = ({
     () =>
       chartData.map((item) => {
         return {
-          primary:
+          date:
             period === 'months'
-              ? dayjs(item.primary).format("MMM 'YY")
-              : dayjs(item.primary).format('MMM D'),
-          secondary: item.secondary,
+              ? dayjs(item.date).format("MMM 'YY")
+              : dayjs(item.date).format('MMM D'),
+          expense: item.expense,
+          income: item.income,
         };
       }),
     [chartData]
@@ -65,6 +65,7 @@ export const CashflowChart = ({
         <Tooltip
           content={
             <CustomTooltip
+              keyAccessor={'date'}
               formatter={(value) => {
                 return `${primaryWallet?.currency}${formatAmount({
                   value: value,
@@ -77,17 +78,17 @@ export const CashflowChart = ({
 
         <defs>
           <linearGradient id='colorUv' x1='0' y1='0' x2='0' y2='1'>
-            <stop offset='5%' stopColor={color} stopOpacity={0.8} />
-            <stop offset='95%' stopColor={color} stopOpacity={0} />
+            <stop offset='5%' stopColor='#8884d8' stopOpacity={0.8} />
+            <stop offset='95%' stopColor='#8884d8' stopOpacity={0} />
           </linearGradient>
 
-          {/*<linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">*/}
-          {/*  <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8}/>*/}
-          {/*  <stop offset="95%" stopColor="#82ca9d" stopOpacity={0}/>*/}
-          {/*</linearGradient>*/}
+          <linearGradient id='colorPv' x1='0' y1='0' x2='0' y2='1'>
+            <stop offset='5%' stopColor='#82ca9d' stopOpacity={0.8} />
+            <stop offset='95%' stopColor='#82ca9d' stopOpacity={0} />
+          </linearGradient>
         </defs>
 
-        <XAxis fontSize={11} dataKey='primary' />
+        <XAxis fontSize={11} dataKey='date' />
 
         {showYAxis && (
           <YAxis
@@ -100,17 +101,28 @@ export const CashflowChart = ({
             }}
             fontSize={11}
             width={40}
-            dataKey='secondary'
           />
         )}
 
-        <Area
-          dataKey='secondary'
-          stroke={color}
-          fillOpacity={1}
-          fill='url(#colorUv)'
-          type={'monotone'}
-        />
+        {transactionType === 'debit' || transactionType === 'all' ? (
+          <Area
+            type='monotone'
+            dataKey='expense'
+            stroke='#8884d8'
+            fillOpacity={1}
+            fill='url(#colorUv)'
+          />
+        ) : null}
+
+        {transactionType === 'credit' || transactionType === 'all' ? (
+          <Area
+            type='monotone'
+            dataKey='income'
+            stroke='#82ca9d'
+            fillOpacity={1}
+            fill='url(#colorPv)'
+          />
+        ) : null}
 
         <CartesianGrid strokeOpacity={0.4} strokeDasharray='3 3' />
       </AreaChart>

@@ -17,7 +17,8 @@ interface Amount {
 interface Trend {
   from: string;
   to: string;
-  amount: number;
+  income: number;
+  expense: number;
 }
 
 export function useGetCashflowChart(

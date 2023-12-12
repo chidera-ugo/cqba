@@ -16,8 +16,9 @@ export const usePopulateEmptyChartData = () => {
     getChartData(numberOfDays: number) {
       return getPastDays(numberOfDays).map((id) => {
         return {
-          primary: id,
-          secondary: 0,
+          date: id,
+          expense: 0,
+          income: 0,
         };
       });
     },

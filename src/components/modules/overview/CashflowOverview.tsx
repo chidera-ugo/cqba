@@ -45,10 +45,11 @@ export const CashflowOverview = ({
     }
   );
 
-  const chartData = data?.trend?.map(({ amount, from }) => {
+  const chartData = data?.trend?.map(({ expense, income, from }) => {
     return {
-      primary: from,
-      secondary: amount / 100,
+      date: from,
+      expense: expense / 100,
+      income: income / 100,
     };
   });
 
@@ -160,8 +161,8 @@ export const CashflowOverview = ({
               )}
 
               <CashflowChart
-                color={transactionType !== 'credit' ? '#7992ff' : '#30b902'}
                 period={period}
+                transactionType={transactionType}
                 chartData={chartData?.length ? chartData : getChartData(7)}
               />
             </AppErrorBoundary>

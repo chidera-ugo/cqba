@@ -2,6 +2,7 @@ export const transactionTypeFilterOptions: {
   value: string;
   name: string;
 }[] = [
+  { value: 'all', name: 'Show All' },
   { value: 'credit', name: 'Inflow' },
   { value: 'debit', name: 'Outflow' },
 ];
