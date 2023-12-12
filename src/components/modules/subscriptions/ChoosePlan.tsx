@@ -1,19 +1,18 @@
-import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { Tabs } from 'components/commons/Tabs';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
+import { ChoosePaymentMethod } from 'components/modules/subscriptions/ChoosePaymentMethod';
 import { PlanCards } from 'components/modules/subscriptions/PlanCards';
 import { ComparePlans } from 'components/modules/subscriptions/ComparePlans';
-import { AppToast } from 'components/primary/AppToast';
 import { UserIconLg } from 'components/svgs/UserIcon';
-import { useAppContext } from 'context/AppContext';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
-import { useChooseSubscriptionPlan } from 'hooks/api/subscriptions/useChooseSubscriptionPlan';
-import { useGetAllSubscriptionPlans } from 'hooks/api/subscriptions/useGetAllSubscriptionPlans';
+import {
+  SubscriptionPlan,
+  useGetAllSubscriptionPlans,
+} from 'hooks/api/subscriptions/useGetAllSubscriptionPlans';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 
 const tabs = [
   { name: 'Monthly', value: 'MONTHLY' },
@@ -21,27 +20,13 @@ const tabs = [
 ];
 
 export const ChoosePlan = ({ minimal }: { minimal?: boolean }) => {
-  const { getCurrentUser, dispatch } = useAppContext();
-
   const [currentTab, setCurrentTab] = useState(tabs[0]!);
+  const [selectedPlan, setSelectedPlan] = useState<SubscriptionPlan | null>(
+    null
+  );
 
   const { data: organization } = useGetOrganizationInformation();
   const { isLoading, isError, data } = useGetAllSubscriptionPlans();
-
-  const queryClient = useQueryClient();
-
-  const { mutate, isLoading: choosingPlan } = useChooseSubscriptionPlan({
-    onSuccess(res) {
-      dispatch({ type: 'update_has_choosen_plan', payload: true });
-
-      toast(<AppToast>{res.message}</AppToast>, { type: 'success' });
-
-      getCurrentUser!(null);
-
-      queryClient.invalidateQueries(['subscription_history']);
-      queryClient.invalidateQueries(['current_subscription_plan']);
-    },
-  });
 
   if (isLoading) {
     if (minimal) return <IsLoading />;
@@ -57,17 +42,14 @@ export const ChoosePlan = ({ minimal }: { minimal?: boolean }) => {
       />
     );
 
-  function choosePlan(planId?: string) {
-    mutate({
-      plan: planId,
-      months: currentTab.value == 'MONTHLY' ? 1 : 12,
-      paymentMethod: 'wallet',
-    });
-  }
-
   return (
     <div className={clsx(!minimal && 'app-container mx-auto max-w-[1168px]')}>
-      <FullScreenLoader id={'choosing_plan'} show={choosingPlan} />
+      <ChoosePaymentMethod
+        show={!!selectedPlan}
+        months={currentTab.value == 'MONTHLY' ? 1 : 12}
+        selectedPlan={selectedPlan}
+        close={() => setSelectedPlan(null)}
+      />
 
       <div>
         <div className={clsx(minimal ? 'mb-10' : 'py-10')}>
@@ -146,15 +128,19 @@ export const ChoosePlan = ({ minimal }: { minimal?: boolean }) => {
               : 'col-span-12 640:col-span-6 1024:col-span-4'
           )}
           isEligibleForTrial={!minimal}
-          choosePlan={choosePlan}
+          choosePlan={(plan) => setSelectedPlan(plan)}
           currentTab={currentTab.value}
         />
       </div>
 
       <ComparePlans
-        choosePlan={(planCode) =>
-          choosePlan(data?.find(({ code }) => planCode === code)?._id)
-        }
+        choosePlan={(planCode) => {
+          const plan = data?.find(({ code }) => planCode === code);
+
+          if (!plan) return;
+
+          setSelectedPlan(plan);
+        }}
         showOnlyPaidPlans={minimal}
         headerClassname={'mt-24'}
         centerText

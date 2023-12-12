@@ -9,6 +9,9 @@ export interface ActiveSubscription {
   endingAt: string;
   startedAt: string;
   renewAt: string;
+  meta: {
+    months: number;
+  };
 }
 
 export function useGetActiveSubscription() {

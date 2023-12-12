@@ -5,7 +5,7 @@ import { SubscriptionPlan } from 'hooks/api/subscriptions/useGetAllSubscriptionP
 
 interface Props {
   currentTab: string;
-  choosePlan: (planId: string) => void;
+  choosePlan: (plan: SubscriptionPlan) => void;
   plans?: SubscriptionPlan[];
   className?: string;
   isEligibleForTrial?: boolean;
@@ -22,7 +22,8 @@ export const PlanCards = ({
 
   return (
     <div className='grid grid-cols-12 gap-4'>
-      {plans?.map(({ name, description, _id, mostPopular, amount }) => {
+      {plans?.map((plan) => {
+        const { name, description, _id, mostPopular, amount } = plan;
         const isMostPopular = mostPopular;
 
         return (
@@ -40,7 +41,7 @@ export const PlanCards = ({
             key={_id}
             planName={name}
             amount={amount.NGN}
-            choosePlan={() => choosePlan(_id)}
+            choosePlan={() => choosePlan(plan)}
             buttonClassname={
               !mostPopular && amount.NGN > 0
                 ? 'dark-button'

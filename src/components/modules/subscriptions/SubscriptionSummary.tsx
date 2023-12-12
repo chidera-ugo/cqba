@@ -1,14 +1,12 @@
-import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
-import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { CentredModalWrapper } from 'components/modal/ModalWrapper';
+import { ChoosePaymentMethod } from 'components/modules/subscriptions/ChoosePaymentMethod';
 import { ComparePlans } from 'components/modules/subscriptions/ComparePlans';
+import { Spinner } from 'components/svgs/dashboard/Spinner';
 import { CrossSubtract } from 'components/svgs/navigation/Exit';
-import { useAppContext } from 'context/AppContext';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import updateLocale from 'dayjs/plugin/updateLocale';
-import { useChooseSubscriptionPlan } from 'hooks/api/subscriptions/useChooseSubscriptionPlan';
 import { useGetActiveSubscription } from 'hooks/api/subscriptions/useGetActiveSubscription';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -37,20 +35,11 @@ dayjs.updateLocale('en', {
 });
 
 export const SubscriptionSummary = () => {
-  const [showModal, setShowModal] = useState(false);
+  const [modal, setModal] = useState<'compare' | 'payment_methods' | null>(
+    null
+  );
 
   const { isLoading, isError, data } = useGetActiveSubscription();
-  const { getCurrentUser } = useAppContext();
-
-  const queryClient = useQueryClient();
-
-  const { mutate, isLoading: choosingPlan } = useChooseSubscriptionPlan({
-    onSuccess() {
-      getCurrentUser!(null);
-      queryClient.invalidateQueries(['subscription_history']);
-      queryClient.invalidateQueries(['current_subscription_plan']);
-    },
-  });
 
   if (isLoading) return <IsLoadingIsError type={'loading'} />;
   if (isError || !data) return <IsLoadingIsError type={'error'} />;
@@ -58,16 +47,21 @@ export const SubscriptionSummary = () => {
   const { endingAt, plan, trial, renewAt } = data;
 
   function close() {
-    setShowModal(false);
+    setModal(null);
   }
 
   return (
     <>
-      <FullScreenLoader show={choosingPlan} id={'subscription_summary'} />
+      <ChoosePaymentMethod
+        months={data?.meta?.months ?? 1}
+        selectedPlan={data?.plan}
+        show={modal === 'payment_methods' && !!data?.plan}
+        close={() => setModal(null)}
+      />
 
       <CentredModalWrapper
         closeOnClickOutside
-        show={showModal}
+        show={modal === 'compare'}
         hideHeader
         type={'zoom'}
         closeModal={close}
@@ -117,41 +111,38 @@ export const SubscriptionSummary = () => {
         <div className='y-between card col-span-12 min-h-[156px] 640:col-span-6 1180:col-span-4'>
           <p className={'text-sm font-light text-black'}>Payment Options</p>
 
-          <div>
-            <div className='flex'>
-              <Link
-                href={'/settings/license/change-plan'}
-                className='text_link'
-              >
-                Change Plan
-              </Link>
-            </div>
+          {isLoading || !data ? (
+            <Spinner className={'h-6 w-6 text-primary-main'} />
+          ) : (
+            <div>
+              <div className='flex'>
+                <Link
+                  href={'/settings/license/change-plan'}
+                  className='text_link'
+                >
+                  Change Plan
+                </Link>
+              </div>
 
-            <div className='flex'>
-              <button
-                onClick={() => setShowModal(true)}
-                className='text_link mt-1'
-              >
-                Compare Plans
-              </button>
-            </div>
+              <div className='flex'>
+                <button
+                  onClick={() => setModal('compare')}
+                  className='text_link mt-1'
+                >
+                  Compare Plans
+                </button>
+              </div>
 
-            <div className='flex'>
-              <button
-                onClick={() => {
-                  mutate({
-                    plan: data?.plan?._id,
-                    // Todo: Pass correct number of months
-                    months: 1,
-                    paymentMethod: 'wallet',
-                  });
-                }}
-                className='text_link mt-1'
-              >
-                Renew Current Plan
-              </button>
+              <div className='flex'>
+                <button
+                  onClick={() => setModal('payment_methods')}
+                  className='text_link mt-1'
+                >
+                  Renew Current Plan
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>

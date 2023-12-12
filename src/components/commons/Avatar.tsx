@@ -31,12 +31,11 @@ export const Avatar = ({
           ) : (
             <div
               className={clsx(
-                'y-center rounded-full text-center text-sm font-semibold text-black',
+                'y-center rounded-full text-center text-sm font-semibold text-white',
                 className
               )}
               style={{
-                backgroundColor: `${color}30`,
-                color,
+                backgroundColor: color,
                 height: size,
                 width: size,
               }}
