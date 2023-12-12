@@ -5,7 +5,8 @@ import { DateRange } from 'utils/getters/getDateRange';
 
 export interface TCashFlowChart {
   curreny: string;
-  amount: Amount;
+  expense: Amount;
+  income: Amount;
   trend: Trend[];
 }
 

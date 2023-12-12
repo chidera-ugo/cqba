@@ -53,21 +53,32 @@ export const CashflowOverview = ({
     };
   });
 
-  const amount = Number(data?.amount?.value ?? 0) / 100;
+  const amount =
+    Number(
+      data?.[transactionType === 'credit' ? 'income' : 'expense']?.value ?? 0
+    ) / 100;
+
+  const variance =
+    data?.[transactionType === 'credit' ? 'income' : 'expense']
+      ?.percentageDiff ?? 0;
 
   return (
     <div className='card p-0'>
       <div className='relative gap-3 p-5 768:flex 768:h-[140px] 1280:block 1340:flex'>
         <div className={'mb-auto flex w-full justify-between'}>
-          <SummaryWithVariance
-            name={`Total ${
-              transactionType === 'credit' ? 'Income' : 'Expense'
-            }`}
-            currency={primaryWallet?.currency}
-            className={'text-neutral-500'}
-            variance={data?.amount?.percentageDiff}
-            value={amount}
-          />
+          {transactionType === 'all' ? (
+            <h6 className={'text-lg font-medium'}>Cashflow Overview</h6>
+          ) : (
+            <SummaryWithVariance
+              name={`Total ${
+                transactionType === 'credit' ? 'Income' : 'Expense'
+              }`}
+              currency={primaryWallet?.currency}
+              className={'text-neutral-500'}
+              variance={variance}
+              value={amount}
+            />
+          )}
 
           <div className='flex flex-col'>
             <Filter

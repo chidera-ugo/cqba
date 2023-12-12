@@ -49,7 +49,7 @@ export const SummaryWithVariance = ({
         </div>
 
         <div className={'mt-1'}>
-          {variance && (
+          {variance ? (
             <div className={clsx('flex gap-1', className)}>
               <span
                 className={clsx(
@@ -64,7 +64,7 @@ export const SummaryWithVariance = ({
                 selected period
               </span>
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     </>

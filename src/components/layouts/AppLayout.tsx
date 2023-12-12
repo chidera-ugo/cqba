@@ -61,13 +61,13 @@ export const AppLayout = ({
 
   const { isValidRoute } = useNavigationItems(role);
 
+  if (!userExists) return <FullScreenLoader asPage />;
+
   if (!enabledFor) {
   } else if (enabledFor !== role) return <NotFound />;
 
   if ((!isVerified && pathname !== '/kyc') || !isValidRoute())
     return <NotFound />;
-
-  if (!userExists) return <FullScreenLoader asPage />;
 
   return (
     <div className={'min-w-screen min-h-screen'}>
