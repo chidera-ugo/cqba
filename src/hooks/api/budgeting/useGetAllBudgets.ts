@@ -67,7 +67,6 @@ export function useGetAllBudgetsUnpaginated(
     options: {
       ...options,
       meta: { silent: true },
-      staleTime: Infinity,
     },
   });
 }

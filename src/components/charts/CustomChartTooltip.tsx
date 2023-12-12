@@ -2,11 +2,11 @@ export const CustomTooltip = ({
   active,
   payload,
   label,
-  formatValue,
+  formatter,
   payloadIndex = 0,
 }: Record<string, any> & {
   payloadIndex?: number;
-  formatValue: (value: string) => string;
+  formatter: (value: string) => string;
 }) => {
   if (active && payload && payload.length) {
     const value = payload[payloadIndex].value;
@@ -15,7 +15,7 @@ export const CustomTooltip = ({
       <div className='rounded-lg bg-neutral-1000 p-2 text-white'>
         <div className='text-xs'>{label}</div>
         <div className='mt-1 text-sm font-semibold'>
-          {formatValue ? formatValue(value) : value}
+          {formatter ? formatter(value) : value}
         </div>
       </div>
     );

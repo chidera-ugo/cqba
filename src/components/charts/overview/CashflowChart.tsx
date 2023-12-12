@@ -25,9 +25,15 @@ interface Props {
   chartData: Series;
   period: string;
   color: string;
+  showYAxis?: boolean;
 }
 
-export const CashflowChart = ({ chartData, period, color }: Props) => {
+export const CashflowChart = ({
+  chartData,
+  showYAxis,
+  period,
+  color,
+}: Props) => {
   const { primaryWallet } = useManageWallets();
 
   const data: Data[] = useMemo(
@@ -59,7 +65,7 @@ export const CashflowChart = ({ chartData, period, color }: Props) => {
         <Tooltip
           content={
             <CustomTooltip
-              formatValue={(value) => {
+              formatter={(value) => {
                 return `${primaryWallet?.currency}${formatAmount({
                   value: value,
                   decimalPlaces: 0,
@@ -69,31 +75,44 @@ export const CashflowChart = ({ chartData, period, color }: Props) => {
           }
         />
 
+        <defs>
+          <linearGradient id='colorUv' x1='0' y1='0' x2='0' y2='1'>
+            <stop offset='5%' stopColor={color} stopOpacity={0.8} />
+            <stop offset='95%' stopColor={color} stopOpacity={0} />
+          </linearGradient>
+
+          {/*<linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">*/}
+          {/*  <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8}/>*/}
+          {/*  <stop offset="95%" stopColor="#82ca9d" stopOpacity={0}/>*/}
+          {/*</linearGradient>*/}
+        </defs>
+
         <XAxis fontSize={11} dataKey='primary' />
 
-        <YAxis
-          tickFormatter={(val) => {
-            return formatAmount({
-              value: val,
-              kFormatter: val > 9999,
-              decimalPlaces: 0,
-            });
-          }}
-          fontSize={11}
-          width={40}
-          dataKey='secondary'
-        />
+        {showYAxis && (
+          <YAxis
+            tickFormatter={(val) => {
+              return formatAmount({
+                value: val,
+                kFormatter: val > 9999,
+                decimalPlaces: 0,
+              });
+            }}
+            fontSize={11}
+            width={40}
+            dataKey='secondary'
+          />
+        )}
 
         <Area
-          strokeWidth={3}
           dataKey='secondary'
           stroke={color}
-          fillOpacity={0.04}
-          // type={'monotone'}
-          fill={color}
+          fillOpacity={1}
+          fill='url(#colorUv)'
+          type={'monotone'}
         />
 
-        <CartesianGrid stroke={'#E5E7EA'} vertical={false} />
+        <CartesianGrid strokeOpacity={0.4} strokeDasharray='3 3' />
       </AreaChart>
     </ResponsiveContainer>
   );

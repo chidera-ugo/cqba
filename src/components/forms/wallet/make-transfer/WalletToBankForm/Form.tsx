@@ -5,10 +5,8 @@ import { Institution } from 'components/forms/wallet/make-transfer/WalletToBankF
 import { ActiveBudgetCard } from 'components/modules/budgeting/ActiveBudgetCard';
 import { WalletToBankFormRecoveryValues } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank';
 import { Form as FormikForm, FormikProps } from 'formik';
-import {
-  IBudget,
-  useGetAllBudgetsUnpaginated,
-} from 'hooks/api/budgeting/useGetAllBudgets';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
+import { useGetDebitableBudgets } from 'hooks/api/budgeting/useGetDebitableBudgets';
 import { formatAmount } from 'utils/formatters/formatAmount';
 import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
@@ -37,8 +35,7 @@ export const Form = ({
 }: Props) => {
   const { handleSubmit, setFieldValue, setValues, values } = formikProps;
 
-  const { isLoading, isRefetching, isError, data } =
-    useGetAllBudgetsUnpaginated();
+  const { isLoading, isRefetching, isError, data } = useGetDebitableBudgets();
 
   const [isProcessing, setIsProcessing] = useState({
     fee: false,
@@ -65,8 +62,7 @@ export const Form = ({
     if (!values.budget) return;
 
     const budgetBalance =
-      Number(data?.docs.find(({ _id }) => _id === values.budget)?.balance) /
-      100;
+      Number(data?.find(({ _id }) => _id === values.budget)?.balance) / 100;
 
     setFieldValue('budgetBalance', budgetBalance);
   }, [values.budget, data]);
@@ -81,7 +77,7 @@ export const Form = ({
         <>
           <Select
             options={
-              data?.docs.map(({ name, _id, balance }) => ({
+              data?.map(({ name, _id, balance }) => ({
                 name: `${name} - ${currency} ${formatAmount({
                   value: balance / 100,
                 })}`,

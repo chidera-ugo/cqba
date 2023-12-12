@@ -2,6 +2,7 @@ import logo from '/public/logos/main-logo.svg';
 import white_logo from '/public/logos/white_logo.svg';
 import clsx from 'clsx';
 import { Avatar } from 'components/commons/Avatar';
+import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { Notifications } from 'components/modules/app/Notifications';
 import { MobileMenu } from 'components/primary/MobileMenu';
 import { PointerLeft } from 'components/svgs/navigation/Arrows';
@@ -58,7 +59,9 @@ export const AppHeader = ({
             <div className={'hidden gap-4 1024:flex'}>
               <Notifications />
 
-              <Avatar avatar={user?.avatar} />
+              <AppErrorBoundary className={'my-auto'} type={'hidden'}>
+                <Avatar avatar={user?.avatar} />
+              </AppErrorBoundary>
             </div>
           )}
 

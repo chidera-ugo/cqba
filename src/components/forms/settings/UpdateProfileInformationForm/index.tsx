@@ -1,3 +1,4 @@
+import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { UpdateAvatar } from 'components/forms/settings/UpdateProfileInformationForm/UpdateAvatar';
 import { AppToast } from 'components/primary/AppToast';
 import { useAppContext } from 'context/AppContext';
@@ -57,10 +58,12 @@ export const UpdateProfileInformationForm = () => {
 
         return (
           <>
-            <UpdateAvatar
-              avatar={avatar}
-              setFieldValue={formikProps?.setFieldValue}
-            />
+            <AppErrorBoundary>
+              <UpdateAvatar
+                avatar={avatar}
+                setFieldValue={formikProps?.setFieldValue}
+              />
+            </AppErrorBoundary>
 
             <div className={'mt-8 border-t border-neutral-200 pt-5'}>
               <Form

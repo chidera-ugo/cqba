@@ -3,17 +3,15 @@ import { CreateFirstBudget } from 'components/modules/wallet/MakeTransfer/Create
 import { PerformWalletToBank } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank';
 import { AppToast } from 'components/primary/AppToast';
 import { Outbound } from 'components/svgs/navigation/Arrows';
-import {
-  IBudget,
-  useGetAllBudgetsUnpaginated,
-} from 'hooks/api/budgeting/useGetAllBudgets';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
+import { useGetDebitableBudgets } from 'hooks/api/budgeting/useGetDebitableBudgets';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 export const MakeTransfer = ({ budget }: { budget?: IBudget }) => {
   const [modal, setModal] = useState<'create_budget' | 'transfer' | null>(null);
 
-  const { isLoading, isError, data } = useGetAllBudgetsUnpaginated();
+  const { isLoading, isError, data } = useGetDebitableBudgets();
 
   return (
     <>
@@ -40,7 +38,7 @@ export const MakeTransfer = ({ budget }: { budget?: IBudget }) => {
               type: 'error',
             });
 
-          if (!data?.docs?.length) return setModal('create_budget');
+          if (!data?.length) return setModal('create_budget');
 
           setModal('transfer');
         }}

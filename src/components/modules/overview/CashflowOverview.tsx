@@ -160,7 +160,7 @@ export const CashflowOverview = ({
               )}
 
               <CashflowChart
-                color={transactionType !== 'credit' ? '#1A44ED' : '#30b902'}
+                color={transactionType !== 'credit' ? '#7992ff' : '#30b902'}
                 period={period}
                 chartData={chartData?.length ? chartData : getChartData(7)}
               />

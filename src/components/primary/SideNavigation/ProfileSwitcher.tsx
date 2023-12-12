@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { Avatar } from 'components/commons/Avatar';
 import { Dropdown } from 'components/commons/Dropdown';
 import { ChevronDown } from 'components/svgs/navigation/Chevrons';
 import { Exit } from 'components/svgs/navigation/Exit';
@@ -33,7 +32,7 @@ export const ProfileSwitcher = ({
   return (
     <div
       className={clsx(
-        'sticky top-0 left-0 z-[100] p-5 pb-0 640:p-8',
+        'sticky top-0 left-0 z-[100] p-4 pb-0 640:p-4',
         className,
         isOwner ? 'bg-neutral-100' : 'bg-neutral-1000'
       )}
@@ -41,14 +40,12 @@ export const ProfileSwitcher = ({
       <div id={id} className='relative'>
         <button
           className={clsx(
-            'x-between relative z-[25] w-full rounded-2xl p-2.5',
+            'x-between relative z-[25] w-full rounded-xl border border-neutral-180 p-3',
             isOwner ? 'bg-white' : 'bg-neutral-900'
           )}
           onClick={() => setShowDropdown((prev) => !prev)}
         >
           <div className='flex gap-2.5'>
-            <Avatar avatar={user?.avatar} size={48} />
-
             <div className='my-auto text-left'>
               <div
                 className={clsx(
@@ -64,7 +61,9 @@ export const ProfileSwitcher = ({
                   isOwner ? 'text-neutral-600' : 'text-neutral-400'
                 )}
               >
-                {user?.email}
+                {!user?.firstName
+                  ? user?.email
+                  : `${user?.firstName} ${user?.lastName}`}
               </div>
             </div>
           </div>
