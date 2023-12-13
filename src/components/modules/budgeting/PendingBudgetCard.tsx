@@ -11,12 +11,14 @@ type Props = IBudget & {
   getColor?: (char: string) => string;
   className?: string;
   stripDown?: boolean;
+  isDetails?: boolean;
 };
 
 export const PendingBudgetCard = ({
   getColor,
   stripDown,
   onClick,
+  isDetails,
   ...budget
 }: Props) => {
   const {
@@ -33,8 +35,9 @@ export const PendingBudgetCard = ({
     <button
       type={'button'}
       className={clsx(
-        'y-between relative col-span-12 w-full cursor-pointer text-left hover:border-neutral-300 640:col-span-6 1280:col-span-4',
-        !stripDown ? 'card' : 'pb-2'
+        'y-between relative col-span-12 w-full text-left 640:col-span-6 1280:col-span-4',
+        !stripDown ? 'card' : 'pb-2',
+        isDetails ? 'cursor-default' : 'cursor-pointer hover:border-neutral-300'
       )}
       onClick={onClick}
     >

@@ -1,10 +1,10 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { AppToast } from 'components/primary/AppToast';
 import { Formik } from 'formik';
 import {
   IOwner,
   useUpdateOwnerInformation,
 } from 'hooks/api/kyc/useUpdateOwnerInformation';
+import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
 import { toast } from 'react-toastify';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
@@ -19,12 +19,12 @@ export const UpdateOwnerInformationForm = ({
   currentOwner: IOwner | null;
   closeModal: () => void;
 }) => {
-  const queryClient = useQueryClient();
+  const { invalidate } = useQueryInvalidator();
 
   const { isLoading, mutate } = useUpdateOwnerInformation({
     onSuccess() {
-      queryClient.invalidateQueries(['organization-information']);
       closeModal();
+      invalidate('organization');
       toast(<AppToast>Update successful</AppToast>, { type: 'success' });
     },
   });

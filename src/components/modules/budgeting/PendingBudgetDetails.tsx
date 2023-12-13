@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { AuthorizeActionWithPin } from 'components/core/AuthorizeActionWithPin';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
@@ -20,6 +19,7 @@ import { useCancelBudget } from 'hooks/api/budgeting/useCancelBudget';
 import { useCloseBudget } from 'hooks/api/budgeting/useCloseBudget';
 import { useGetBudgetById } from 'hooks/api/budgeting/useGetBudgetById';
 import { useHandleError } from 'hooks/api/useHandleError';
+import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
 import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { useState } from 'react';
@@ -39,7 +39,7 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
   >(null);
   const [reason, setReason] = useState('');
 
-  const queryClient = useQueryClient();
+  const { defaultInvalidator, invalidate } = useQueryInvalidator();
   const { getColor } = useGetColorByChar();
   const { handleError } = useHandleError();
 
@@ -58,16 +58,14 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
 
   const { isLoading: declining, mutate: decline } = useCloseBudget(data?._id, {
     onSuccess() {
-      queryClient.invalidateQueries(['budget', data?._id]);
-      queryClient.invalidateQueries(['budgets']);
+      onSuccess();
       setMode('success');
     },
   });
 
   const { isLoading: cancelling, mutate: cancel } = useCancelBudget(data?._id, {
     onSuccess() {
-      queryClient.invalidateQueries(['budget', data?._id]);
-      queryClient.invalidateQueries(['budgets']);
+      onSuccess();
       close();
       toast(<AppToast>Canceled budget successfully</AppToast>, {
         type: 'success',
@@ -78,6 +76,11 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
   if (gettingBudget || _l) return <IsLoading />;
 
   if (isError || _e || !primaryWallet || !data) return <IsError />;
+
+  function onSuccess() {
+    defaultInvalidator(['budget', data?._id]);
+    defaultInvalidator(['budgets']);
+  }
 
   function dismiss() {
     setMode(null);
@@ -148,8 +151,7 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
               },
               {
                 onSuccess() {
-                  queryClient.invalidateQueries(['budgets']);
-                  queryClient.invalidateQueries(['wallets']);
+                  invalidate('budgets', 'balances');
                   setMode('success');
                 },
                 onError(e) {
@@ -185,7 +187,7 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
         negative={() => setAction(null)}
       />
 
-      <PendingBudgetCard {...data} {...{ getColor }} />
+      <PendingBudgetCard isDetails {...data} {...{ getColor }} />
 
       {user?.role === 'owner' ? (
         <ApproveBudgetForm

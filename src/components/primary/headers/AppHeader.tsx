@@ -60,7 +60,9 @@ export const AppHeader = ({
               <Notifications />
 
               <AppErrorBoundary className={'my-auto'} type={'hidden'}>
-                <Avatar avatar={user?.avatar} />
+                <Link href={'/settings'}>
+                  <Avatar avatar={user?.avatar} />
+                </Link>
               </AppErrorBoundary>
             </div>
           )}

@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { Avatar } from 'components/commons/Avatar';
 import { DisplayValue } from 'components/commons/DisplayValue';
 import { IsError } from 'components/data-states/IsError';
@@ -12,6 +11,7 @@ import { useDeleteInvite } from 'hooks/api/employees/useDeleteInvite';
 import { IEmployee } from 'hooks/api/employees/useGetAllEmployees';
 import { useGetEmployeeById } from 'hooks/api/employees/useGetEmployeeById';
 import { useResendInvite } from 'hooks/api/employees/useResendInvite';
+import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { formatDate } from 'utils/formatters/formatDate';
@@ -31,13 +31,13 @@ export const EmployeeDetails = ({
 }: Props) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
 
-  const queryClient = useQueryClient();
+  const { invalidate } = useQueryInvalidator();
 
   const { isLoading, isError, data: _data } = useGetEmployeeById(id);
 
   const { isLoading: deleting, mutate: deleteInvite } = useDeleteInvite(id, {
     onSuccess() {
-      queryClient.invalidateQueries(['employees']);
+      invalidate('team');
       close();
     },
   });
@@ -52,7 +52,7 @@ export const EmployeeDetails = ({
   const { mutate: deleteEmployee, isLoading: deletingEmployee } =
     useDeleteEmployee(id, {
       onSuccess() {
-        queryClient.invalidateQueries(['employees']);
+        invalidate('team');
         close();
       },
     });

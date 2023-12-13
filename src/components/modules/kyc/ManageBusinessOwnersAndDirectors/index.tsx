@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { UpdateOwnerInformationForm } from 'components/forms/kyc/UpdateOwnerInformationForm';
@@ -9,6 +8,7 @@ import { Spinner } from 'components/svgs/dashboard/Spinner';
 import { useDeleteOwner } from 'hooks/api/kyc/useDeleteOwner';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { IOwner } from 'hooks/api/kyc/useUpdateOwnerInformation';
+import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -28,7 +28,7 @@ export const ManageBusinessOwnersAndDirectors = () => {
     id: string;
   }>(null);
 
-  const queryClient = useQueryClient();
+  const { invalidate } = useQueryInvalidator();
 
   const { isUnderReview } = useAccountVerificationStatus();
 
@@ -37,7 +37,7 @@ export const ManageBusinessOwnersAndDirectors = () => {
 
   const { mutate: _delete, isLoading: deleting } = useDeleteOwner({
     onSuccess() {
-      queryClient.invalidateQueries(['organization-information']);
+      invalidate('organization');
     },
   });
 

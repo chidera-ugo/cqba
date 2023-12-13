@@ -67,6 +67,15 @@ export const Form = ({
     setFieldValue('budgetBalance', budgetBalance);
   }, [values.budget, data]);
 
+  const budgets =
+    data?.map(({ name, _id, balance }) => ({
+      name: `${name} - ${currency} ${formatAmount({
+        value: balance / 100,
+      })}`,
+      balance: balance,
+      _id,
+    })) ?? [];
+
   return (
     <FormikForm onSubmit={handleSubmit}>
       {budget ? (
@@ -76,15 +85,7 @@ export const Form = ({
       ) : (
         <>
           <Select
-            options={
-              data?.map(({ name, _id, balance }) => ({
-                name: `${name} - ${currency} ${formatAmount({
-                  value: balance / 100,
-                })}`,
-                balance: balance,
-                _id,
-              })) ?? []
-            }
+            options={budgets}
             isError={isError}
             isLoading={isLoading || isRefetching}
             className={'mt-0'}

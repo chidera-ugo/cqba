@@ -12,7 +12,6 @@ export function useGetDebitableBudgets(
     options: {
       ...options,
       meta: { silent: true },
-      staleTime: Infinity,
     },
   });
 }

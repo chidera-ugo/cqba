@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { NoData } from 'components/core/Table/NoData';
 import { Confirmation } from 'components/modals/Confirmation';
 import { MobileEmployeesList } from 'components/modules/employees/MobileEmployeesList';
@@ -12,6 +11,7 @@ import {
   useGetAllEmployees,
 } from 'hooks/api/employees/useGetAllEmployees';
 import { useUnblockEmployee } from 'hooks/api/employees/useUnblockEmployee';
+import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
 import { TPagination } from 'hooks/client_api/hooks/useUrlManagedState';
 import { EmployeeModalType } from 'hooks/employees/useManageEmployee';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
@@ -42,7 +42,7 @@ export const AllEmployeesTable = ({
   pagination,
   setPagination,
 }: Props & TPagination) => {
-  const queryClient = useQueryClient();
+  const { invalidate } = useQueryInvalidator();
 
   const { screenSize } = useAppContext().state;
 
@@ -106,7 +106,7 @@ export const AllEmployeesTable = ({
   );
 
   function onSuccess() {
-    queryClient.invalidateQueries(['employees']);
+    invalidate('team');
     setShowConfirmation(false);
   }
 

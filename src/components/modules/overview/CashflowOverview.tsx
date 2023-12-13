@@ -163,7 +163,7 @@ export const CashflowOverview = ({
             />
           </div>
         ) : (
-          <div className='x-thin-scrollbar h-full overflow-x-auto overflow-y-hidden px-3'>
+          <div className='hidden-scrollbar h-full overflow-x-auto overflow-y-hidden px-3'>
             <AppErrorBoundary className='relative h-full min-w-[700px]'>
               {isFetching && (
                 <div className='absolute right-3 top-3'>

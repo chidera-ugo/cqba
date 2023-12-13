@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { AuthorizeActionWithPin } from 'components/core/AuthorizeActionWithPin';
 import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { IsError } from 'components/data-states/IsError';
@@ -18,10 +17,19 @@ import {
 } from 'hooks/api/budgeting/useCreateBudget';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
 import { useHandleError } from 'hooks/api/useHandleError';
+import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { useState } from 'react';
 import { FormRecoveryProps } from 'types/forms/form_recovery';
 import { sanitizeAmount } from 'utils/formatters/formatAmount';
+
+interface Props {
+  show: boolean;
+  close: () => void;
+  budget?: IBudget;
+  onFinish?: () => void;
+  hideBackground?: boolean;
+}
 
 export const ManageBudgetCreation = ({
   show,
@@ -29,13 +37,7 @@ export const ManageBudgetCreation = ({
   budget,
   hideBackground,
   onFinish,
-}: {
-  show: boolean;
-  close: () => void;
-  budget?: IBudget;
-  onFinish?: () => void;
-  hideBackground?: boolean;
-}) => {
+}: Props) => {
   const [mode, setMode] = useState<
     'create' | 'add_beneficiaries' | 'create_employee' | 'approve' | 'success'
   >('create');
@@ -60,7 +62,7 @@ export const ManageBudgetCreation = ({
 
   const { primaryWallet, isError, isLoading } = useManageWallets();
 
-  const queryClient = useQueryClient();
+  const { invalidate, defaultInvalidator } = useQueryInvalidator();
   const { handleError } = useHandleError();
 
   const { isLoading: creatingBudget, mutate } = useCreateBudget(budget?._id, {
@@ -161,10 +163,8 @@ export const ManageBudgetCreation = ({
           setBudgetStatus(res.status);
           setMode('success');
 
-          queryClient.invalidateQueries(['budgets']);
-          queryClient.invalidateQueries(['wallets']);
-          queryClient.invalidateQueries(['employees']);
-          queryClient.invalidateQueries(['budget', budget?._id]);
+          invalidate('budgets', 'balances', 'team');
+          defaultInvalidator(['budget', budget?._id]);
 
           resetFormRecoveryValues();
         },

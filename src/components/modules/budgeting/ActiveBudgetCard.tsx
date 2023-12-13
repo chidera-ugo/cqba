@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { Avatar } from 'components/commons/Avatar';
 import { AuthorizeActionWithPin } from 'components/core/AuthorizeActionWithPin';
@@ -13,6 +12,7 @@ import { UserRoles } from 'enums/employee_enum';
 import { useCloseBudget } from 'hooks/api/budgeting/useCloseBudget';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
 import { usePauseBudget } from 'hooks/api/budgeting/usePauseBudget';
+import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
 import { useRouter } from 'next/router';
 import { Fragment, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -44,13 +44,12 @@ export const ActiveBudgetCard = ({
   const [paused, setPaused] = useState(budget.paused);
 
   const { replace, push } = useRouter();
-  const queryClient = useQueryClient();
+  const { invalidate, defaultInvalidator } = useQueryInvalidator();
 
   const { isLoading: pausing, mutate: pause } = usePauseBudget(budget._id, {
     onSuccess(res) {
       setPaused(res.paused);
-      queryClient.invalidateQueries(['budget', budget._id]);
-      queryClient.invalidateQueries(['budgets']);
+      onSuccess();
       setMode('success');
     },
   });
@@ -58,9 +57,8 @@ export const ActiveBudgetCard = ({
   const { isLoading: closing, mutate: close } = useCloseBudget(budget._id, {
     onSuccess(res) {
       replace('/budgeting').then(() => {
+        onSuccess();
         toast(<AppToast>{res.message}</AppToast>, { type: 'success' });
-        queryClient.invalidateQueries(['budget', budget._id]);
-        queryClient.invalidateQueries(['budgets']);
       });
     },
   });
@@ -100,6 +98,11 @@ export const ActiveBudgetCard = ({
       disabled: threshold === amount,
     },
   ];
+
+  function onSuccess() {
+    defaultInvalidator(['budget', budget._id]);
+    invalidate('budgets');
+  }
 
   function getWidth(val: number) {
     return `${Math.round((val * 100) / amount)}%`;

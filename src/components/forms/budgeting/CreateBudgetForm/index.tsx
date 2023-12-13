@@ -1,7 +1,7 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { Formik } from 'formik';
 import { useCreatePersonalBudget } from 'hooks/api/budgeting/useCreatePersonalBudget';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
+import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
 import { FormRecoveryProps } from 'types/forms/form_recovery';
 import { sanitizeAmount } from 'utils/formatters/formatAmount';
 import { Form } from './Form';
@@ -29,13 +29,12 @@ export const CreateBudgetForm = ({
   isOwner,
   budget,
 }: Props) => {
-  const queryClient = useQueryClient();
+  const { invalidate } = useQueryInvalidator();
 
   const { mutate: createPersonalBudget, isLoading: creatingPersonalBudget } =
     useCreatePersonalBudget({
       onSuccess(res) {
-        queryClient.invalidateQueries(['budgets']);
-        queryClient.invalidateQueries(['wallets']);
+        invalidate('budgets', 'balances');
 
         if (!onSuccess) return;
 

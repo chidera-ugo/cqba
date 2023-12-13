@@ -65,7 +65,7 @@ export const CashflowChart = ({
         <Tooltip
           content={
             <CustomTooltip
-              keyAccessor={'date'}
+              xAxisAccessor={'date'}
               formatter={(value) => {
                 return `${primaryWallet?.currency}${formatAmount({
                   value: value,

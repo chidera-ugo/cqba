@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { IsError } from 'components/data-states/IsError';
@@ -8,6 +7,7 @@ import FormData from 'form-data';
 import { Formik } from 'formik';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useUpdateOrganizationDocuments } from 'hooks/api/kyc/useUpdateOrganizationDocuments';
+import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import { toast } from 'react-toastify';
 import { DatePickerValue, IFile } from 'types/commons';
@@ -19,7 +19,7 @@ import { useRouter } from 'next/router';
 export const UpdateBusinessDocumentionForm = () => {
   const { replace } = useRouter();
 
-  const queryClient = useQueryClient();
+  const { invalidate } = useQueryInvalidator();
 
   const {
     hasProvidedOwnerInformationRequirements,
@@ -34,7 +34,7 @@ export const UpdateBusinessDocumentionForm = () => {
 
   const { isLoading, mutate } = useUpdateOrganizationDocuments({
     onSuccess() {
-      queryClient.invalidateQueries(['organization-information']);
+      invalidate('organization');
 
       replace(`/kyc?tab=${redirectUrl}`).then(() => {
         toast(<AppToast>Update successful</AppToast>, { type: 'success' });

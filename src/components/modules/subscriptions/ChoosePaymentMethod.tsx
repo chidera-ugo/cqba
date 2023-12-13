@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { AnimateLayout } from 'components/animations/AnimateLayout';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
@@ -12,6 +11,7 @@ import { RadioOff, RadioOn } from 'components/svgs/others/Radio';
 import { useAppContext } from 'context/AppContext';
 import { useChooseSubscriptionPlan } from 'hooks/api/subscriptions/useChooseSubscriptionPlan';
 import { SubscriptionPlan } from 'hooks/api/subscriptions/useGetAllSubscriptionPlans';
+import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -58,7 +58,7 @@ export const ChoosePaymentMethod = ({
 
   const initializePayment = usePaystackPayment(paystackConfig);
 
-  const queryClient = useQueryClient();
+  const { invalidate } = useQueryInvalidator();
 
   useEffect(() => {
     if (!paystackConfig?.reference || !paystackConfig.amount) return;
@@ -102,14 +102,8 @@ export const ChoosePaymentMethod = ({
 
   function onSuccess() {
     dispatch({ type: 'update_has_choosen_plan', payload: true });
-
     getCurrentUser!(null);
-
-    queryClient.invalidateQueries(['subscription_history']);
-    queryClient.invalidateQueries(['current_subscription_plan']);
-    queryClient.invalidateQueries(['dashboard_overview']);
-    queryClient.invalidateQueries(['wallets']);
-
+    invalidate('balances', 'subscription');
     setMode('success');
   }
 

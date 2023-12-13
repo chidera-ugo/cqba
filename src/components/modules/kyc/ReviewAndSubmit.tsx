@@ -1,21 +1,21 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { ApplicationUnderReview } from 'components/modules/kyc/ApplicationUnderReview';
 import { KycSteps } from 'components/modules/kyc/KycSteps';
 import { useApplyForReview } from 'hooks/api/kyc/useApplyForReview';
+import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import Link from 'next/link';
 import { useState } from 'react';
 
 export const ReviewAndSubmit = () => {
-  const queryClient = useQueryClient();
+  const { invalidate } = useQueryInvalidator();
 
   const [submitted, setSubmitted] = useState(false);
 
   const { isLoading, mutate } = useApplyForReview({
     onSuccess() {
       setSubmitted(true);
-      queryClient.invalidateQueries(['organization-information']);
+      invalidate('organization');
     },
   });
 
