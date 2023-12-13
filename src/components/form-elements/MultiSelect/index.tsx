@@ -21,11 +21,13 @@ export type Props = JSX.IntrinsicElements['input'] &
     isLoading?: boolean;
     isError?: boolean;
     setFieldValue: SetFieldValue;
+    asRadio?: boolean;
   };
 
 export const MultiSelect = ({
   isLoading,
   isError,
+  asRadio,
   placeholder,
   ...props
 }: PropsWithChildren<Props>) => {
@@ -122,7 +124,7 @@ export const MultiSelect = ({
               <div className='y-center my-auto h-full w-full'>
                 <span
                   className={clsx(
-                    'x-center y-center mx-auto my-auto h-7 w-full rounded-full',
+                    'x-center y-center mx-auto my-auto h-7',
                     selection.length ? 'bg-white' : 'bg-neutral-100'
                   )}
                 >
@@ -147,9 +149,14 @@ export const MultiSelect = ({
             showList,
             selectedOptions: field.value,
             handleChange(value) {
-              if (!setFieldValue) return;
+              if (!setFieldValue || !name) return;
 
-              setFieldValue(name!, {
+              if (asRadio) {
+                setFieldValue(name, value);
+                return;
+              }
+
+              setFieldValue(name, {
                 ...field.value,
                 ...value,
               });

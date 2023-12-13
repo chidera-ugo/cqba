@@ -32,7 +32,7 @@ export const WideTabs = ({
   tabClassname,
 }: Props) => {
   return (
-    <div className={clsx('no-scrollbar h-full', className)}>
+    <div className={clsx('no-scrollbar', className)}>
       <div
         className={clsx(
           `my-auto flex h-full w-max flex-shrink-0 gap-5 align-middle`

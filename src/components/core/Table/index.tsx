@@ -10,7 +10,10 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
-import { TableDataStates } from 'components/core/Table/TableDataStates';
+import {
+  NoDataConfig,
+  TableDataStates,
+} from 'components/core/Table/TableDataStates';
 import {
   Dispatch,
   FC,
@@ -29,8 +32,6 @@ import { Spinner } from 'components/svgs/dashboard/Spinner';
 
 export type Props<T> = JSX.IntrinsicElements['table'] & {
   title: string;
-  emptyTableText?: string;
-  emptyTableIcon?: JSX.Element;
   // TABLE
   columns: ColumnDef<T, unknown>[];
   data?: PaginatedResponse<T>;
@@ -76,12 +77,12 @@ export type Props<T> = JSX.IntrinsicElements['table'] & {
     value: string;
   };
   hideFetchingToast?: boolean;
+  noDataConfig?: NoDataConfig;
 };
 
 export function Table<T>({
   columns: defaultColumns,
   data: res,
-  emptyTableText,
   accessor,
   onRowClick,
   title,
@@ -114,10 +115,10 @@ export function Table<T>({
   tableClassname,
   refetch,
   hidePagination,
-  emptyTableIcon,
   tableFiltersKeyValuePairs,
   minimal,
   shouldDisableClicking,
+  noDataConfig,
 }: Props<T>) {
   const [columns] = useState<typeof defaultColumns>(() => [...defaultColumns]);
   const [rowSelection, setRowSelection] = useState({});
@@ -393,8 +394,7 @@ export function Table<T>({
           isLoading,
           isError,
           data: res,
-          emptyTableText,
-          emptyTableIcon,
+          noDataConfig,
           minimal,
           refetch,
           canNotShowData,

@@ -197,7 +197,7 @@ export const AllEmployeesTable = ({
             setSorting([]);
             reset && reset();
           }}
-          emptyTableText='You have not added any employees yet.'
+          noDataConfig={{ title: 'You have not added any employees yet.' }}
         />
       )}
     </>

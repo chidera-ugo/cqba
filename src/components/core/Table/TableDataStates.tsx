@@ -1,7 +1,8 @@
 import clsx from 'clsx';
-import { IsEmpty } from 'components/data-states/IsEmpty';
+import { NoData } from 'components/core/Table/NoData';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
+import { StaticImageData } from 'next/image';
 import { PaginatedResponse } from 'types/Table';
 
 type Props = {
@@ -11,15 +12,19 @@ type Props = {
   isError?: boolean;
   isLoading?: boolean;
   minimal?: boolean;
-  emptyTableText?: string;
   refetch?: () => void;
-  emptyTableIcon?: JSX.Element;
+  noDataConfig?: NoDataConfig;
+};
+
+export type NoDataConfig = {
+  image?: StaticImageData;
+  title?: string;
+  description?: string;
 };
 
 export const TableDataStates = ({
   canNotShowData,
-  emptyTableText,
-  emptyTableIcon,
+  noDataConfig,
   minimal,
   isLoading,
   data: res,
@@ -27,14 +32,22 @@ export const TableDataStates = ({
   title,
   refetch,
 }: Props) => {
+  const IsEmpty = () => {
+    return (
+      <NoData
+        processing={!!isLoading}
+        imageSrc={noDataConfig?.image}
+        title={noDataConfig?.title}
+        toastClassname={'bottom-24'}
+        subTitle={noDataConfig?.description}
+      />
+    );
+  };
+
   return (
     <>
       {canNotShowData ? (
-        <IsEmpty
-          text={emptyTableText}
-          icon={emptyTableIcon}
-          minimal={minimal}
-        />
+        <IsEmpty />
       ) : isLoading && !res?.docs?.length ? (
         <IsLoading
           className={clsx(
@@ -56,7 +69,7 @@ export const TableDataStates = ({
           }
         />
       ) : !res?.docs.length ? (
-        <IsEmpty {...{ emptyTableText, emptyTableIcon, minimal }} />
+        <IsEmpty />
       ) : null}
     </>
   );

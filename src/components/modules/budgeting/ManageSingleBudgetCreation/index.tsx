@@ -31,7 +31,7 @@ interface Props {
   hideBackground?: boolean;
 }
 
-export const ManageBudgetCreation = ({
+export const ManageSingleBudgetCreation = ({
   show,
   close,
   budget,

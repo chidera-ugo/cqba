@@ -45,8 +45,6 @@ export const UpdateCompanyInformationForm = () => {
       validationSchema={validationSchema}
       onSubmit={({
         companyType,
-        employees,
-        expenses,
         businessName,
         businessIndustry,
         phoneNumber,
@@ -56,9 +54,7 @@ export const UpdateCompanyInformationForm = () => {
           companyName: businessName,
           businessIndustry,
           phone: phoneNumber,
-          averageMonthlyExpenses: expenses,
           businessType: companyType,
-          numberOfEmployees: employees,
           ...values,
         });
       }}

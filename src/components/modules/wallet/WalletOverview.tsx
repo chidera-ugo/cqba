@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { SummaryWithVariance } from 'components/modules/overview/Overview/SummaryWithVariance';
 import { useGetWalletBalances } from 'hooks/api/wallet/useGetWalletBalances';
-import { useUserRole } from 'hooks/rbac/useUserRole';
+import { useUserRole } from 'hooks/access_control/useUserRole';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import Link from 'next/link';
 

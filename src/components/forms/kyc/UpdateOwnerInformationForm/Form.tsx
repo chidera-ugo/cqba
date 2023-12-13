@@ -154,7 +154,11 @@ export const Form = ({
         />
       )}
 
-      <AddressInputGroup country={values.country} state={values.state} />
+      <AddressInputGroup
+        setFieldValue={setFieldValue}
+        country={values.country}
+        state={values.state}
+      />
 
       <div className='gap-4 880:flex'>
         <Select

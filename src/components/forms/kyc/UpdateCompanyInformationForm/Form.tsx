@@ -44,13 +44,11 @@ export const Form = ({
 
     const {
       address,
-      averageMonthlyExpenses,
       city,
       country,
       businessName,
       businessIndustry,
       state,
-      numberOfEmployees,
       businessType,
       phone,
       postalCode,
@@ -66,8 +64,6 @@ export const Form = ({
         businessIndustry,
         address,
         companyType: businessType,
-        expenses: averageMonthlyExpenses,
-        employees: numberOfEmployees,
         city,
         state,
         tin,
@@ -109,7 +105,6 @@ export const Form = ({
           { name: 'INCORPORATED TRUSTEES', id: 'Incorporated_Trustees' },
           { name: 'PRIVATE LIMITED', id: 'Private_Incorporated' },
           { name: 'PUBLIC LIMITED', id: 'Public_Incorporated' },
-          { name: 'UNREGISTERED INDIVIDUAL', id: 'Free_Zone' },
         ]}
         displayValueKey={'name'}
         trueValueKey={'id'}
@@ -126,7 +121,10 @@ export const Form = ({
       ) : null}
 
       {values.companyType === Business_typeEnum.businessName && (
-        <Input label='Business Number (BN)' name='businessNumber' />
+        <Input
+          label='Business Registration Number (BN)'
+          name='businessNumber'
+        />
       )}
 
       {isPrivateOrPublic ? <Input label='RC Number' name='rcNumber' /> : null}
@@ -143,27 +141,11 @@ export const Form = ({
         shouldValidate
       />
 
-      <div className='gap-5 480:flex'>
-        <Select
-          label='Number of employees'
-          name='employees'
-          placeholder={'Select range'}
-          options={['Less than 10', 'Between 11 and 50', 'More than 50']}
-        />
-
-        <Select
-          label='Average monthly expenses'
-          name='expenses'
-          placeholder={'Select range'}
-          options={[
-            'Less than USD 5,000',
-            'Between USD 5,000 and USD 50,000',
-            'More than USD 50,000',
-          ]}
-        />
-      </div>
-
-      <AddressInputGroup country={values.country} state={values.state} />
+      <AddressInputGroup
+        setFieldValue={setFieldValue}
+        country={values.country}
+        state={values.state}
+      />
 
       <div className={'mt-10 pb-8'}>
         <div className='relative flex'>

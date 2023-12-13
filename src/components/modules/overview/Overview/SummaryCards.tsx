@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { SummaryWithVariance } from 'components/modules/overview/Overview/SummaryWithVariance';
 import { useGetDashboardSummary } from 'hooks/api/dashboard/useGetDashboardSummary';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
-import { useUserRole } from 'hooks/rbac/useUserRole';
+import { useUserRole } from 'hooks/access_control/useUserRole';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { Fragment } from 'react';
 import { generatePlaceholderArray } from 'utils/generators/generatePlaceholderArray';
@@ -13,14 +13,11 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
   const { isOwner } = useUserRole();
 
   const { primaryWallet } = useManageWallets();
+  const currency = primaryWallet?.currency;
 
-  const { isLoading, isError, data } = useGetDashboardSummary(
-    range,
-    primaryWallet?.currency,
-    {
-      enabled: isVerified,
-    }
-  );
+  const { isLoading, isError, data } = useGetDashboardSummary(range, currency, {
+    enabled: isVerified && !!currency,
+  });
 
   if (isLoading) return <IsLoadingIsError type='loading' />;
   if (isError) return <IsLoadingIsError type='error' />;

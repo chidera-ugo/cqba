@@ -1,5 +1,4 @@
 import { UseMutationOptions } from '@tanstack/react-query';
-import { useAppContext } from 'context/AppContext';
 import { useTMutation } from 'hooks/api/useTMutation';
 
 export interface UpdateCompanyInformationDto {
@@ -11,19 +10,15 @@ export interface UpdateCompanyInformationDto {
   state: string;
   phone: string;
   postalCode: string;
-  numberOfEmployees: string;
-  averageMonthlyExpenses: string;
   address: string;
 }
 
 export function useUpdateCompanyInformation(
   options?: UseMutationOptions<any, unknown, void, unknown>
 ) {
-  const { user } = useAppContext().state;
-
   return useTMutation<UpdateCompanyInformationDto, any>({
     method: 'patch',
-    url: `/${user?.organization}/update-company-info`,
+    url: `/update-company-info`,
     service: 'organizations',
     options,
   });

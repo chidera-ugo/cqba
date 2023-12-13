@@ -55,7 +55,7 @@ export const ChoosePlan = ({ minimal }: { minimal?: boolean }) => {
         <div className={clsx(minimal ? 'mb-10' : 'py-10')}>
           {!minimal && (
             <>
-              <div className='x-center'>
+              <div className='x-center text-neutral-200'>
                 <UserIconLg />
               </div>
 

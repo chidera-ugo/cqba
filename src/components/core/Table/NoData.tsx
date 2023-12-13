@@ -9,7 +9,7 @@ interface Props {
   title?: string;
   icon?: ReactNode;
   imageSrc?: StaticImageData;
-  subTitle: string;
+  subTitle?: string;
   noToast?: boolean;
   toastClassname?: string;
 }
@@ -54,7 +54,7 @@ export const NoData = ({
             {title && <h4 className='mt-5 text-xl 640:text-3xl'>{title}</h4>}
 
             <p className='mt-4 text-sm font-light leading-5 text-neutral-600'>
-              {subTitle}
+              {subTitle ?? 'No data yet'}
             </p>
           </div>
         </div>

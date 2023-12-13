@@ -88,9 +88,11 @@ export const ChoosePaymentMethod = ({
       image: chequebase,
       id: 'wallet',
       title: 'ChequeBase Account',
-      subTitle: `Balance: ${primaryWallet?.currency}${formatAmount({
-        value: primaryWallet?.balance,
-      })}`,
+      subTitle: !primaryWallet
+        ? 'Balance: '
+        : `Balance: ${primaryWallet?.currency}${formatAmount({
+            value: primaryWallet?.balance,
+          })}`,
     },
     {
       image: paystack,

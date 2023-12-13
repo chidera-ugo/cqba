@@ -3,14 +3,16 @@ import { Select } from 'components/form-elements/Select';
 import { useGetCities } from 'hooks/api/address/useGetCities';
 import { useGetCountries } from 'hooks/api/address/useGetCountries';
 import { useGetStates } from 'hooks/api/address/useGetStates';
+import { useEffect } from 'react';
+import { SetFieldValue } from 'types/commons';
 
-export const AddressInputGroup = ({
-  country,
-  state,
-}: {
+interface Props {
   country: string;
   state: string;
-}) => {
+  setFieldValue: SetFieldValue;
+}
+
+export const AddressInputGroup = ({ country, state, setFieldValue }: Props) => {
   const {
     isLoading: loadingCountries,
     isError: countriesError,
@@ -28,6 +30,15 @@ export const AddressInputGroup = ({
     isError: citiesError,
     data: cities,
   } = useGetCities(country, state);
+
+  useEffect(() => {
+    if (country || !countries?.length) return;
+
+    setFieldValue(
+      'country',
+      countries?.find(({ isoCode }) => isoCode === 'NG')?.isoCode ?? ''
+    );
+  }, [countries]);
 
   return (
     <>

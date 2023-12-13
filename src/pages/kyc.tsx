@@ -70,6 +70,7 @@ export default function Kyc() {
     <AppLayout
       title='Get Started'
       hideSideNavigation
+      headerClassname={'border-b-none'}
       headerSlot={<LogoutButton />}
     >
       <SimpleToast show={isRefetching && showSteps}>Updating...</SimpleToast>

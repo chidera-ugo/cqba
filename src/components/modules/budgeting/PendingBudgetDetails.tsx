@@ -7,7 +7,7 @@ import { RejectionReasonForm } from 'components/forms/budgeting/RejectionReasonF
 import { Cancel } from 'components/illustrations/Cancel';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { Confirmation } from 'components/modals/Confirmation';
-import { ManageBudgetCreation } from 'components/modules/budgeting/ManageBudgetCreation';
+import { ManageSingleBudgetCreation } from 'components/modules/budgeting/ManageSingleBudgetCreation';
 import { PendingBudgetCard } from 'components/modules/budgeting/PendingBudgetCard';
 import { AppToast } from 'components/primary/AppToast';
 import { useAppContext } from 'context/AppContext';
@@ -164,7 +164,7 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
         }}
       />
 
-      <ManageBudgetCreation
+      <ManageSingleBudgetCreation
         budget={data}
         hideBackground
         onFinish={close}

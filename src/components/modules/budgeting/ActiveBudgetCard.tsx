@@ -26,6 +26,7 @@ type Props = IBudget & {
   className?: string;
   showActions?: boolean;
   showOnlyBreakdown?: boolean;
+  isProject?: boolean;
 };
 
 export const ActiveBudgetCard = ({

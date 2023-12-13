@@ -1,5 +1,4 @@
 import { UseMutationOptions } from '@tanstack/react-query';
-import { useAppContext } from 'context/AppContext';
 import { useTMutation } from 'hooks/api/useTMutation';
 
 export interface UpdateOwnersInformationDto {
@@ -40,11 +39,9 @@ export interface IOwner {
 export function useUpdateOwnerInformation(
   options?: UseMutationOptions<IOwner, unknown, void, unknown>
 ) {
-  const { user } = useAppContext().state;
-
   return useTMutation<UpdateOwnersInformationDto, IOwner>({
     method: 'patch',
-    url: `/${user?.organization}/update-owner-info`,
+    url: `/update-owner-info`,
     service: 'organizations',
     options,
   });

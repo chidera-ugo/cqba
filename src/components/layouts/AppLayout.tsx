@@ -10,7 +10,6 @@ import { copyrightText } from 'constants/copyrightText';
 import { UserRole } from 'enums/employee_enum';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useNavigationItems } from 'hooks/dashboard/useNavigationItems';
-import { useIsKycFlow } from 'hooks/kyc/useIsKycFlow';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import NotFound from 'pages/404';
@@ -29,12 +28,14 @@ export interface Props {
   breadCrumbs?: { title: string; url?: string }[];
   breadCrumbsSlot?: ReactNode;
   enabledFor?: UserRole;
+  headerClassname?: string;
 }
 
 export const AppLayout = ({
   children,
   headerSlot,
   title,
+  headerClassname = 'border-b',
   back,
   childrenClassName,
   breadCrumbs,
@@ -56,7 +57,6 @@ export const AppLayout = ({
   const hideSideNavigation = props.hideSideNavigation || shouldSelectFirstPlan;
 
   const { isVerified } = useIsVerified();
-  const { isKycFlow } = useIsKycFlow();
   const { pathname } = useRouter();
 
   const { isValidRoute } = useNavigationItems(role);
@@ -104,7 +104,7 @@ export const AppLayout = ({
                 title,
                 hideSideNavigation,
               }}
-              className={!isKycFlow || shouldSelectFirstPlan ? 'border-b' : ''}
+              className={headerClassname}
             >
               {shouldSelectFirstPlan ? <LogoutButton /> : headerSlot}
             </AppHeader>
