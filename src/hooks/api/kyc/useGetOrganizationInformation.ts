@@ -55,7 +55,7 @@ export function useGetOrganizationInformation(
 
   return useTQuery<IOrganization>({
     queryKey: ['organization-information'],
-    url: ``,
+    url: `/get-organization`,
     service: 'organizations',
     options: {
       ...options,

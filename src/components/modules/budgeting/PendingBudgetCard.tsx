@@ -71,8 +71,8 @@ export const PendingBudgetCard = ({
       </div>
 
       <div className='x-between relative mt-5 w-full border-t border-neutral-310 pt-4'>
-        <div className={'flex gap-0.5 text-base font-medium'}>
-          <span className={'my-auto h-full pt-1 text-xs'}>{currency}</span>
+        <div className={'flex gap-1 text-[20px] font-medium'}>
+          <span className={'my-auto h-full pt-1 text-sm'}>{currency}</span>
           <span>{formatAmount({ value: amount / 100 })}</span>
         </div>
 
