@@ -7,7 +7,6 @@ import { RejectionReasonForm } from 'components/forms/budgeting/RejectionReasonF
 import { Cancel } from 'components/illustrations/Cancel';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { Confirmation } from 'components/modals/Confirmation';
-import { ManageSingleBudgetCreation } from 'components/modules/budgeting/ManageSingleBudgetCreation';
 import { PendingBudgetCard } from 'components/modules/budgeting/PendingBudgetCard';
 import { AppToast } from 'components/primary/AppToast';
 import { useAppContext } from 'context/AppContext';
@@ -107,7 +106,7 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
       </RightModalWrapper>
 
       <AuthorizeActionWithPin
-        mode={mode}
+        isSuccess={mode === 'success'}
         show={!!mode}
         icon={action === 'decline' ? <Cancel /> : undefined}
         title={
@@ -164,16 +163,8 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
         }}
       />
 
-      <ManageSingleBudgetCreation
-        budget={data}
-        hideBackground
-        onFinish={close}
-        show={action === 'edit_budget'}
-        close={() => setAction(null)}
-      />
-
       <Confirmation
-        hideBackground
+        hideBackdrop
         show={action === 'confirm_cancel'}
         buttonTexts={['Cancel', 'Continue']}
         title='Cancel Budget'

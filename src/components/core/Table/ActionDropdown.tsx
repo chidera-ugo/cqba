@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { Dropdown } from 'components/commons/Dropdown';
-import { VerticalDots } from 'components/svgs/Icons_TableActions';
+import { HorizontalDots } from 'components/svgs/Icons_TableActions';
 import { Dispatch, PropsWithChildren, SetStateAction, useState } from 'react';
 
 export interface TableActionItem {
@@ -23,7 +23,7 @@ interface Props {
   wrapperClassname?: string;
 }
 
-export const TableAction = ({
+export const ActionDropdown = ({
   children,
   id,
   totalRows,
@@ -59,9 +59,13 @@ export const TableAction = ({
               setShowDropdown((prev) => !prev);
             }
           }}
-          className='relative my-auto block min-h-[40px] w-full p-2'
+          className='relative my-auto block h-10 w-10 rounded-full border border-neutral-200 text-neutral-500 hover:text-primary-main'
         >
-          {icon ?? <VerticalDots />}
+          {icon ?? (
+            <span className={'x-center'}>
+              <HorizontalDots />
+            </span>
+          )}
         </button>
 
         <Dropdown
@@ -91,8 +95,8 @@ export const TableAction = ({
                 onClick={onClick}
                 className='action-button disabled:text-neutral-400'
               >
-                <span className='my-auto mr-2 text-primary-main'>{icon}</span>
-                <span className='my-auto'>{title}</span>
+                <span className='my-auto mr-2'>{icon}</span>
+                <span className='my-auto text-sm'>{title}</span>
               </button>
             );
           })}

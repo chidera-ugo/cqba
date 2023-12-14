@@ -1,17 +1,20 @@
 import { MultiSelect } from 'components/form-elements/MultiSelect';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { Formik, Form } from 'formik';
-import { validateMultiCheckValues } from 'utils/validators/validateMultiCheckValues';
+import {
+  MultiCheckValue,
+  validateMultiCheckValues,
+} from 'utils/validators/validateMultiCheckValues';
 import { object } from 'yup';
 
 interface Props {
-  onSubmit: (budgetType: string) => void;
+  onSubmit: (budgetType: MultiCheckValue) => void;
 }
 
 export const SelectBudgetTypeForm = ({ onSubmit }: Props) => {
   return (
     <Formik
-      initialValues={{ budgetType: '' }}
+      initialValues={{ budgetType: {} as MultiCheckValue }}
       validationSchema={object({
         budgetType: object().test('min', 'Please select budget type', (value) =>
           validateMultiCheckValues(value)

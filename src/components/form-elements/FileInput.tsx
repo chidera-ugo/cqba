@@ -70,7 +70,7 @@ export const FileInput = ({
       <label htmlFor={id} id={`drop-${id}`} className='group'>
         <div
           className={clsx(
-            'y-center input hover:bg-primary-50 min-h-[100px] rounded-xl border px-4 py-3 hover:border-dashed hover:border-primary-main 640:px-8 640:py-5',
+            'y-center input min-h-[100px] rounded-xl border px-4 py-3 hover:border-dashed hover:border-primary-main hover:bg-primary-50 640:px-8 640:py-5',
             'group-focus:ring-4 group-focus:ring-neutral-200',
             !props.disabled
               ? 'hover:border-primary-500 cursor-pointer'

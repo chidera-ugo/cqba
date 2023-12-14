@@ -11,7 +11,7 @@ export type HeaderProps = {
 export const Header = ({ title, slot, closeModal }: HeaderProps) => {
   return (
     <div className='sticky top-0 z-[910]'>
-      <div className='x-between h-16 border-b border-neutral-200 bg-white px-4 640:h-16 640:px-8 1024:h-20'>
+      <div className='x-between h-16 border-b border-neutral-310 bg-white px-4 640:h-16 640:px-8 1024:h-20'>
         <div className='my-auto text-lg font-semibold 640:text-xl'>{title}</div>
 
         {closeModal && (

@@ -9,6 +9,7 @@ type Props = PaginationDetails & {
   setPagination: Dispatch<SetStateAction<PaginationState>>;
   pagination: PaginationState;
   fetching?: boolean;
+  noPadding?: boolean;
 };
 
 export const Pagination = ({
@@ -18,6 +19,7 @@ export const Pagination = ({
   pagination,
   fetching,
   totalPages,
+  noPadding,
   page: pageIndex,
 }: Props) => {
   const pageNumber = (pageIndex ?? 0) - 1;
@@ -118,7 +120,10 @@ export const Pagination = ({
         pageCount={totalPages ?? 1}
         nextLabel={
           <button
-            className='pagination-button absolute right-5 top-0 my-auto ml-auto flex h-full rounded-xl disabled:cursor-not-allowed 640:-mr-10 640:px-5'
+            className={clsx(
+              'pagination-button absolute right-5 top-0 my-auto ml-auto flex h-full rounded-xl disabled:cursor-not-allowed 640:px-5',
+              !noPadding ? '640:-mr-5' : '640:-mr-10'
+            )}
             onClick={() => goto((page ?? 0) + 1)}
             disabled={last || disabled || fetching}
           >
@@ -132,7 +137,10 @@ export const Pagination = ({
         }
         previousLabel={
           <button
-            className='pagination-button absolute left-5 top-0 my-auto mr-auto flex h-full rounded-xl disabled:cursor-not-allowed 640:-ml-10 640:px-5'
+            className={clsx(
+              'pagination-button absolute left-5 top-0 my-auto mr-auto flex h-full rounded-xl disabled:cursor-not-allowed 640:px-5',
+              !noPadding ? '640:-ml-5' : '640:-ml-10'
+            )}
             onClick={() => goto((page ?? 0) - 1)}
             disabled={first || disabled || fetching}
           >

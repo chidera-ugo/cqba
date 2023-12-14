@@ -21,11 +21,13 @@ interface Props {
   currency?: string;
   isOwner?: boolean;
   budget?: IBudget;
+  isProjectCreationFlow?: boolean;
 }
 
 export const Form = ({
   formikProps,
   currency,
+  isProjectCreationFlow,
   recoveryValues,
   processing,
   isOwner,
@@ -66,20 +68,22 @@ export const Form = ({
   return (
     <FormikForm onSubmit={handleSubmit}>
       <Input
-        label='Budget Title'
+        label={`${isProjectCreationFlow ? 'Project' : 'Budget'} Title`}
         lazyFocus
         placeholder={'Add title'}
         name='title'
       />
 
-      <TextArea
-        label={'Description'}
-        name={'description'}
-        placeholder={'Add description'}
-      />
+      {!isOwner && (
+        <TextArea
+          label={'Description'}
+          name={'description'}
+          placeholder={'Add description'}
+        />
+      )}
 
       <AmountInput
-        label='Budget Amount'
+        label={isProjectCreationFlow ? 'Project Budget' : 'Budget Amount'}
         name='amount'
         currency={currency}
         setFieldValue={setFieldValue}

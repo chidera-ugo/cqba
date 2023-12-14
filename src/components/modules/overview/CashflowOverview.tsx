@@ -66,7 +66,9 @@ export const CashflowOverview = ({
     <div className='card p-0'>
       <div className='relative gap-3 p-5 768:flex 768:h-[140px] 1280:block 1340:flex'>
         <div className={'mb-auto flex w-full justify-between'}>
-          {transactionType === 'all' ? (
+          {!transactionType ? (
+            <div></div>
+          ) : transactionType === 'all' ? (
             <h6 className={'text-lg font-medium'}>Cashflow Overview</h6>
           ) : (
             <SummaryWithVariance

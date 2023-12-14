@@ -79,7 +79,7 @@ export const EmployeeDetails = ({
       <Confirmation
         type={'right'}
         show={showConfirmation}
-        hideBackground
+        hideBackdrop
         title={isActive ? 'Remove team member' : 'Delete invite'}
         subTitle={`This means ${firstName} ${lastName} will no longer be able to ${
           isActive ? 'access your dashboard' : 'join your organization'

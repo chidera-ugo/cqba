@@ -95,6 +95,7 @@ export const BudgetsGrid = ({
           (pagination?.pageIndex === 0 &&
             data?.docs?.length === pagination?.pageSize)) && (
           <Pagination
+            noPadding
             {...data}
             {...{ isLoading, isRefetching, pagination, setPagination }}
           />

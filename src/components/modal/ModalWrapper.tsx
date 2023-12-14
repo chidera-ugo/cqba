@@ -17,7 +17,6 @@ export type ModalWrapperProps = ModalProps &
     className?: string;
     id?: string;
     childrenClassname?: string;
-    hideBackground?: boolean;
   };
 
 export type ModalProps = {

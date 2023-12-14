@@ -22,7 +22,7 @@ export const SubscriptionHistory = () => {
       {data?.docs?.map(({ _id, startedAt, plan, status }) => {
         return (
           <div key={_id} className={clsx('x-between h-10')}>
-            <span className={'my-auto'}>
+            <span className={'my-auto block line-clamp-1'}>
               {formatDate(startedAt, 'short', true)} - {plan?.name}
             </span>
 

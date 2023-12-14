@@ -2,7 +2,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import clsx from 'clsx';
 import { Avatar } from 'components/commons/Avatar';
 import { TableCell } from 'components/core/Table/TableCell';
-import { UserRole, UserRoles } from 'enums/employee_enum';
+import { Frozen } from 'components/modules/budgeting/ActiveBudgetCard';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
 import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { useMemo } from 'react';
@@ -43,39 +43,29 @@ export const useColumns = () => {
           />
         ),
       },
-      // {
-      //   header: 'Allocated',
-      //   accessorKey: '',
-      //   enableColumnFilter: false,
-      //   cell: (props) => (
-      //     <TableCell
-      //       currency={props?.row?.original?.currency}
-      //       isAmount
-      //       {...props}
-      //     />
-      //   ),
-      // },
       {
-        header: 'Phone No',
-        accessorKey: 'phone',
+        header: 'Threshold',
+        accessorKey: 'threshold',
         enableColumnFilter: false,
-        cell: (props) => <TableCell {...props} />,
+        cell: (props) => (
+          <TableCell
+            currency={props?.row?.original?.currency}
+            isAmount
+            {...props}
+          />
+        ),
       },
       {
-        header: 'Role',
-        accessorKey: 'role',
+        header: 'Available',
+        accessorKey: 'balance',
         enableColumnFilter: false,
-        cell: ({ getValue }) => {
-          const val = getValue() as UserRole;
-
-          return (
-            <div className='flex w-min'>
-              <div className={clsx('pill_gray capitalize')}>
-                {UserRoles[val]}
-              </div>
-            </div>
-          );
-        },
+        cell: (props) => (
+          <TableCell
+            currency={props?.row?.original?.currency}
+            isAmount
+            {...props}
+          />
+        ),
       },
       {
         header: 'Due Date',
@@ -87,27 +77,33 @@ export const useColumns = () => {
         header: 'Beneficiaries',
         accessorKey: 'beneficiaries',
         enableColumnFilter: false,
-        cell: ({ getValue }) => {
+        cell: ({ getValue, row }) => {
+          const { paused } = row.original;
+
+          if (paused)
+            return (
+              <div className={'flex'}>
+                <Frozen className={'text-xs'} />
+              </div>
+            );
+
           const beneficiaries = getValue() as { email: string }[];
 
           return (
             <>
               <div className={clsx('relative flex')}>
                 {handleSort({
-                  data: beneficiaries,
+                  data: beneficiaries.slice(0, 5),
                   sortBy: 'email',
+                  direction: 'desc',
                 })?.map(({ email }, i) => {
                   return (
                     <div
                       key={email}
-                      className={clsx('absolute', 'right-0 top-0 z-10')}
-                      style={{
-                        zIndex: 10 + i,
-                        right: 23 * i,
-                      }}
+                      className={clsx('block', i > 0 && '-ml-1')}
                     >
                       <Avatar
-                        className={clsx('-ml-2 ring-2 ring-white')}
+                        className={clsx('ring-2 ring-white')}
                         size={27}
                         key={email}
                         char={email.charAt(0)}

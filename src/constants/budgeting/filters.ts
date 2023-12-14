@@ -1,9 +1,8 @@
 export const budgetingFilterOptions: {
   title: string;
   value: 'active' | 'pending' | 'projects';
-  isPremium?: boolean;
+  isForPremium?: boolean;
 }[] = [
-  { title: 'Projects', value: 'projects', isPremium: true },
+  { title: 'Projects', value: 'projects', isForPremium: true },
   { title: 'Single Budgets', value: 'active' },
-  { title: 'Requests', value: 'pending' },
 ];

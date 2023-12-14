@@ -63,9 +63,49 @@ export const ManageBusinessOwnersAndDirectors = () => {
       <FullScreenLoader show={deleting} />
 
       <div className={'mt-4 rounded-lg border border-neutral-200 p-5'}>
+        <h5 className={'text-base'}>Business Owner</h5>
+        <p className={'mt-1 text-sm text-neutral-400'}>
+          A business representative is either an owner, director or shareholder
+          of your business
+        </p>
+
+        <OwnersList
+          {...{
+            isLoading,
+            isError,
+            setCurrentOwner,
+            isUnderReview,
+            setOwnerToDelete,
+          }}
+          handleShowModal={() => handleShowModal('owner')}
+          data={data?.owners}
+        />
+
+        {!isUnderReview ? (
+          <div className={clsx('mt-5 flex gap-4')}>
+            <button
+              onClick={() => handleShowModal('owner')}
+              className={clsx(
+                'secondary-button rounded-lg border-none bg-neutral-100 text-neutral-500'
+              )}
+            >
+              Add Owner
+            </button>
+
+            {isFetching && (
+              <div className='my-auto'>
+                <Spinner className='text-primary-main' />
+              </div>
+            )}
+          </div>
+        ) : null}
+      </div>
+
+      <div className={'mt-4 rounded-lg border border-neutral-200 p-5'}>
         <h5 className={'text-base'}>Business Directors</h5>
         <p className={'mt-1 text-sm text-neutral-400'}>
-          Please identify at least 1 director of your business
+          Identify or add at least 1 person who owns a minimum total of 5% of
+          the business
         </p>
 
         <OwnersList
@@ -89,45 +129,6 @@ export const ManageBusinessOwnersAndDirectors = () => {
               )}
             >
               Add Director
-            </button>
-
-            {isFetching && (
-              <div className='my-auto'>
-                <Spinner className='text-primary-main' />
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-
-      <div className={'mt-4 rounded-lg border border-neutral-200 p-5'}>
-        <h5 className={'text-base'}>Business Owners</h5>
-        <p className={'mt-1 text-sm text-neutral-400'}>
-          Identify or add at least 1 person who owns a minimum total of 5% of
-          the business
-        </p>
-
-        <OwnersList
-          {...{
-            isLoading,
-            isError,
-            setCurrentOwner,
-            isUnderReview,
-            setOwnerToDelete,
-          }}
-          handleShowModal={() => handleShowModal('owner')}
-          data={data?.owners}
-        />
-
-        {!isUnderReview && (
-          <div className={clsx('mt-5 flex gap-4')}>
-            <button
-              onClick={() => handleShowModal('owner')}
-              className={clsx(
-                'secondary-button rounded-lg border-none bg-neutral-100 text-neutral-500'
-              )}
-            >
-              Add Owner
             </button>
 
             {isFetching && (

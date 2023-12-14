@@ -97,24 +97,26 @@ export const Form = ({
         name='businessName'
       />
 
-      <Select
-        label='Business Type'
-        name='companyType'
-        options={[
-          { name: 'BUSINESS NAME REGISTRATION', id: 'Business_Name' },
-          { name: 'INCORPORATED TRUSTEES', id: 'Incorporated_Trustees' },
-          { name: 'PRIVATE LIMITED', id: 'Private_Incorporated' },
-          { name: 'PUBLIC LIMITED', id: 'Public_Incorporated' },
-        ]}
-        displayValueKey={'name'}
-        trueValueKey={'id'}
-      />
+      <div className='gap-4 880:flex'>
+        <Select
+          label='Business Type'
+          name='companyType'
+          options={[
+            { name: 'BUSINESS NAME REGISTRATION', id: 'Business_Name' },
+            { name: 'INCORPORATED TRUSTEES', id: 'Incorporated_Trustees' },
+            { name: 'PRIVATE LIMITED', id: 'Private_Incorporated' },
+            { name: 'PUBLIC LIMITED', id: 'Public_Incorporated' },
+          ]}
+          displayValueKey={'name'}
+          trueValueKey={'id'}
+        />
 
-      <Select
-        label='Business Industry'
-        name='businessIndustry'
-        options={industries}
-      />
+        <Select
+          label='Business Industry'
+          name='businessIndustry'
+          options={industries}
+        />
+      </div>
 
       {isPrivateOrPublic ? (
         <Input label='Tax Identification Number' name='tin' />

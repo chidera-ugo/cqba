@@ -31,7 +31,7 @@ export const TableCell = <T,>({
       </span>
     );
 
-  if (isDate) return <span>{formatDate(value, 'semi-full')}</span>;
+  if (isDate) return <span>{value ? formatDate(value, 'short') : '----'}</span>;
 
   if (isAmount)
     return (

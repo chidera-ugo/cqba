@@ -6,7 +6,6 @@ import { ChoosePlan } from 'components/modules/subscriptions/ChoosePlan';
 import { IdleTimer } from 'components/modules/IdleTimer';
 import { PageHead } from 'components/primary/PageHead';
 import { ChevronRight } from 'components/svgs/navigation/Chevrons';
-import { copyrightText } from 'constants/copyrightText';
 import { UserRole } from 'enums/employee_enum';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useNavigationItems } from 'hooks/dashboard/useNavigationItems';
@@ -168,16 +167,6 @@ export const AppLayout = ({
             >
               {shouldSelectFirstPlan ? <ChoosePlan /> : children}
             </div>
-
-            {hideSideNavigation && (
-              <p
-                className={
-                  'absolute bottom-0 w-full pb-3 text-center text-xs text-neutral-700 640:text-sm'
-                }
-              >
-                {copyrightText}
-              </p>
-            )}
           </main>
         </div>
       </div>

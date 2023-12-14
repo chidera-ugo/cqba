@@ -8,18 +8,18 @@ type Props = JSX.IntrinsicElements['input'] &
     label: string;
     note?: string;
     currency?: string;
-    onChange?: (val: string) => void;
+    handleChange?: (val: string) => void;
     error?: string;
-    errorBorders?: boolean;
+    showRedBorders?: boolean;
   };
 
 export const AmountInput = ({
   label,
   className,
   note,
-  onChange,
+  handleChange,
   currency = 'NGN',
-  errorBorders,
+  showRedBorders,
   setFieldValue,
   error,
   ...props
@@ -64,9 +64,7 @@ export const AmountInput = ({
               typing: true,
             });
 
-            if (onChange) {
-              onChange(val);
-            }
+            if (handleChange) handleChange(val);
 
             if (setFieldValue) {
               setFieldValue(props.name!, val, true);
@@ -79,7 +77,7 @@ export const AmountInput = ({
           )}
           style={{
             borderColor:
-              errorBorders &&
+              showRedBorders &&
               !Number(
                 sanitizeAmount({ value: field.value, returnTrueAmount: true })
               )

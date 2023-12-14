@@ -60,7 +60,7 @@ export const WideTabs = ({
             >
               <span
                 className={clsx(
-                  `smooth relative z-10 mb-auto text-sm font-medium capitalize`,
+                  `smooth relative z-10 my-auto text-sm font-medium capitalize`,
                   isActive ? 'text-primary-main' : 'text-black',
                   tabClassname
                 )}

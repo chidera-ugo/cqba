@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 import { LogoutButton } from 'components/buttons/Logout';
+import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { SimpleToast } from 'components/commons/SimpleToast';
 import { UpdateBusinessDocumentionForm } from 'components/forms/kyc/UpdateBusinessDocumentionForm';
 import { UpdateCompanyInformationForm } from 'components/forms/kyc/UpdateCompanyInformationForm';
-import { GreenCheck } from 'components/illustrations/Success';
 import { AppLayout } from 'components/layouts/AppLayout';
 import { SimpleInformation } from 'components/modules/commons/SimpleInformation';
 import { KycSteps } from 'components/modules/kyc/KycSteps';
@@ -45,26 +45,13 @@ export default function Kyc() {
       replace('/kyc?tab=review-and-submit');
   }, [query['tab']]);
 
-  if (isVerified)
-    return (
-      <AppLayout title='Setup your account' hideSideNavigation>
-        <div className='py-10'>
-          <SimpleInformation
-            title={<div className='text-xl'>Account Verified</div>}
-            description={
-              <span className='mt-1 block px-2'>
-                {`We have approved your application and an account has been created for you.`}
-              </span>
-            }
-            actionButton={{
-              action: () => replace('/'),
-              text: 'Go Home',
-            }}
-            icon={<GreenCheck />}
-          />
-        </div>
-      </AppLayout>
-    );
+  useEffect(() => {
+    if (!isVerified) return;
+
+    replace('/');
+  }, [isVerified]);
+
+  if (isVerified) return <FullScreenLoader show white id={'kyc'} />;
 
   return (
     <AppLayout

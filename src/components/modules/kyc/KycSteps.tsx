@@ -49,9 +49,9 @@ export const KycSteps = ({ isRecap }: { isRecap?: boolean }) => {
             href={`/kyc?tab=${isUnderReview ? 'review-and-submit' : url}`}
             key={title}
             className={clsx(
-              'smooth x-between group mt-4 w-full border border-neutral-140 px-4 py-3 text-left font-medium transition-colors',
+              'smooth x-between group mt-4 w-full border border-neutral-140 text-left font-medium transition-colors',
               isActive ? 'text-primary-main' : 'text-neutral-1000',
-              isRecap ? 'rounded-lg' : 'rounded-xl'
+              isRecap ? 'rounded-lg p-6' : 'rounded-xl px-4 py-3'
             )}
           >
             <div className={'my-auto'}>

@@ -27,8 +27,6 @@ import { PaginatedResponse } from 'types/Table';
 import { TableHead as TableColumnsHead } from './TableHead';
 import { AppliedFilters } from './AppliedFilters';
 import clsx from 'clsx';
-import { SimpleToast } from 'components/commons/SimpleToast';
-import { Spinner } from 'components/svgs/dashboard/Spinner';
 
 export type Props<T> = JSX.IntrinsicElements['table'] & {
   title: string;
@@ -59,7 +57,7 @@ export type Props<T> = JSX.IntrinsicElements['table'] & {
   currentSearchColumn?: string;
   setCurrentSearchColumn?: Dispatch<SetStateAction<string>>;
   // OTHERS
-  getRowTextColor?: (row: Row<T>) => string;
+  getRowStyling?: (row: Row<T>) => string;
   mustHaveRange?: boolean;
   dontScrollToTopOnPageChange?: boolean;
   onFilterClick?: (filter: string) => void;
@@ -87,7 +85,6 @@ export function Table<T>({
   onRowClick,
   title,
   canNotShowData,
-  hideFetchingToast,
   alignTop,
   pagination,
   setPagination,
@@ -99,7 +96,7 @@ export function Table<T>({
   setColumnFilters,
   returnOriginalOnRowClick,
   className,
-  getRowTextColor,
+  getRowStyling,
   mustHaveRange,
   reset,
   isRefetching,
@@ -210,20 +207,6 @@ export function Table<T>({
         className
       )}
     >
-      <SimpleToast
-        show={
-          !hideFetchingToast &&
-          (!!isLoading || !!isRefetching) &&
-          !!res?.docs?.length
-        }
-        className='bottom-32 left-0 1180:left-[122px]'
-      >
-        <div className='flex py-2'>
-          <Spinner className='my-auto mr-1 h-4 text-white' />
-          <span className='my-auto'>Fetching</span>
-        </div>
-      </SimpleToast>
-
       <div
         className={clsx(
           'h-full overflow-x-auto',
@@ -304,8 +287,8 @@ export function Table<T>({
                   {table.getRowModel().rows.map((row, i) => {
                     let textColor = 'text-neutral-800';
 
-                    if (getRowTextColor) {
-                      textColor = getRowTextColor(row);
+                    if (getRowStyling) {
+                      textColor = getRowStyling(row);
                     }
 
                     const originalRow = row.original as any;

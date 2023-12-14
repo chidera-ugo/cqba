@@ -1,18 +1,21 @@
 import clsx from 'clsx';
 import { Avatar } from 'components/commons/Avatar';
 import { AuthorizeActionWithPin } from 'components/core/AuthorizeActionWithPin';
-import { SubmitButton } from 'components/form-elements/SubmitButton';
+import { ActionDropdown } from 'components/core/Table/ActionDropdown';
 import { RejectionReasonForm } from 'components/forms/budgeting/RejectionReasonForm';
 import { Cancel } from 'components/illustrations/Cancel';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { MakeTransfer } from 'components/modules/wallet/MakeTransfer';
 import { AppToast } from 'components/primary/AppToast';
+import { Freeze, MiniLock } from 'components/svgs/budgeting/Budget_Icons';
+import { budgetingFilterOptions } from 'constants/budgeting/filters';
 import { useAppContext } from 'context/AppContext';
 import { UserRoles } from 'enums/employee_enum';
 import { useCloseBudget } from 'hooks/api/budgeting/useCloseBudget';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
 import { usePauseBudget } from 'hooks/api/budgeting/usePauseBudget';
 import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
+import { defaultStringifySearch } from 'hooks/client_api/search_params';
 import { useRouter } from 'next/router';
 import { Fragment, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -47,6 +50,10 @@ export const ActiveBudgetCard = ({
   const { replace, push } = useRouter();
   const { invalidate, defaultInvalidator } = useQueryInvalidator();
 
+  const backToBudgetingHref = `/budgeting${defaultStringifySearch({
+    status: budgetingFilterOptions[1]!,
+  })}`;
+
   const { isLoading: pausing, mutate: pause } = usePauseBudget(budget._id, {
     onSuccess(res) {
       setPaused(res.paused);
@@ -57,7 +64,7 @@ export const ActiveBudgetCard = ({
 
   const { isLoading: closing, mutate: close } = useCloseBudget(budget._id, {
     onSuccess(res) {
-      replace('/budgeting').then(() => {
+      replace(backToBudgetingHref).then(() => {
         onSuccess();
         toast(<AppToast>{res.message}</AppToast>, { type: 'success' });
       });
@@ -109,10 +116,27 @@ export const ActiveBudgetCard = ({
     return `${Math.round((val * 100) / amount)}%`;
   }
 
+  const SubTitle = () => {
+    return (
+      <div className={'mt-px'}>
+        {expiry ? (
+          <div className={'text-sm font-light text-neutral-500'}>
+            Due Date: {formatDate(expiry, 'short')}
+          </div>
+        ) : showActions && approvedDate && approvedBy ? (
+          <div className={'text-sm font-light text-neutral-500'}>
+            Approved by {UserRoles[approvedBy!.role]}:{' '}
+            {formatDate(approvedDate, 'semi-full')}
+          </div>
+        ) : null}
+      </div>
+    );
+  };
+
   return (
     <>
       <AuthorizeActionWithPin
-        mode={mode}
+        isSuccess={mode === 'success'}
         show={!!mode}
         showBackground
         icon={action === 'close' ? <Cancel /> : undefined}
@@ -120,7 +144,7 @@ export const ActiveBudgetCard = ({
           mode !== 'success'
             ? action === 'close'
               ? 'Close Budget'
-              : `${paused ? 'Unpause' : 'Pause'} Budget`
+              : `${paused ? 'Unfreeze' : 'Freeze'} Budget`
             : ''
         }
         close={() => {
@@ -132,16 +156,16 @@ export const ActiveBudgetCard = ({
           setMode(null);
           setAction(null);
         }}
-        successTitle={!paused ? 'Budget Unpaused' : 'Budget Paused'}
+        successTitle={!paused ? 'Budget Unfrozen' : 'Budget Frozen'}
         successMessage={`You have ${
-          !paused ? 'unpaused' : 'paused'
+          !paused ? 'unfrozen' : 'frozen'
         } this budget successfully`}
         actionMessage={
           action === 'close'
             ? 'Close Budget'
             : paused
-            ? 'Unpause Budget'
-            : 'Pause Budget'
+            ? 'Unfreeze Budget'
+            : 'Freeze Budget'
         }
         submit={(pin) => {
           if (action === 'close') {
@@ -177,7 +201,8 @@ export const ActiveBudgetCard = ({
           'card relative col-span-12 block w-full text-left 640:col-span-6 1280:col-span-4',
           showActions || showOnlyBreakdown
             ? 'cursor-default'
-            : 'cursor-pointer hover:border-neutral-300'
+            : 'cursor-pointer hover:border-neutral-300',
+          paused && !showActions && 'opacity-50'
         )}
         onClick={() => {
           if (showActions || showOnlyBreakdown) return;
@@ -199,54 +224,54 @@ export const ActiveBudgetCard = ({
                 </div>
 
                 <div className='min-h-[15px]'>
-                  {showActions && approvedDate && approvedBy ? (
-                    <div className={'text-[10px] text-neutral-500'}>
-                      Approve by {UserRoles[approvedBy!.role]}:{' '}
-                      {formatDate(approvedDate, 'semi-full')}
-                    </div>
-                  ) : expiry ? (
-                    <div className={'text-[10px] text-neutral-500'}>
-                      Due Date: {formatDate(expiry, 'semi-full')}
-                    </div>
-                  ) : null}
+                  <SubTitle />
                 </div>
               </div>
 
-              {getColor && (
-                <div className={clsx('relative flex', showActions && 'ml-2')}>
-                  {handleSort({
-                    data: beneficiaries,
-                    sortBy: 'email',
-                  })?.map(({ email }, i) => {
-                    return (
-                      <div
-                        key={email}
-                        className={clsx(
-                          showActions ? 'block' : 'absolute',
-                          'right-0 top-0 z-10'
-                        )}
-                        style={{
-                          zIndex: 10 + i,
-                          right: 23 * i,
-                        }}
-                      >
-                        <Avatar
-                          className={clsx('-ml-2 ring-2 ring-white')}
-                          size={
-                            showActions
-                              ? screenSize?.['mobile']
-                                ? 33
-                                : 44
-                              : 27
-                          }
-                          key={email}
-                          char={email.charAt(0)}
-                          getBackgroundColor={getColor}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
+              {paused ? (
+                <Frozen />
+              ) : (
+                <>
+                  {getColor && (
+                    <div
+                      className={clsx('relative flex', showActions && 'ml-2')}
+                    >
+                      {handleSort({
+                        data: beneficiaries,
+                        sortBy: 'email',
+                        direction: showActions ? 'desc' : 'asc',
+                      })?.map(({ email }, i) => {
+                        return (
+                          <div
+                            key={email}
+                            className={clsx(
+                              showActions ? 'block' : 'absolute',
+                              'right-0 top-0 z-10'
+                            )}
+                            style={{
+                              zIndex: 10 + i,
+                              right: 23 * i,
+                            }}
+                          >
+                            <Avatar
+                              className={clsx('-ml-2 ring-2 ring-white')}
+                              size={
+                                showActions
+                                  ? screenSize?.['mobile']
+                                    ? 33
+                                    : 44
+                                  : 27
+                              }
+                              key={email}
+                              char={email.charAt(0)}
+                              getBackgroundColor={getColor}
+                            />
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </>
               )}
 
               <div className={clsx(!showActions ? 'hidden' : 'block')}>
@@ -254,16 +279,7 @@ export const ActiveBudgetCard = ({
                   {name}
                 </div>
 
-                {showActions && approvedDate && approvedBy ? (
-                  <div className={'text-[10px] text-neutral-500'}>
-                    Approve by {UserRoles[approvedBy!.role]}:{' '}
-                    {formatDate(approvedDate, 'semi-full')}
-                  </div>
-                ) : expiry ? (
-                  <div className={'text-[10px] text-neutral-500'}>
-                    Due Date: {formatDate(expiry, 'semi-full')}
-                  </div>
-                ) : null}
+                <SubTitle />
               </div>
             </div>
           </div>
@@ -340,6 +356,21 @@ export const ActiveBudgetCard = ({
 
         {showActions && (
           <div className='right-5 top-5 mt-5 flex w-full gap-3 375:w-auto 768:absolute 768:mt-0'>
+            {paused && (
+              <button
+                onClick={() => {
+                  setAction('pause_and_unpause');
+                  setMode('authorize');
+                }}
+                className={'group my-auto'}
+              >
+                <Frozen
+                  className={'group-hover:text-primary-main'}
+                  size={'md'}
+                />
+              </button>
+            )}
+
             {status === 'closed' ? (
               <div
                 className={
@@ -351,35 +382,58 @@ export const ActiveBudgetCard = ({
             ) : !isOwner ? (
               <MakeTransfer budget={budget} />
             ) : (
-              <>
-                <SubmitButton
-                  submitting={pausing}
-                  onClick={() => {
-                    setAction('pause_and_unpause');
-                    setMode('authorize');
-                  }}
-                  type={'button'}
-                  className={
-                    'primary-button h-11 w-full 360:min-w-[125px] 425:w-auto'
-                  }
-                >
-                  {paused ? 'Unpause' : 'Pause'} Budget
-                </SubmitButton>
-
-                <button
-                  onClick={() => setAction('close')}
-                  type={'button'}
-                  className={
-                    'secondary-button h-11 w-full 360:min-w-[125px] 425:w-auto'
-                  }
-                >
-                  Close Budget
-                </button>
-              </>
+              <ActionDropdown
+                options={[
+                  {
+                    icon: <Freeze />,
+                    onClick() {
+                      setAction('pause_and_unpause');
+                      setMode('authorize');
+                    },
+                    title: `${paused ? 'Unfreeze' : 'Freeze'} Budget`,
+                  },
+                  {
+                    icon: <MiniLock />,
+                    onClick: () => setAction('close'),
+                    title: 'Close Budget',
+                  },
+                ]}
+                id={'budget_actions'}
+              />
             )}
           </div>
         )}
       </button>
     </>
+  );
+};
+
+export const Frozen = ({
+  size = 'sm',
+  className,
+}: {
+  size?: 'sm' | 'md';
+  className?: string;
+}) => {
+  return (
+    <div
+      className={clsx(
+        'flex gap-1 rounded-full border border-neutral-200',
+        size === 'sm' ? 'h-7 px-2' : 'h-11 px-4',
+        className
+      )}
+    >
+      <span className={'my-auto'}>
+        <Freeze className={clsx(size === 'sm' ? 'h-4 w-4' : 'h-5 w-5')} />
+      </span>
+      <span
+        className={clsx(
+          'my-auto font-medium',
+          size === 'sm' ? 'text-xs' : 'text-sm'
+        )}
+      >
+        Frozen
+      </span>
+    </div>
   );
 };

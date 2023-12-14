@@ -1,4 +1,4 @@
-import { Bin, Edit } from 'components/svgs/Icons_TableActions';
+import { Bin } from 'components/svgs/Icons_TableActions';
 
 export type EmployeeAction = 'delete' | 'edit' | 'block' | 'unblock' | null;
 
@@ -21,15 +21,7 @@ export const EmployeeActions = ({
         >
           <Bin />
         </button>
-      ) : (
-        <button
-          onClick={() => handleActionClick('edit')}
-          type={'button'}
-          className={'y-center cell-button p-1 text-primary-main'}
-        >
-          <Edit />
-        </button>
-      )}
+      ) : null}
     </div>
   );
 };

@@ -54,7 +54,7 @@ export const SummaryWithVariance = ({
               <span
                 className={clsx(
                   'my-auto',
-                  variance > 0 ? 'text-green-500' : 'text-red-500'
+                  variance > 0 ? 'rotate-180 text-green-500' : 'text-red-500'
                 )}
               >
                 <Outbound />

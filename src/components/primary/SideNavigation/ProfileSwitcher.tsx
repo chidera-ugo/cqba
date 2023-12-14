@@ -40,8 +40,8 @@ export const ProfileSwitcher = ({
       <div id={id} className='relative'>
         <button
           className={clsx(
-            'x-between relative z-[25] w-full rounded-xl border border-neutral-180 p-3',
-            isOwner ? 'bg-white' : 'bg-neutral-900'
+            'x-between relative z-[25] h-[73px] w-full rounded-2xl border border-neutral-180 p-4',
+            isOwner ? 'bg-neutral-200' : 'bg-neutral-900'
           )}
           onClick={() => setShowDropdown((prev) => !prev)}
         >
@@ -81,7 +81,7 @@ export const ProfileSwitcher = ({
         <Dropdown
           show={showDropdown}
           className={clsx(
-            'border-none p-4',
+            'rounded-xl border-none p-4',
             isOwner ? 'bg-white' : 'bg-neutral-900'
           )}
           dismiss={() => setShowDropdown(false)}

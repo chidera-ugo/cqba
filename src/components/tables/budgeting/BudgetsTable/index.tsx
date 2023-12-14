@@ -9,21 +9,26 @@ export const BudgetsTable = ({
   pagination,
   setPagination,
   isError,
-  setCurrentBudget,
   isLoading,
+  onRowClick,
   isRefetching,
   data,
-}: BudgetsListProps & TPagination) => {
+}: { onRowClick: (budget: IBudget) => void } & BudgetsListProps &
+  TPagination) => {
   const { columns } = useColumns();
 
   return (
     <Table<IBudget>
       className={'mt-20 640:mt-4'}
       title='budgets'
-      onRowClick={(budget) => setCurrentBudget(budget)}
+      onRowClick={onRowClick}
       returnOriginalOnRowClick
       accessor='_id'
       mustHaveRange
+      getRowStyling={(row) => {
+        if (row?.original?.paused) return 'opacity-50';
+        return '';
+      }}
       {...{
         isLoading,
         data,

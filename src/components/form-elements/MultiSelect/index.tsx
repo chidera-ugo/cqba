@@ -153,6 +153,7 @@ export const MultiSelect = ({
 
               if (asRadio) {
                 setFieldValue(name, value);
+                setShowList(false);
                 return;
               }
 
