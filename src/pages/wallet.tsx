@@ -3,7 +3,7 @@ import { FundWallet } from 'components/modules/wallet/FundWallet';
 import { MakeTransfer } from 'components/modules/wallet/MakeTransfer';
 import { WalletTransactions } from 'components/modules/wallet/WalletTransactions';
 import { WalletOverview } from 'components/modules/wallet/WalletOverview';
-import { useUserRole } from 'hooks/rbac/useUserRole';
+import { useUserRole } from 'hooks/access_control/useUserRole';
 
 export default function Wallet() {
   const { isOwner } = useUserRole();

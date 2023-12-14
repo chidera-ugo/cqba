@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { AnalyticsChart } from 'components/charts/overview/AnalyticsChart';
+import { CashflowChart } from 'components/charts/overview/CashflowChart';
 import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { NoData } from 'components/core/Table/NoData';
 import { IsError } from 'components/data-states/IsError';
@@ -19,7 +19,6 @@ import { UseUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import Link from 'next/link';
-import { formatAmount } from 'utils/formatters/formatAmount';
 import { getDateRange } from 'utils/getters/getDateRange';
 
 export const CashflowOverview = ({
@@ -46,33 +45,42 @@ export const CashflowOverview = ({
     }
   );
 
-  const chartData = data?.trend?.map(({ amount, from }) => {
+  const chartData = data?.trend?.map(({ expense, income, from }) => {
     return {
-      primary: from,
-      secondary: amount / 100,
+      date: from,
+      expense: expense / 100,
+      income: income / 100,
     };
   });
 
-  const amount = Number(data?.amount?.value ?? 0) / 100;
+  const amount =
+    Number(
+      data?.[transactionType === 'credit' ? 'income' : 'expense']?.value ?? 0
+    ) / 100;
+
+  const variance =
+    data?.[transactionType === 'credit' ? 'income' : 'expense']
+      ?.percentageDiff ?? 0;
 
   return (
     <div className='card p-0'>
       <div className='relative gap-3 p-5 768:flex 768:h-[140px] 1280:block 1340:flex'>
         <div className={'mb-auto flex w-full justify-between'}>
-          <SummaryWithVariance
-            name={`Total ${
-              transactionType === 'credit' ? 'Income' : 'Expense'
-            }`}
-            isAmount
-            currency={primaryWallet?.currency}
-            className={'text-neutral-500'}
-            variance={data?.amount?.percentageDiff}
-            value={formatAmount({
-              value: amount,
-              decimalPlaces: 2,
-              kFormatter: amount > 99999999,
-            })}
-          />
+          {!transactionType ? (
+            <div></div>
+          ) : transactionType === 'all' ? (
+            <h6 className={'text-lg font-medium'}>Cashflow Overview</h6>
+          ) : (
+            <SummaryWithVariance
+              name={`Total ${
+                transactionType === 'credit' ? 'Income' : 'Expense'
+              }`}
+              currency={primaryWallet?.currency}
+              className={'text-neutral-500'}
+              variance={variance}
+              value={amount}
+            />
+          )}
 
           <div className='flex flex-col'>
             <Filter
@@ -157,7 +165,7 @@ export const CashflowOverview = ({
             />
           </div>
         ) : (
-          <div className='x-thin-scrollbar h-full overflow-x-auto px-3'>
+          <div className='hidden-scrollbar h-full overflow-x-auto overflow-y-hidden px-3'>
             <AppErrorBoundary className='relative h-full min-w-[700px]'>
               {isFetching && (
                 <div className='absolute right-3 top-3'>
@@ -165,9 +173,9 @@ export const CashflowOverview = ({
                 </div>
               )}
 
-              <AnalyticsChart
-                color={transactionType !== 'credit' ? '#1A44ED' : '#30b902'}
+              <CashflowChart
                 period={period}
+                transactionType={transactionType}
                 chartData={chartData?.length ? chartData : getChartData(7)}
               />
             </AppErrorBoundary>

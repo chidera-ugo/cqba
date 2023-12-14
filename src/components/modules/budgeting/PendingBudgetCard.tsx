@@ -11,12 +11,14 @@ type Props = IBudget & {
   getColor?: (char: string) => string;
   className?: string;
   stripDown?: boolean;
+  isDetails?: boolean;
 };
 
 export const PendingBudgetCard = ({
   getColor,
   stripDown,
   onClick,
+  isDetails,
   ...budget
 }: Props) => {
   const {
@@ -33,8 +35,9 @@ export const PendingBudgetCard = ({
     <button
       type={'button'}
       className={clsx(
-        'y-between relative col-span-12 w-full cursor-pointer text-left hover:border-neutral-300 640:col-span-6 1280:col-span-4',
-        !stripDown ? 'card' : 'pb-2'
+        'y-between relative col-span-12 w-full text-left 640:col-span-6 1280:col-span-4',
+        !stripDown ? 'card' : 'pb-2',
+        isDetails ? 'cursor-default' : 'cursor-pointer hover:border-neutral-300'
       )}
       onClick={onClick}
     >
@@ -68,8 +71,8 @@ export const PendingBudgetCard = ({
       </div>
 
       <div className='x-between relative mt-5 w-full border-t border-neutral-310 pt-4'>
-        <div className={'flex gap-0.5 text-base font-medium'}>
-          <span className={'my-auto h-full pt-1 text-xs'}>{currency}</span>
+        <div className={'flex gap-1 text-[20px] font-medium'}>
+          <span className={'my-auto h-full pt-1 text-sm'}>{currency}</span>
           <span>{formatAmount({ value: amount / 100 })}</span>
         </div>
 
@@ -78,7 +81,7 @@ export const PendingBudgetCard = ({
             {handleSort({
               data: beneficiaries,
               sortBy: 'email',
-            })?.map(({ email }, i) => {
+            })?.map(({ email, avatar }, i) => {
               return (
                 <div
                   key={email}
@@ -91,6 +94,7 @@ export const PendingBudgetCard = ({
                   <Avatar
                     className={clsx('-ml-2 ring-2 ring-white')}
                     size={27}
+                    avatar={avatar}
                     key={email}
                     char={email.charAt(0)}
                     getBackgroundColor={getColor}

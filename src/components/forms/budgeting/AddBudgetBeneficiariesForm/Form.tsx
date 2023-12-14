@@ -5,6 +5,7 @@ import { AddBudgetBeneficiariesFormRecoveryValues } from 'components/forms/budge
 import { FieldArray, Form as FormikForm, FormikProps } from 'formik';
 import { useGetBudgetBeneficiaries } from 'hooks/api/employees/useGetBudgetBeneficiaries';
 import { useEffect } from 'react';
+import { formatAmount, sanitizeAmount } from 'utils/formatters/formatAmount';
 import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { AmountInput } from 'components/form-elements/AmountInput';
@@ -22,7 +23,10 @@ export const Form = ({
   inviteEmployee,
   currency,
 }: Props) => {
-  const { handleSubmit, setFieldValue, setValues, values } = formikProps;
+  const { handleSubmit, setFieldValue, setValues, values, errors } =
+    formikProps;
+
+  console.log(errors);
 
   useEffect(() => {
     if (!recoveryValues) return;
@@ -39,6 +43,13 @@ export const Form = ({
   const selectedUsers = data?.filter(({ _id }) => {
     return values.beneficiaries[_id];
   });
+
+  const budgetAmount = Number(
+    sanitizeAmount({
+      value: values.budgetAmount,
+      returnTrueAmount: true,
+    })
+  );
 
   return (
     <FormikForm onSubmit={handleSubmit}>
@@ -85,7 +96,7 @@ export const Form = ({
         />
       )}
 
-      <div className='card mt-5 rounded-xl p-4'>
+      <div className='card mt-5 rounded-xl p-5'>
         <div className={'text-xs text-neutral-500'}>Budget Allocation</div>
         <div className='mt-2 block text-xl font-semibold'>
           {`${currency} ${values.budgetAmount}`}
@@ -94,9 +105,11 @@ export const Form = ({
 
       {values.splittingRules && selectedUsers && selectedUsers?.length > 1 && (
         <FieldArray name={'allocations'}>
-          {({ form: { errors } }) => {
+          {({ form: { errors, touched } }) => {
             const error =
-              typeof errors.allocations === 'string' ? errors.allocations : '';
+              typeof errors.allocations === 'string' && touched?.allocations
+                ? errors.allocations
+                : '';
 
             return (
               <>
@@ -106,9 +119,37 @@ export const Form = ({
                       key={_id}
                       label={`${firstName} ${lastName}`}
                       name={`allocations.${_id}`}
+                      handleChange={(value) => {
+                        const amount = Number(
+                          sanitizeAmount({
+                            value,
+                            returnTrueAmount: true,
+                          })
+                        );
+
+                        const usersToPrefillAmountFor = selectedUsers.filter(
+                          (user) => user._id !== _id
+                        );
+
+                        const remainder = budgetAmount - amount;
+
+                        if (!usersToPrefillAmountFor?.length) return;
+
+                        const prefillAmount =
+                          remainder / usersToPrefillAmountFor?.length;
+
+                        for (const user of usersToPrefillAmountFor) {
+                          setFieldValue(
+                            `allocations.${user._id}`,
+                            formatAmount({
+                              value: prefillAmount <= 0 ? 0 : prefillAmount,
+                            })
+                          );
+                        }
+                      }}
                       currency='NGN'
                       setFieldValue={setFieldValue}
-                      errorBorders={!!error}
+                      showRedBorders={!!error}
                     />
                   );
                 })}

@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Confirmation } from 'components/modals/Confirmation';
-import { isDev } from 'constants/environmentVariables';
 
 interface Props {
   hasUnsavedChanges: boolean;
+  hideBackdrop?: boolean;
   actionToPerformAfterRoutingByUnsavedChangesPrompt?: () => void;
 }
 
 const UnsavedChangesPrompt = ({
   hasUnsavedChanges,
+  hideBackdrop,
   actionToPerformAfterRoutingByUnsavedChangesPrompt,
 }: Props) => {
   const router = useRouter();
@@ -21,7 +22,6 @@ const UnsavedChangesPrompt = ({
     'You have unsaved changes, are you sure you want to leave this page? Your changes will be lost';
 
   useEffect(() => {
-    if (isDev) return;
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (hasUnsavedChanges && !canProceed.current) {
         e.preventDefault();
@@ -37,7 +37,6 @@ const UnsavedChangesPrompt = ({
   }, [hasUnsavedChanges]);
 
   useEffect(() => {
-    if (isDev) return;
     const handleRouteChangeStart = (destination: string) => {
       if (hasUnsavedChanges && !canProceed.current) {
         setShowConfirmation(true);
@@ -56,6 +55,7 @@ const UnsavedChangesPrompt = ({
 
   return (
     <Confirmation
+      hideBackdrop={hideBackdrop}
       show={showConfirmation}
       buttonTexts={['Cancel', 'Continue']}
       title='Discard Changes'

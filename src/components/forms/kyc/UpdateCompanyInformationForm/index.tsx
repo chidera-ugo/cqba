@@ -1,9 +1,9 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { AppToast } from 'components/primary/AppToast';
 import { Formik } from 'formik';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useUpdateCompanyInformation } from 'hooks/api/kyc/useUpdateCompanyInformation';
+import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import { toast } from 'react-toastify';
 import { initialValues } from './initialValues';
@@ -13,13 +13,14 @@ import { useRouter } from 'next/router';
 
 export const UpdateCompanyInformationForm = () => {
   const { replace } = useRouter();
-  const queryClient = useQueryClient();
+
+  const { invalidate } = useQueryInvalidator();
 
   const { hasProvidedAllRequirements } = useAccountVerificationStatus();
 
   const { isLoading, mutate } = useUpdateCompanyInformation({
     onSuccess() {
-      queryClient.invalidateQueries(['organization-information']);
+      invalidate('organization');
 
       replace(
         `/kyc?tab=${
@@ -44,8 +45,6 @@ export const UpdateCompanyInformationForm = () => {
       validationSchema={validationSchema}
       onSubmit={({
         companyType,
-        employees,
-        expenses,
         businessName,
         businessIndustry,
         phoneNumber,
@@ -55,9 +54,7 @@ export const UpdateCompanyInformationForm = () => {
           companyName: businessName,
           businessIndustry,
           phone: phoneNumber,
-          averageMonthlyExpenses: expenses,
           businessType: companyType,
-          numberOfEmployees: employees,
           ...values,
         });
       }}

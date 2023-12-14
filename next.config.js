@@ -6,6 +6,9 @@ const nextConfig = {
 module.exports = {
   ...nextConfig,
   images: {
-    domains: ['backend-core-dev-avatar-bucket.s3.eu-central-1.amazonaws.com'],
+    domains: [
+      'backend-core-dev-avatar-bucket.s3-eu-central-1.amazonaws.com',
+      'backend-core-dev-avatar-bucket.s3.eu-central-1.amazonaws.com',
+    ],
   },
 };

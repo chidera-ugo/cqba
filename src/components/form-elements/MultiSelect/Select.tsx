@@ -12,6 +12,8 @@ import { useAppContext } from 'context/AppContext';
 export type TMultiSelect = {
   options: any[];
   displayValueKey: string;
+  descriptionValueKey?: string;
+  withBorders?: boolean;
   trueValueKey: string;
   imageKey?: string;
   otherInfoKey?: string;
@@ -24,6 +26,7 @@ export type TMultiSelect = {
   disableSorting?: boolean;
   dropdownInMobileView?: boolean;
   itemCountAdjustment?: number;
+  itemSize?: number;
 };
 
 export type TMultiOptions = {
@@ -50,6 +53,7 @@ export const Select = ({
   close,
   trueValueKey,
   displayValueKey,
+  descriptionValueKey,
   otherInfoKey,
   imageKey,
   selectedOptions,
@@ -63,6 +67,8 @@ export const Select = ({
   renderer,
   isLoading,
   children,
+  withBorders,
+  itemSize = 48,
   itemCountAdjustment = 0,
 }: PropsWithChildren<Props>) => {
   const options = !convertOptionsToObjectArray
@@ -134,7 +140,9 @@ export const Select = ({
           </div>
         )}
 
-        {!noSearch ? (
+        {noSearch ? (
+          <IdNavigator autoFocus id='multi_check_psuedo-search' />
+        ) : (
           <div className='w-full p-3 pt-0 640:pt-3'>
             <SearchInput
               id='select-search'
@@ -157,8 +165,6 @@ export const Select = ({
               }}
             />
           </div>
-        ) : (
-          <IdNavigator id='psuedo-search' />
         )}
       </div>
 
@@ -174,7 +180,7 @@ export const Select = ({
             noSearch && 'pt-1'
           )}
           style={{
-            height: Number(itemsLength * 48),
+            height: Number(itemsLength * itemSize) + 10,
           }}
         >
           {!filteredOptions?.length ? (
@@ -205,7 +211,7 @@ export const Select = ({
                       itemCount:
                         filteredOptions.length +
                         (screenSize?.mobile ? itemCountAdjustment : 0),
-                      itemSize: 48,
+                      itemSize,
                     }}
                   >
                     {({ index, style, data: _ }) => {
@@ -222,57 +228,77 @@ export const Select = ({
                           style={style}
                           key={val}
                           className={clsx(
-                            'my-auto flex w-full gap-3 px-1 align-middle transition-colors ease-linear'
+                            'my-auto w-full px-1 align-middle transition-colors ease-linear'
                           )}
                         >
-                          <label
-                            className={clsx(
-                              'x-between my-auto h-full w-full cursor-pointer rounded-lg px-3 hover:bg-neutral-200'
-                            )}
-                            htmlFor={id}
-                          >
-                            <>
-                              {renderer ? (
-                                <>{renderer(val, index)}</>
-                              ) : (
-                                <div className='my-auto flex align-middle'>
-                                  {imageKey && data[imageKey] && (
-                                    <div className='mr-3'>
-                                      <Image
-                                        src={data[imageKey]}
-                                        height={32}
-                                        width={32}
-                                        className='my-auto flex-shrink-0 rounded-full object-cover'
-                                        alt={data[displayValueKey]}
-                                      />
+                          {index > 0 && withBorders && (
+                            <div className='mx-2 h-px bg-neutral-200'></div>
+                          )}
+
+                          <div className='my-auto flex h-full gap-3'>
+                            <label
+                              className={clsx(
+                                'x-between group my-auto h-full w-full cursor-pointer rounded-lg px-3',
+                                !withBorders && 'hover:bg-neutral-200'
+                              )}
+                              htmlFor={id}
+                            >
+                              <>
+                                {renderer ? (
+                                  <>{renderer(val, index)}</>
+                                ) : (
+                                  <div className='my-auto'>
+                                    <div
+                                      className={'my-auto flex align-middle'}
+                                    >
+                                      {imageKey && data[imageKey] && (
+                                        <div className='mr-3'>
+                                          <Image
+                                            src={data[imageKey]}
+                                            height={32}
+                                            width={32}
+                                            className='my-auto flex-shrink-0 rounded-full object-cover'
+                                            alt={data[displayValueKey]}
+                                          />
+                                        </div>
+                                      )}
+                                      <div className='my-auto text-left text-base font-medium line-clamp-1 group-hover:text-primary-main'>
+                                        {val}
+                                        {otherDisplayVal && (
+                                          <span className='ml-2 text-neutral-400'>
+                                            {otherDisplayVal}
+                                          </span>
+                                        )}
+                                      </div>
                                     </div>
-                                  )}
-                                  <div className='my-auto text-left text-base line-clamp-1'>
-                                    {val}
-                                    {otherDisplayVal && (
-                                      <span className='ml-2 text-neutral-400'>
-                                        {otherDisplayVal}
-                                      </span>
+                                    {descriptionValueKey && (
+                                      <p
+                                        className={
+                                          'mt-1 max-w-[284px] text-sm text-neutral-500'
+                                        }
+                                      >
+                                        {data[descriptionValueKey]}
+                                      </p>
                                     )}
                                   </div>
-                                </div>
-                              )}
-                            </>
+                                )}
+                              </>
 
-                            <input
-                              id={id}
-                              checked={
-                                selectedOptions?.[data[trueValueKey]] ?? false
-                              }
-                              onChange={(e) => {
-                                handleChange({
-                                  [data[trueValueKey]]: e.target.checked,
-                                });
-                              }}
-                              type='checkbox'
-                              className='my-auto flex-shrink-0'
-                            />
-                          </label>
+                              <input
+                                id={id}
+                                checked={
+                                  selectedOptions?.[data[trueValueKey]] ?? false
+                                }
+                                onChange={(e) => {
+                                  handleChange({
+                                    [data[trueValueKey]]: e.target.checked,
+                                  });
+                                }}
+                                type='checkbox'
+                                className='my-auto flex-shrink-0'
+                              />
+                            </label>
+                          </div>
                         </div>
                       );
                     }}

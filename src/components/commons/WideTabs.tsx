@@ -32,7 +32,7 @@ export const WideTabs = ({
   tabClassname,
 }: Props) => {
   return (
-    <div className={clsx('no-scrollbar h-full', className)}>
+    <div className={clsx('no-scrollbar', className)}>
       <div
         className={clsx(
           `my-auto flex h-full w-max flex-shrink-0 gap-5 align-middle`
@@ -60,7 +60,7 @@ export const WideTabs = ({
             >
               <span
                 className={clsx(
-                  `smooth relative z-10 mb-auto text-sm font-medium capitalize`,
+                  `smooth relative z-10 my-auto text-sm font-medium capitalize`,
                   isActive ? 'text-primary-main' : 'text-black',
                   tabClassname
                 )}

@@ -1,11 +1,13 @@
 import { UseQueryOptions } from '@tanstack/react-query';
+import { REFETCH_INTERVAL } from 'constants/api/refetch_interval';
 import { useTQuery } from 'hooks/api/useTQuery';
 import { generateUrlParamsFromObject } from 'utils/generators/generateUrlParamsFromObject';
 import { DateRange } from 'utils/getters/getDateRange';
 
 export interface TCashFlowChart {
   curreny: string;
-  amount: Amount;
+  expense: Amount;
+  income: Amount;
   trend: Trend[];
 }
 
@@ -17,7 +19,8 @@ interface Amount {
 interface Trend {
   from: string;
   to: string;
-  amount: number;
+  income: number;
+  expense: number;
 }
 
 export function useGetCashflowChart(
@@ -44,6 +47,7 @@ export function useGetCashflowChart(
     options: {
       ...options,
       enabled: !!currency && !!type,
+      refetchInterval: REFETCH_INTERVAL,
       meta: {
         silent: true,
       },

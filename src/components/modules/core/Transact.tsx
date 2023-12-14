@@ -16,7 +16,7 @@ export const Transact = ({
 }: Props) => {
   return (
     <AuthorizeActionWithPin
-      mode={mode}
+      isSuccess={mode === 'success'}
       show={!!mode}
       close={terminate}
       processing={processing}

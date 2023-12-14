@@ -141,7 +141,7 @@ export const WalletTransactionsTable = ({
           }
           accessor='_id'
           mustHaveRange
-          emptyTableText={'No wallet transactions yet'}
+          noDataConfig={{ title: 'No wallet transactions yet' }}
           {...{
             isLoading,
             data,

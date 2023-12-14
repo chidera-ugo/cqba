@@ -7,12 +7,14 @@ interface Props {
   value: string | number;
   className?: string;
   valueClassName?: string;
+  currency?: string;
 }
 
 export const SimpleDisplayValue = ({
   name,
   className,
   valueClassName,
+  currency,
   isAmount,
   value,
 }: Props) => {
@@ -27,9 +29,8 @@ export const SimpleDisplayValue = ({
         )}
       >
         {isAmount
-          ? `₦${formatAmount({
+          ? `${currency}${formatAmount({
               value,
-              kFormatter: Number(value) > 9999999,
               decimalPlaces: 2,
             })}`
           : value ?? '---'}

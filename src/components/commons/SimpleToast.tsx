@@ -23,13 +23,17 @@ export const useSimpleToast = () => {
 interface Props {
   show: boolean;
   className?: string;
+  enabled?: boolean;
 }
 
 export const SimpleToast = ({
   show,
   children,
   className,
+  enabled = false,
 }: PropsWithChildren<Props>) => {
+  if (!enabled) return null;
+
   return (
     <AnimatePresence initial={false}>
       {show && (

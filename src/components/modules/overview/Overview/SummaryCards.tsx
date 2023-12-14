@@ -2,10 +2,9 @@ import clsx from 'clsx';
 import { SummaryWithVariance } from 'components/modules/overview/Overview/SummaryWithVariance';
 import { useGetDashboardSummary } from 'hooks/api/dashboard/useGetDashboardSummary';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
-import { useUserRole } from 'hooks/rbac/useUserRole';
+import { useUserRole } from 'hooks/access_control/useUserRole';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { Fragment } from 'react';
-import { formatAmount } from 'utils/formatters/formatAmount';
 import { generatePlaceholderArray } from 'utils/generators/generatePlaceholderArray';
 import { DateRange } from 'utils/getters/getDateRange';
 
@@ -14,14 +13,11 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
   const { isOwner } = useUserRole();
 
   const { primaryWallet } = useManageWallets();
+  const currency = primaryWallet?.currency;
 
-  const { isLoading, isError, data } = useGetDashboardSummary(
-    range,
-    primaryWallet?.currency,
-    {
-      enabled: isVerified,
-    }
-  );
+  const { isLoading, isError, data } = useGetDashboardSummary(range, currency, {
+    enabled: isVerified && !!currency,
+  });
 
   if (isLoading) return <IsLoadingIsError type='loading' />;
   if (isError) return <IsLoadingIsError type='error' />;
@@ -36,22 +32,19 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
   }[] = [
     {
       name: 'Account Balance',
-      value: data?.budgetBalance?.value,
-      isAmount: true,
+      value: data?.accountBalance?.value,
       moreInfo: 'Total amount in your wallet',
-      variance: data?.budgetBalance?.percentageDiff,
+      variance: data?.accountBalance?.percentageDiff,
     },
     {
       name: 'Budget Balance',
       value: data?.budgetBalance?.value,
-      isAmount: true,
       moreInfo: 'Total amount in your budget balance',
       variance: data?.budgetBalance?.percentageDiff,
     },
     {
       name: 'Total Spend',
       value: data?.totalSpend?.value,
-      isAmount: true,
       disabled: !isOwner,
       variance: data?.totalSpend?.percentageDiff,
     },
@@ -77,11 +70,7 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
               <SummaryWithVariance
                 className={i === 0 ? 'text-white' : 'text-neutral-500'}
                 currency={data?.currency}
-                value={formatAmount({
-                  value: _val,
-                  decimalPlaces: isAmount ? 2 : 0,
-                  kFormatter: _val > 999999,
-                })}
+                value={_val}
                 {...{
                   name,
                   variance,

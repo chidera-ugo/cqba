@@ -18,6 +18,7 @@ interface Props {
   isLoading?: boolean;
   isError?: boolean;
   className?: string;
+  currency?: string;
   normal?: boolean;
   valueClassname?: string;
 }
@@ -33,11 +34,10 @@ export const DisplayValue = ({
   isLoading,
   className,
   titleClassName,
+  currency,
   normal,
   valueClassname,
 }: Props) => {
-  if (!value) return <></>;
-
   if (normal)
     return (
       <div className={className}>
@@ -80,13 +80,12 @@ export const DisplayValue = ({
           <span className={'text-red-400'}>xxx</span>
         ) : (
           <>
-            {isAmount && <span>₦</span>}
+            {isAmount && currency && <span>{currency}</span>}
             {typeof value === 'string'
               ? value
               : formatAmount({
                   value,
                   decimalPlaces: isAmount ? 2 : 0,
-                  kFormatter: isAmount ? value > 99999999 : false,
                 })}
           </>
         )}

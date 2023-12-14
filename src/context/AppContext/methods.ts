@@ -35,13 +35,15 @@ export function reducer(state: State, action: Action): State {
       };
     }
     case 'signout': {
-      deleteFromLocalStore('tokens');
+      deleteFromLocalStore('tokens', true);
 
       return {
         ...state,
         user: null,
         isInitializing: false,
         tokens: null,
+        hasChoosenPlan: false,
+        hasSetPin: false,
       };
     }
     default:

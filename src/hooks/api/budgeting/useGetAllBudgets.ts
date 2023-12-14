@@ -1,4 +1,5 @@
 import { UseQueryOptions } from '@tanstack/react-query';
+import { REFETCH_INTERVAL } from 'constants/api/refetch_interval';
 import { BudgetStatus } from 'enums/budget';
 import { UserRole } from 'enums/employee_enum';
 import { useTQuery } from 'hooks/api/useTQuery';
@@ -18,6 +19,7 @@ export interface IBudget {
   paused: boolean;
   beneficiaries: {
     email: string;
+    avatar?: string;
   }[];
   approvedDate?: string;
   approvedBy?: {
@@ -25,7 +27,7 @@ export interface IBudget {
     role: UserRole;
   };
   amountUsed: number;
-  availableAmount: number;
+  balance: number;
 }
 
 export function useGetAllBudgets(
@@ -37,6 +39,7 @@ export function useGetAllBudgets(
     status?: string;
     paginated?: boolean;
   },
+  isProjectsList: boolean,
   options?: UseQueryOptions<any, any, any, string[]>
 ) {
   const _params = generateUrlParamsFromObject({
@@ -44,11 +47,12 @@ export function useGetAllBudgets(
   });
 
   return useTQuery<PaginatedResponse<IBudget>>({
-    queryKey: ['budgets', _params],
-    url: _params,
+    queryKey: ['budgets', _params, `isProjectsList: ${isProjectsList}`],
+    url: `${isProjectsList ? '/project' : _params}`,
     service: 'budgets',
     options: {
       ...options,
+      refetchInterval: REFETCH_INTERVAL,
       meta: { silent: true },
     },
   });
@@ -67,7 +71,6 @@ export function useGetAllBudgetsUnpaginated(
     options: {
       ...options,
       meta: { silent: true },
-      staleTime: Infinity,
     },
   });
 }

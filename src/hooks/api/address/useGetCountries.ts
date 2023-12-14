@@ -1,5 +1,4 @@
 import { useTQuery } from 'hooks/api/useTQuery';
-import { useAppContext } from 'context/AppContext';
 
 export interface Country {
   name: string;
@@ -9,14 +8,11 @@ export interface Country {
 }
 
 export function useGetCountries() {
-  const { user } = useAppContext().state;
-
   return useTQuery<Country[]>({
     queryKey: ['countries'],
-    url: `/${user?.organization}/countries`,
+    url: `/countries`,
     service: 'organizations',
     options: {
-      enabled: !!user?.organization,
       staleTime: Infinity,
       meta: { silent: true },
     },

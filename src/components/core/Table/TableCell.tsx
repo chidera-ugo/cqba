@@ -9,6 +9,7 @@ type Props = {
   isDate?: boolean;
   isEnum?: boolean;
   canCopy?: boolean;
+  currency?: string;
 };
 
 export const TableCell = <T,>({
@@ -17,6 +18,7 @@ export const TableCell = <T,>({
   isDate,
   canCopy,
   isEnum,
+  currency,
 }: CellContext<T, unknown> & Props) => {
   const value = getValue() as any;
 
@@ -29,9 +31,15 @@ export const TableCell = <T,>({
       </span>
     );
 
-  if (isDate) return <span>{formatDate(value, 'semi-full')}</span>;
+  if (isDate) return <span>{value ? formatDate(value, 'short') : '----'}</span>;
 
-  if (isAmount) return <span>₦{formatAmount({ value: value / 100 })}</span>;
+  if (isAmount)
+    return (
+      <span>
+        {currency}
+        {formatAmount({ value: value / 100 })}
+      </span>
+    );
 
   if (typeof value !== 'number' && !value) return <span>-----</span>;
 

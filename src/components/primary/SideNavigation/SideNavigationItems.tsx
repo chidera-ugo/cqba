@@ -25,7 +25,7 @@ export const SideNavigationItems = () => {
     <>
       {Object.keys(navigationItems).map((item, i) => {
         return (
-          <div key={item} className={clsx(i > 0 && 'mt-8')}>
+          <div key={item} className={clsx(i > 0 && 'mt-5')}>
             <div
               className={clsx(
                 'mb-3 text-sm font-medium',
@@ -37,13 +37,13 @@ export const SideNavigationItems = () => {
 
             <div>
               {navigationItems[item]?.map(
-                ({ icon, title, id, url, showWhenUnverified, isRoot }) => {
-                  const route = url ?? `/${convertToUrlString(title)}`;
+                ({ icon, title, id, showWhenUnverified, isRoot }) => {
+                  const route = `/${convertToUrlString(id ?? title)}`;
 
                   if (showWhenUnverified && isVerified)
                     return <Fragment key={title}></Fragment>;
 
-                  const isActive = checkIsActive(pathname, title, isRoot, url);
+                  const isActive = checkIsActive(pathname, id ?? title, isRoot);
 
                   return (
                     <div key={title}>
@@ -95,13 +95,7 @@ export const SideNavigationItems = () => {
   );
 };
 
-function checkIsActive(
-  pathname: string,
-  query: string,
-  isRoot?: boolean,
-  url?: string
-) {
+function checkIsActive(pathname: string, query: string, isRoot?: boolean) {
   if (isRoot && pathname === '/') return true;
-  if (url && pathname.includes(url)) return true;
   return !!pathname.split('/')[1]?.includes(convertToUrlString(query));
 }

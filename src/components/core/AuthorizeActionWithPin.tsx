@@ -14,7 +14,7 @@ type Props = {
   processing: boolean;
   submit: (pin: string, errorCb: () => void) => void;
   title: string;
-  mode: string | null;
+  isSuccess: boolean;
   show: boolean;
   successMessage: string;
   successTitle: string;
@@ -29,7 +29,7 @@ export const AuthorizeActionWithPin = ({
   finish,
   submit,
   title,
-  mode,
+  isSuccess,
   icon,
   show,
   close,
@@ -48,8 +48,8 @@ export const AuthorizeActionWithPin = ({
       show={show}
       closeModal={close}
     >
-      <AnimateLayout changeTracker={String(mode)}>
-        {mode === 'success' ? (
+      <AnimateLayout changeTracker={String(isSuccess)}>
+        {isSuccess ? (
           <div className='y-center py-20'>
             <SimpleInformation
               title={<span className='text-xl'>{successTitle}</span>}
@@ -60,7 +60,7 @@ export const AuthorizeActionWithPin = ({
               }
               icon={icon ?? <GreenCheck />}
               actionButton={{
-                text: 'Thanks chief',
+                text: "Let's Go!",
                 action: finish,
               }}
             />

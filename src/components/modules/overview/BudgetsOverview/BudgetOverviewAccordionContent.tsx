@@ -13,8 +13,7 @@ export const BudgetOverviewAccordionContent = ({
   currentTab,
   ...budget
 }: IBudget & { currentTab?: string; getColor: GetColorByChar }) => {
-  const { amount, availableAmount, beneficiaries, status, currency, expiry } =
-    budget;
+  const { amount, balance, beneficiaries, status, currency, expiry } = budget;
 
   if (currentTab === 'pending')
     return <PendingBudgetCard {...budget} stripDown />;
@@ -26,11 +25,11 @@ export const BudgetOverviewAccordionContent = ({
     },
     {
       label: 'Available',
-      value: availableAmount,
+      value: balance,
     },
     {
       label: 'Spent',
-      value: amount - availableAmount,
+      value: amount - balance,
     },
     {
       label: 'Due Date',
@@ -60,7 +59,7 @@ export const BudgetOverviewAccordionContent = ({
             {handleSort({
               data: beneficiaries.slice(0, 5),
               sortBy: 'email',
-            })?.map(({ email }, i) => {
+            })?.map(({ email, avatar }, i) => {
               return (
                 <div
                   key={email}
@@ -71,6 +70,7 @@ export const BudgetOverviewAccordionContent = ({
                   }}
                 >
                   <Avatar
+                    avatar={avatar}
                     getBackgroundColor={() => getColor(email?.charAt(0))}
                     className={clsx('my-auto ring-2 ring-white')}
                     size={28}
@@ -101,7 +101,6 @@ export const BudgetOverviewAccordionContent = ({
                   <span className={'my-auto'}>
                     {formatAmount({
                       value: value / 100,
-                      kFormatter: value / 100 > 99999,
                     })}
                   </span>
                 </span>

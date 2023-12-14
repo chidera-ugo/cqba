@@ -6,12 +6,9 @@ import { ChoosePlan } from 'components/modules/subscriptions/ChoosePlan';
 import { IdleTimer } from 'components/modules/IdleTimer';
 import { PageHead } from 'components/primary/PageHead';
 import { ChevronRight } from 'components/svgs/navigation/Chevrons';
-import { copyrightText } from 'constants/copyrightText';
 import { UserRole } from 'enums/employee_enum';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useNavigationItems } from 'hooks/dashboard/useNavigationItems';
-import { useIsKycFlow } from 'hooks/kyc/useIsKycFlow';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import NotFound from 'pages/404';
 import { PropsWithChildren, ReactNode } from 'react';
@@ -26,15 +23,17 @@ export interface Props {
   back?: string;
   hideSideNavigation?: boolean;
   childrenClassName?: string;
-  breadCrumbs?: { title: string; url?: string }[];
+  breadCrumbs?: { title: string; action?: () => void; url?: string }[];
   breadCrumbsSlot?: ReactNode;
   enabledFor?: UserRole;
+  headerClassname?: string;
 }
 
 export const AppLayout = ({
   children,
   headerSlot,
   title,
+  headerClassname = 'border-b',
   back,
   childrenClassName,
   breadCrumbs,
@@ -42,6 +41,8 @@ export const AppLayout = ({
   breadCrumbsSlot,
   ...props
 }: PropsWithChildren<Props>) => {
+  const { push } = useRouter();
+
   const { userExists } = useProtectedRoutesGuard();
 
   const { screenSize, user, hasChoosenPlan } = useAppContext().state;
@@ -56,18 +57,17 @@ export const AppLayout = ({
   const hideSideNavigation = props.hideSideNavigation || shouldSelectFirstPlan;
 
   const { isVerified } = useIsVerified();
-  const { isKycFlow } = useIsKycFlow();
   const { pathname } = useRouter();
 
   const { isValidRoute } = useNavigationItems(role);
+
+  if (!userExists) return <FullScreenLoader asPage />;
 
   if (!enabledFor) {
   } else if (enabledFor !== role) return <NotFound />;
 
   if ((!isVerified && pathname !== '/kyc') || !isValidRoute())
     return <NotFound />;
-
-  if (!userExists) return <FullScreenLoader asPage />;
 
   return (
     <div className={'min-w-screen min-h-screen'}>
@@ -104,7 +104,7 @@ export const AppLayout = ({
                 title,
                 hideSideNavigation,
               }}
-              className={!isKycFlow || shouldSelectFirstPlan ? 'border-b' : ''}
+              className={headerClassname}
             >
               {shouldSelectFirstPlan ? <LogoutButton /> : headerSlot}
             </AppHeader>
@@ -112,12 +112,14 @@ export const AppLayout = ({
             {breadCrumbs && !shouldSelectFirstPlan && (
               <div className='app-container x-between nav_bar sticky left-0 top-14 z-[1000] -ml-2 overflow-x-auto 640:h-16 1024:top-20'>
                 <div className='flex gap-1'>
-                  {breadCrumbs?.map(({ url, title }, i) => {
+                  {breadCrumbs?.map(({ url, action, title }, i) => {
                     return (
                       <div key={title} className={'flex gap-1'}>
-                        {url ? (
-                          <Link
-                            href={url}
+                        {url || action ? (
+                          <button
+                            onClick={
+                              action ? action : () => (url ? push(url) : null)
+                            }
                             className={clsx(
                               'my-auto gap-3 px-2 py-2.5 text-center text-sm font-medium transition-colors',
                               i === breadCrumbs.length - 1
@@ -126,7 +128,7 @@ export const AppLayout = ({
                             )}
                           >
                             {title}
-                          </Link>
+                          </button>
                         ) : (
                           <div
                             className={clsx(
@@ -168,16 +170,6 @@ export const AppLayout = ({
             >
               {shouldSelectFirstPlan ? <ChoosePlan /> : children}
             </div>
-
-            {hideSideNavigation && (
-              <p
-                className={
-                  'absolute bottom-0 w-full pb-3 text-center text-xs text-neutral-700 640:text-sm'
-                }
-              >
-                {copyrightText}
-              </p>
-            )}
           </main>
         </div>
       </div>

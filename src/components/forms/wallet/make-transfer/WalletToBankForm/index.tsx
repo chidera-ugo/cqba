@@ -1,10 +1,10 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { Transact } from 'components/modules/core/Transact';
 import { WalletToBankFormRecoveryValues } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank';
 import { Formik } from 'formik';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
 import { useHandleError } from 'hooks/api/useHandleError';
 import { useInititateWalletToBank } from 'hooks/api/wallet/useInititateWalletToBank';
+import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
 import { useTransact } from 'hooks/dashboard/core/useTransact';
 import { useState } from 'react';
 import { FormRecoveryProps } from 'types/forms/form_recovery';
@@ -39,8 +39,6 @@ export const WalletToBankForm = ({
 }: Props & FormRecoveryProps<WalletToBankFormRecoveryValues>) => {
   const [budgetId, setBudgetId] = useState('');
 
-  const queryClient = useQueryClient();
-
   const { mutate, isLoading } = useInititateWalletToBank(budgetId, {
     onError: () => null, // Overrides the default onError in useTMutation,
   });
@@ -48,6 +46,8 @@ export const WalletToBankForm = ({
   const transact = useTransact({
     transactionType: 'WALLET_TO_BANK',
   });
+
+  const { invalidate, defaultInvalidator } = useQueryInvalidator();
 
   const { handleError } = useHandleError();
 
@@ -82,14 +82,8 @@ export const WalletToBankForm = ({
               onSuccess() {
                 formikProps.resetForm();
                 transact.setMode('success');
-                queryClient.invalidateQueries(['wallets']);
-                queryClient.invalidateQueries(['budgets']);
-                queryClient.invalidateQueries([
-                  'budget',
-                  formikProps.values.budget,
-                ]);
-                queryClient.invalidateQueries(['cash_flow_chart']);
-                queryClient.invalidateQueries(['wallet_transactions']);
+                defaultInvalidator(['budget', formikProps.values.budget]);
+                invalidate('balances', 'budgets');
               },
               onError(e) {
                 handleError(e);

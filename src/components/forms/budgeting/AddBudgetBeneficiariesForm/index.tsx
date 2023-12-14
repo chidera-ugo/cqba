@@ -9,7 +9,7 @@ export type AddBudgetBeneficiariesFormRecoveryValues = FormRecoveryProps<
 >['formRecoveryValues'];
 
 interface Props {
-  onSubmit: (values?: AddBudgetBeneficiariesFormRecoveryValues) => void;
+  onSubmit: (values: typeof initialValues) => void;
   formRecoveryValues?: AddBudgetBeneficiariesFormRecoveryValues;
   currency: string;
   inviteEmployee: (values?: AddBudgetBeneficiariesFormRecoveryValues) => void;
@@ -25,9 +25,7 @@ export const AddBudgetBeneficiariesForm = ({
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={(values) => {
-        onSubmit(values);
-      }}
+      onSubmit={onSubmit}
       validateOnBlur={false}
     >
       {(formikProps) => {

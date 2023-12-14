@@ -1,18 +1,15 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { Avatar } from 'components/commons/Avatar';
 import { DisplayValue } from 'components/commons/DisplayValue';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
-import { Confirmation } from 'components/modals/Confirmation';
 import { AppToast } from 'components/primary/AppToast';
+import { EmployeeAction } from 'components/tables/employees/AllEmployeesTable/useColumns';
 import { UserRoles } from 'enums/employee_enum';
-import { useDeleteEmployee } from 'hooks/api/employees/useDeleteEmployee';
-import { useDeleteInvite } from 'hooks/api/employees/useDeleteInvite';
 import { IEmployee } from 'hooks/api/employees/useGetAllEmployees';
 import { useGetEmployeeById } from 'hooks/api/employees/useGetEmployeeById';
 import { useResendInvite } from 'hooks/api/employees/useResendInvite';
-import { useState } from 'react';
+import { Fragment } from 'react';
 import { toast } from 'react-toastify';
 import { formatDate } from 'utils/formatters/formatDate';
 
@@ -20,27 +17,16 @@ interface Props {
   id?: string;
   close: () => void;
   changeRole: (employee: IEmployee) => void;
-  currentEmployee: IEmployee | null;
+  handleAction: (action: EmployeeAction, employee: IEmployee) => void;
 }
 
 export const EmployeeDetails = ({
   id,
-  currentEmployee,
   close,
+  handleAction,
   changeRole,
 }: Props) => {
-  const [showConfirmation, setShowConfirmation] = useState(false);
-
-  const queryClient = useQueryClient();
-
-  const { isLoading, isError, data: _data } = useGetEmployeeById(id);
-
-  const { isLoading: deleting, mutate: deleteInvite } = useDeleteInvite(id, {
-    onSuccess() {
-      queryClient.invalidateQueries(['employees']);
-      close();
-    },
-  });
+  const { isLoading, isError, data } = useGetEmployeeById(id);
 
   const { isLoading: resending, mutate: resend } = useResendInvite(id, {
     onSuccess() {
@@ -49,22 +35,13 @@ export const EmployeeDetails = ({
     },
   });
 
-  const { mutate: deleteEmployee, isLoading: deletingEmployee } =
-    useDeleteEmployee(id, {
-      onSuccess() {
-        queryClient.invalidateQueries(['employees']);
-        close();
-      },
-    });
+  if (isLoading) return <IsLoading />;
 
-  if (isLoading && !currentEmployee) return <IsLoading />;
-
-  if (isError && !currentEmployee)
+  if (isError)
     return <IsError description={'Failed to get employee details'} />;
 
-  const data = !!currentEmployee ? currentEmployee : _data!;
-
-  const { firstName, lastName, status, email, role, phone, createdAt } = data;
+  const { firstName, lastName, status, avatar, email, role, phone, createdAt } =
+    data;
 
   const payload = [
     { title: 'Phone Number', value: phone },
@@ -76,24 +53,10 @@ export const EmployeeDetails = ({
 
   return (
     <>
-      <Confirmation
-        type={'right'}
-        show={showConfirmation}
-        hideBackground
-        title={isActive ? 'Remove team member' : 'Delete invite'}
-        subTitle={`This means ${firstName} ${lastName} will no longer be able to ${
-          isActive ? 'access your dashboard' : 'join your organization'
-        }`}
-        positive={() => (isActive ? deleteEmployee(null) : deleteInvite(null))}
-        buttonTexts={[isActive ? 'Remove User' : 'Delete Invite']}
-        processing={deleting || deletingEmployee}
-        negative={() => setShowConfirmation(false)}
-      />
-
       <div className={'rounded-xl border border-neutral-310 p-5'}>
         <div className='flex gap-2 border-b border-neutral-310 pb-4'>
           <div className='y-center'>
-            <Avatar size={42} />
+            <Avatar avatar={avatar} size={42} />
           </div>
 
           <div className={'my-auto'}>
@@ -106,6 +69,8 @@ export const EmployeeDetails = ({
         </div>
 
         {payload.map(({ value, title }) => {
+          if (!value) return <Fragment key={title} />;
+
           return (
             <DisplayValue
               normal
@@ -121,7 +86,7 @@ export const EmployeeDetails = ({
         <button
           className={'primary-button min-w-[120px]'}
           onClick={() =>
-            isActive ? changeRole(data) : setShowConfirmation(true)
+            isActive ? changeRole(data) : handleAction('delete_invite', data)
           }
           type={'button'}
         >
@@ -132,7 +97,9 @@ export const EmployeeDetails = ({
           className={'secondary-button min-w-[120px]'}
           submitting={resending}
           type={'button'}
-          onClick={() => (isActive ? setShowConfirmation(true) : resend(null))}
+          onClick={() =>
+            isActive ? handleAction('remove_user', data) : resend(null)
+          }
         >
           {isActive ? 'Remove User' : 'Resend Invite'}
         </SubmitButton>

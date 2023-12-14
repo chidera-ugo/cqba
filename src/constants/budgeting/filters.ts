@@ -1,7 +1,14 @@
 export const budgetingFilterOptions: {
   title: string;
-  value: 'active' | 'pending';
+  value: 'active' | 'pending' | 'projects';
+  isForPremium?: boolean;
+  isForOwner?: boolean;
 }[] = [
-  { title: 'Active Budgets', value: 'active' },
-  { title: 'Requests', value: 'pending' },
+  {
+    title: 'Projects',
+    value: 'projects',
+    isForPremium: true,
+    isForOwner: true,
+  },
+  { title: 'Single Budgets', value: 'active' },
 ];

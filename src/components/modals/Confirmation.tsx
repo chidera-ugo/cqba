@@ -17,7 +17,7 @@ interface Props {
   processing?: boolean;
   processingMessage?: string;
   type?: 'right' | 'center';
-  hideBackground?: boolean;
+  hideBackdrop?: boolean;
 }
 
 export const Confirmation = ({
@@ -27,7 +27,7 @@ export const Confirmation = ({
   title,
   subTitle,
   positive,
-  hideBackground,
+  hideBackdrop,
   processing,
   buttonTexts = ['No', 'Yes'],
   type = 'center',
@@ -39,7 +39,7 @@ export const Confirmation = ({
       <RightModalWrapper
         closeModal={negative}
         closeOnClickOutside
-        {...{ show, hideBackground }}
+        {...{ show, hideBackdrop }}
         className='bg-white p-0'
       >
         <h5>{title}</h5>
@@ -63,7 +63,7 @@ export const Confirmation = ({
       hideHeader
       {...{
         show,
-        hideBackground,
+        hideBackdrop,
       }}
       className='bg-white p-0'
     >

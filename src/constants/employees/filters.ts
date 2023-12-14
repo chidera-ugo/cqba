@@ -4,6 +4,6 @@ export const employeesFilterOptions: {
   title: string;
   value: EmployeeStatus;
 }[] = [
-  { title: 'Active Employees', value: 'active' },
+  { title: 'Active Users', value: 'active' },
   { title: 'Pending Invites', value: 'invited' },
 ];

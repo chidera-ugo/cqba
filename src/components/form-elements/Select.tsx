@@ -38,10 +38,12 @@ export const Select = ({
   const id = props.id ?? props.name;
 
   useEffect(() => {
+    if (isLoading) return;
+
     if (next && !!field.value) {
       document.getElementById(next)?.focus();
     }
-  }, [field.value]);
+  }, [field.value, isLoading]);
 
   function getKeySuffix(value: any) {
     if (!listKeyModifieres?.length) return '';

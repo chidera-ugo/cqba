@@ -1,4 +1,5 @@
 import {
+  Approval,
   BadgeCheck,
   BarChart,
   Card,
@@ -18,7 +19,6 @@ interface NavigationItem {
   icon: JSX.Element;
   title: string;
   id?: string;
-  url?: string;
   isRoot?: boolean;
   showWhenUnverified?: boolean;
 }
@@ -53,11 +53,12 @@ export const useNavigationItems = (role?: UserRole) => {
     'Spend Management': [
       {
         icon: <PieChart />,
-        title: 'Budgeting',
+        title: 'Budgets',
+        id: 'budgeting',
       },
       {
-        icon: <Refund />,
-        title: 'Reimbursement',
+        icon: <Approval />,
+        title: 'Approvals',
       },
       {
         icon: <PieChart />,
@@ -71,7 +72,8 @@ export const useNavigationItems = (role?: UserRole) => {
     Others: [
       {
         icon: <Users />,
-        title: 'Employees',
+        id: 'employees',
+        title: 'People',
       },
       {
         icon: <Code />,
@@ -97,7 +99,8 @@ export const useNavigationItems = (role?: UserRole) => {
       },
       {
         icon: <PieChart />,
-        title: 'Budgeting',
+        title: 'Budgets',
+        id: 'budgeting',
       },
       {
         icon: <Refund />,

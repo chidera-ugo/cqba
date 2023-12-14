@@ -6,7 +6,7 @@ export const useIsVerified = () => {
   const isVerified = user?.KYBStatus === 'approved' || user?.role !== 'owner';
 
   return {
-    isVerified,
+    isVerified: !!user && isVerified,
     screenSize,
   };
 };

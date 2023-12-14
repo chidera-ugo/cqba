@@ -9,6 +9,7 @@ interface Props {
   budgetId: string;
   amount: string;
   minimumAmount: number;
+  currency?: string;
   emitValue: (value: string) => void;
   emitIsProcessing: (processing: boolean) => void;
 }
@@ -18,6 +19,7 @@ export const GetTransactionFee = ({
   emitValue,
   minimumAmount,
   emitIsProcessing,
+  currency,
   budgetId,
 }: Props) => {
   const sanitizedAmount = sanitizeAmount({
@@ -81,7 +83,8 @@ export const GetTransactionFee = ({
             <Dollar />
           </span>
           <span className='my-auto font-medium'>
-            ₦{formatAmount({ value: fee, decimalPlaces: 2 })}
+            {currency}
+            {formatAmount({ value: fee, decimalPlaces: 2 })}
           </span>
         </div>
       )}

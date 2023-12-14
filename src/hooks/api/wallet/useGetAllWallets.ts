@@ -1,3 +1,4 @@
+import { REFETCH_INTERVAL } from 'constants/api/refetch_interval';
 import { useTQuery } from 'hooks/api/useTQuery';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 
@@ -7,7 +8,6 @@ export interface IWallet {
   balance: number;
   primary: boolean;
   virtualAccounts: VirtualAccount[];
-  availableBalance: number;
 }
 
 export interface VirtualAccount {
@@ -27,6 +27,7 @@ export function useGetAllWallets() {
     service: 'wallet',
     options: {
       staleTime: Infinity,
+      refetchInterval: REFETCH_INTERVAL,
       meta: {
         silent: true,
         enabled: isVerified,

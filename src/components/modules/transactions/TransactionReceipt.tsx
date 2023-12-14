@@ -168,7 +168,7 @@ export const TransactionReceipt = ({
             <ReceiptContent />
           </div>
 
-          <div className='mt-4 bg-[#F6F7F9] p-6'>
+          <div className='mt-4 bg-neutral-100 p-6'>
             <div className='x-between'>
               <h1
                 className={
@@ -182,7 +182,7 @@ export const TransactionReceipt = ({
 
               <div className='relative'>
                 <div className='y-center absolute left-0 top-0 h-full w-full'>
-                  <div className='y-center relative mx-auto h-9 w-9 rounded bg-[#F6F7F9]'>
+                  <div className='y-center relative mx-auto h-9 w-9 rounded bg-neutral-100'>
                     <div className='mx-auto'>
                       <Icon />
                     </div>

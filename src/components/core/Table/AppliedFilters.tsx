@@ -43,7 +43,7 @@ export const AppliedFilters = ({
       if (i === 'amount') {
         arr.push({
           id: i,
-          value: `amount >= ₦${formatAmount({
+          value: `amount >= ${formatAmount({
             value: Number(filters[i]),
             decimalPlaces: 2,
             kFormatter: true,

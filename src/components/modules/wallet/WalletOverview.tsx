@@ -1,39 +1,50 @@
 import clsx from 'clsx';
-import { DisplayValue } from 'components/commons/DisplayValue';
-import { useAppContext } from 'context/AppContext';
+import { SummaryWithVariance } from 'components/modules/overview/Overview/SummaryWithVariance';
+import { useGetWalletBalances } from 'hooks/api/wallet/useGetWalletBalances';
+import { useUserRole } from 'hooks/access_control/useUserRole';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import Link from 'next/link';
 
 export const WalletOverview = () => {
-  const { user } = useAppContext().state;
+  const { isOwner } = useUserRole();
 
   const { isLoading, isError, primaryWallet } = useManageWallets();
 
-  if (isLoading) return <IsLoadingIsError isLoading />;
-  if (isError) return <IsLoadingIsError />;
+  const { isLoading: _l, isError: _e, data } = useGetWalletBalances();
+
+  if (isLoading || _l) return <IsLoadingIsError isLoading />;
+  if (isError || _e) return <IsLoadingIsError />;
 
   return (
-    <div className='grid-cols-2 gap-4 640:grid'>
-      {user?.role === 'owner' && (
-        <div className='card'>
-          <DisplayValue
-            value={!primaryWallet ? 0 : primaryWallet.availableBalance}
-            isAmount
-            title='Account Balance'
+    <div className='h-[94px] grid-cols-2 gap-4 640:grid 640:h-[114px]'>
+      {isOwner && (
+        <div className='card y-center'>
+          <SummaryWithVariance
+            value={
+              !primaryWallet
+                ? 0
+                : (data?.wallet?.find(
+                    ({ currency }) => currency === primaryWallet?.currency
+                  )?.balance ?? 0) / 100
+            }
+            currency={primaryWallet?.currency}
+            name='Account Balance'
             moreInfo='Your main wallet balance'
           />
         </div>
       )}
 
-      <div className='card relative mt-4 640:mt-0'>
-        <DisplayValue
+      <div className='card y-center relative mt-4 640:mt-0'>
+        <SummaryWithVariance
           value={
             !primaryWallet
               ? 0
-              : primaryWallet.balance - primaryWallet.availableBalance
+              : (data?.budget?.find(
+                  ({ currency }) => currency === primaryWallet?.currency
+                )?.balance ?? 0) / 100
           }
-          isAmount
-          title='Budget Balance'
+          currency={primaryWallet?.currency}
+          name='Budget Balance'
           moreInfo='Your total budget balance'
         />
 
@@ -51,7 +62,7 @@ export const WalletOverview = () => {
 const IsLoadingIsError = ({ isLoading }: { isLoading?: boolean }) => {
   return (
     <div className='grid-cols-2 gap-4 640:grid'>
-      <div className='card y-center h-[76px] 640:h-[106px]'>
+      <div className='card y-center h-[94px] 640:h-[114px]'>
         <div
           className={clsx(
             'h-3 w-[60%] 640:h-5',
@@ -60,13 +71,13 @@ const IsLoadingIsError = ({ isLoading }: { isLoading?: boolean }) => {
         ></div>
         <div
           className={clsx(
-            'mt-2 h-6 w-[80%] 640:h-8',
+            'mt-3 h-6 w-[80%] 640:h-8',
             isLoading ? 'skeleton' : 'skeleton-error'
           )}
         ></div>
       </div>
 
-      <div className='card y-center mt-4 h-[76px] 640:mt-0 640:h-[106px]'>
+      <div className='card y-center mt-4 h-[94px] 640:mt-0 640:h-[114px]'>
         <div
           className={clsx(
             'h-3 w-[60%] 640:h-5',
@@ -75,7 +86,7 @@ const IsLoadingIsError = ({ isLoading }: { isLoading?: boolean }) => {
         ></div>
         <div
           className={clsx(
-            'mt-2 h-6 w-[80%] 640:h-8',
+            'mt-3 h-6 w-[80%] 640:h-8',
             isLoading ? 'skeleton' : 'skeleton-error'
           )}
         ></div>

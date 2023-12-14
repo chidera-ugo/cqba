@@ -1,14 +1,18 @@
 import { ColumnDef } from '@tanstack/react-table';
 import clsx from 'clsx';
+import { ActionDropdown } from 'components/core/Table/ActionDropdown';
 import { TableCell } from 'components/core/Table/TableCell';
-import {
-  EmployeeAction,
-  EmployeeActions,
-} from 'components/tables/employees/AllEmployeesTable/EmployeeActions';
 import { UserRole, UserRoles } from 'enums/employee_enum';
 import { IEmployee } from 'hooks/api/employees/useGetAllEmployees';
 import { useMemo } from 'react';
-import { formatDate } from 'utils/formatters/formatDate';
+
+export type EmployeeAction =
+  | 'remove_user'
+  | 'edit'
+  | 'block'
+  | 'unblock'
+  | 'delete_invite'
+  | null;
 
 interface Args {
   handleActionClick: (employee: IEmployee, action: EmployeeAction) => void;
@@ -62,27 +66,43 @@ export const useColumns = ({ handleActionClick }: Args) => {
         },
       },
       {
-        header: 'Created',
-        accessorKey: 'createdAt',
-        enableColumnFilter: false,
-        cell: ({ getValue }) => {
-          return <div>{formatDate(getValue() as string, 'semi-full')}</div>;
-        },
-      },
-      {
         header: 'Actions',
+        id: 'actions',
         accessorKey: '_id',
         enableColumnFilter: false,
         cell: ({ row }) => {
           const employee = row.original;
 
+          const isEmployeeActive = employee.status === 'active';
+
           return (
-            <EmployeeActions
-              isEmployeeActive={employee.status === 'active'}
-              handleActionClick={(action) => {
-                handleActionClick(employee, action);
-              }}
-            />
+            <div className={'mr-auto flex'}>
+              <ActionDropdown
+                withoutBorders
+                options={
+                  isEmployeeActive
+                    ? [
+                        {
+                          onClick: () =>
+                            handleActionClick(employee, 'remove_user'),
+                          title: 'Remove User',
+                        },
+                        {
+                          onClick: () => handleActionClick(employee, 'edit'),
+                          title: 'Change Role',
+                        },
+                      ]
+                    : [
+                        {
+                          onClick: () =>
+                            handleActionClick(employee, 'delete_invite'),
+                          title: 'Delete Invite',
+                        },
+                      ]
+                }
+                id={`employee_actions_${employee._id}`}
+              />
+            </div>
           );
         },
       },

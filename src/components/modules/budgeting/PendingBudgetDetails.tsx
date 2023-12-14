@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { AuthorizeActionWithPin } from 'components/core/AuthorizeActionWithPin';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
@@ -8,7 +7,6 @@ import { RejectionReasonForm } from 'components/forms/budgeting/RejectionReasonF
 import { Cancel } from 'components/illustrations/Cancel';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { Confirmation } from 'components/modals/Confirmation';
-import { ManageBudgetCreation } from 'components/modules/budgeting/ManageBudgetCreation';
 import { PendingBudgetCard } from 'components/modules/budgeting/PendingBudgetCard';
 import { AppToast } from 'components/primary/AppToast';
 import { useAppContext } from 'context/AppContext';
@@ -20,6 +18,7 @@ import { useCancelBudget } from 'hooks/api/budgeting/useCancelBudget';
 import { useCloseBudget } from 'hooks/api/budgeting/useCloseBudget';
 import { useGetBudgetById } from 'hooks/api/budgeting/useGetBudgetById';
 import { useHandleError } from 'hooks/api/useHandleError';
+import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
 import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { useState } from 'react';
@@ -39,7 +38,7 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
   >(null);
   const [reason, setReason] = useState('');
 
-  const queryClient = useQueryClient();
+  const { defaultInvalidator, invalidate } = useQueryInvalidator();
   const { getColor } = useGetColorByChar();
   const { handleError } = useHandleError();
 
@@ -58,16 +57,14 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
 
   const { isLoading: declining, mutate: decline } = useCloseBudget(data?._id, {
     onSuccess() {
-      queryClient.invalidateQueries(['budget', data?._id]);
-      queryClient.invalidateQueries(['budgets']);
+      onSuccess();
       setMode('success');
     },
   });
 
   const { isLoading: cancelling, mutate: cancel } = useCancelBudget(data?._id, {
     onSuccess() {
-      queryClient.invalidateQueries(['budget', data?._id]);
-      queryClient.invalidateQueries(['budgets']);
+      onSuccess();
       close();
       toast(<AppToast>Canceled budget successfully</AppToast>, {
         type: 'success',
@@ -78,6 +75,11 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
   if (gettingBudget || _l) return <IsLoading />;
 
   if (isError || _e || !primaryWallet || !data) return <IsError />;
+
+  function onSuccess() {
+    defaultInvalidator(['budget', data?._id]);
+    defaultInvalidator(['budgets']);
+  }
 
   function dismiss() {
     setMode(null);
@@ -104,7 +106,7 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
       </RightModalWrapper>
 
       <AuthorizeActionWithPin
-        mode={mode}
+        isSuccess={mode === 'success'}
         show={!!mode}
         icon={action === 'decline' ? <Cancel /> : undefined}
         title={
@@ -148,8 +150,7 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
               },
               {
                 onSuccess() {
-                  queryClient.invalidateQueries(['budgets']);
-                  queryClient.invalidateQueries(['wallets']);
+                  invalidate('budgets', 'balances');
                   setMode('success');
                 },
                 onError(e) {
@@ -162,16 +163,8 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
         }}
       />
 
-      <ManageBudgetCreation
-        budget={data}
-        hideBackground
-        onFinish={close}
-        show={action === 'edit_budget'}
-        close={() => setAction(null)}
-      />
-
       <Confirmation
-        hideBackground
+        hideBackdrop
         show={action === 'confirm_cancel'}
         buttonTexts={['Cancel', 'Continue']}
         title='Cancel Budget'
@@ -185,7 +178,7 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
         negative={() => setAction(null)}
       />
 
-      <PendingBudgetCard {...data} {...{ getColor }} />
+      <PendingBudgetCard isDetails {...data} {...{ getColor }} />
 
       {user?.role === 'owner' ? (
         <ApproveBudgetForm

@@ -34,7 +34,7 @@ export const UserIconLg = () => {
         width='66.6042'
         height='66.6042'
         rx='33.3021'
-        fill='#E5E7EA'
+        fill='currentColor'
       />
       <rect
         x='1.69792'

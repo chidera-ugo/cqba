@@ -64,9 +64,7 @@ export const BudgetsOverview = () => {
         </div>
       </div>
 
-      <div
-        className={'hidden-scrollbar block h-[420px] overflow-y-auto py-3 px-6'}
-      >
+      <div className={'block h-[420px] overflow-y-auto py-3 px-6'}>
         <AppErrorBoundary>
           <PendingAndActiveBudgetsOverview status={currentTab?.value} />
         </AppErrorBoundary>

@@ -63,7 +63,7 @@ export const PermissionGroupCard = ({
                 {handleSort({
                   data: data.slice(0, 5),
                   sortBy: 'email',
-                })?.map(({ email, firstName, lastName }, i) => {
+                })?.map(({ email, firstName, lastName, avatar }, i) => {
                   return (
                     <div
                       key={email}
@@ -79,6 +79,7 @@ export const PermissionGroupCard = ({
                       <Avatar
                         className={clsx('my-auto ring-2 ring-white')}
                         size={detailed ? 32 : 40}
+                        avatar={avatar}
                         key={email}
                         char={email.charAt(0)}
                         getBackgroundColor={getColor}

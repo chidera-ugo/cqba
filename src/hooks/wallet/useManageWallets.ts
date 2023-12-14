@@ -5,11 +5,10 @@ export const useManageWallets = () => {
 
   return {
     primaryWallet: data
-      ?.map(({ balance, availableBalance, ...data }) => {
+      ?.map(({ balance, ...data }) => {
         return {
           ...data,
           balance: balance / 100,
-          availableBalance: availableBalance / 100,
         };
       })
       .find(({ primary }) => primary) as IWallet,

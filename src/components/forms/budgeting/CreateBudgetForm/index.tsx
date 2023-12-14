@@ -1,9 +1,9 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { Formik } from 'formik';
 import { useCreatePersonalBudget } from 'hooks/api/budgeting/useCreatePersonalBudget';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
+import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
 import { FormRecoveryProps } from 'types/forms/form_recovery';
-import { sanitizeAmount } from 'utils/formatters/formatAmount';
+import { formatAmount, sanitizeAmount } from 'utils/formatters/formatAmount';
 import { Form } from './Form';
 import { validationSchema } from './validationSchema';
 import { initialValues } from './initialValues';
@@ -19,23 +19,26 @@ interface Props {
   currency: string;
   isOwner?: boolean;
   budget?: IBudget;
+  isProjectCreationFlow?: boolean;
+  unallocatedFunds?: number;
 }
 
 export const CreateBudgetForm = ({
   onSuccess,
   onSubmit,
+  isProjectCreationFlow,
+  unallocatedFunds,
   formRecoveryValues,
   currency,
   isOwner,
   budget,
 }: Props) => {
-  const queryClient = useQueryClient();
+  const { invalidate } = useQueryInvalidator();
 
   const { mutate: createPersonalBudget, isLoading: creatingPersonalBudget } =
     useCreatePersonalBudget({
       onSuccess(res) {
-        queryClient.invalidateQueries(['budgets']);
-        queryClient.invalidateQueries(['wallets']);
+        invalidate('budgets', 'balances');
 
         if (!onSuccess) return;
 
@@ -46,7 +49,7 @@ export const CreateBudgetForm = ({
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={validationSchema}
+      validationSchema={validationSchema(isOwner, unallocatedFunds)}
       onSubmit={(values) => {
         if (onSubmit) return onSubmit(values);
 
@@ -82,16 +85,32 @@ export const CreateBudgetForm = ({
     >
       {(formikProps) => {
         return (
-          <Form
-            recoveryValues={formRecoveryValues}
-            {...{
-              budget,
-              isOwner,
-              currency,
-              formikProps,
-              processing: creatingPersonalBudget,
-            }}
-          />
+          <>
+            {unallocatedFunds !== undefined && (
+              <div className='card mt-5 rounded-xl p-4'>
+                <div className={'text-xs text-neutral-500'}>
+                  Unallocated Funds
+                </div>
+                <div className='mt-2 block text-xl font-semibold'>
+                  {`${currency} ${formatAmount({
+                    value: unallocatedFunds / 100,
+                  })}`}
+                </div>
+              </div>
+            )}
+
+            <Form
+              recoveryValues={formRecoveryValues}
+              {...{
+                isProjectCreationFlow,
+                budget,
+                isOwner,
+                currency,
+                formikProps,
+                processing: creatingPersonalBudget,
+              }}
+            />
+          </>
         );
       }}
     </Formik>

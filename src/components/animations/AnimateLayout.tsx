@@ -18,13 +18,13 @@ export const AnimateLayout = ({
         exit='exit'
         variants={{
           enter: {
-            x: '100%',
+            x: '110%',
           },
           center: {
             x: 0,
           },
           exit: {
-            x: '-100%',
+            x: '-110%',
           },
         }}
         transition={{

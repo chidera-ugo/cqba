@@ -12,7 +12,8 @@ export const validationSchema = object({
         ctx.parent.beneficiaries
       )?.filter((val) => !!val)?.length;
 
-      if (!ctx.parent.rules || numberOfBeneficiariesSelected === 1) return true;
+      if (!ctx.parent.splittingRules || numberOfBeneficiariesSelected === 1)
+        return true;
 
       return (
         Object.values(val)?.filter((val) => {
@@ -25,7 +26,7 @@ export const validationSchema = object({
       );
     })
     .test('required', 'Total is more than budget', (val, ctx) => {
-      if (!ctx.parent.rules) return true;
+      if (!ctx.parent.splittingRules) return true;
 
       const budgetAmount = Number(
         sanitizeAmount({
@@ -36,7 +37,7 @@ export const validationSchema = object({
 
       const allocations = Object.values(val);
 
-      const sumOfSplitting = !!allocations.length
+      const sumOfAllocations = !!allocations.length
         ? allocations
             ?.map((val) =>
               Number(
@@ -46,7 +47,7 @@ export const validationSchema = object({
             .reduce((a, b) => a + b)
         : 0;
 
-      const isInvalid = sumOfSplitting > budgetAmount;
+      const isInvalid = sumOfAllocations > budgetAmount;
 
       return !isInvalid;
     }),

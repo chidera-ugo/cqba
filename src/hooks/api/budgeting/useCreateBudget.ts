@@ -11,7 +11,7 @@ export interface CreateBudgetDto {
   amount: number;
   threshold: number;
   expiry: Date | null;
-  currency: string;
+  currency?: string;
   priority?: BudgetPriorities;
 }
 

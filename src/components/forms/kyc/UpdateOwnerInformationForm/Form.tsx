@@ -1,7 +1,6 @@
 import { AddressInputGroup } from 'components/form-elements/AddressInputGroup';
 import { Input } from 'components/form-elements/Input';
 import { ImageViewer } from 'components/modals/ImageViewer';
-import { OwnerType } from 'components/modules/kyc/ManageBusinessOwnersAndDirectors';
 import { roles } from 'constants/kyc/roles';
 import { useAppContext } from 'context/AppContext';
 import { Form as FormikForm, FormikProps } from 'formik';
@@ -22,16 +21,10 @@ import dayjs from 'dayjs';
 interface Props {
   formikProps: FormikProps<typeof initialValues>;
   processing: boolean;
-  type: OwnerType;
   currentOwner: IOwner | null;
 }
 
-export const Form = ({
-  processing,
-  formikProps,
-  currentOwner,
-  type,
-}: Props) => {
+export const Form = ({ processing, formikProps, currentOwner }: Props) => {
   const {
     handleSubmit,
     setValues,
@@ -135,9 +128,9 @@ export const Form = ({
         shouldValidate
       />
 
-      <Input label='Email' name='email' />
+      <Input label='Email (Optional)' name='email' />
 
-      {type === 'owner' ? (
+      <div className='gap-4 880:flex'>
         <Input
           label='Percentage Owned (5% - 100%)'
           placeholder={'Enter percentage'}
@@ -145,16 +138,20 @@ export const Form = ({
           inputMode={'tel'}
           type={'number'}
         />
-      ) : (
+
         <Select
           label='Title'
           placeholder={'Select title'}
           name='title'
           options={roles}
         />
-      )}
+      </div>
 
-      <AddressInputGroup country={values.country} state={values.state} />
+      <AddressInputGroup
+        setFieldValue={setFieldValue}
+        country={values.country}
+        state={values.state}
+      />
 
       <div className='gap-4 880:flex'>
         <Select

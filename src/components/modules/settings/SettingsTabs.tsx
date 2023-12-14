@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { ChevronRight } from 'components/svgs/navigation/Chevrons';
 import { useHorizontalScrollIntoView } from 'hooks/commons/useHorizontalScrollIntoView';
-import { useUserRole } from 'hooks/rbac/useUserRole';
+import { useUserRole } from 'hooks/access_control/useUserRole';
 import { useSettingsTabs } from 'hooks/settings/useSettingsTabs';
 import { useRouter } from 'next/router';
 import { Fragment } from 'react';

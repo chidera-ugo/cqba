@@ -8,6 +8,7 @@ import { ManageEmployee } from 'components/modules/employees/ManageEmployee';
 import { EmployeeDetails } from 'components/modules/employees/EmployeeDetails';
 import { SimplePlus } from 'components/svgs/others/Plus';
 import { AllEmployeesTable } from 'components/tables/employees/AllEmployeesTable';
+import { EmployeeAction } from 'components/tables/employees/AllEmployeesTable/useColumns';
 import { employeesFilterOptions } from 'constants/employees/filters';
 import { IEmployee } from 'hooks/api/employees/useGetAllEmployees';
 import { useUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
@@ -26,6 +27,14 @@ export default function Employees() {
   const [debouncedSearch] = useDebouncer({
     value: search,
   });
+  const [action, setAction] = useState<EmployeeAction>(null);
+  const [showActionConfirmation, setShowActionConfirmation] = useState(false);
+  const [employeeToPerformActionOn, setEmployeeToPerformActionOn] =
+    useState<IEmployee | null>(null);
+  const [
+    shouldRestoreEmployeeDetailsModal,
+    setShouldRestoreEmployeeDetailsModal,
+  ] = useState(false);
 
   const { filters, setFilters, pagination, setPagination } = useUrlManagedState(
     employeesFiltersSchema
@@ -34,11 +43,12 @@ export default function Employees() {
   const { isVerified } = useIsVerified();
 
   const { currentEmployee, setCurrentEmployee, setModal, ...rest } =
-    useManageEmployee();
+    useManageEmployee(restoreEmployeeDetailsModal);
 
   function close() {
     setModal(null);
     setCurrentEmployee(null);
+    setEmployeeToPerformActionOn(null);
     setFilters((prev) => ({ ...prev, employeeId: '' }));
   }
 
@@ -49,14 +59,28 @@ export default function Employees() {
         employeeId: employee._id,
       }));
     } else {
-      setModal('edit_employee');
+      setModal(action);
     }
 
     setCurrentEmployee(employee);
+    setShouldRestoreEmployeeDetailsModal(false);
+  }
+
+  function hideEmployeeDetailsModal() {
+    setFilters(({ employeeId: _, ...prev }) => ({
+      ...prev!,
+    }));
+  }
+
+  function restoreEmployeeDetailsModal() {
+    if (!shouldRestoreEmployeeDetailsModal) return;
+
+    setFilters((prev) => ({ ...prev, employeeId: currentEmployee?._id }));
+    setShouldRestoreEmployeeDetailsModal(false);
   }
 
   return (
-    <AppLayout title='Employees' childrenClassName={'mb-7'}>
+    <AppLayout title='People' childrenClassName={'mb-7'}>
       <div className='sticky top-14 left-0 z-[800] flex h-14 justify-between gap-2 border-b border-neutral-310 bg-white bg-opacity-80 px-3 backdrop-blur-md 640:h-20 640:border-b-0 640:px-8 1024:top-20'>
         <div className='x-between my-auto mb-0 h-10 w-full gap-5 640:mb-auto'>
           <WideTabs
@@ -99,14 +123,11 @@ export default function Employees() {
           <button
             onClick={() => {
               if (!isVerified) return;
-
               setModal('add_employee');
             }}
             className='primary-button x-center h-6 w-6 px-2 text-sm 640:h-10 640:w-full 640:px-4'
           >
-            <span className={'my-auto mr-2 hidden 640:block'}>
-              Add Employee
-            </span>
+            <span className={'my-auto mr-2 hidden 640:block'}>Invite User</span>
             <span className={'my-auto'}>
               <SimplePlus />
             </span>
@@ -136,16 +157,24 @@ export default function Employees() {
       <RightModalWrapper
         show={!!filters.employeeId}
         closeModal={close}
-        title={'Employee Details'}
+        title={'User Info'}
         closeOnClickOutside
       >
         <AppErrorBoundary>
           <EmployeeDetails
+            handleAction={(action, employee) => {
+              setAction(action);
+              setShowActionConfirmation(true);
+              setEmployeeToPerformActionOn(employee);
+              setShouldRestoreEmployeeDetailsModal(true);
+              hideEmployeeDetailsModal();
+            }}
             changeRole={(employee) => {
               setCurrentEmployee(employee); // There's no current employee at this point which the manage employee needs to show the form
+              setShouldRestoreEmployeeDetailsModal(false);
+              hideEmployeeDetailsModal();
               setModal('edit_employee');
             }}
-            currentEmployee={currentEmployee}
             close={close}
             id={filters?.employeeId}
           />
@@ -155,12 +184,19 @@ export default function Employees() {
       <div className={'px-3 640:px-8'}>
         <AllEmployeesTable
           {...{
+            action,
+            setAction,
+            setShowActionConfirmation,
+            showActionConfirmation,
+            employeeToPerformActionOn,
+            setEmployeeToPerformActionOn,
             pagination,
             setPagination,
             search: debouncedSearch,
-            currentEmployee,
             onRowClick,
+            setCurrentEmployee,
           }}
+          onClose={restoreEmployeeDetailsModal}
           status={filters?.status?.value}
         />
       </div>

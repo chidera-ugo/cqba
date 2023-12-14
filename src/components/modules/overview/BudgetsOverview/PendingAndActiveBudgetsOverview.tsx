@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useGetAllBudgetsUnpaginated } from 'hooks/api/budgeting/useGetAllBudgets';
 import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export const PendingAndActiveBudgetsOverview = ({
   status,
@@ -21,6 +21,14 @@ export const PendingAndActiveBudgetsOverview = ({
   const { isVerified } = useIsVerified();
   const { isLoading, isError, data } = useGetAllBudgetsUnpaginated(status);
   const { getColor } = useGetColorByChar();
+
+  useEffect(() => {
+    const id = data?.docs[0]?._id;
+
+    if (!data?.docs?.length || !id) return;
+
+    setExpandedBudget(id);
+  }, [data]);
 
   if (isVerified && isLoading) return <IsLoading />;
 
@@ -64,6 +72,7 @@ export const PendingAndActiveBudgetsOverview = ({
                   <Avatar
                     getBackgroundColor={getColor}
                     size={32}
+                    avatar={beneficiaries[0]?.avatar}
                     char={beneficiaries[0]?.email?.charAt(0)}
                     className={'my-auto'}
                   />

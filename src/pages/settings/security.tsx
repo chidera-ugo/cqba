@@ -41,7 +41,7 @@ export default function Security() {
       button: (
         <button
           onClick={() => replace({ pathname, query: { _m: 'pin' } })}
-          className='dark-button h-10 px-3 text-sm'
+          className='primary-button h-10 px-3 text-sm'
         >
           Change Pin
         </button>
@@ -81,8 +81,8 @@ export default function Security() {
             key={title}
           >
             <div className={'w-full'}>
-              <h6 className={'text-[20px]'}>{title}</h6>
-              <p className='mt-1 max-w-[500px] leading-6 text-neutral-500'>
+              <h6 className={'text-lg'}>{title}</h6>
+              <p className='mt-1 max-w-[500px] text-sm leading-5 text-neutral-500'>
                 {description}
               </p>
             </div>

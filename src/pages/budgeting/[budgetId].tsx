@@ -14,7 +14,7 @@ import { useState } from 'react';
 import { walletFiltersSchema } from 'zod_schemas/wallet_schema';
 
 export default function BudgetDetails() {
-  const { query } = useRouter();
+  const { query, back } = useRouter();
 
   const _q = query['budgetId'];
   const budgetId = typeof _q === 'string' ? _q : '';
@@ -38,10 +38,10 @@ export default function BudgetDetails() {
       breadCrumbs={[
         {
           title: 'Budgeting',
-          url: '/budgeting',
+          action: back,
         },
         {
-          title: 'Track Expense',
+          title: 'Track Budget',
         },
       ]}
       breadCrumbsSlot={
@@ -66,7 +66,7 @@ export default function BudgetDetails() {
                 range,
                 setRange,
               }}
-              buttonClassname={'h-10'}
+              buttonClassname={'h-10 w-[90px]'}
               selectFilters={[
                 {
                   id: 'transactionType',

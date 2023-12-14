@@ -24,8 +24,11 @@ export const ComparePlansTable = ({
   titleClassname,
 }: Props) => {
   const { isLoading, isError, data: _data } = useGetAllSubscriptionPlans();
-  const { data: activePlan, isLoading: gettingActivePlan } =
-    useGetActiveSubscription();
+  const {
+    data: activePlan,
+    isLoading: gettingActivePlan,
+    isRefetching: refetching,
+  } = useGetActiveSubscription();
 
   if (isLoading) return <IsLoading />;
   if (isError) return <IsError className={'py-16'} />;
@@ -151,7 +154,7 @@ export const ComparePlansTable = ({
                       className='table_border bg-white px-5 text-center font-semibold text-neutral-800'
                     >
                       <SubmitButton
-                        submitting={gettingActivePlan}
+                        submitting={gettingActivePlan || refetching}
                         type={'button'}
                         onClick={() =>
                           isActive ? null : choosePlan(getPlanCode(i + 1))
