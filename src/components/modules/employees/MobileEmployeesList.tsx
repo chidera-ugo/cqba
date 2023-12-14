@@ -69,7 +69,7 @@ export const MobileEmployeesList = ({
           </div>
 
           {data?.docs?.map((employee, i) => {
-            const { firstName, lastName, email, _id } = employee;
+            const { firstName, lastName, email, avatar, _id } = employee;
 
             const char = email?.charAt(0);
 
@@ -85,6 +85,7 @@ export const MobileEmployeesList = ({
               >
                 <div className={'my-auto flex gap-2 text-left'}>
                   <Avatar
+                    avatar={avatar}
                     size={42}
                     getBackgroundColor={() => getColor(char)}
                     {...{ char }}

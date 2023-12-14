@@ -40,8 +40,10 @@ export const ProfileSwitcher = ({
       <div
         id={id}
         className={clsx(
-          'relative min-h-[73px] overflow-hidden rounded-2xl border border-neutral-180',
-          isOwner ? 'bg-neutral-200' : 'bg-neutral-900'
+          'relative min-h-[73px] overflow-hidden rounded-2xl',
+          isOwner
+            ? 'border border-neutral-180 bg-neutral-200'
+            : 'bg-neutral-900'
         )}
       >
         <button

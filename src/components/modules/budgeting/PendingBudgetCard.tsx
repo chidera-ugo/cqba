@@ -81,7 +81,7 @@ export const PendingBudgetCard = ({
             {handleSort({
               data: beneficiaries,
               sortBy: 'email',
-            })?.map(({ email }, i) => {
+            })?.map(({ email, avatar }, i) => {
               return (
                 <div
                   key={email}
@@ -94,6 +94,7 @@ export const PendingBudgetCard = ({
                   <Avatar
                     className={clsx('-ml-2 ring-2 ring-white')}
                     size={27}
+                    avatar={avatar}
                     key={email}
                     char={email.charAt(0)}
                     getBackgroundColor={getColor}

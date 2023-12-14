@@ -59,7 +59,7 @@ export const BudgetOverviewAccordionContent = ({
             {handleSort({
               data: beneficiaries.slice(0, 5),
               sortBy: 'email',
-            })?.map(({ email }, i) => {
+            })?.map(({ email, avatar }, i) => {
               return (
                 <div
                   key={email}
@@ -70,6 +70,7 @@ export const BudgetOverviewAccordionContent = ({
                   }}
                 >
                   <Avatar
+                    avatar={avatar}
                     getBackgroundColor={() => getColor(email?.charAt(0))}
                     className={clsx('my-auto ring-2 ring-white')}
                     size={28}

@@ -240,7 +240,7 @@ export const ActiveBudgetCard = ({
                         data: beneficiaries,
                         sortBy: 'email',
                         direction: showActions ? 'desc' : 'asc',
-                      })?.map(({ email }, i) => {
+                      })?.map(({ email, avatar }, i) => {
                         return (
                           <div
                             key={email}
@@ -254,6 +254,7 @@ export const ActiveBudgetCard = ({
                             }}
                           >
                             <Avatar
+                              avatar={avatar}
                               className={clsx('-ml-2 ring-2 ring-white')}
                               size={
                                 showActions

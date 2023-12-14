@@ -19,6 +19,7 @@ export interface IBudget {
   paused: boolean;
   beneficiaries: {
     email: string;
+    avatar?: string;
   }[];
   approvedDate?: string;
   approvedBy?: {

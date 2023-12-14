@@ -12,6 +12,7 @@ import { Grid, List } from 'components/svgs/GridAndList';
 import { SimplePlus } from 'components/svgs/others/Plus';
 import { budgetingFilterOptions } from 'constants/budgeting/filters';
 import { useUserPlan } from 'hooks/access_control/useUserPlan';
+import { useUserRole } from 'hooks/access_control/useUserRole';
 import { useUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
 import { useDebouncer } from 'hooks/commons/useDebouncer';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
@@ -39,11 +40,17 @@ export default function Budgeting() {
 
   const { isVerified } = useIsVerified();
   const { isPremiumUser } = useUserPlan();
+  const { isOwner } = useUserRole();
 
-  const tabs = budgetingFilterOptions.filter(({ isForPremium }) => {
-    if (!isForPremium) return true;
-    return isPremiumUser;
-  });
+  const tabs = budgetingFilterOptions
+    .filter(({ isForPremium }) => {
+      if (!isForPremium) return true;
+      return isPremiumUser;
+    })
+    .filter(({ isForOwner }) => {
+      if (!isForOwner) return true;
+      return isOwner;
+    });
 
   const { filters, setFilters, pagination, setPagination } = useUrlManagedState(
     budgetingFiltersSchema(tabs[0]!),
@@ -62,7 +69,7 @@ export default function Budgeting() {
           isPremiumUser ? 'border-b' : ''
         )}
       >
-        {isPremiumUser && (
+        {isPremiumUser && isOwner && (
           <div className='x-between my-auto mb-0 w-full gap-5 640:mb-auto'>
             <WideTabs
               className={clsx('block h-12 w-fit 640:h-14')}

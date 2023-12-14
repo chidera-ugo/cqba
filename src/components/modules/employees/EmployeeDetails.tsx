@@ -40,7 +40,8 @@ export const EmployeeDetails = ({
   if (isError)
     return <IsError description={'Failed to get employee details'} />;
 
-  const { firstName, lastName, status, email, role, phone, createdAt } = data;
+  const { firstName, lastName, status, avatar, email, role, phone, createdAt } =
+    data;
 
   const payload = [
     { title: 'Phone Number', value: phone },
@@ -55,7 +56,7 @@ export const EmployeeDetails = ({
       <div className={'rounded-xl border border-neutral-310 p-5'}>
         <div className='flex gap-2 border-b border-neutral-310 pb-4'>
           <div className='y-center'>
-            <Avatar size={42} />
+            <Avatar avatar={avatar} size={42} />
           </div>
 
           <div className={'my-auto'}>

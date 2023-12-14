@@ -5,6 +5,7 @@ import { PaginatedResponse } from 'types/Table';
 import { generateUrlParamsFromObject } from 'utils/generators/generateUrlParamsFromObject';
 
 export interface IEmployee {
+  avatar?: string;
   lastName: string;
   emailVerifyCode: string;
   status: EmployeeStatus;

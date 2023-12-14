@@ -77,8 +77,8 @@ export const useColumns = () => {
         header: 'Beneficiaries',
         accessorKey: 'beneficiaries',
         enableColumnFilter: false,
-        cell: ({ getValue, row }) => {
-          const { paused } = row.original;
+        cell: ({ row }) => {
+          const { paused, beneficiaries } = row.original;
 
           if (paused)
             return (
@@ -87,8 +87,6 @@ export const useColumns = () => {
               </div>
             );
 
-          const beneficiaries = getValue() as { email: string }[];
-
           return (
             <>
               <div className={clsx('relative flex')}>
@@ -96,13 +94,14 @@ export const useColumns = () => {
                   data: beneficiaries.slice(0, 5),
                   sortBy: 'email',
                   direction: 'desc',
-                })?.map(({ email }, i) => {
+                })?.map(({ email, avatar }, i) => {
                   return (
                     <div
                       key={email}
                       className={clsx('block', i > 0 && '-ml-1')}
                     >
                       <Avatar
+                        avatar={avatar}
                         className={clsx('ring-2 ring-white')}
                         size={27}
                         key={email}
