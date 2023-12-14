@@ -32,17 +32,20 @@ export const ProfileSwitcher = ({
   return (
     <div
       className={clsx(
-        'sticky top-0 left-0 z-[100] p-4 pb-0 640:p-4',
+        'sticky top-0 left-0 z-[100] mb-10 h-[73px] p-4 pb-0 640:p-4',
         className,
         isOwner ? 'bg-neutral-100' : 'bg-neutral-1000'
       )}
     >
-      <div id={id} className='relative'>
+      <div
+        id={id}
+        className={clsx(
+          'relative min-h-[73px] overflow-hidden rounded-2xl border border-neutral-180',
+          isOwner ? 'bg-neutral-200' : 'bg-neutral-900'
+        )}
+      >
         <button
-          className={clsx(
-            'x-between relative z-[25] h-[73px] w-full rounded-2xl border border-neutral-180 p-4',
-            isOwner ? 'bg-neutral-200' : 'bg-neutral-900'
-          )}
+          className={clsx('x-between relative z-[25] w-full p-4 pb-0')}
           onClick={() => setShowDropdown((prev) => !prev)}
         >
           <div className='flex gap-2.5'>
@@ -80,27 +83,34 @@ export const ProfileSwitcher = ({
 
         <Dropdown
           show={showDropdown}
-          className={clsx(
-            'rounded-xl border-none p-4',
-            isOwner ? 'bg-white' : 'bg-neutral-900'
-          )}
+          asAccordion={!mobile}
           dismiss={() => setShowDropdown(false)}
           anchorPosition={top ? 'top' : 'bottom'}
           wrapperId={id}
         >
-          <button onClick={() => destroySession()} className='flex w-full'>
-            <span className='my-auto mr-2'>
-              <Exit />
-            </span>
-            <span
-              className={clsx(
-                'my-auto text-sm font-semibold',
-                isOwner ? 'text-neutral-1000' : 'text-white'
-              )}
+          <div
+            className={clsx(
+              isOwner ? 'bg-neutral-200' : 'bg-neutral-900',
+              'mt-2'
+            )}
+          >
+            <button
+              onClick={() => destroySession()}
+              className='flex h-14 w-full px-4'
             >
-              Logout
-            </span>
-          </button>
+              <span className='my-auto mr-2'>
+                <Exit />
+              </span>
+              <span
+                className={clsx(
+                  'my-auto text-sm font-semibold',
+                  isOwner ? 'text-neutral-1000' : 'text-white'
+                )}
+              >
+                Logout
+              </span>
+            </button>
+          </div>
         </Dropdown>
       </div>
     </div>

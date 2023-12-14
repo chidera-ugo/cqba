@@ -28,10 +28,9 @@ export const ManageEmployee = ({
         currentEmployee
           ? isActive
             ? 'Change Role'
-            : 'Update Employee'
-          : 'Add Employee'
+            : 'Update User'
+          : 'Invite User'
       }
-      hideBackdrop={isActive}
       closeModal={closeModal}
       closeOnClickOutside
       childrenClassname='py-0 640:px-8 px-4'

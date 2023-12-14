@@ -9,7 +9,6 @@ import { ChevronRight } from 'components/svgs/navigation/Chevrons';
 import { UserRole } from 'enums/employee_enum';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useNavigationItems } from 'hooks/dashboard/useNavigationItems';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import NotFound from 'pages/404';
 import { PropsWithChildren, ReactNode } from 'react';
@@ -24,7 +23,7 @@ export interface Props {
   back?: string;
   hideSideNavigation?: boolean;
   childrenClassName?: string;
-  breadCrumbs?: { title: string; url?: string }[];
+  breadCrumbs?: { title: string; action?: () => void; url?: string }[];
   breadCrumbsSlot?: ReactNode;
   enabledFor?: UserRole;
   headerClassname?: string;
@@ -42,6 +41,8 @@ export const AppLayout = ({
   breadCrumbsSlot,
   ...props
 }: PropsWithChildren<Props>) => {
+  const { push } = useRouter();
+
   const { userExists } = useProtectedRoutesGuard();
 
   const { screenSize, user, hasChoosenPlan } = useAppContext().state;
@@ -111,12 +112,14 @@ export const AppLayout = ({
             {breadCrumbs && !shouldSelectFirstPlan && (
               <div className='app-container x-between nav_bar sticky left-0 top-14 z-[1000] -ml-2 overflow-x-auto 640:h-16 1024:top-20'>
                 <div className='flex gap-1'>
-                  {breadCrumbs?.map(({ url, title }, i) => {
+                  {breadCrumbs?.map(({ url, action, title }, i) => {
                     return (
                       <div key={title} className={'flex gap-1'}>
-                        {url ? (
-                          <Link
-                            href={url}
+                        {url || action ? (
+                          <button
+                            onClick={
+                              action ? action : () => (url ? push(url) : null)
+                            }
                             className={clsx(
                               'my-auto gap-3 px-2 py-2.5 text-center text-sm font-medium transition-colors',
                               i === breadCrumbs.length - 1
@@ -125,7 +128,7 @@ export const AppLayout = ({
                             )}
                           >
                             {title}
-                          </Link>
+                          </button>
                         ) : (
                           <div
                             className={clsx(

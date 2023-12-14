@@ -185,7 +185,7 @@ export const ManageProjectCreation = ({ show, budget, onFinish }: Props) => {
         }}
         successTitle={'Project Created Successfully'}
         successMessage={
-          'You have successfully created a salary budget, you can now spend from this wallet.'
+          'You have successfully created a project budget, you can now spend from this budget'
         }
         actionMessage={'Approve'}
         submit={(pin, errorCb) => createProject(pin, errorCb)}
@@ -294,11 +294,11 @@ export const ManageProjectCreation = ({ show, budget, onFinish }: Props) => {
                     Add Sub Budget
                   </h5>
 
-                  {hasSubBudgets && (
+                  {hasSubBudgets ? (
                     <span className={'my-auto'}>
                       <MiniPlus />
                     </span>
-                  )}
+                  ) : null}
 
                   {!hasSubBudgets && (
                     <p

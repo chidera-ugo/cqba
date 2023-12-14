@@ -9,6 +9,9 @@ export function useGetEmployeeById(id?: string) {
     options: {
       enabled: !!id,
       staleTime: Infinity,
+      meta: {
+        silent: true,
+      },
     },
   });
 }

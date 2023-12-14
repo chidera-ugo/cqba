@@ -1,10 +1,10 @@
 import { NoData } from 'components/core/Table/NoData';
 import { Confirmation } from 'components/modals/Confirmation';
 import { MobileEmployeesList } from 'components/modules/employees/MobileEmployeesList';
-import { EmployeeAction } from 'components/tables/employees/AllEmployeesTable/EmployeeActions';
 import { useAppContext } from 'context/AppContext';
 import { useBlockEmployee } from 'hooks/api/employees/useBlockEmployee';
 import { useDeleteEmployee } from 'hooks/api/employees/useDeleteEmployee';
+import { useDeleteInvite } from 'hooks/api/employees/useDeleteInvite';
 import {
   EmployeeStatus,
   IEmployee,
@@ -16,30 +16,43 @@ import { TPagination } from 'hooks/client_api/hooks/useUrlManagedState';
 import { EmployeeModalType } from 'hooks/employees/useManageEmployee';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { ColumnFiltersState, SortingState } from '@tanstack/react-table';
-import { PaginatedResponse } from 'types/Table';
-import { useColumns } from './useColumns';
+import { EmployeeAction, useColumns } from './useColumns';
 import { Table } from 'components/core/Table';
 import clock from '/public/mockups/clock.jpg';
 
 interface Props {
   reset?: () => void;
-  search?: string;
   filters?: Record<string, any>;
   setFilters?: Dispatch<SetStateAction<Record<string, string>>>;
   slot?: JSX.Element;
-  currentEmployee: IEmployee | null;
   onRowClick: (employee: IEmployee, action: EmployeeModalType) => void;
   status?: EmployeeStatus;
+  setEmployeeToPerformActionOn: Dispatch<SetStateAction<IEmployee | null>>;
+  employeeToPerformActionOn: IEmployee | null;
+  setShowActionConfirmation: Dispatch<SetStateAction<boolean>>;
+  showActionConfirmation: boolean;
+  setAction: Dispatch<SetStateAction<EmployeeAction>>;
+  action: EmployeeAction;
+  setCurrentEmployee: Dispatch<SetStateAction<IEmployee | null>>;
+  onClose: () => void;
 }
 
 export const AllEmployeesTable = ({
   slot,
+  action,
+  setAction,
   reset,
   filters,
   setFilters,
+  showActionConfirmation,
+  setCurrentEmployee,
+  setShowActionConfirmation,
   status = 'active',
   onRowClick,
   pagination,
+  onClose,
+  employeeToPerformActionOn,
+  setEmployeeToPerformActionOn,
   setPagination,
 }: Props & TPagination) => {
   const { invalidate } = useQueryInvalidator();
@@ -48,12 +61,7 @@ export const AllEmployeesTable = ({
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [action, setAction] = useState<EmployeeAction>(null);
   const [currentSearchColumn, setCurrentSearchColumn] = useState('');
-  const [showConfirmation, setShowConfirmation] = useState(false);
-
-  const [employeeToPerformActionOn, setEmployeeToPerformActionOn] =
-    useState<IEmployee | null>(null);
 
   const { columns } = useColumns({
     handleActionClick(employee, action) {
@@ -61,7 +69,7 @@ export const AllEmployeesTable = ({
         onRowClick(employee, 'edit_employee');
       } else {
         setAction(action);
-        setShowConfirmation(true);
+        setShowActionConfirmation(true);
         setEmployeeToPerformActionOn(employee);
       }
     },
@@ -79,15 +87,23 @@ export const AllEmployeesTable = ({
 
   const { mutate: deleteEmployee, isLoading: deletingEmployee } =
     useDeleteEmployee(employeeToPerformActionOn?._id, {
-      onSuccess,
+      onSuccess() {
+        onSuccess();
+        setCurrentEmployee(null);
+      },
     });
 
-  const {
-    isLoading,
-    isError,
-    data: res,
-    isRefetching,
-  } = useGetAllEmployees({
+  const { isLoading: deletingInvite, mutate: deleteInvite } = useDeleteInvite(
+    employeeToPerformActionOn?._id,
+    {
+      onSuccess() {
+        onSuccess();
+        setCurrentEmployee(null);
+      },
+    }
+  );
+
+  const { isLoading, isError, data, isRefetching } = useGetAllEmployees({
     status,
     page: pagination.pageIndex + 1,
     size: pagination.pageSize,
@@ -97,17 +113,9 @@ export const AllEmployeesTable = ({
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
   }, [filters, columnFilters]);
 
-  useEffect(() => {
-    if (!!res) setData(res);
-  }, [res]);
-
-  const [data, setData] = useState<PaginatedResponse<IEmployee> | undefined>(
-    res
-  );
-
   function onSuccess() {
     invalidate('team');
-    setShowConfirmation(false);
+    setShowActionConfirmation(false);
   }
 
   if (data && !data?.docs?.length)
@@ -124,28 +132,44 @@ export const AllEmployeesTable = ({
       />
     );
 
+  const isActive = employeeToPerformActionOn?.status === 'active';
+
+  const identifier = employeeToPerformActionOn?.firstName
+    ? `${employeeToPerformActionOn?.firstName} ${employeeToPerformActionOn?.lastName}`
+    : employeeToPerformActionOn?.email;
+
   return (
     <>
       <Confirmation
         type={'right'}
-        show={showConfirmation && !!employeeToPerformActionOn && !!action}
-        title={'Remove team member'}
-        subTitle={`This means ${employeeToPerformActionOn?.firstName} ${employeeToPerformActionOn?.lastName} will no longer be able to access your dashboard`}
+        show={showActionConfirmation && !!employeeToPerformActionOn && !!action}
+        title={isActive ? 'Remove User' : 'Delete Invite'}
+        subTitle={`This means ${identifier} will no longer be able to ${
+          isActive ? 'access your dashboard' : 'join your organization'
+        }`}
         positive={() => {
           const id = employeeToPerformActionOn?._id;
 
-          if (action === 'unblock') {
+          if (action === 'delete_invite') {
+            deleteInvite(null);
+          } else if (action === 'unblock') {
             unblockEmployee(id);
           } else if (action === 'block') {
             blockEmployee(id);
-          } else if (action === 'delete') {
+          } else if (action === 'remove_user') {
             deleteEmployee(id);
           }
         }}
-        buttonTexts={['Remove User']}
-        processing={deletingEmployee || blockingEmployee || unblockingEmployee}
+        buttonTexts={[isActive ? 'Remove User' : 'Delete Invite']}
+        processing={
+          deletingInvite ||
+          deletingEmployee ||
+          blockingEmployee ||
+          unblockingEmployee
+        }
         negative={() => {
-          setShowConfirmation(false);
+          setShowActionConfirmation(false);
+          onClose();
         }}
       />
 
@@ -164,7 +188,7 @@ export const AllEmployeesTable = ({
       ) : (
         <Table<IEmployee>
           className={'mt-20 640:mt-4'}
-          title='employees'
+          title='users'
           headerSlot={slot}
           dontScrollToTopOnPageChange
           onRowClick={(employee) => {
@@ -197,7 +221,7 @@ export const AllEmployeesTable = ({
             setSorting([]);
             reset && reset();
           }}
-          noDataConfig={{ title: 'You have not added any employees yet.' }}
+          noDataConfig={{ title: 'You have not added any users yet.' }}
         />
       )}
     </>

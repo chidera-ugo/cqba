@@ -31,6 +31,7 @@ export const useQueryInvalidator = () => {
         defaultInvalidator(['current_subscription_plan']);
         return;
       case 'team':
+        defaultInvalidator(['employee']);
         defaultInvalidator(['employees']);
         defaultInvalidator(['permission_group_users']);
         return;

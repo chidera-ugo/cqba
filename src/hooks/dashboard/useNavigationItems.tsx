@@ -72,7 +72,8 @@ export const useNavigationItems = (role?: UserRole) => {
     Others: [
       {
         icon: <Users />,
-        title: 'Employees',
+        id: 'employees',
+        title: 'People',
       },
       {
         icon: <Code />,

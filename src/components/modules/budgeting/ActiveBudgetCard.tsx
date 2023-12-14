@@ -228,7 +228,7 @@ export const ActiveBudgetCard = ({
                 </div>
               </div>
 
-              {paused ? (
+              {paused && !showActions ? (
                 <Frozen />
               ) : (
                 <>

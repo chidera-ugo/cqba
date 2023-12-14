@@ -59,9 +59,6 @@ export const Budgets = ({
     setCurrentBudget(null);
   }
 
-  if (data && !data?.docs?.length)
-    return <NoBudgets processing={isLoading || isRefetching} />;
-
   return (
     <>
       <RightModalWrapper
@@ -81,42 +78,48 @@ export const Budgets = ({
         )}
       </RightModalWrapper>
 
-      <AppErrorBoundary>
-        {layout == 'grid' || screenSize?.['mobile'] ? (
-          <BudgetsGrid
-            {...{
-              data,
-              pagination,
-              setPagination,
-              setCurrentBudget,
-              currentTab,
-              isError,
-              isRefetching,
-              isLoading,
-            }}
-          />
-        ) : (
-          <BudgetsTable
-            onRowClick={(budget) => {
-              if (currentTab === 'pending') return setCurrentBudget(budget);
+      {data && !data?.docs?.length ? (
+        <NoBudgets processing={isLoading || isRefetching} />
+      ) : (
+        <AppErrorBoundary>
+          {layout == 'grid' || screenSize?.['mobile'] ? (
+            <BudgetsGrid
+              {...{
+                data,
+                pagination,
+                setPagination,
+                setCurrentBudget,
+                currentTab,
+                isError,
+                isRefetching,
+                isLoading,
+              }}
+            />
+          ) : (
+            <BudgetsTable
+              onRowClick={(budget) => {
+                if (currentTab === 'pending') return setCurrentBudget(budget);
 
-              push(
-                `${!isApprovalsPage ? 'budgeting' : 'approvals'}/${budget?._id}`
-              );
-            }}
-            {...{
-              data,
-              pagination,
-              setPagination,
-              setCurrentBudget,
-              currentTab,
-              isError,
-              isRefetching,
-              isLoading,
-            }}
-          />
-        )}
-      </AppErrorBoundary>
+                push(
+                  `${!isApprovalsPage ? 'budgeting' : 'approvals'}/${
+                    budget?._id
+                  }`
+                );
+              }}
+              {...{
+                data,
+                pagination,
+                setPagination,
+                setCurrentBudget,
+                currentTab,
+                isError,
+                isRefetching,
+                isLoading,
+              }}
+            />
+          )}
+        </AppErrorBoundary>
+      )}
     </>
   );
 };

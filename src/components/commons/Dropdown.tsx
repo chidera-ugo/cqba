@@ -12,6 +12,7 @@ type Props = InputHTMLAttributes<HTMLDivElement> & {
   anchorPosition?: 'top' | 'bottom';
   isTableAction?: boolean;
   disableCloseOnClickOutside?: boolean;
+  asAccordion?: boolean;
 };
 
 export const Dropdown = ({
@@ -24,6 +25,7 @@ export const Dropdown = ({
   className,
   isTableAction,
   style,
+  asAccordion,
   disableCloseOnClickOutside,
 }: PropsWithChildren<Props>) => {
   useDismissDropdown(
@@ -32,6 +34,33 @@ export const Dropdown = ({
     exceptedId,
     disableCloseOnClickOutside
   );
+
+  if (asAccordion)
+    return (
+      <AnimatePresence initial={false}>
+        {show && (
+          <motion.div
+            initial='collapsed'
+            animate='open'
+            exit='collapsed'
+            variants={{
+              open: {
+                height: 'auto',
+              },
+              collapsed: {
+                height: 0,
+                overflow: 'hidden',
+              },
+            }}
+            transition={{
+              duration: 0.3,
+            }}
+          >
+            {children}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    );
 
   return (
     <AnimatePresence>

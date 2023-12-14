@@ -5,7 +5,7 @@ import { Dispatch, PropsWithChildren, SetStateAction, useState } from 'react';
 
 export interface TableActionItem {
   title: string;
-  icon: JSX.Element;
+  icon?: JSX.Element;
   onClick: () => void;
 }
 
@@ -21,6 +21,7 @@ interface Props {
   dropdownClassname?: string;
   marginClassname?: string;
   wrapperClassname?: string;
+  withoutBorders?: boolean;
 }
 
 export const ActionDropdown = ({
@@ -36,6 +37,7 @@ export const ActionDropdown = ({
   dropdownClassname,
   marginClassname,
   wrapperClassname,
+  withoutBorders,
 }: PropsWithChildren<Props>) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -59,7 +61,10 @@ export const ActionDropdown = ({
               setShowDropdown((prev) => !prev);
             }
           }}
-          className='relative my-auto block h-10 w-10 rounded-full border border-neutral-200 text-neutral-500 hover:text-primary-main'
+          className={clsx(
+            'relative my-auto block h-10 w-10 rounded-full text-neutral-500 hover:text-primary-main',
+            !withoutBorders && 'border border-neutral-200'
+          )}
         >
           {icon ?? (
             <span className={'x-center'}>
