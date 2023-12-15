@@ -1,8 +1,7 @@
 export const approvalsFilterOptions: {
   title: string;
-  value: 'approved' | 'pending';
-  isPremium?: boolean;
+  value: string;
 }[] = [
-  { title: 'Approved', value: 'approved' },
+  { title: 'Approved', value: 'active' },
   { title: 'Requests', value: 'pending' },
 ];

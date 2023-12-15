@@ -15,7 +15,7 @@ import {
   useApproveBudget,
 } from 'hooks/api/budgeting/useApproveBudget';
 import { useCancelBudget } from 'hooks/api/budgeting/useCancelBudget';
-import { useCloseBudget } from 'hooks/api/budgeting/useCloseBudget';
+import { useCloseBudgetOrProject } from 'hooks/api/budgeting/useCloseBudgetOrProject';
 import { useGetBudgetById } from 'hooks/api/budgeting/useGetBudgetById';
 import { useHandleError } from 'hooks/api/useHandleError';
 import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
@@ -55,12 +55,16 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
     }
   );
 
-  const { isLoading: declining, mutate: decline } = useCloseBudget(data?._id, {
-    onSuccess() {
-      onSuccess();
-      setMode('success');
-    },
-  });
+  const { isLoading: declining, mutate: decline } = useCloseBudgetOrProject(
+    data?._id,
+    false,
+    {
+      onSuccess() {
+        onSuccess();
+        setMode('success');
+      },
+    }
+  );
 
   const { isLoading: cancelling, mutate: cancel } = useCancelBudget(data?._id, {
     onSuccess() {
@@ -106,10 +110,10 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
       </RightModalWrapper>
 
       <AuthorizeActionWithPin
-        isSuccess={mode === 'success'}
+        hasResponse={mode === 'success'}
         show={!!mode}
         icon={action === 'decline' ? <Cancel /> : undefined}
-        title={
+        modalTitle={
           mode !== 'success'
             ? action === 'decline'
               ? 'Authorize Decline'
@@ -125,15 +129,15 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
           dismiss();
           close();
         }}
-        successTitle={
+        responseTitle={
           action === 'decline' ? 'Budget Declined' : 'Budget Approved'
         }
-        successMessage={
+        responseMessage={
           action === 'approve'
             ? `Congratulations! Your budget has been Approved successfully`
             : ''
         }
-        actionMessage={
+        authorizeButtonText={
           action === 'decline' ? 'Decline Budget' : 'Approve Budget'
         }
         submit={(pin, errorCb) => {

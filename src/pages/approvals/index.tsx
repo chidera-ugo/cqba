@@ -46,6 +46,7 @@ export default function Approvals() {
             layoutId={'budget_status'}
             action={(tab) => {
               setFilters((prev) => ({ ...prev, status: tab }));
+              setPagination((prev) => ({ ...prev, pageIndex: 0 }));
             }}
             currentTab={filters?.status?.value}
             tabs={approvalsFilterOptions}

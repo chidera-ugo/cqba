@@ -6,19 +6,17 @@ import { RejectionReasonForm } from 'components/forms/budgeting/RejectionReasonF
 import { Cancel } from 'components/illustrations/Cancel';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { MakeTransfer } from 'components/modules/wallet/MakeTransfer';
-import { AppToast } from 'components/primary/AppToast';
 import { Freeze, MiniLock } from 'components/svgs/budgeting/Budget_Icons';
 import { budgetingFilterOptions } from 'constants/budgeting/filters';
 import { useAppContext } from 'context/AppContext';
 import { UserRoles } from 'enums/employee_enum';
-import { useCloseBudget } from 'hooks/api/budgeting/useCloseBudget';
-import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
-import { usePauseBudget } from 'hooks/api/budgeting/usePauseBudget';
+import { useCloseBudgetOrProject } from 'hooks/api/budgeting/useCloseBudgetOrProject';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
+import { usePauseBudgetOrProject } from 'hooks/api/budgeting/usePauseBudgetOrProject';
 import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
 import { defaultStringifySearch } from 'hooks/client_api/search_params';
 import { useRouter } from 'next/router';
-import { Fragment, useState } from 'react';
-import { toast } from 'react-toastify';
+import { Fragment, ReactNode, useState } from 'react';
 import { formatAmount } from 'utils/formatters/formatAmount';
 import { formatDate } from 'utils/formatters/formatDate';
 import { handleSort } from 'utils/handlers/handleSort';
@@ -30,14 +28,24 @@ type Props = IBudget & {
   showActions?: boolean;
   showOnlyBreakdown?: boolean;
   isProject?: boolean;
+  onClick?: () => void;
+  actionsSlot?: ReactNode;
 };
 
 export const ActiveBudgetCard = ({
   getColor,
   showActions,
+  isProject,
+  onClick,
   showOnlyBreakdown,
+  actionsSlot,
   ...budget
 }: Props) => {
+  const { query } = useRouter();
+
+  const projectId = query['projectId'];
+  const subBudgetId = query['subBudgetId'];
+
   const { screenSize, user } = useAppContext().state;
 
   const [mode, setMode] = useState<'success' | 'authorize' | null>(null);
@@ -50,26 +58,35 @@ export const ActiveBudgetCard = ({
   const { replace, push } = useRouter();
   const { invalidate, defaultInvalidator } = useQueryInvalidator();
 
-  const backToBudgetingHref = `/budgeting${defaultStringifySearch({
-    status: budgetingFilterOptions[1]!,
+  const backToBudgetingHref = `/budgeting${
+    !!projectId && !!subBudgetId ? `/projects/${projectId}` : ''
+  }${defaultStringifySearch({
+    status: budgetingFilterOptions[isProject ? 0 : 1]!,
   })}`;
 
-  const { isLoading: pausing, mutate: pause } = usePauseBudget(budget._id, {
-    onSuccess(res) {
-      setPaused(res.paused);
-      onSuccess();
-      setMode('success');
-    },
-  });
-
-  const { isLoading: closing, mutate: close } = useCloseBudget(budget._id, {
-    onSuccess(res) {
-      replace(backToBudgetingHref).then(() => {
+  const { isLoading: pausing, mutate: pause } = usePauseBudgetOrProject(
+    budget._id,
+    isProject,
+    {
+      onSuccess(res) {
+        setPaused(res.paused);
         onSuccess();
-        toast(<AppToast>{res.message}</AppToast>, { type: 'success' });
-      });
-    },
-  });
+        setMode('success');
+      },
+    }
+  );
+
+  const { isLoading: closing, mutate: close } = useCloseBudgetOrProject(
+    budget._id,
+    isProject,
+    {
+      onSuccess() {
+        replace(backToBudgetingHref).then(() => {
+          onSuccess();
+        });
+      },
+    }
+  );
 
   const {
     _id,
@@ -84,28 +101,55 @@ export const ActiveBudgetCard = ({
     approvedDate,
     balance,
     threshold,
+    allocatedAmount,
+    unallocatedAmount,
+    totalSpent,
   } = budget;
 
   const isOwner = user?.role === 'owner';
 
-  const breakdown = [
-    {
-      title: 'Spent',
-      className: 'bg-primary-main',
-      value: amountUsed,
-    },
-    {
-      title: 'Available',
-      className: 'bg-neutral-200',
-      value: balance,
-    },
-    {
-      title: 'Budget Threshold',
-      className: 'bg-neutral-300',
-      value: threshold,
-      disabled: threshold === amount,
-    },
-  ];
+  const breakdown = isProject
+    ? [
+        {
+          title: 'Spent',
+          className: 'bg-primary-main',
+          value: totalSpent,
+        },
+        {
+          title: 'Unallocated',
+          className: 'bg-neutral-200',
+          order: 2,
+          value: unallocatedAmount,
+        },
+        {
+          title: 'Allocated',
+          className: 'bg-neutral-300',
+          order: 1,
+          value: allocatedAmount,
+        },
+      ]
+    : [
+        {
+          title: 'Spent',
+          className: 'bg-primary-main',
+          value: amountUsed,
+        },
+        {
+          title: 'Available',
+          className: 'bg-neutral-200',
+          order: 2,
+          value: balance,
+        },
+        {
+          title: 'Threshold',
+          className: 'bg-neutral-300',
+          value: threshold,
+          order: 1,
+          disabled: threshold === amount,
+        },
+      ];
+
+  const entity = isProject ? 'Project' : 'Budget';
 
   function onSuccess() {
     defaultInvalidator(['budget', budget._id]);
@@ -136,15 +180,15 @@ export const ActiveBudgetCard = ({
   return (
     <>
       <AuthorizeActionWithPin
-        isSuccess={mode === 'success'}
+        hasResponse={mode === 'success'}
         show={!!mode}
         showBackground
         icon={action === 'close' ? <Cancel /> : undefined}
-        title={
+        modalTitle={
           mode !== 'success'
             ? action === 'close'
-              ? 'Close Budget'
-              : `${paused ? 'Unfreeze' : 'Freeze'} Budget`
+              ? `Close ${entity}`
+              : `${paused ? 'Unfreeze' : 'Freeze'} ${entity}`
             : ''
         }
         close={() => {
@@ -156,16 +200,16 @@ export const ActiveBudgetCard = ({
           setMode(null);
           setAction(null);
         }}
-        successTitle={!paused ? 'Budget Unfrozen' : 'Budget Frozen'}
-        successMessage={`You have ${
+        responseTitle={!paused ? `${entity} Unfrozen` : `${entity} Frozen`}
+        responseMessage={`You have ${
           !paused ? 'unfrozen' : 'frozen'
-        } this budget successfully`}
-        actionMessage={
+        } this ${entity.toLowerCase()} successfully`}
+        authorizeButtonText={
           action === 'close'
-            ? 'Close Budget'
+            ? `Close ${entity}`
             : paused
-            ? 'Unfreeze Budget'
-            : 'Freeze Budget'
+            ? `Unfreeze ${entity}`
+            : `Freeze ${entity}`
         }
         submit={(pin) => {
           if (action === 'close') {
@@ -183,7 +227,7 @@ export const ActiveBudgetCard = ({
         closeModal={() => {
           setAction(null);
         }}
-        title={'Close Budget'}
+        title={`Close ${entity}`}
         show={action === 'close' && !mode}
         childrenClassname={'pt-4 px-8'}
       >
@@ -206,6 +250,10 @@ export const ActiveBudgetCard = ({
         )}
         onClick={() => {
           if (showActions || showOnlyBreakdown) return;
+
+          if (onClick) return onClick();
+
+          if (isProject) return push(`/budgeting/projects/${_id}`);
 
           push(`/budgeting/${_id}`);
         }}
@@ -264,7 +312,7 @@ export const ActiveBudgetCard = ({
                                   : 27
                               }
                               key={email}
-                              char={email.charAt(0)}
+                              char={email?.charAt(0)}
                               getBackgroundColor={getColor}
                             />
                           </div>
@@ -294,26 +342,27 @@ export const ActiveBudgetCard = ({
           </span>
         </div>
 
-        <div className='relative mt-3 h-2 w-full overflow-hidden rounded-full bg-neutral-200'>
-          {threshold !== amount && (
-            <div
-              className={
-                'absolute left-0 top-0 h-full rounded-full bg-neutral-300'
-              }
-              style={{
-                width: getWidth(threshold),
-              }}
-            ></div>
+        <div
+          className={clsx(
+            'relative mt-3 h-2 w-full overflow-hidden rounded-full bg-neutral-200'
           )}
+        >
+          {breakdown.map(({ title, className, disabled, value }) => {
+            if (disabled) return <Fragment key={title} />;
 
-          <div
-            className={
-              'absolute left-0 top-0 h-full rounded-full bg-primary-main'
-            }
-            style={{
-              width: getWidth(amountUsed),
-            }}
-          ></div>
+            return (
+              <div
+                key={title}
+                className={clsx(
+                  'absolute left-0 top-0 h-full rounded-full',
+                  className
+                )}
+                style={{
+                  width: getWidth(value),
+                }}
+              ></div>
+            );
+          })}
         </div>
 
         <div
@@ -322,7 +371,11 @@ export const ActiveBudgetCard = ({
             showActions ? 'gap-10' : 'gap-5'
           )}
         >
-          {breakdown.map(({ title, disabled, value, className }) => {
+          {handleSort({
+            data: breakdown,
+            sortBy: 'order',
+            direction: 'desc',
+          }).map(({ title, disabled, value, className }) => {
             if (disabled) return <Fragment key={title} />;
 
             return (
@@ -356,7 +409,9 @@ export const ActiveBudgetCard = ({
         </div>
 
         {showActions && (
-          <div className='right-5 top-5 mt-5 flex w-full gap-3 375:w-auto 768:absolute 768:mt-0'>
+          <div className='right-2 top-5 mt-5 flex w-full gap-3 375:w-auto 768:absolute 768:mt-0'>
+            {actionsSlot}
+
             {paused && (
               <button
                 onClick={() => {
@@ -378,7 +433,7 @@ export const ActiveBudgetCard = ({
                   'primary-button y-center rounded-full bg-red-600 hover:bg-red-600'
                 }
               >
-                Budget Closed
+                {entity} Closed
               </div>
             ) : !isOwner ? (
               <MakeTransfer budget={budget} />
@@ -391,12 +446,12 @@ export const ActiveBudgetCard = ({
                       setAction('pause_and_unpause');
                       setMode('authorize');
                     },
-                    title: `${paused ? 'Unfreeze' : 'Freeze'} Budget`,
+                    title: `${paused ? 'Unfreeze' : 'Freeze'} ${entity}`,
                   },
                   {
                     icon: <MiniLock />,
                     onClick: () => setAction('close'),
-                    title: 'Close Budget',
+                    title: `Close ${entity}`,
                   },
                 ]}
                 id={'budget_actions'}

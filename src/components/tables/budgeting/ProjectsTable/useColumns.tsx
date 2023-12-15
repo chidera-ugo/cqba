@@ -33,7 +33,7 @@ export const useColumns = () => {
       },
       {
         header: 'Spent',
-        accessorKey: 'amountUsed',
+        accessorKey: 'totalSpent',
         enableColumnFilter: false,
         cell: (props) => (
           <TableCell
@@ -44,8 +44,8 @@ export const useColumns = () => {
         ),
       },
       {
-        header: 'Threshold',
-        accessorKey: 'threshold',
+        header: 'Allocated',
+        accessorKey: 'allocatedAmount',
         enableColumnFilter: false,
         cell: (props) => (
           <TableCell
@@ -56,8 +56,8 @@ export const useColumns = () => {
         ),
       },
       {
-        header: 'Available',
-        accessorKey: 'balance',
+        header: 'Unallocated',
+        accessorKey: 'unallocatedAmount',
         enableColumnFilter: false,
         cell: (props) => (
           <TableCell
@@ -105,7 +105,7 @@ export const useColumns = () => {
                         className={clsx('ring-2 ring-white')}
                         size={27}
                         key={email}
-                        char={email?.charAt(0)}
+                        char={email.charAt(0)}
                         getBackgroundColor={getColor}
                       />
                     </div>

@@ -25,6 +25,7 @@ export const useQueryInvalidator = () => {
       case 'budgets':
         defaultInvalidator(['debitable_budgets']);
         defaultInvalidator(['budgets']);
+        defaultInvalidator(['project']);
         return;
       case 'subscription':
         defaultInvalidator(['subscription_history']);

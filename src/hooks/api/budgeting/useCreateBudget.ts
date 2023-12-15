@@ -1,6 +1,6 @@
 import { UseMutationOptions } from '@tanstack/react-query';
 import { BudgetPriorities } from 'enums/budget';
-import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { useTMutation } from 'hooks/api/useTMutation';
 
 export interface CreateBudgetDto {

@@ -9,7 +9,7 @@ import {
 import { useAppContext } from 'context/AppContext';
 import { BudgetStatus } from 'enums/budget';
 import { useCreateBudget } from 'hooks/api/budgeting/useCreateBudget';
-import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { useHandleError } from 'hooks/api/useHandleError';
 import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
 import { useManageSingleBudgetCreation } from 'hooks/budgeting/useManageSingleBudgetCreation';
@@ -20,12 +20,14 @@ interface Props {
   close: () => void;
   budget?: IBudget;
   onFinish?: () => void;
+  unallocatedFunds?: number;
 }
 
 export const ManageBudgetCreation = ({
   show,
   close,
   budget,
+  unallocatedFunds,
   onFinish,
 }: Props) => {
   const [mode, setMode] = useState<Mode>(Mode.create);
@@ -93,11 +95,11 @@ export const ManageBudgetCreation = ({
   return (
     <>
       <AuthorizeActionWithPin
-        isSuccess={mode === Mode.success}
+        hasResponse={mode === Mode.success}
         show={show && isAuthorizationMode}
         close={closeModal}
         processing={creatingBudget}
-        title={
+        modalTitle={
           mode === Mode.approve
             ? user?.role === 'owner'
               ? 'Approve Budget'
@@ -111,19 +113,19 @@ export const ManageBudgetCreation = ({
 
           onFinish();
         }}
-        successTitle={
+        responseTitle={
           budgetStatus === 'active'
             ? `Budget ${isOwner ? 'Created' : 'Approve'}`
             : 'Successful'
         }
-        successMessage={
+        responseMessage={
           budgetStatus === 'active'
             ? `Congratulations! Your budget has been ${
                 isOwner ? 'created' : 'approved'
               } successfully`
             : 'Your budget request has been sent successfully'
         }
-        actionMessage={'Approve'}
+        authorizeButtonText={'Approve'}
         submit={(pin, errorCb) => createBudget(pin, errorCb)}
       />
 
@@ -147,7 +149,7 @@ export const ManageBudgetCreation = ({
           {isAuthorizationMode ? null : (
             <AppErrorBoundary>
               <ManageSingleBudgetCreation
-                {...{ mode, setMode }}
+                {...{ mode, setMode, unallocatedFunds }}
                 {...manageSingleBudgetCreation}
               />
             </AppErrorBoundary>

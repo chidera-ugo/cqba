@@ -60,7 +60,7 @@ export const Avatar = ({
         >
           <Image
             className={
-              'my-auto h-full w-full rounded-full object-cover object-center'
+              'my-auto h-full w-full rounded-full bg-neutral-300 object-cover object-center'
             }
             src={avatar}
             height={size}

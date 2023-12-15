@@ -1,6 +1,6 @@
 import { ActiveBudgetCard } from 'components/modules/budgeting/ActiveBudgetCard';
 import { WalletTransactionsTable } from 'components/tables/wallet/WalletTransactionsTable';
-import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { UseUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
 import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 

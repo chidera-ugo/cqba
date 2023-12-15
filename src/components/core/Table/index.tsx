@@ -304,9 +304,10 @@ export function Table<T>({
                       <tr
                         key={key}
                         className={clsx(
-                          `group h-[60px] border-b border-gray-100 text-sm font-semibold`,
+                          `group h-[60px] border-gray-100 text-sm font-semibold`,
                           canClick && 'cursor-pointer',
                           i % 2 !== 0 && 'bg-neutral-100',
+                          i > 0 && 'border-t',
                           textColor
                         )}
                       >

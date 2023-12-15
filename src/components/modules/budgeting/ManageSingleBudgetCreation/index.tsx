@@ -5,7 +5,7 @@ import { CreateBudgetForm } from 'components/forms/budgeting/CreateBudgetForm';
 import { initialValues } from 'components/forms/budgeting/AddBudgetBeneficiariesForm/initialValues';
 import { UpdateEmployeeForm } from 'components/forms/employees/UpdateEmployeeForm';
 import { useAppContext } from 'context/AppContext';
-import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { UseManageSingleBudgetCreation } from 'hooks/budgeting/useManageSingleBudgetCreation';
 import { Dispatch, SetStateAction } from 'react';
 

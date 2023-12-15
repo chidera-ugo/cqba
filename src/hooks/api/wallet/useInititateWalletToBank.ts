@@ -8,16 +8,16 @@ interface UseInititateWalletToBankDto {
   pin: string;
 }
 
+interface Res {
+  message: string;
+  status: 'failed' | 'pending';
+}
+
 export function useInititateWalletToBank(
   budgetId: string,
-  options?: UseMutationOptions<
-    UseInititateWalletToBankDto,
-    unknown,
-    void,
-    unknown
-  >
+  options?: UseMutationOptions<Res, unknown, void, unknown>
 ) {
-  return useTMutation<UseInititateWalletToBankDto, any>({
+  return useTMutation<UseInititateWalletToBankDto, Res>({
     url: `/${budgetId}/transfer/initiate`,
     service: 'budgets',
     options,

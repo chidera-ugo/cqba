@@ -1,5 +1,5 @@
 import { UseMutationOptions } from '@tanstack/react-query';
-import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { useTMutation } from 'hooks/api/useTMutation';
 
 export interface ApproveBudgetDto {

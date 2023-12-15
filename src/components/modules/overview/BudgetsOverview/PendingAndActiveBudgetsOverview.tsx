@@ -6,7 +6,7 @@ import { IsLoading } from 'components/data-states/IsLoading';
 import { BudgetOverviewAccordionContent } from 'components/modules/overview/BudgetsOverview/BudgetOverviewAccordionContent';
 import { EmptyReports } from 'components/svgs/overview/EmptyReports';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useGetAllBudgetsUnpaginated } from 'hooks/api/budgeting/useGetAllBudgets';
+import { useGetAllBudgetsUnpaginated } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useEffect, useState } from 'react';

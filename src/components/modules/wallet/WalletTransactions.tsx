@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { SearchInput } from 'components/form-elements/SearchInput';
 import { FilterWithRangePreset } from 'components/modules/commons/FilterWithRangePreset';
 import { WalletTransactionsTable } from 'components/tables/wallet/WalletTransactionsTable';
-import { useGetAllBudgetsUnpaginated } from 'hooks/api/budgeting/useGetAllBudgets';
+import { useGetAllBudgetsUnpaginated } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { useUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
 import { useDebouncer } from 'hooks/commons/useDebouncer';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';

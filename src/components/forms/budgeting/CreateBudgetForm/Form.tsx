@@ -3,7 +3,7 @@ import { Select } from 'components/form-elements/Select';
 import { TextArea } from 'components/form-elements/Textarea';
 import { CreateBudgetFormRecoveryValues } from 'components/forms/budgeting/CreateBudgetForm/index';
 import { Form as FormikForm, FormikProps } from 'formik';
-import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { useEffect } from 'react';
 import { DatePickerValue } from 'types/commons';
 import { formatAmount } from 'utils/formatters/formatAmount';

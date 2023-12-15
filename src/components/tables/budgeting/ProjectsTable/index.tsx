@@ -5,7 +5,7 @@ import { Table } from 'components/core/Table';
 
 import { Props as BudgetsListProps } from 'components/modules/budgeting/Budgets/Grid';
 
-export const BudgetsTable = ({
+export const ProjectsTable = ({
   pagination,
   setPagination,
   isError,
@@ -22,7 +22,7 @@ export const BudgetsTable = ({
   return (
     <Table<IBudget>
       className={'mt-20 640:mt-4'}
-      title='budgets'
+      title='projects'
       onRowClick={onRowClick}
       returnOriginalOnRowClick
       accessor='_id'
