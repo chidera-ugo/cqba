@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { CurrentUserAvatar } from 'components/modules/app/CurrentUserAvatar';
+import { UserIconMd } from 'components/svgs/UserIcon';
 import Image from 'next/image';
 
 interface Props {
@@ -28,7 +28,7 @@ export const Avatar = ({
       {!avatar ? (
         <>
           {!getBackgroundColor ? (
-            <CurrentUserAvatar size={size} />
+            <UserIconMd size={size} />
           ) : (
             <div
               className={clsx(

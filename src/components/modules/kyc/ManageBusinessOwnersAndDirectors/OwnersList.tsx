@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { Trash } from 'components/svgs/others/Trash';
+import { DeleteIcon, EditIcon } from 'components/svgs/EditAndDelete';
 import { IOwner } from 'hooks/api/kyc/useUpdateOwnerInformation';
 import { Dispatch, SetStateAction } from 'react';
 import { generatePlaceholderArray } from 'utils/generators/generatePlaceholderArray';
@@ -10,7 +10,6 @@ interface Props {
   data?: IOwner[];
   setCurrentOwner: Dispatch<SetStateAction<IOwner | null>>;
   handleShowModal: () => void;
-  isUnderReview?: boolean;
   setOwnerToDelete: Dispatch<
     SetStateAction<{ name: string; id: string } | null>
   >;
@@ -22,7 +21,6 @@ export const OwnersList = ({
   isLoading,
   setCurrentOwner,
   handleShowModal,
-  isUnderReview,
   setOwnerToDelete,
 }: Props) => {
   if (isLoading) return <IsLoadingIsError isLoading />;
@@ -32,42 +30,50 @@ export const OwnersList = ({
   return (
     <>
       {data?.map((owner) => {
-        const { firstName, lastName, id } = owner;
+        const { firstName, lastName, percentOwned, _id } = owner;
 
         return (
-          <div key={id}>
-            <div className='mt-4 flex h-14 gap-2.5'>
-              <button
-                onClick={() => {
-                  setCurrentOwner(owner);
-                  handleShowModal();
-                }}
-                className='x-between group my-auto h-full w-full rounded-xl bg-neutral-100 px-4'
+          <div
+            key={_id}
+            className='card mt-4 gap-2.5 rounded-2xl border-neutral-200 p-6'
+          >
+            <div className='text-left text-base font-medium text-black line-clamp-1 group-hover:text-primary-main'>
+              {firstName} {lastName}
+            </div>
+
+            <p className={'font-light text-neutral-500'}>Director, Owner</p>
+
+            <div className='x-between mt-4'>
+              <div
+                className={
+                  'y-center my-auto h-10 rounded-full border border-neutral-200 px-3 text-sm font-medium'
+                }
               >
-                <span className='my-auto text-left text-sm font-medium text-black line-clamp-1 group-hover:text-primary-main'>
-                  {firstName} {lastName}
-                </span>
+                {percentOwned}% Ownership
+              </div>
 
-                <div className='my-auto text-xs text-primary-main group-hover:underline'>
-                  {isUnderReview ? 'View' : 'Edit'}
-                </div>
-              </button>
+              <div className='flex gap-2'>
+                <button
+                  className={''}
+                  onClick={() => {
+                    setCurrentOwner(owner);
+                    handleShowModal();
+                  }}
+                >
+                  <EditIcon />
+                </button>
 
-              {!isUnderReview && (
                 <button
                   onClick={() => {
                     setOwnerToDelete({
                       name: `${firstName} ${lastName}`,
-                      id,
+                      id: _id,
                     });
                   }}
-                  className='y-center w-14 flex-shrink-0 rounded-lg bg-neutral-100 text-neutral-400 text-primary-main hover:bg-red-100 hover:bg-opacity-50 hover:text-red-500'
                 >
-                  <div className='mx-auto'>
-                    <Trash />
-                  </div>
+                  <DeleteIcon />
                 </button>
-              )}
+              </div>
             </div>
           </div>
         );

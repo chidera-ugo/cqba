@@ -18,7 +18,7 @@ export interface UpdateOwnersInformationDto {
 }
 
 export interface IOwner {
-  id: string;
+  _id: string;
   lastName: string;
   country: string;
   idType: string;
