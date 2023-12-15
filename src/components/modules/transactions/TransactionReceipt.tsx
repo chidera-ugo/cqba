@@ -1,4 +1,5 @@
 import { clsx } from 'clsx';
+import { Pill } from 'components/commons/Pill';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
@@ -79,17 +80,6 @@ export const TransactionReceipt = ({
     },
   ];
 
-  function getStatusStyling() {
-    switch (status) {
-      case 'successful':
-        return 'text-green-500';
-      case 'pending':
-        return 'text-yellow-600';
-      default:
-        return 'text-black';
-    }
-  }
-
   const ReceiptContent = () => {
     return (
       <>
@@ -105,9 +95,15 @@ export const TransactionReceipt = ({
           {convertAmountToWords(amount / 100, currency)}
         </p>
 
-        <div className={clsx(getStatusStyling(), 'mt-1 text-sm capitalize')}>
-          {status}
-        </div>
+        <Pill
+          className={'mt-3'}
+          config={{
+            failed: 'failed',
+            success: 'successful',
+            pending: 'pending',
+          }}
+          value={status}
+        />
 
         <div className='mt-7'>
           {payload.map(({ title, value }) => {

@@ -82,7 +82,8 @@ export const ManageBudgetCreation = ({
       },
       {
         onSuccess(res) {
-          setBudgetStatus(res.status);
+          setBudgetStatus(!!projectId ? 'active' : res.status);
+
           setMode(Mode.success);
 
           invalidate('budgets', 'balances', 'team');

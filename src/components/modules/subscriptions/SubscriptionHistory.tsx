@@ -21,10 +21,15 @@ export const SubscriptionHistory = () => {
     <>
       {data?.docs?.map(({ _id, startedAt, plan, status }) => {
         return (
-          <div key={_id} className={clsx('x-between h-10')}>
-            <span className={'my-auto block line-clamp-1'}>
-              {formatDate(startedAt, 'short', true)} - {plan?.name}
-            </span>
+          <div key={_id} className={clsx('x-between')}>
+            <div className={'my-1.5 block'}>
+              <p className={'text-[15px] font-medium text-black line-clamp-1'}>
+                {formatDate(startedAt, 'semi-full', true)}
+              </p>
+              <p className={'text-sm font-light text-neutral-500'}>
+                {plan?.name} Plan
+              </p>
+            </div>
 
             <span
               className={clsx(

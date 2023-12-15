@@ -9,9 +9,10 @@ interface Props {
   solid?: boolean;
   value: string;
   suffix?: string;
+  className?: string;
 }
 
-export const Pill = ({ value, solid, suffix, config }: Props) => {
+export const Pill = ({ value, className, solid, suffix, config }: Props) => {
   const val = value.toLowerCase();
 
   const getPillColor = () => {
@@ -25,7 +26,7 @@ export const Pill = ({ value, solid, suffix, config }: Props) => {
   };
 
   return (
-    <div className='flex align-middle'>
+    <div className={clsx('flex align-middle', className)}>
       <span className={clsx(getPillColor(), 'my-auto capitalize')}>
         {value?.replaceAll('-', ' ')}
         {suffix && ` ${suffix}`}

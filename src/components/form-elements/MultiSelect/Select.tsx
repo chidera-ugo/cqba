@@ -239,7 +239,7 @@ export const Select = ({
                             <label
                               className={clsx(
                                 'x-between group my-auto h-full w-full cursor-pointer rounded-lg px-3',
-                                !withBorders && 'hover:bg-neutral-200'
+                                !withBorders && 'hover:bg-neutral-100'
                               )}
                               htmlFor={id}
                             >
