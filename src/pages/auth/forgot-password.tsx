@@ -1,7 +1,8 @@
 import clsx from 'clsx';
+import asset from '/public/assets/auth/moneyTalk.jpg';
+import Image from 'next/image';
 import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { ForgotPasswordForm } from 'components/forms/auth/ForgotPasswordForm';
-import { ChatBubbles } from 'components/illustrations/ChatBubbles';
 import { AuthLayout } from 'components/layouts/AuthLayout';
 import { SimpleInformation } from 'components/modules/commons/SimpleInformation';
 import { AppToast } from 'components/primary/AppToast';
@@ -32,7 +33,13 @@ export default function ForgotPassword() {
       >
         {email ? (
           <SimpleInformation
-            icon={<ChatBubbles />}
+            icon={
+              <Image
+                src={asset}
+                alt={'budget_categories'}
+                className={'mx-auto py-10'}
+              />
+            }
             title={<span>We sent you a reset link.</span>}
             description={
               <span className='mt-3 block'>
