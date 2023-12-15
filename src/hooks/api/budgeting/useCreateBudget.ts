@@ -1,6 +1,6 @@
 import { UseMutationOptions } from '@tanstack/react-query';
 import { BudgetPriorities } from 'enums/budget';
-import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { useTMutation } from 'hooks/api/useTMutation';
 
 export interface CreateBudgetDto {
@@ -22,11 +22,12 @@ export interface Beneficiary {
 
 export function useCreateBudget(
   id?: string,
+  projectId?: string,
   options?: UseMutationOptions<any, unknown, void, unknown>
 ) {
   return useTMutation<CreateBudgetDto, IBudget>({
     method: !!id ? 'put' : 'post',
-    url: `${!!id ? `/${id}` : ''}`,
+    url: projectId ? `/project/${projectId}` : `${!!id ? `/${id}` : ''}`,
     service: 'budgets',
     options,
   });

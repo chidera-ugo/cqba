@@ -26,11 +26,20 @@ export interface IBudget {
     email: string;
     role: UserRole;
   };
+  // Project properties
   amountUsed: number;
   balance: number;
+  organization: string;
+  wallet: string;
+  createdAt: string;
+  updatedAt: string;
+  budgets: number;
+  totalSpent: number;
+  allocatedAmount: number;
+  unallocatedAmount: number;
 }
 
-export function useGetAllBudgets(
+export function useGetAllBudgetsOrProjects(
   params: {
     page?: number;
     limit?: number;
@@ -38,17 +47,20 @@ export function useGetAllBudgets(
     departmentId?: string;
     status?: string;
     paginated?: boolean;
+    createdByUser?: boolean;
   },
   isProjectsList: boolean,
   options?: UseQueryOptions<any, any, any, string[]>
 ) {
   const _params = generateUrlParamsFromObject({
-    data: params,
+    data: isProjectsList
+      ? { page: params.page, status: params.status, limit: params.limit }
+      : params,
   });
 
   return useTQuery<PaginatedResponse<IBudget>>({
     queryKey: ['budgets', _params, `isProjectsList: ${isProjectsList}`],
-    url: `${isProjectsList ? '/project' : _params}`,
+    url: `${isProjectsList ? `/project${_params}` : _params}`,
     service: 'budgets',
     options: {
       ...options,

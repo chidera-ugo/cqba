@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { Avatar } from 'components/commons/Avatar';
 import { BudgetPriorities, getPriorityAsText } from 'enums/budget';
-import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { formatAmount } from 'utils/formatters/formatAmount';
 import { formatDate } from 'utils/formatters/formatDate';
 import { handleSort } from 'utils/handlers/handleSort';

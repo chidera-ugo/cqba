@@ -1,5 +1,5 @@
 import { UseQueryOptions } from '@tanstack/react-query';
-import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { useTQuery } from 'hooks/api/useTQuery';
 
 export function useGetBudgetById(

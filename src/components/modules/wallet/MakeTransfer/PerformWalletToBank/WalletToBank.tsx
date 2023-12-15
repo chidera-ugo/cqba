@@ -2,7 +2,7 @@ import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
 import { WalletToBankForm } from 'components/forms/wallet/make-transfer/WalletToBankForm';
 import { WalletToBankFormRecoveryValues } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank/index';
-import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { useGetInstitutions } from 'hooks/api/wallet/useGetInstitutions';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { FormRecoveryProps } from 'types/forms/form_recovery';

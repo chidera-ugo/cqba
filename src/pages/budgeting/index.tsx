@@ -5,39 +5,34 @@ import { SearchInput } from 'components/form-elements/SearchInput';
 import { SelectBudgetTypeForm } from 'components/forms/budgeting/SelectBudgetTypeForm';
 import { AppLayout } from 'components/layouts/AppLayout';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
+import { ToggleLayout } from 'components/modules/app/ToggleLayout';
 import { Budgets } from 'components/modules/budgeting/Budgets';
 import { ManageBudgetCreation } from 'components/modules/budgeting/ManageBudgetCreation';
 import { ManageProjectCreation } from 'components/modules/budgeting/ManageProjectCreation';
-import { Grid, List } from 'components/svgs/GridAndList';
 import { SimplePlus } from 'components/svgs/others/Plus';
 import { budgetingFilterOptions } from 'constants/budgeting/filters';
 import { useUserPlan } from 'hooks/access_control/useUserPlan';
 import { useUserRole } from 'hooks/access_control/useUserRole';
+import { useToggleLayout } from 'hooks/app/useToggleLayout';
 import { useUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
 import { useDebouncer } from 'hooks/commons/useDebouncer';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
-import { getFromLocalStore, saveToLocalStore } from 'lib/localStore';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { budgetingFiltersSchema } from 'zod_schemas/budgeting_schema';
 
-type TLayout = 'grid' | 'list';
-
 export default function Budgeting() {
   const { query, pathname, push } = useRouter();
 
-  const [layout, setLayout] = useState<TLayout>(
-    getFromLocalStore('preferences')?.['budgeting_layout'] ?? 'grid'
-  );
   const [search, setSearch] = useState('');
   const [modal, setModal] = useState<
     'create_budget' | 'create_project' | 'choose_action' | null
   >(null);
-
   const [debouncedSearch] = useDebouncer({
     value: search,
   });
 
+  const { layout, setLayout } = useToggleLayout();
   const { isVerified } = useIsVerified();
   const { isPremiumUser } = useUserPlan();
   const { isOwner } = useUserRole();
@@ -56,7 +51,7 @@ export default function Budgeting() {
     budgetingFiltersSchema(tabs[0]!),
     30,
     undefined,
-    9
+    layout === 'grid' ? 9 : 10
   );
 
   const currentTab = filters?.status?.value;
@@ -76,6 +71,7 @@ export default function Budgeting() {
               layoutId={'budget_status'}
               action={(tab) => {
                 setFilters((prev) => ({ ...prev, status: tab }));
+                setPagination((prev) => ({ ...prev, pageIndex: 0 }));
               }}
               currentTab={filters?.status?.value}
               tabs={tabs}
@@ -104,40 +100,7 @@ export default function Budgeting() {
           </div>
 
           <div className='my-auto flex h-full flex-shrink-0 gap-2'>
-            <div className='hidden h-10 flex-shrink-0 overflow-hidden rounded-full border border-neutral-200 640:flex'>
-              {[
-                {
-                  id: 'grid',
-                  icon: <Grid />,
-                  className: 'pr-1.5 pl-2.5',
-                },
-                {
-                  id: 'list',
-                  icon: <List />,
-                  className: 'pl-1.5 pr-2.5',
-                },
-              ].map(({ id, icon, className }, i) => {
-                return (
-                  <button
-                    key={id}
-                    onClick={() => {
-                      setLayout(id as TLayout);
-                      saveToLocalStore('preferences', { budgeting_layout: id });
-                    }}
-                    className={clsx(
-                      className,
-                      'y-center my-auto h-full w-full',
-                      i > 0 && 'border-l border-neutral-200',
-                      layout === id
-                        ? 'bg-neutral-100 text-primary-main'
-                        : 'text-neutral-500'
-                    )}
-                  >
-                    <div className='mx-auto'>{icon}</div>
-                  </button>
-                );
-              })}
-            </div>
+            <ToggleLayout {...{ layout, setLayout }} />
 
             <div className='y-center my-auto h-full w-fit flex-shrink-0 640:mt-auto 640:mb-auto'>
               <button
@@ -146,14 +109,12 @@ export default function Budgeting() {
 
                   setModal(isPremiumUser ? 'choose_action' : 'create_budget');
                 }}
-                className='primary-button x-center my-auto h-6 w-6 px-2 text-sm 640:h-10 640:w-full 640:px-4'
+                className='primary-button x-center my-auto h-6 w-6 gap-2 px-2 text-sm 640:h-10 640:w-full 640:px-4'
               >
-                <span className={'my-auto mr-2 hidden 640:block'}>
-                  Add Budget
-                </span>
                 <span className={'my-auto'}>
                   <SimplePlus />
                 </span>
+                <span className={'my-auto hidden 640:block'}>Add Budget</span>
               </button>
             </div>
           </div>
@@ -188,6 +149,10 @@ export default function Budgeting() {
               });
             } else {
               setModal('create_budget');
+              setFilters((prev) => ({
+                ...prev,
+                status: budgetingFilterOptions[1],
+              }));
             }
           }}
         />
@@ -204,6 +169,7 @@ export default function Budgeting() {
             layout={layout}
             currentTab={currentTab}
             search={debouncedSearch}
+            createdByUser
             {...{
               pagination,
               setPagination,

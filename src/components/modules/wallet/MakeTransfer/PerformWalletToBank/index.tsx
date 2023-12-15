@@ -5,7 +5,7 @@ import { initialValues } from 'components/forms/wallet/make-transfer/WalletToBan
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { WalletToBank } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank/WalletToBank';
 import { AnimateLayout } from 'components/animations/AnimateLayout';
-import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { useState } from 'react';
 

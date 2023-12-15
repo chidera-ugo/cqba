@@ -23,10 +23,7 @@ export const Form = ({
   inviteEmployee,
   currency,
 }: Props) => {
-  const { handleSubmit, setFieldValue, setValues, values, errors } =
-    formikProps;
-
-  console.log(errors);
+  const { handleSubmit, setFieldValue, setValues, values } = formikProps;
 
   useEffect(() => {
     if (!recoveryValues) return;
@@ -37,7 +34,7 @@ export const Form = ({
     });
   }, [recoveryValues]);
 
-  const { isLoading, isRefetching, isError, data } =
+  const { isLoading, isRefetching, isError, refetch, data } =
     useGetBudgetBeneficiaries();
 
   const selectedUsers = data?.filter(({ _id }) => {
@@ -59,6 +56,7 @@ export const Form = ({
         isLoading={isLoading || isRefetching}
         {...{
           isError,
+          refetch,
           setFieldValue,
         }}
         entity={'beneficiary'}

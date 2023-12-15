@@ -3,7 +3,7 @@ import { CreateFirstBudget } from 'components/modules/wallet/MakeTransfer/Create
 import { PerformWalletToBank } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank';
 import { AppToast } from 'components/primary/AppToast';
 import { Outbound } from 'components/svgs/navigation/Arrows';
-import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { useGetDebitableBudgets } from 'hooks/api/budgeting/useGetDebitableBudgets';
 import { useState } from 'react';
 import { toast } from 'react-toastify';

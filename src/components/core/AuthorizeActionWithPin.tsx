@@ -13,13 +13,14 @@ type Props = {
   finish: () => void;
   processing: boolean;
   submit: (pin: string, errorCb: () => void) => void;
-  title: string;
-  isSuccess: boolean;
+  modalTitle: string;
+  hasResponse: boolean;
   show: boolean;
-  successMessage: string;
-  successTitle: string;
+  responseMessage: string;
+  responseTitle: string;
   close: () => void;
-  actionMessage: string;
+  authorizeButtonText: string;
+  finishButtonText?: string;
   showBackground?: boolean;
   icon?: ReactNode;
 };
@@ -28,14 +29,15 @@ export const AuthorizeActionWithPin = ({
   processing,
   finish,
   submit,
-  title,
-  isSuccess,
+  modalTitle,
+  hasResponse,
   icon,
   show,
   close,
-  successMessage,
-  successTitle,
-  actionMessage,
+  finishButtonText = "Let's Go!",
+  responseMessage,
+  responseTitle,
+  authorizeButtonText,
   showBackground,
 }: Props) => {
   const [pin, setPin] = useState('');
@@ -43,24 +45,24 @@ export const AuthorizeActionWithPin = ({
 
   return (
     <RightModalWrapper
-      title={title}
+      title={modalTitle}
       hideBackdrop={!showBackground}
       show={show}
       closeModal={close}
     >
-      <AnimateLayout changeTracker={String(isSuccess)}>
-        {isSuccess ? (
+      <AnimateLayout changeTracker={String(hasResponse)}>
+        {hasResponse ? (
           <div className='y-center py-20'>
             <SimpleInformation
-              title={<span className='text-xl'>{successTitle}</span>}
+              title={<span className='text-xl'>{responseTitle}</span>}
               description={
                 <div className='mx-auto mt-1 max-w-[400px]'>
-                  {successMessage}
+                  {responseMessage}
                 </div>
               }
               icon={icon ?? <GreenCheck />}
               actionButton={{
-                text: "Let's Go!",
+                text: finishButtonText,
                 action: finish,
               }}
             />
@@ -101,7 +103,7 @@ export const AuthorizeActionWithPin = ({
                 disabled={pin.length !== 4}
                 className='primary-button mt-4 min-w-[128px]'
               >
-                {actionMessage}
+                {authorizeButtonText}
               </SubmitButton>
             </div>
           </form>

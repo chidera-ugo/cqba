@@ -11,6 +11,7 @@ import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PropsWithChildren } from 'react';
+import { generateUUID } from 'utils/generators/generateUUID';
 
 interface Props {
   title?: string;
@@ -61,7 +62,7 @@ export const AppHeader = ({
 
               <AppErrorBoundary className={'my-auto'} type={'hidden'}>
                 <Link href={'/settings'}>
-                  <Avatar avatar={user?.avatar} />
+                  <Avatar avatar={`${user?.avatar}?${generateUUID()}`} />
                 </Link>
               </AppErrorBoundary>
             </div>

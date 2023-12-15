@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { Avatar } from 'components/commons/Avatar';
 import { PendingBudgetCard } from 'components/modules/budgeting/PendingBudgetCard';
-import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { GetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { Fragment } from 'react';
 import { formatAmount } from 'utils/formatters/formatAmount';

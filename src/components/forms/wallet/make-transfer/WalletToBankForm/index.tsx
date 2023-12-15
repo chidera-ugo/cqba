@@ -1,7 +1,7 @@
 import { Transact } from 'components/modules/core/Transact';
 import { WalletToBankFormRecoveryValues } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank';
 import { Formik } from 'formik';
-import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { useHandleError } from 'hooks/api/useHandleError';
 import { useInititateWalletToBank } from 'hooks/api/wallet/useInititateWalletToBank';
 import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
@@ -79,11 +79,18 @@ export const WalletToBankForm = ({
               pin,
             },
             {
-              onSuccess() {
-                formikProps.resetForm();
-                transact.setMode('success');
+              onSuccess(res) {
                 defaultInvalidator(['budget', formikProps.values.budget]);
                 invalidate('balances', 'budgets');
+
+                if (res.status !== 'pending') {
+                  transact.setMode('failed');
+                  transact.setErrorMessage(res.message);
+                  return;
+                }
+
+                formikProps.resetForm();
+                transact.setMode('success');
               },
               onError(e) {
                 handleError(e);

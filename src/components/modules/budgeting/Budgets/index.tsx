@@ -3,11 +3,12 @@ import { BudgetsGrid } from 'components/modules/budgeting/Budgets/Grid';
 import { NoBudgets } from 'components/modules/budgeting/Budgets/NoBudgets';
 import { PendingBudgetDetails } from 'components/modules/budgeting/PendingBudgetDetails';
 import { BudgetsTable } from 'components/tables/budgeting/BudgetsTable';
+import { ProjectsTable } from 'components/tables/budgeting/ProjectsTable';
 import { useAppContext } from 'context/AppContext';
 import {
   IBudget,
-  useGetAllBudgets,
-} from 'hooks/api/budgeting/useGetAllBudgets';
+  useGetAllBudgetsOrProjects,
+} from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { TPagination } from 'hooks/client_api/hooks/useUrlManagedState';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -15,9 +16,10 @@ import { RightModalWrapper } from 'components/modal/ModalWrapper';
 
 interface Props {
   search: string;
-  currentTab: string;
+  currentTab?: string;
   isApprovalsPage?: boolean;
   layout: string;
+  createdByUser?: boolean;
 }
 
 export const Budgets = ({
@@ -27,22 +29,23 @@ export const Budgets = ({
   search,
   currentTab,
   layout,
-}: Props & TPagination) => {
+  createdByUser,
+}: Props & Partial<TPagination>) => {
   const { screenSize } = useAppContext().state;
 
-  const [showPinModal, setShowPinModal] = useState(false);
   const [currentBudget, setCurrentBudget] = useState<IBudget | null>(null);
 
   const { push } = useRouter();
 
   const isProjectsList = currentTab === 'projects';
 
-  const { isLoading, isError, data, isRefetching } = useGetAllBudgets(
+  const { isLoading, isError, data, isRefetching } = useGetAllBudgetsOrProjects(
     {
-      page: search ? 1 : pagination.pageIndex + 1,
-      limit: pagination.pageSize,
+      page: search ? 1 : Number(pagination?.pageIndex ?? 0) + 1,
+      limit: pagination?.pageSize,
       search,
       status: isProjectsList ? undefined : currentTab,
+      createdByUser,
     },
     isProjectsList,
     {
@@ -51,11 +54,12 @@ export const Budgets = ({
   );
 
   useEffect(() => {
+    if (!setPagination) return;
+
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
   }, [search]);
 
   function closeModal() {
-    setShowPinModal(false);
     setCurrentBudget(null);
   }
 
@@ -63,11 +67,7 @@ export const Budgets = ({
     <>
       <RightModalWrapper
         title={currentTab === 'pending' ? 'Pending Approval' : 'Pending Budget'}
-        show={
-          !showPinModal &&
-          !!currentBudget &&
-          currentBudget.status !== 'approved'
-        }
+        show={!!currentBudget && currentBudget.status !== 'approved'}
         closeModal={closeModal}
         closeOnClickOutside
       >
@@ -86,6 +86,7 @@ export const Budgets = ({
             <BudgetsGrid
               {...{
                 data,
+                isProjectsList,
                 pagination,
                 setPagination,
                 setCurrentBudget,
@@ -96,27 +97,45 @@ export const Budgets = ({
               }}
             />
           ) : (
-            <BudgetsTable
-              onRowClick={(budget) => {
-                if (currentTab === 'pending') return setCurrentBudget(budget);
-
-                push(
-                  `${!isApprovalsPage ? 'budgeting' : 'approvals'}/${
-                    budget?._id
-                  }`
-                );
-              }}
-              {...{
-                data,
-                pagination,
-                setPagination,
-                setCurrentBudget,
-                currentTab,
-                isError,
-                isRefetching,
-                isLoading,
-              }}
-            />
+            <>
+              {isProjectsList ? (
+                <ProjectsTable
+                  onRowClick={(budget) => {
+                    push(`/budgeting/projects/${budget?._id}`);
+                  }}
+                  {...{
+                    data,
+                    pagination,
+                    setPagination,
+                    setCurrentBudget,
+                    currentTab,
+                    isError,
+                    isRefetching,
+                    isLoading,
+                  }}
+                />
+              ) : (
+                <BudgetsTable
+                  onRowClick={(budget) => {
+                    push(
+                      `${!isApprovalsPage ? 'budgeting' : 'approvals'}/${
+                        budget?._id
+                      }`
+                    );
+                  }}
+                  {...{
+                    data,
+                    pagination,
+                    setPagination,
+                    setCurrentBudget,
+                    currentTab,
+                    isError,
+                    isRefetching,
+                    isLoading,
+                  }}
+                />
+              )}
+            </>
           )}
         </AppErrorBoundary>
       )}

@@ -5,7 +5,7 @@ import { Institution } from 'components/forms/wallet/make-transfer/WalletToBankF
 import { ActiveBudgetCard } from 'components/modules/budgeting/ActiveBudgetCard';
 import { WalletToBankFormRecoveryValues } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank';
 import { Form as FormikForm, FormikProps } from 'formik';
-import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { useGetDebitableBudgets } from 'hooks/api/budgeting/useGetDebitableBudgets';
 import { formatAmount } from 'utils/formatters/formatAmount';
 import { initialValues } from './initialValues';

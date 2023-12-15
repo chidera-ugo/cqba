@@ -18,8 +18,8 @@ import {
 } from 'components/modules/budgeting/ManageSingleBudgetCreation';
 import { MiniPlus } from 'components/svgs/forms/Plus';
 import { useAppContext } from 'context/AppContext';
-import { useCreateProject } from 'hooks/api/budgeting/useCreateProject';
-import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
+import { useCreateProject } from 'hooks/api/budgeting/project/useCreateProject';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { useHandleError } from 'hooks/api/useHandleError';
 import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
 import { useManageSingleBudgetCreation } from 'hooks/budgeting/useManageSingleBudgetCreation';
@@ -50,9 +50,7 @@ export const ManageProjectCreation = ({ show, budget, onFinish }: Props) => {
   const [mode, setMode] = useState<Mode>(Mode.create);
   const [budgetCreationMode, setBudgetCreationMode] =
     useState<BudgetCreationMode>(BudgetCreationMode.create);
-
   const [subBudgets, setSubBudgets] = useState<SubBudgetListItem[]>([]);
-
   const [createProjectFormRecoveryValues, setCreateProjectFormRecoveryValues] =
     useState<CreateBudgetFormRecoveryValues>(null);
 
@@ -150,6 +148,7 @@ export const ManageProjectCreation = ({ show, budget, onFinish }: Props) => {
 
   function resetOnClose() {
     resetFormRecoveryValues();
+    setSubBudgets([]);
     setMode(Mode.create);
     setBudgetCreationMode(BudgetCreationMode.create);
   }
@@ -171,11 +170,11 @@ export const ManageProjectCreation = ({ show, budget, onFinish }: Props) => {
   return (
     <>
       <AuthorizeActionWithPin
-        isSuccess={mode === Mode.success}
+        hasResponse={mode === Mode.success}
         show={show && (mode === Mode.success || mode === Mode.approve)}
         close={closeModal}
         processing={creatingProject}
-        title={mode === Mode.approve ? 'Approve Project' : ''}
+        modalTitle={mode === Mode.approve ? 'Approve Project' : ''}
         finish={() => {
           closeModal();
 
@@ -183,11 +182,11 @@ export const ManageProjectCreation = ({ show, budget, onFinish }: Props) => {
 
           onFinish();
         }}
-        successTitle={'Project Created Successfully'}
-        successMessage={
+        responseTitle={'Project Created Successfully'}
+        responseMessage={
           'You have successfully created a project budget, you can now spend from this budget'
         }
-        actionMessage={'Approve'}
+        authorizeButtonText={'Approve'}
         submit={(pin, errorCb) => createProject(pin, errorCb)}
       />
 

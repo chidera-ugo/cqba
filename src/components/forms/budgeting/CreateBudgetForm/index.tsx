@@ -1,6 +1,6 @@
 import { Formik } from 'formik';
 import { useCreatePersonalBudget } from 'hooks/api/budgeting/useCreatePersonalBudget';
-import { IBudget } from 'hooks/api/budgeting/useGetAllBudgets';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
 import { FormRecoveryProps } from 'types/forms/form_recovery';
 import { formatAmount, sanitizeAmount } from 'utils/formatters/formatAmount';
