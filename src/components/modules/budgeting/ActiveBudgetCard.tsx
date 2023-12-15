@@ -49,11 +49,10 @@ export const ActiveBudgetCard = ({
   const { screenSize, user } = useAppContext().state;
 
   const [mode, setMode] = useState<'success' | 'authorize' | null>(null);
-  const [action, setAction] = useState<'pause_and_unpause' | 'close' | null>(
+  const [action, setAction] = useState<'pause' | 'unpause' | 'close' | null>(
     null
   );
   const [reason, setReason] = useState('');
-  const [paused, setPaused] = useState(budget.paused);
 
   const { replace, push } = useRouter();
   const { invalidate, defaultInvalidator } = useQueryInvalidator();
@@ -68,8 +67,7 @@ export const ActiveBudgetCard = ({
     budget._id,
     isProject,
     {
-      onSuccess(res) {
-        setPaused(res.paused);
+      onSuccess() {
         onSuccess();
         setMode('success');
       },
@@ -104,6 +102,7 @@ export const ActiveBudgetCard = ({
     allocatedAmount,
     unallocatedAmount,
     totalSpent,
+    paused,
   } = budget;
 
   const isOwner = user?.role === 'owner';
@@ -200,14 +199,16 @@ export const ActiveBudgetCard = ({
           setMode(null);
           setAction(null);
         }}
-        responseTitle={!paused ? `${entity} Unfrozen` : `${entity} Frozen`}
+        responseTitle={
+          action === 'unpause' ? `${entity} Unfrozen` : `${entity} Frozen`
+        }
         responseMessage={`You have ${
-          !paused ? 'unfrozen' : 'frozen'
+          action === 'unpause' ? 'unfrozen' : 'frozen'
         } this ${entity.toLowerCase()} successfully`}
         authorizeButtonText={
           action === 'close'
             ? `Close ${entity}`
-            : paused
+            : action === 'unpause'
             ? `Unfreeze ${entity}`
             : `Freeze ${entity}`
         }
@@ -218,7 +219,7 @@ export const ActiveBudgetCard = ({
               reason,
             });
           } else {
-            pause({ pin, pause: !paused });
+            pause({ pin, pause: action === 'pause' });
           }
         }}
       />
@@ -282,7 +283,10 @@ export const ActiveBudgetCard = ({
                 <>
                   {getColor && (
                     <div
-                      className={clsx('relative flex', showActions && 'ml-2')}
+                      className={clsx(
+                        'relative flex',
+                        showActions && !!beneficiaries?.length && 'ml-2'
+                      )}
                     >
                       {handleSort({
                         data: beneficiaries,
@@ -415,7 +419,7 @@ export const ActiveBudgetCard = ({
             {paused && (
               <button
                 onClick={() => {
-                  setAction('pause_and_unpause');
+                  setAction('unpause');
                   setMode('authorize');
                 }}
                 className={'group my-auto'}
@@ -443,7 +447,7 @@ export const ActiveBudgetCard = ({
                   {
                     icon: <Freeze />,
                     onClick() {
-                      setAction('pause_and_unpause');
+                      setAction(paused ? 'unpause' : 'pause');
                       setMode('authorize');
                     },
                     title: `${paused ? 'Unfreeze' : 'Freeze'} ${entity}`,

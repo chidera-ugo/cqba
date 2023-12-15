@@ -20,6 +20,7 @@ interface Props {
   close: () => void;
   budget?: IBudget;
   onFinish?: () => void;
+  projectId?: string;
   unallocatedFunds?: number;
 }
 
@@ -29,6 +30,7 @@ export const ManageBudgetCreation = ({
   budget,
   unallocatedFunds,
   onFinish,
+  projectId,
 }: Props) => {
   const [mode, setMode] = useState<Mode>(Mode.create);
 
@@ -43,9 +45,13 @@ export const ManageBudgetCreation = ({
   const { invalidate, defaultInvalidator } = useQueryInvalidator();
   const { handleError } = useHandleError();
 
-  const { isLoading: creatingBudget, mutate } = useCreateBudget(budget?._id, {
-    onError: () => null,
-  });
+  const { isLoading: creatingBudget, mutate } = useCreateBudget(
+    budget?._id,
+    projectId,
+    {
+      onError: () => null,
+    }
+  );
 
   const isAuthorizationMode = mode === Mode.approve || mode === Mode.success;
 

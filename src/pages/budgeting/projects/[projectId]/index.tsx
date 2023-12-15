@@ -46,7 +46,7 @@ export default function ProjectDetailsPage() {
       breadCrumbsSlot={
         <div className={clsx('my-auto hidden gap-2 1180:flex')}>
           <SearchInput
-            placeholder='Search by Budget ID'
+            placeholder='Search budgets'
             value={search}
             wrapperClassname={'640:w-auto w-full'}
             className='w-full 640:w-[300px]'

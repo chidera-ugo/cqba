@@ -54,6 +54,7 @@ export const ProjectDetails = ({
   return (
     <>
       <ManageBudgetCreation
+        projectId={projectId}
         unallocatedFunds={data?.unallocatedAmount}
         show={modal === 'create_budget'}
         close={() => setModal(null)}

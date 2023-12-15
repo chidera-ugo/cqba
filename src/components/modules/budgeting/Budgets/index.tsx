@@ -31,8 +31,6 @@ export const Budgets = ({
   layout,
   createdByUser,
 }: Props & Partial<TPagination>) => {
-  console.log(pagination);
-
   const { screenSize } = useAppContext().state;
 
   const [currentBudget, setCurrentBudget] = useState<IBudget | null>(null);

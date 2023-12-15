@@ -7,6 +7,7 @@ import { Formik } from 'formik';
 import { useUpdateAvatar } from 'hooks/api/settings/useUpdateAvatar';
 import { useUpdateProfile } from 'hooks/api/settings/useUpdateProfile';
 import { toast } from 'react-toastify';
+import { generateUUID } from 'utils/generators/generateUUID';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
@@ -54,7 +55,11 @@ export const UpdateProfileInformationForm = () => {
       {(formikProps) => {
         const _avatar = formikProps.values.avatar;
 
-        const avatar = _avatar?.url ?? _avatar?.webUrl;
+        const avatar = !!_avatar?.url
+          ? _avatar.url
+          : !_avatar.webUrl
+          ? ''
+          : `${_avatar?.webUrl}?${generateUUID()}`;
 
         return (
           <>

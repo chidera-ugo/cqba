@@ -3,7 +3,6 @@ import { ImageIcon } from 'components/svgs/forms/ImageIcon';
 import { UserIcon } from 'components/svgs/UserIcon';
 import { imageExtensions } from 'constants/files/image_extensions';
 import { useFileSelector } from 'hooks/forms/useFileSelector';
-import Image from 'next/image';
 import { SetFieldValue } from 'types/commons';
 import { constructAcceptedFileTypeList } from 'utils/constructors/constructAcceptedFileTypeList';
 
@@ -66,7 +65,7 @@ export const UpdateAvatar = ({ avatar, setFieldValue }: Props) => {
       <div className='col-span-6 mt-5 425:mt-0 640:col-span-8'>
         <div className='y-center h-[128px] w-[128px] overflow-hidden rounded-full bg-neutral-200'>
           {avatar ? (
-            <Image
+            <img
               className={'my-auto h-full w-full object-cover object-center'}
               src={avatar}
               height={128}

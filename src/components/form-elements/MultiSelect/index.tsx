@@ -18,6 +18,7 @@ export type Props = JSX.IntrinsicElements['input'] &
     name?: string;
     dropdownClassname?: string;
     asModal?: boolean;
+    refetch?: () => void;
     isLoading?: boolean;
     isError?: boolean;
     setFieldValue: SetFieldValue;
@@ -28,6 +29,7 @@ export const MultiSelect = ({
   isLoading,
   isError,
   asRadio,
+  refetch,
   placeholder,
   ...props
 }: PropsWithChildren<Props>) => {
@@ -72,7 +74,16 @@ export const MultiSelect = ({
           )}
 
         {isLoading || isError ? (
-          <div className={clsx('input w-full bg-neutral-100')}>
+          <div
+            onClick={() => {
+              if (!refetch) return;
+              refetch();
+            }}
+            className={clsx(
+              'input w-full bg-neutral-100',
+              refetch && 'cursor-pointer'
+            )}
+          >
             <div className='y-center absolute right-3 h-full'>
               {isLoading ? (
                 <Spinner className={'my-auto text-primary-main'} />

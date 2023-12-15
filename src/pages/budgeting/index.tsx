@@ -149,6 +149,10 @@ export default function Budgeting() {
               });
             } else {
               setModal('create_budget');
+              setFilters((prev) => ({
+                ...prev,
+                status: budgetingFilterOptions[1],
+              }));
             }
           }}
         />
