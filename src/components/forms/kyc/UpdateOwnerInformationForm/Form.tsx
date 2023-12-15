@@ -88,7 +88,7 @@ export const Form = ({ processing, formikProps, currentOwner }: Props) => {
         title,
         phoneNumber: formatPhoneNumber(phone ?? user?.phone) ?? '',
       },
-      false
+      true
     );
   }, [currentOwner]);
 
@@ -103,7 +103,7 @@ export const Form = ({ processing, formikProps, currentOwner }: Props) => {
       />
 
       <div className='gap-4 880:flex'>
-        <Input label='First Name' name='firstName' />
+        <Input lazyFocus label='First Name' name='firstName' />
         <Input label='Last Name' name='lastName' />
       </div>
 
@@ -163,7 +163,7 @@ export const Form = ({ processing, formikProps, currentOwner }: Props) => {
           options={constructIdTypes()}
         />
 
-        <Input label='ID Document Number' name='idNumber' />
+        <Input label='ID Number' name='idNumber' />
       </div>
 
       <Input

@@ -12,6 +12,7 @@ export const useKycSteps = () => {
     description: string;
     actionText: string;
     hidden?: boolean;
+    dependency?: string;
   }[] = [
     {
       label: 'Business Information',
@@ -30,6 +31,7 @@ export const useKycSteps = () => {
       title: 'Business Documentation',
       description: 'Upload business documents',
       actionText: 'Upload Documents',
+      dependency: 'COMPANY_INFORMATION',
     },
     {
       label: 'Review',

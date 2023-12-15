@@ -274,7 +274,7 @@ export const ManageProjectCreation = ({ show, budget, onFinish }: Props) => {
                 <button
                   onClick={() => setMode(Mode.add_sub_budget)}
                   className={clsx(
-                    'w-full rounded-[10px] border border-dashed border-neutral-200 py-[30px] px-5 text-center hover:border-primary-main',
+                    'dashed_card w-full',
                     hasSubBudgets ? 'x-center gap-2' : 'y-center bg-primary-50'
                   )}
                 >

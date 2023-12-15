@@ -32,14 +32,14 @@ export const UpdateOwnerInformationForm = ({
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={validationSchema(type)}
+      validationSchema={validationSchema}
       onSubmit={({ phoneNumber, dateOfBirth, percentOwned, ...values }) => {
         mutate({
           ...values,
           percentOwned: !percentOwned ? 0 : parseInt(percentOwned),
           phone: phoneNumber,
           dob: String(dateOfBirth.calendarValue?.toISOString()),
-          id: currentOwner?.id,
+          id: currentOwner?._id,
         });
       }}
       validateOnBlur={false}

@@ -1,10 +1,12 @@
 import clsx from 'clsx';
 import { FullScreenLoader } from 'components/commons/FullScreenLoader';
+import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { UpdateOwnerInformationForm } from 'components/forms/kyc/UpdateOwnerInformationForm';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { Confirmation } from 'components/modals/Confirmation';
 import { OwnersList } from 'components/modules/kyc/ManageBusinessOwnersAndDirectors/OwnersList';
 import { Spinner } from 'components/svgs/dashboard/Spinner';
+import { UserAdd } from 'components/svgs/kyc/StepsCompletion';
 import { useDeleteOwner } from 'hooks/api/kyc/useDeleteOwner';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { IOwner } from 'hooks/api/kyc/useUpdateOwnerInformation';
@@ -58,110 +60,88 @@ export const ManageBusinessOwnersAndDirectors = () => {
     type === 'owner' ? 'Owner' : 'Director'
   }`;
 
+  const owners = [...(data?.directors ?? []), ...(data?.owners ?? [])].filter(
+    (owner) => !!owner?._id
+  );
+
   return (
     <>
       <FullScreenLoader show={deleting} />
 
-      <div className={'mt-4 rounded-lg border border-neutral-200 p-5'}>
-        <h5 className={'text-base'}>Business Owner</h5>
-        <p className={'mt-1 text-sm text-neutral-400'}>
-          A business representative is either an owner, director or shareholder
-          of your business
-        </p>
+      {!owners.length ? (
+        <button className={clsx('dashed_card mt-5 w-full bg-primary-50')}>
+          <span>
+            <UserAdd />
+          </span>
 
-        <OwnersList
-          {...{
-            isLoading,
-            isError,
-            setCurrentOwner,
-            isUnderReview,
-            setOwnerToDelete,
-          }}
-          handleShowModal={() => handleShowModal('owner')}
-          data={data?.owners}
-        />
+          <h5 className={clsx('mt-3 text-left text-lg font-medium')}>
+            Tell us about the business representative
+          </h5>
 
-        {!isUnderReview ? (
-          <div className={clsx('mt-5 flex gap-4')}>
-            <button
-              onClick={() => handleShowModal('owner')}
-              className={clsx(
-                'secondary-button rounded-lg border-none bg-neutral-100 text-neutral-500'
-              )}
-            >
-              Add Owner
-            </button>
-
-            {isFetching && (
-              <div className='my-auto'>
-                <Spinner className='text-primary-main' />
-              </div>
-            )}
-          </div>
-        ) : null}
-      </div>
-
-      <div className={'mt-4 rounded-lg border border-neutral-200 p-5'}>
-        <h5 className={'text-base'}>Business Directors</h5>
-        <p className={'mt-1 text-sm text-neutral-400'}>
-          Identify or add at least 1 person who owns a minimum total of 5% of
-          the business
-        </p>
-
-        <OwnersList
-          {...{
-            isLoading,
-            isError,
-            setCurrentOwner,
-            isUnderReview,
-            setOwnerToDelete,
-          }}
-          handleShowModal={() => handleShowModal('director')}
-          data={data?.directors}
-        />
-
-        {!isUnderReview && (
-          <div className={clsx('mt-5 flex gap-4')}>
-            <button
-              onClick={() => handleShowModal('director')}
-              className={clsx(
-                'secondary-button rounded-lg border-none bg-neutral-100 text-neutral-500'
-              )}
-            >
-              Add Director
-            </button>
-
-            {isFetching && (
-              <div className='my-auto'>
-                <Spinner className='text-primary-main' />
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-
-      {data?.directors?.length || data?.owners?.length ? (
-        <div className={'mt-10 pb-8'}>
-          <Link
-            href={`/kyc?tab=${
-              hasProvidedAllRequirements
-                ? 'review-and-submit'
-                : 'business-documentation&showSteps=true'
-            }`}
+          <p
+            className={
+              'mt-2 max-w-[360px] text-left text-sm leading-5 text-neutral-600'
+            }
           >
-            <div className='primary-button w-full min-w-[170px] 640:w-min'>
-              <span className='y-center h-full'>Save and Continue</span>
+            A business representative is either an owner, director or
+            shareholder of your business
+          </p>
+        </button>
+      ) : (
+        <>
+          <AppErrorBoundary>
+            <OwnersList
+              {...{
+                isLoading,
+                isError,
+                setCurrentOwner,
+                isUnderReview,
+                setOwnerToDelete,
+              }}
+              handleShowModal={() => handleShowModal('owner')}
+              data={owners}
+            />
+          </AppErrorBoundary>
+
+          {!isUnderReview ? (
+            <div className={clsx('mt-4 flex gap-4')}>
+              <button
+                onClick={() => handleShowModal('owner')}
+                className={clsx('text-sm font-medium text-primary-main')}
+              >
+                Add additional owners, director or shareholder
+              </button>
+
+              {isFetching && (
+                <div className='my-auto'>
+                  <Spinner className='text-primary-main' />
+                </div>
+              )}
             </div>
-          </Link>
+          ) : null}
 
-          <Link
-            href={'/kyc?tab=review-and-submit&showSteps=true'}
-            className='x-center mx-auto mt-4 flex w-full py-2 text-center text-sm font-medium 640:hidden'
-          >
-            Skip for later
-          </Link>
-        </div>
-      ) : null}
+          <div className={'mt-10 pb-8'}>
+            <Link
+              href={`/kyc?tab=${
+                hasProvidedAllRequirements
+                  ? 'review-and-submit'
+                  : 'business-documentation&showSteps=true'
+              }`}
+            >
+              <div className='primary-button w-full min-w-[170px] 640:w-min'>
+                <span className='y-center h-full'>Save and Continue</span>
+              </div>
+            </Link>
+
+            <Link
+              href={'/kyc?tab=review-and-submit&showSteps=true'}
+              className='x-center mx-auto mt-4 flex w-full py-2 text-center text-sm font-medium 640:hidden'
+            >
+              Skip for later
+            </Link>
+          </div>
+        </>
+      )}
 
       <Confirmation
         title='Confirm Deletion'

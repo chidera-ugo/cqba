@@ -11,7 +11,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 export default function ProjectDetailsPage() {
-  const { query, back } = useRouter();
+  const { query } = useRouter();
 
   const _q = query['projectId'];
   const projectId = typeof _q === 'string' ? _q : '';
@@ -37,7 +37,7 @@ export default function ProjectDetailsPage() {
       breadCrumbs={[
         {
           title: 'Budgets',
-          action: back,
+          url: '/budgeting',
         },
         {
           title: 'Track Project',

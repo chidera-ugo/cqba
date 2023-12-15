@@ -83,7 +83,7 @@
 
   button,
   input {
-    @apply disabled:cursor-not-allowed disabled:opacity-50;
+    @apply disabled:cursor-not-allowed disabled:opacity-40;
   }
 
   .text-link {
@@ -194,6 +194,15 @@
     @apply w-full rounded-[10px] border border-neutral-310 p-3 640:p-4;
   }
 
+  .dashed_card {
+    @apply rounded-[10px] border border-dashed border-neutral-200 py-[30px] px-5 text-center hover:border-primary-main;
+  }
+
+  .kyc_layout_height {
+    height: calc(100vh - 140px);
+    min-height: calc(100vh - 140px);
+  }
+
   .x-between {
     @apply flex justify-between align-middle;
   }
@@ -222,14 +231,6 @@
 
   .smooth {
     @apply duration-[150ms] ease-linear;
-  }
-
-  .card-title {
-    @apply;
-  }
-
-  .card-description {
-    @apply;
   }
 
   .autosizer > div {
@@ -309,7 +310,7 @@
   }
 
   .pill_gray {
-    @apply tpill bg-neutral-100 text-neutral-900 ring-1 ring-neutral-600 ring-opacity-20 640:ring-2;
+    @apply tpill bg-neutral-100 text-neutral-900 ring-1 ring-neutral-600 ring-opacity-20;
   }
 
   .pill_red {

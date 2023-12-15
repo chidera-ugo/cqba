@@ -27,7 +27,9 @@ export function useCreateBudget(
 ) {
   return useTMutation<CreateBudgetDto, IBudget>({
     method: !!id ? 'put' : 'post',
-    url: projectId ? `/project/${projectId}` : `${!!id ? `/${id}` : ''}`,
+    url: projectId
+      ? `/project/${projectId}/sub-budget`
+      : `${!!id ? `/${id}` : ''}`,
     service: 'budgets',
     options,
   });
