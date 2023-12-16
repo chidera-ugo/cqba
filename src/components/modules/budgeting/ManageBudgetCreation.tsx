@@ -22,6 +22,7 @@ interface Props {
   onFinish?: () => void;
   projectId?: string;
   unallocatedFunds?: number;
+  onSuccess?: (budgetId: string) => void;
 }
 
 export const ManageBudgetCreation = ({
@@ -31,6 +32,7 @@ export const ManageBudgetCreation = ({
   unallocatedFunds,
   onFinish,
   projectId,
+  onSuccess,
 }: Props) => {
   const [mode, setMode] = useState<Mode>(Mode.create);
 
@@ -84,7 +86,8 @@ export const ManageBudgetCreation = ({
         onSuccess(res) {
           setBudgetStatus(!!projectId ? 'active' : res.status);
 
-          setMode(Mode.success);
+          if (onSuccess) onSuccess(res._id);
+          else setMode(Mode.success);
 
           invalidate('budgets', 'balances', 'team');
           defaultInvalidator(['budget', budget?._id]);
@@ -144,7 +147,7 @@ export const ManageBudgetCreation = ({
             : mode === Mode.add_beneficiaries
             ? 'Add Beneficiaries'
             : mode === Mode.create_employee
-            ? 'Invite Employee'
+            ? 'Invite People'
             : ''
         }
         {...{
@@ -156,7 +159,7 @@ export const ManageBudgetCreation = ({
           {isAuthorizationMode ? null : (
             <AppErrorBoundary>
               <ManageSingleBudgetCreation
-                {...{ mode, setMode, unallocatedFunds }}
+                {...{ mode, onSuccess, setMode, unallocatedFunds }}
                 {...manageSingleBudgetCreation}
               />
             </AppErrorBoundary>

@@ -16,9 +16,9 @@ export const WalletOverview = () => {
   if (isError || _e) return <IsLoadingIsError />;
 
   return (
-    <div className='h-[94px] grid-cols-2 gap-4 640:grid 640:h-[114px]'>
+    <div className='grid-cols-2 gap-4 640:grid'>
       {isOwner && (
-        <div className='card y-center'>
+        <div className='card y-center h-[94px] 640:h-[114px]'>
           <SummaryWithVariance
             value={
               !primaryWallet
@@ -34,7 +34,7 @@ export const WalletOverview = () => {
         </div>
       )}
 
-      <div className='card y-center relative mt-4 640:mt-0'>
+      <div className='card y-center relative mt-4 h-[94px] 640:mt-0 640:h-[114px]'>
         <SummaryWithVariance
           value={
             !primaryWallet

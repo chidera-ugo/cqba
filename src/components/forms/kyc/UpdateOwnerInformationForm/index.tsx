@@ -1,21 +1,17 @@
-import { AppToast } from 'components/primary/AppToast';
 import { Formik } from 'formik';
 import {
   IOwner,
   useUpdateOwnerInformation,
 } from 'hooks/api/kyc/useUpdateOwnerInformation';
 import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
-import { toast } from 'react-toastify';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
 
 export const UpdateOwnerInformationForm = ({
-  type,
   currentOwner,
   closeModal,
 }: {
-  type: 'owner' | 'director';
   currentOwner: IOwner | null;
   closeModal: () => void;
 }) => {
@@ -25,7 +21,6 @@ export const UpdateOwnerInformationForm = ({
     onSuccess() {
       closeModal();
       invalidate('organization');
-      toast(<AppToast>Update successful</AppToast>, { type: 'success' });
     },
   });
 
@@ -33,9 +28,16 @@ export const UpdateOwnerInformationForm = ({
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={({ phoneNumber, dateOfBirth, percentOwned, ...values }) => {
+      onSubmit={({
+        phoneNumber,
+        dateOfBirth,
+        title,
+        percentOwned,
+        ...values
+      }) => {
         mutate({
           ...values,
+          title: Object.keys(title),
           percentOwned: !percentOwned ? 0 : parseInt(percentOwned),
           phone: phoneNumber,
           dob: String(dateOfBirth.calendarValue?.toISOString()),
@@ -49,7 +51,6 @@ export const UpdateOwnerInformationForm = ({
           <Form
             {...{
               currentOwner,
-              type,
               formikProps,
               processing: isLoading,
             }}

@@ -1,1 +1,5 @@
-export const roles = ['Owner', 'Director', 'Shareholder'];
+export const roles = [
+  { label: 'Owner' },
+  { label: 'Director' },
+  { label: 'Shareholder' },
+];

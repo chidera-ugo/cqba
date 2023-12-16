@@ -53,7 +53,7 @@ export const Filter = <T extends Record<string, any>>({
         </div>
 
         {withChevron && (
-          <span className='my-auto ml-1'>
+          <span className='my-auto ml-1 pt-px'>
             <div
               className={clsx(
                 'text-primary-main duration-100',

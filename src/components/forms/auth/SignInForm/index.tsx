@@ -1,6 +1,8 @@
+import { AppToast } from 'components/primary/AppToast';
 import { Formik } from 'formik';
 import { useSignin } from 'hooks/api/auth/useSignin';
 import { useInitiateAuthSession } from 'hooks/app/useInitiateAuthSession';
+import { toast } from 'react-toastify';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
@@ -30,6 +32,11 @@ export const SignInForm = ({
           {
             onSuccess(res) {
               if (!res.rememberMe) return goTo2fa(email);
+
+              if (!res.tokens)
+                return toast(<AppToast>An error occurred</AppToast>, {
+                  type: 'error',
+                });
 
               const { access_token, refresh_token } = res.tokens;
 

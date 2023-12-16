@@ -1,5 +1,6 @@
 import { AddressInputGroup } from 'components/form-elements/AddressInputGroup';
 import { Input } from 'components/form-elements/Input';
+import { MultiSelect } from 'components/form-elements/MultiSelect';
 import { ImageViewer } from 'components/modals/ImageViewer';
 import { roles } from 'constants/kyc/roles';
 import { useAppContext } from 'context/AppContext';
@@ -33,6 +34,8 @@ export const Form = ({ processing, formikProps, currentOwner }: Props) => {
     submitCount,
     values,
   } = formikProps;
+
+  console.log(values.title);
 
   const [previewImageUrl, setPreviewImageUrl] = useState('');
 
@@ -120,15 +123,33 @@ export const Form = ({ processing, formikProps, currentOwner }: Props) => {
         maxDate={maxDob.toDate()}
       />
 
-      <PhoneNumberInput
-        label='Phone Number'
-        name='phoneNumber'
-        setFieldValue={setFieldValue}
-        inputMode='tel'
-        shouldValidate
-      />
+      <div className='gap-4 880:flex'>
+        <PhoneNumberInput
+          label='Phone Number'
+          name='phoneNumber'
+          setFieldValue={setFieldValue}
+          inputMode='tel'
+          shouldValidate
+        />
 
-      <Input label='Email (Optional)' name='email' />
+        <Input label='Email (Optional)' name='email' />
+      </div>
+
+      <MultiSelect
+        id={'select_titles'}
+        {...{
+          setFieldValue,
+        }}
+        entity={'title'}
+        noSearch
+        label='Title'
+        placeholder={'Select title'}
+        name='title'
+        trueValueKey={'label'}
+        displayValueKey={'label'}
+        options={roles}
+        itemCountAdjustment={1}
+      />
 
       <div className='gap-4 880:flex'>
         <Input
@@ -137,21 +158,22 @@ export const Form = ({ processing, formikProps, currentOwner }: Props) => {
           name='percentOwned'
           inputMode={'tel'}
           type={'number'}
+          className='w-full'
         />
 
-        <Select
-          label='Title'
-          placeholder={'Select title'}
-          name='title'
-          options={roles}
+        <Input
+          label='BVN'
+          name='bvn'
+          setFieldValue={setFieldValue}
+          type='text'
+          inputMode='tel'
+          autoComplete='off'
+          next={'idType'}
+          fieldType='idNumber'
+          limit={11}
+          shouldValidate
         />
       </div>
-
-      <AddressInputGroup
-        setFieldValue={setFieldValue}
-        country={values.country}
-        state={values.state}
-      />
 
       <div className='gap-4 880:flex'>
         <Select
@@ -166,17 +188,10 @@ export const Form = ({ processing, formikProps, currentOwner }: Props) => {
         <Input label='ID Number' name='idNumber' />
       </div>
 
-      <Input
-        label='BVN'
-        name='bvn'
+      <AddressInputGroup
         setFieldValue={setFieldValue}
-        type='text'
-        inputMode='tel'
-        autoComplete='off'
-        next={'idType'}
-        fieldType='idNumber'
-        limit={11}
-        shouldValidate
+        country={values.country}
+        state={values.state}
       />
 
       <div className='relative mt-8 flex pb-8'>

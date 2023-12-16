@@ -87,7 +87,7 @@ export const Form = ({
           <Select
             options={budgets}
             isError={isError}
-            isLoading={isLoading || isRefetching}
+            isLoading={isLoading || (isRefetching && !budgets.length)}
             className={'mt-0'}
             displayValueKey={'name'}
             next={'amount'}

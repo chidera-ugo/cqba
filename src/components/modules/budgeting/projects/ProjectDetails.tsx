@@ -68,14 +68,12 @@ export const ProjectDetails = ({
           data?.unallocatedAmount > 0 ? (
             <button
               onClick={() => setModal('create_budget')}
-              className='primary-button x-center my-auto h-6 w-6 gap-2 px-2 text-sm 640:h-10 640:w-full 640:px-4'
+              className='primary-button x-center my-auto h-10 w-full gap-2 px-2 text-sm 640:px-4'
             >
               <span className={'my-auto'}>
                 <SimplePlus />
               </span>
-              <span className={'my-auto hidden 640:block'}>
-                Create Sub Budget
-              </span>
+              <span className={'my-auto'}>Create Sub Budget</span>
             </button>
           ) : null
         }

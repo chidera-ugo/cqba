@@ -1,4 +1,5 @@
 import { DatePickerValue } from 'types/commons';
+import { MultiCheckValue } from 'utils/validators/validateMultiCheckValues';
 
 export const initialValues = {
   firstName: '',
@@ -12,7 +13,7 @@ export const initialValues = {
   address: '',
   state: '',
   postalCode: '',
-  title: '',
+  title: {} as MultiCheckValue,
   city: '',
   idNumber: '',
   bvn: '',

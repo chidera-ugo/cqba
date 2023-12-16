@@ -1,5 +1,6 @@
 import { Action, State } from 'context/AppContext/types';
 import { deleteFromLocalStore, saveToLocalStore } from 'lib/localStore';
+import { generateUUID } from 'utils/generators/generateUUID';
 
 export function reducer(state: State, action: Action): State {
   switch (action.type) {
@@ -28,9 +29,14 @@ export function reducer(state: State, action: Action): State {
       return { ...state, tokens: null };
     }
     case 'setCurrentUser': {
+      const avatar = action?.payload?.avatar;
+
       return {
         ...state,
-        user: action.payload,
+        user: {
+          ...action.payload,
+          avatar: !avatar ? '' : `${avatar}?${generateUUID()}`,
+        },
         isInitializing: false,
       };
     }

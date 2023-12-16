@@ -51,7 +51,7 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
   ];
 
   return (
-    <div className='grid grid-cols-12 gap-5'>
+    <div className='grid grid-cols-12 gap-3 640:gap-5'>
       {payload.map(
         ({ name, value, disabled, variance, moreInfo, isAmount }, i) => {
           if (disabled) return <Fragment key={name} />;
@@ -61,8 +61,8 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
           return (
             <div
               className={clsx(
-                'card y-center col-span-12 h-[116px] 640:col-span-6 640:h-[132px]',
-                isOwner && '1280:col-span-4',
+                'card y-center h-[116px] 640:h-[132px]',
+                isOwner ? 'col-span-4' : 'col-span-6',
                 i === 0 && 'bg-primary-main text-white'
               )}
               key={name}
@@ -88,12 +88,12 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
 
 const IsLoadingIsError = ({ type }: { type: 'loading' | 'error' }) => {
   return (
-    <div className='grid grid-cols-12 gap-5'>
+    <div className='flex w-full gap-3 640:gap-5'>
       {generatePlaceholderArray(3).map((id) => {
         return (
           <div
             className={clsx(
-              'card y-center col-span-12 h-[116px] 640:col-span-6 640:h-[132px] 1280:col-span-4'
+              'card y-center h-[116px] min-w-[320px] 640:h-[132px] 640:min-w-[360px]'
             )}
             key={id}
           >

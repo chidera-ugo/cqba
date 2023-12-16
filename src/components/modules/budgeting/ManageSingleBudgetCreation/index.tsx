@@ -23,6 +23,7 @@ type Props = {
   budget?: IBudget;
   onAddBudgetBeneficiariesSubmit?: (values: typeof initialValues) => void;
   unallocatedFunds?: number;
+  onSuccess?: (budgetId: string) => void;
 } & Omit<
   UseManageSingleBudgetCreation,
   'getBudget' | 'resetFormRecoveryValues'
@@ -40,6 +41,7 @@ export const ManageSingleBudgetCreation = ({
   unallocatedFunds,
   isLoading,
   currency,
+  onSuccess,
   onAddBudgetBeneficiariesSubmit,
 }: Props) => {
   const { user } = useAppContext().state;
@@ -92,6 +94,7 @@ export const ManageSingleBudgetCreation = ({
       {...{ budget, unallocatedFunds }}
       currency={currency}
       formRecoveryValues={createBudgetFormRecoveryValues}
+      onSuccess={onSuccess}
       onSubmit={(values) => {
         setCreateBudgetFormRecoveryValues((prev) => ({
           ...prev!,

@@ -1,5 +1,5 @@
-import { passwordValidation } from 'components/forms/auth/SignUpForm/validationSchema';
 import { SmallCheck } from 'components/svgs/others/Check';
+import { passwordValidation } from 'constants/validation/password_validation';
 
 export const PasswordRequirementsCheckList = ({
   password,

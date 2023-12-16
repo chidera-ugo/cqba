@@ -28,12 +28,6 @@ import { useState } from 'react';
 import { sanitizeAmount } from 'utils/formatters/formatAmount';
 import { generateUUID } from 'utils/generators/generateUUID';
 
-interface Props {
-  show: boolean;
-  budget?: IBudget;
-  onFinish?: () => void;
-}
-
 export enum Mode {
   'create',
   'sub_budgets_list',
@@ -42,7 +36,19 @@ export enum Mode {
   'success',
 }
 
-export const ManageProjectCreation = ({ show, budget, onFinish }: Props) => {
+interface Props {
+  show: boolean;
+  budget?: IBudget;
+  onFinish?: () => void;
+  close: () => void;
+}
+
+export const ManageProjectCreation = ({
+  show,
+  close,
+  budget,
+  onFinish,
+}: Props) => {
   const { replace, query, pathname } = useRouter();
 
   const { user } = useAppContext().state;
@@ -147,6 +153,7 @@ export const ManageProjectCreation = ({ show, budget, onFinish }: Props) => {
   }
 
   function resetOnClose() {
+    close();
     resetFormRecoveryValues();
     setSubBudgets([]);
     setMode(Mode.create);
@@ -172,15 +179,15 @@ export const ManageProjectCreation = ({ show, budget, onFinish }: Props) => {
       <AuthorizeActionWithPin
         hasResponse={mode === Mode.success}
         show={show && (mode === Mode.success || mode === Mode.approve)}
-        close={closeModal}
+        close={() => {
+          closeModal();
+          if (onFinish && mode === Mode.success) onFinish();
+        }}
         processing={creatingProject}
         modalTitle={mode === Mode.approve ? 'Approve Project' : ''}
         finish={() => {
           closeModal();
-
-          if (!onFinish) return;
-
-          onFinish();
+          if (onFinish) onFinish();
         }}
         responseTitle={'Project Created Successfully'}
         responseMessage={
@@ -198,7 +205,7 @@ export const ManageProjectCreation = ({ show, budget, onFinish }: Props) => {
             : budgetCreationMode === BudgetCreationMode.add_beneficiaries
             ? 'Add Beneficiaries'
             : budgetCreationMode === BudgetCreationMode.create_employee
-            ? 'Invite Employee'
+            ? 'Invite People'
             : ''
         }
         closeModal={closeBudgetCreationModal}

@@ -1,4 +1,5 @@
 import { phoneNumberTest } from 'utils/validators/validateField';
+import { validateMultiCheckValues } from 'utils/validators/validateMultiCheckValues';
 import { object, string } from 'yup';
 
 export const validationSchema = object({
@@ -18,7 +19,9 @@ export const validationSchema = object({
       return !!val.value && !!val.calendarValue;
     }
   ),
-  title: string().required('Please select title'),
+  title: object().test('min', 'Please select title', (value) =>
+    validateMultiCheckValues(value)
+  ),
   percentOwned: string()
     .test('invalid percent', 'Invalid percentage', (val) => {
       const num = parseInt(val ?? '0');

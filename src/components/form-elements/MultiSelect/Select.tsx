@@ -262,7 +262,13 @@ export const Select = ({
                                           />
                                         </div>
                                       )}
-                                      <div className='my-auto text-left text-base font-medium line-clamp-1 group-hover:text-primary-main'>
+                                      <div
+                                        className={clsx(
+                                          'my-auto text-left text-base font-medium line-clamp-1',
+                                          withBorders &&
+                                            'group-hover:text-primary-main'
+                                        )}
+                                      >
                                         {val}
                                         {otherDisplayVal && (
                                           <span className='ml-2 text-neutral-400'>

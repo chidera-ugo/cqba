@@ -46,26 +46,28 @@ export const useManageSingleBudgetCreation = () => {
 
       const count = Object.values(beneficiaries)?.filter((val) => val)?.length;
 
-      const _budgetAmount = Number(
+      const _budgetAmount = parseInt(
         sanitizeAmount({ value: budgetAmount, returnTrueAmount: true })
       );
 
       for (const i in beneficiaries) {
-        if (beneficiaries[i])
+        if (beneficiaries[i]) {
+          const allocation = !splittingRules
+            ? _budgetAmount / count
+            : count === 1
+            ? _budgetAmount
+            : parseInt(
+                sanitizeAmount({
+                  value: allocations[i]!,
+                  returnTrueAmount: true,
+                })
+              );
+
           arr.push({
             user: i,
-            allocation:
-              (!splittingRules
-                ? _budgetAmount / count
-                : count === 1
-                ? _budgetAmount
-                : Number(
-                    sanitizeAmount({
-                      value: allocations[i]!,
-                      returnTrueAmount: true,
-                    })
-                  )) * 100,
+            allocation: parseInt((allocation * 100).toString()),
           });
+        }
       }
 
       return arr;

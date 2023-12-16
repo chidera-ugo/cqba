@@ -25,6 +25,9 @@ export const VerifyLoginOtp = ({ email, back }: Props) => {
 
   const { isLoading, mutate } = useVerifyLoginOtp({
     onSuccess(res) {
+      if (!res.tokens)
+        return toast(<AppToast>An error occurred</AppToast>, { type: 'error' });
+
       const { access_token, refresh_token } = res.tokens;
       initiateAuthSession(access_token, refresh_token);
     },

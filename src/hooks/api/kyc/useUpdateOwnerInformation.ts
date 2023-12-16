@@ -10,7 +10,7 @@ export interface UpdateOwnersInformationDto {
   country: string;
   address: string;
   state: string;
-  title: string;
+  title: string[];
   city: string;
   bvn: string;
   percentOwned: number;

@@ -47,59 +47,33 @@ export const ResetPinSteps = ({ closeModal }: Props) => {
     <>
       <FullScreenLoader show={isLoading} />
 
-      <div className={clsx('y-center smooth relative w-full overflow-hidden')}>
-        <AnimateLayout changeTracker={mode} className='mx-auto w-full'>
-          {mode === 'password' ? (
+      <AnimateLayout changeTracker={mode} className='mx-auto w-full'>
+        {mode === 'password' ? (
+          <ResetPinPasswordForm
+            onSuccess={(password) => {
+              setPassword(password);
+              setMode('otp');
+            }}
+          />
+        ) : mode === 'otp' ? (
+          <>
+            <p className={'leading-2'}>
+              Enter the OTP that was sent to your phone number or email
+            </p>
+            <div className='x-center mt-2'>
+              <VerifyResetPinPassword
+                password={password}
+                next={(otp) => {
+                  setOtp(otp);
+                  setMode('new');
+                }}
+              />
+            </div>
+          </>
+        ) : mode === 'new' ? (
+          <>
             <>
-              <p>Enter your account password</p>
-
-              <div className={clsx('mx-auto mt-8 max-w-[420px]')}>
-                <ResetPinPasswordForm
-                  onSuccess={(password) => {
-                    setPassword(password);
-                    setMode('otp');
-                  }}
-                />
-              </div>
-            </>
-          ) : mode === 'otp' ? (
-            <>
-              <p className={'leading-2'}>
-                Enter the OTP that was sent to your phone number or email
-              </p>
-              <div className='x-center mt-2'>
-                <VerifyResetPinPassword
-                  password={password}
-                  next={(otp) => {
-                    setOtp(otp);
-                    setMode('new');
-                  }}
-                />
-              </div>
-            </>
-          ) : mode === 'new' ? (
-            <>
-              <>
-                <p>Enter your new PIN</p>
-                <div className={clsx('mx-auto mt-4 max-w-[300px]')}>
-                  <CodeInput
-                    charLimit={4}
-                    autoComplete='off'
-                    autoFocus
-                    type={'password'}
-                    submit={(pin) => {
-                      setPins((prev) => ({ ...prev, new: pin }));
-                      setMode('confirm');
-                    }}
-                    name='newPin'
-                    className='x-center h-[54px] 768:h-[68px]'
-                  />
-                </div>
-              </>
-            </>
-          ) : (
-            <>
-              <p>Confirm your new PIN</p>
+              <p>Enter your new PIN</p>
               <div className={clsx('mx-auto mt-4 max-w-[300px]')}>
                 <CodeInput
                   charLimit={4}
@@ -107,41 +81,59 @@ export const ResetPinSteps = ({ closeModal }: Props) => {
                   autoFocus
                   type={'password'}
                   submit={(pin) => {
-                    if (pin !== pins.new) {
-                      setPins((prev) => ({
-                        password: prev.password,
-                      }));
-
-                      setMode('new');
-
-                      toast(<AppToast>PINs do not match</AppToast>, {
-                        type: 'info',
-                      });
-                    } else {
-                      setPins((prev) => ({ ...prev, confirm: pin }));
-                    }
+                    setPins((prev) => ({ ...prev, new: pin }));
+                    setMode('confirm');
                   }}
-                  name='confirmPin'
+                  name='newPin'
                   className='x-center h-[54px] 768:h-[68px]'
                 />
-
-                <button
-                  type='button'
-                  onClick={() =>
-                    mutate({
-                      newPin: pins.new,
-                      otp,
-                    })
-                  }
-                  className='dark-button mt-5'
-                >
-                  Proceed
-                </button>
               </div>
             </>
-          )}
-        </AnimateLayout>
-      </div>
+          </>
+        ) : (
+          <>
+            <p>Confirm your new PIN</p>
+            <div className={clsx('mx-auto mt-4 max-w-[300px]')}>
+              <CodeInput
+                charLimit={4}
+                autoComplete='off'
+                autoFocus
+                type={'password'}
+                submit={(pin) => {
+                  if (pin !== pins.new) {
+                    setPins((prev) => ({
+                      password: prev.password,
+                    }));
+
+                    setMode('new');
+
+                    toast(<AppToast>PINs do not match</AppToast>, {
+                      type: 'info',
+                    });
+                  } else {
+                    setPins((prev) => ({ ...prev, confirm: pin }));
+                  }
+                }}
+                name='confirmPin'
+                className='x-center h-[54px] 768:h-[68px]'
+              />
+
+              <button
+                type='button'
+                onClick={() =>
+                  mutate({
+                    newPin: pins.new,
+                    otp,
+                  })
+                }
+                className='dark-button mt-5'
+              >
+                Proceed
+              </button>
+            </div>
+          </>
+        )}
+      </AnimateLayout>
     </>
   );
 };

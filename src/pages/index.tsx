@@ -13,10 +13,10 @@ export default function Home() {
   );
 
   return (
-    <AppLayout title='Overview'>
+    <AppLayout title='Overview' childrenClassName={'my-5 640:my-7'}>
       <Overview />
 
-      <div className='mt-5 grid-cols-12 gap-5 1280:grid'>
+      <div className='app-container mt-5 grid-cols-12 gap-5 1280:grid'>
         <div className='col-span-8'>
           <CashflowOverview {...{ setFilters, filters, setRange, range }} />
         </div>

@@ -23,8 +23,6 @@ export const ManageBusinessOwnersAndDirectors = () => {
 
   const { hasProvidedAllRequirements } = useAccountVerificationStatus();
 
-  const [type, setType] = useState<OwnerType>('owner');
-
   const [ownerToDelete, setOwnerToDelete] = useState<null | {
     name: string;
     id: string;
@@ -32,7 +30,7 @@ export const ManageBusinessOwnersAndDirectors = () => {
 
   const { invalidate } = useQueryInvalidator();
 
-  const { isUnderReview } = useAccountVerificationStatus();
+  const { isUnderReviewOrApproved } = useAccountVerificationStatus();
 
   const { isLoading, isError, isFetching, data } =
     useGetOrganizationInformation();
@@ -51,25 +49,21 @@ export const ManageBusinessOwnersAndDirectors = () => {
     setShowModal(false);
   }
 
-  function handleShowModal(type: OwnerType) {
-    setType(type);
+  function handleShowModal() {
     setShowModal(true);
   }
 
-  const modalTitleSuffix = `Business ${
-    type === 'owner' ? 'Owner' : 'Director'
-  }`;
-
-  const owners = [...(data?.directors ?? []), ...(data?.owners ?? [])].filter(
-    (owner) => !!owner?._id
-  );
+  const modalTitleSuffix = 'Business Owner';
 
   return (
     <>
       <FullScreenLoader show={deleting} />
 
-      {!owners.length ? (
-        <button className={clsx('dashed_card mt-5 w-full bg-primary-50')}>
+      {!data?.owners?.length ? (
+        <button
+          onClick={handleShowModal}
+          className={clsx('dashed_card mt-5 w-full bg-primary-50')}
+        >
           <span>
             <UserAdd />
           </span>
@@ -95,18 +89,18 @@ export const ManageBusinessOwnersAndDirectors = () => {
                 isLoading,
                 isError,
                 setCurrentOwner,
-                isUnderReview,
+                isUnderReview: isUnderReviewOrApproved,
                 setOwnerToDelete,
               }}
-              handleShowModal={() => handleShowModal('owner')}
-              data={owners}
+              handleShowModal={handleShowModal}
+              data={data?.owners}
             />
           </AppErrorBoundary>
 
-          {!isUnderReview ? (
+          {!isUnderReviewOrApproved ? (
             <div className={clsx('mt-4 flex gap-4')}>
               <button
-                onClick={() => handleShowModal('owner')}
+                onClick={handleShowModal}
                 className={clsx('text-sm font-medium text-primary-main')}
               >
                 Add additional owners, director or shareholder
@@ -158,19 +152,18 @@ export const ManageBusinessOwnersAndDirectors = () => {
 
       <RightModalWrapper
         title={
-          isUnderReview
+          isUnderReviewOrApproved
             ? 'View Owner'
             : currentOwner
             ? `Edit ${modalTitleSuffix}`
             : `Add ${modalTitleSuffix}`
         }
-        show={isUnderReview ? showModal && !!currentOwner : showModal}
+        show={isUnderReviewOrApproved ? showModal && !!currentOwner : showModal}
         closeOnClickOutside
         childrenClassname='p-4 pt-2 640:p-8 640:pt-4'
         {...{ closeModal }}
       >
         <UpdateOwnerInformationForm
-          type={type}
           {...{
             currentOwner,
             closeModal,

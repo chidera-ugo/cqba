@@ -125,12 +125,16 @@ export default function Employees() {
               if (!isVerified) return;
               setModal('add_employee');
             }}
-            className='primary-button x-center h-6 w-6 gap-2 px-2 text-sm 640:h-10 640:w-full 640:px-4'
+            className='primary-button x-center my-auto h-8 gap-1 px-3 text-sm 640:h-10 640:w-full 640:gap-2 640:px-4'
           >
             <span className={'my-auto'}>
               <SimplePlus />
             </span>
-            <span className={'my-auto hidden 640:block'}>Invite User</span>
+
+            <span className={'my-auto'}>
+              <span className={'hidden 640:block'}>Invite User</span>
+              <span className={'block 640:hidden'}>Add</span>
+            </span>
           </button>
         </div>
       </div>

@@ -12,17 +12,18 @@ export const Form = ({ formikProps, processing }: Props) => {
   const { handleSubmit } = formikProps;
 
   return (
-    <FormikForm onSubmit={handleSubmit} className='mt-4'>
+    <FormikForm onSubmit={handleSubmit} className={'-mt-4'}>
       <PasswordInput
+        autoFocus
         label='Password'
         name='password'
         autoComplete='new-password'
       />
 
       <SubmitButton
-        id='reset-password-submit-button'
+        id='reset_password-submit-button'
         submitting={processing}
-        className='dark-button mt-8 w-full'
+        className='primary-button mt-8 w-full min-w-[120px] 640:w-auto'
       >
         Proceed
       </SubmitButton>

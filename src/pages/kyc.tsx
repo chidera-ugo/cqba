@@ -27,12 +27,13 @@ export default function Kyc() {
 
   const { getCurrentAccountSetupStepUrl } = useCurrentAccountSetupStepUrl();
 
-  const { isUnderReview, hasProvidedCompanyInformation } =
+  const { isUnderReviewOrApproved, hasProvidedCompanyInformation } =
     useAccountVerificationStatus();
 
   const { isRefetching } = useGetOrganizationInformation();
 
-  const showSteps = query['showSteps'] === 'true';
+  const showSteps =
+    query['showSteps'] !== 'false' && query['tab'] !== 'review-and-submit';
 
   useEffect(() => {
     if (isValidAccountSetupStep) return;
@@ -41,7 +42,7 @@ export default function Kyc() {
   }, [isValidAccountSetupStep]);
 
   useEffect(() => {
-    if (isUnderReview && query['tab'] !== 'review-and-submit')
+    if (isUnderReviewOrApproved && query['tab'] !== 'review-and-submit')
       replace('/kyc?tab=review-and-submit');
     else if (
       query['tab'] === 'business-documentation' &&
@@ -56,7 +57,7 @@ export default function Kyc() {
     replace('/');
   }, [isVerified]);
 
-  if (isVerified) return <FullScreenLoader show white id={'kyc'} />;
+  if (!isVerified) return <FullScreenLoader show white id={'kyc'} />;
 
   return (
     <AppLayout
@@ -70,7 +71,7 @@ export default function Kyc() {
       <div className='relative gap-5 768:flex'>
         <div
           className={clsx(
-            'hidden-scrollbar 640:kyc_layout_height sticky top-[108px] h-full w-[360px] flex-col justify-between overflow-y-auto',
+            'hidden-scrollbar 640:kyc_layout_height sticky top-[108px] h-full w-full flex-col justify-between overflow-y-auto 768:w-[360px]',
             showSteps ? 'flex' : 'hidden 768:flex'
           )}
         >
@@ -112,7 +113,6 @@ export default function Kyc() {
               ) : currentTab === 'owners-information' ? (
                 <div>
                   <h5>{`Owners' Information`}</h5>
-
                   <ManageBusinessOwnersAndDirectors />
                 </div>
               ) : currentTab === 'company-information' ? (

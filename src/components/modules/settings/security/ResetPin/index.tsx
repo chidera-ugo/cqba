@@ -19,11 +19,9 @@ export const ResetPin = ({ hasSetPin }: { hasSetPin: boolean }) => {
         closeModal={closeModal}
         show={showModal}
         className='bg-white'
+        title={'Reset Transaction PIN'}
       >
-        <div className='text-center'>
-          <h5 className={'mb-1'}>Reset Transaction PIN</h5>
-          <ResetPinSteps closeModal={closeModal} />
-        </div>
+        <ResetPinSteps closeModal={closeModal} />
       </RightModalWrapper>
     </>
   );

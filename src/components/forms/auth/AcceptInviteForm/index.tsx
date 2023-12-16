@@ -1,10 +1,12 @@
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
+import { AppToast } from 'components/primary/AppToast';
 import { Formik } from 'formik';
 import { useAcceptInvite } from 'hooks/api/auth/useAcceptInvite';
 import { useInitiateAuthSession } from 'hooks/app/useInitiateAuthSession';
 import { useMakeDummyHttpRequest } from 'hooks/commons/useMakeDummyHttpRequest';
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
@@ -22,6 +24,9 @@ export const AcceptInviteForm = () => {
 
   const { isLoading, mutate } = useAcceptInvite({
     onSuccess(res) {
+      if (!res.tokens)
+        return toast(<AppToast>An error occurred</AppToast>, { type: 'error' });
+
       const { access_token, refresh_token } = res.tokens;
 
       initiateAuthSession(access_token, refresh_token);
