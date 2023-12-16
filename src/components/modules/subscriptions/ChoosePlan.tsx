@@ -42,12 +42,13 @@ export const ChoosePlan = ({ minimal }: { minimal?: boolean }) => {
       />
     );
 
+  const months = currentTab.value == 'MONTHLY' ? 1 : 12;
+
   return (
     <div className={clsx(!minimal && 'app-container mx-auto max-w-[1168px]')}>
       <ChoosePaymentMethod
         show={!!selectedPlan}
-        months={currentTab.value == 'MONTHLY' ? 1 : 12}
-        selectedPlan={selectedPlan}
+        {...{ months, selectedPlan }}
         close={() => setSelectedPlan(null)}
       />
 

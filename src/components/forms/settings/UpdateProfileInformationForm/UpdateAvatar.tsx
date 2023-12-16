@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { ImageIcon } from 'components/svgs/forms/ImageIcon';
-import { UserIcon } from 'components/svgs/UserIcon';
+import { UserIconMd } from 'components/svgs/UserIcon';
 import { imageExtensions } from 'constants/files/image_extensions';
 import { useFileSelector } from 'hooks/forms/useFileSelector';
 import { SetFieldValue } from 'types/commons';
@@ -73,11 +73,7 @@ export const UpdateAvatar = ({ avatar, setFieldValue }: Props) => {
               alt={'avatar'}
             />
           ) : (
-            <div className={'y-center my-auto h-full'}>
-              <span className='x-center mx-auto'>
-                <UserIcon className={'h-10 w-10 text-neutral-500'} />
-              </span>
-            </div>
+            <UserIconMd size={128} />
           )}
         </div>
       </div>

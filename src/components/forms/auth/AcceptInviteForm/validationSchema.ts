@@ -1,5 +1,5 @@
-import { validatePassword } from 'components/forms/auth/SignUpForm/validationSchema';
 import { phoneNumberTest } from 'utils/validators/validateField';
+import { validatePassword } from 'utils/validators/validatePassword';
 import { object, string } from 'yup';
 
 export const validationSchema = object({

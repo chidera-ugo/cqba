@@ -19,7 +19,7 @@ export const KycSteps = ({ isRecap }: { isRecap?: boolean }) => {
     hasProvidedDocuments,
     hasProvidedCompanyInformation,
     hasProvidedOwnerInformationRequirements,
-    isUnderReview,
+    isUnderReviewOrApproved,
     refetchingOrganization,
   } = useAccountVerificationStatus();
 
@@ -34,7 +34,7 @@ export const KycSteps = ({ isRecap }: { isRecap?: boolean }) => {
 
     if (url === 'business-documentation' && hasProvidedDocuments) return true;
 
-    return url === 'review-and-submit' && isUnderReview;
+    return url === 'review-and-submit' && isUnderReviewOrApproved;
   }
 
   return (
@@ -53,9 +53,9 @@ export const KycSteps = ({ isRecap }: { isRecap?: boolean }) => {
         return (
           <button
             onClick={() => {
-              if (isDisabled) return;
+              if (isDisabled || isUnderReviewOrApproved) return;
 
-              push(`/kyc?tab=${isUnderReview ? 'review-and-submit' : url}`);
+              push(`/kyc?tab=${url}&showSteps=false`);
             }}
             disabled={isDisabled}
             key={title}

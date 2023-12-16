@@ -60,7 +60,7 @@ export const ActiveBudgetCard = ({
   const backToBudgetingHref = `/budgeting${
     !!projectId && !!subBudgetId ? `/projects/${projectId}` : ''
   }${defaultStringifySearch({
-    status: budgetingFilterOptions[isProject ? 0 : 1]!,
+    status: budgetingFilterOptions[isProject ? 1 : 0]!,
   })}`;
 
   const { isLoading: pausing, mutate: pause } = usePauseBudgetOrProject(
@@ -151,7 +151,11 @@ export const ActiveBudgetCard = ({
   const entity = isProject ? 'Project' : 'Budget';
 
   function onSuccess() {
-    defaultInvalidator(['budget', budget._id]);
+    if (action !== 'close') {
+      defaultInvalidator(['budget', budget._id]);
+      defaultInvalidator(['project']);
+    }
+
     invalidate('budgets');
   }
 
@@ -281,7 +285,7 @@ export const ActiveBudgetCard = ({
                 <Frozen />
               ) : (
                 <>
-                  {getColor && (
+                  {getColor && !!beneficiaries?.length && (
                     <div
                       className={clsx(
                         'relative flex',

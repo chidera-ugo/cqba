@@ -163,10 +163,10 @@ export const AllEmployeesTable = ({
         <NoData
           processing={isLoading || isRefetching}
           imageSrc={clock}
-          title={status === 'active' ? 'Invite Employee' : 'No pending invites'}
+          title={status === 'active' ? 'Invite People' : 'No pending invites'}
           subTitle={
             status === 'active'
-              ? `Building a strong team is essential for business success. Invite new employees to collaborate and manage your finances effectively`
+              ? `Building a strong team is essential for business success. Invite new people to collaborate and manage your finances effectively`
               : `You do not have any pending invites yet, there is no data to be displayed.`
           }
         />

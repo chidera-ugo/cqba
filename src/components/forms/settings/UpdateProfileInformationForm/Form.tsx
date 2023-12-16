@@ -76,7 +76,6 @@ export const Form = ({ submitting, formikProps }: Props) => {
               trueValueKey={'value'}
               displayValueKey={'name'}
               options={[
-                { name: 'CFO', value: 'cfo' },
                 { name: 'Owner', value: 'owner' },
                 { name: 'Employee', value: 'employee' },
               ]}

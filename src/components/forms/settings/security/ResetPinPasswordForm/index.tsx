@@ -1,5 +1,5 @@
 import { Formik } from 'formik';
-import { useMakeDummyHttpRequest } from 'hooks/commons/useMakeDummyHttpRequest';
+import { useInitiateResetPin } from 'hooks/api/settings/password_recovery/useInitiateResetPin';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
@@ -9,21 +9,16 @@ interface Props {
 }
 
 export const ResetPinPasswordForm = ({ onSuccess }: Props) => {
-  const { isLoading, mutate } = useMakeDummyHttpRequest({});
+  const { isLoading, mutate } = useInitiateResetPin({
+    onSuccess,
+  });
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={({ password }) => {
-        mutate(
-          { password },
-          {
-            onSuccess() {
-              onSuccess(password);
-            },
-          }
-        );
+        mutate({ password });
       }}
       validateOnBlur={false}
     >

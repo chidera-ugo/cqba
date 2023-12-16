@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { AnimateLayout } from 'components/animations/AnimateLayout';
+import { IsLoading } from 'components/data-states/IsLoading';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { GreenCheck } from 'components/illustrations/Success';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
@@ -11,12 +12,13 @@ import { RadioOff, RadioOn } from 'components/svgs/others/Radio';
 import { useAppContext } from 'context/AppContext';
 import { useChooseSubscriptionPlan } from 'hooks/api/subscriptions/useChooseSubscriptionPlan';
 import { SubscriptionPlan } from 'hooks/api/subscriptions/useGetAllSubscriptionPlans';
+import { useHandleError } from 'hooks/api/useHandleError';
 import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import process from 'process';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { usePaystackPayment } from 'react-paystack';
 import { PaystackProps } from 'react-paystack/libs/types';
 import { formatAmount } from 'utils/formatters/formatAmount';
@@ -35,6 +37,10 @@ export const ChoosePaymentMethod = ({
   close,
 }: Props) => {
   const { getCurrentUser, dispatch, state } = useAppContext();
+
+  const { handleError } = useHandleError();
+
+  const isFree = show && !!selectedPlan && selectedPlan?.amount?.NGN === 0;
 
   const [mode, setMode] = useState<'success' | 'confirming' | 'choose_method'>(
     'choose_method'
@@ -66,6 +72,12 @@ export const ChoosePaymentMethod = ({
     initializePayment(() => setMode('confirming'), dismiss);
   }, [paystackConfig]);
 
+  useEffect(() => {
+    if (!isFree) return;
+
+    proceed('wallet');
+  }, [isFree]);
+
   const { mutate, isLoading: choosingPlan } = useChooseSubscriptionPlan({
     onSuccess(res) {
       if (res.status === 'pending' && !!res.reference) {
@@ -81,6 +93,10 @@ export const ChoosePaymentMethod = ({
 
       onSuccess();
     },
+    onError(e) {
+      handleError(e);
+      cancel();
+    },
   });
 
   const methods = [
@@ -88,11 +104,10 @@ export const ChoosePaymentMethod = ({
       image: chequebase,
       id: 'wallet',
       title: 'ChequeBase Account',
-      subTitle: !primaryWallet
-        ? 'Balance: '
-        : `Balance: ${primaryWallet?.currency}${formatAmount({
-            value: primaryWallet?.balance,
-          })}`,
+      disabled: !primaryWallet,
+      subTitle: `Balance: ${primaryWallet?.currency}${formatAmount({
+        value: primaryWallet?.balance,
+      })}`,
     },
     {
       image: paystack,
@@ -101,6 +116,14 @@ export const ChoosePaymentMethod = ({
       subTitle: 'Pay with card, bank transfer etc',
     },
   ];
+
+  function proceed(method: string) {
+    mutate({
+      plan: selectedPlan?._id,
+      months,
+      paymentMethod: method,
+    });
+  }
 
   function onSuccess() {
     dispatch({ type: 'update_has_choosen_plan', payload: true });
@@ -127,7 +150,13 @@ export const ChoosePaymentMethod = ({
   return (
     <RightModalWrapper
       show={show}
-      title={mode === 'choose_method' ? 'Select Payment Option' : ''}
+      title={
+        isFree
+          ? 'Subscribing'
+          : mode === 'choose_method'
+          ? 'Select Payment Option'
+          : ''
+      }
       closeModal={cancel}
     >
       <AnimateLayout changeTracker={mode}>
@@ -152,9 +181,13 @@ export const ChoosePaymentMethod = ({
             onSuccess={onSuccess}
             intentId={paystackConfig?.metadata?.intent}
           />
+        ) : isFree ? (
+          <IsLoading message={'Subscribing'} />
         ) : (
           <>
-            {methods?.map(({ id, image, title, subTitle }) => {
+            {methods?.map(({ id, disabled, image, title, subTitle }) => {
+              if (disabled) return <Fragment key={id} />;
+
               return (
                 <button
                   onClick={() => setSelectedMethod(id)}
@@ -197,11 +230,7 @@ export const ChoosePaymentMethod = ({
                 onClick={() => {
                   if (!selectedMethod) return;
 
-                  mutate({
-                    plan: selectedPlan?._id,
-                    months,
-                    paymentMethod: selectedMethod,
-                  });
+                  proceed(selectedMethod);
                 }}
                 className={'primary-button w-[100px]'}
               >

@@ -127,7 +127,7 @@ export const CentredModalWrapper = ({
   return (
     <Modal
       className={clsx(
-        'y-between 640:y-center relative z-[1000] mx-auto mb-0 mt-auto w-full p-0 560:my-auto 640:w-auto',
+        'y-between 640:y-center relative z-[1000] mx-auto mb-0 mt-auto w-full p-0 640:my-auto 640:w-auto',
         withGutter && 'p-3'
       )}
       {...{ duration, show }}

@@ -82,7 +82,7 @@ export const Form = ({
         <SecondaryActionButton
           className={'x-between w-full p-3'}
           onClick={inviteEmployee}
-          text={'Invite Employee'}
+          text={'Invite People'}
         />
       </MultiSelect>
 

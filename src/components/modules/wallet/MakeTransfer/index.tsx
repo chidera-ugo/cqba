@@ -1,30 +1,52 @@
+import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
-import { CreateFirstBudget } from 'components/modules/wallet/MakeTransfer/CreateFirstBudget';
+import { ManageBudgetAndProjectCreation } from 'components/modules/budgeting/ManageBudgetAndProjectCreation';
 import { PerformWalletToBank } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank';
 import { AppToast } from 'components/primary/AppToast';
 import { Outbound } from 'components/svgs/navigation/Arrows';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
-import { useGetDebitableBudgets } from 'hooks/api/budgeting/useGetDebitableBudgets';
+import {
+  useGetDebitableBudgets,
+  useGetDebitableBudgetsByMutation,
+} from 'hooks/api/budgeting/useGetDebitableBudgets';
+import { useManageBudgetAndProjectCreation } from 'hooks/budgeting/useManageBudgetAndProjectCreation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 export const MakeTransfer = ({ budget }: { budget?: IBudget }) => {
-  const [modal, setModal] = useState<'create_budget' | 'transfer' | null>(null);
+  const [showTransferModal, setShowTransferModal] = useState(false);
+  const { modal, setModal } = useManageBudgetAndProjectCreation();
 
   const { isLoading, isError, data } = useGetDebitableBudgets();
 
+  const { mutate, isLoading: gettingBudgets } =
+    useGetDebitableBudgetsByMutation({
+      onError: () => null,
+    });
+
   return (
     <>
-      <CreateFirstBudget
-        show={modal === 'create_budget'}
-        onSuccess={() => setModal('transfer')}
-        close={() => setModal(null)}
+      <FullScreenLoader show={gettingBudgets && !modal} id={'make_transfer'} />
+
+      <ManageBudgetAndProjectCreation
+        {...{
+          modal,
+          setModal,
+        }}
+        onFinish={() => {
+          mutate(null, {
+            onSuccess(res) {
+              if (!!res?.length) setShowTransferModal(true);
+              else setModal('show_prompt');
+            },
+          });
+        }}
       />
 
       <PerformWalletToBank
         budget={budget}
-        show={modal === 'transfer'}
-        close={() => setModal(null)}
+        show={showTransferModal}
+        close={() => setShowTransferModal(false)}
       />
 
       <SubmitButton
@@ -38,11 +60,11 @@ export const MakeTransfer = ({ budget }: { budget?: IBudget }) => {
               type: 'error',
             });
 
-          if (!data?.length) return setModal('create_budget');
+          if (!data?.length) return setModal('show_prompt');
 
-          setModal('transfer');
+          setShowTransferModal(true);
         }}
-        className='primary-button x-center mt-3 h-11 w-full min-w-[163px] px-4 text-sm font-semibold 375:mt-0 1180:w-auto'
+        className='primary-button x-center ml-2 mt-3 h-11 w-full min-w-[163px] px-4 text-sm font-semibold 375:mt-0 1180:w-auto'
       >
         <span className='my-auto mr-2'>Make a transfer</span>
         <span className='my-auto'>

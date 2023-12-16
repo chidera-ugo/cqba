@@ -19,6 +19,7 @@ export const ChangePin = ({ hasSetPin }: { hasSetPin: boolean }) => {
         show={showModal}
         {...{ closeModal }}
         className='bg-white'
+        title={'Change PIN'}
         childrenClassname={'p-0'}
       >
         <div className='mt-8 text-center'>
