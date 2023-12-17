@@ -29,6 +29,7 @@ type Props = IBudget & {
   showOnlyBreakdown?: boolean;
   isProject?: boolean;
   onClick?: () => void;
+  isProjectPaused?: boolean;
   actionsSlot?: ReactNode;
 };
 
@@ -37,6 +38,7 @@ export const ActiveBudgetCard = ({
   showActions,
   isProject,
   onClick,
+  isProjectPaused,
   showOnlyBreakdown,
   actionsSlot,
   ...budget
@@ -251,7 +253,7 @@ export const ActiveBudgetCard = ({
           showActions || showOnlyBreakdown
             ? 'cursor-default'
             : 'cursor-pointer hover:border-neutral-300',
-          paused && !showActions && 'opacity-50'
+          (paused || isProjectPaused) && !showActions && 'opacity-50'
         )}
         onClick={() => {
           if (showActions || showOnlyBreakdown) return;
@@ -281,7 +283,7 @@ export const ActiveBudgetCard = ({
                 </div>
               </div>
 
-              {paused && !showActions ? (
+              {(paused || isProjectPaused) && !showActions ? (
                 <Frozen />
               ) : (
                 <>

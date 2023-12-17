@@ -65,7 +65,7 @@ export const ProjectDetails = ({
         isProject
         getColor={getColor}
         actionsSlot={
-          data?.unallocatedAmount > 0 ? (
+          data?.unallocatedAmount > 0 && !data?.paused ? (
             <button
               onClick={() => setModal('create_budget')}
               className='primary-button x-center my-auto h-10 w-full gap-2 px-2 text-sm 640:px-4'
@@ -90,6 +90,7 @@ export const ProjectDetails = ({
                 onCardClick={(budget) => {
                   push(`/budgeting/projects/${projectId}/${budget?._id}`);
                 }}
+                isProjectPaused={data?.paused}
                 data={paginatedBudgets}
                 {...{
                   isError,
@@ -101,6 +102,7 @@ export const ProjectDetails = ({
                 onRowClick={(budget) => {
                   push(`/budgeting/projects/${projectId}/${budget?._id}`);
                 }}
+                isProjectPaused={data?.paused}
                 data={paginatedBudgets}
                 {...{
                   isError,
