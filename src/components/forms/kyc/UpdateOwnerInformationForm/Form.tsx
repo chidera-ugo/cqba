@@ -35,8 +35,6 @@ export const Form = ({ processing, formikProps, currentOwner }: Props) => {
     values,
   } = formikProps;
 
-  console.log(values.title);
-
   const [previewImageUrl, setPreviewImageUrl] = useState('');
 
   const { user } = useAppContext().state;

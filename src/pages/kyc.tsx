@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import { LogoutButton } from 'components/buttons/Logout';
-import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { SimpleToast } from 'components/commons/SimpleToast';
 import { IsLoading } from 'components/data-states/IsLoading';
 import { UpdateBusinessDocumentionForm } from 'components/forms/kyc/UpdateBusinessDocumentionForm';
@@ -13,7 +12,6 @@ import { ReviewAndSubmit } from 'components/modules/kyc/ReviewAndSubmit';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import { useCurrentAccountSetupStepUrl } from 'hooks/dashboard/kyc/useCurrentAccountSetupStepUrl';
-import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useKycSteps } from 'hooks/kyc/useKycSteps';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -22,8 +20,6 @@ export default function Kyc() {
   const { currentTab, isValidAccountSetupStep } = useKycSteps();
 
   const { replace, query } = useRouter();
-
-  const { isVerified } = useIsVerified();
 
   const { getCurrentAccountSetupStepUrl } = useCurrentAccountSetupStepUrl();
 
@@ -51,16 +47,9 @@ export default function Kyc() {
       replace('/kyc?tab=company-information');
   }, [query['tab']]);
 
-  useEffect(() => {
-    if (!isVerified) return;
-
-    replace('/');
-  }, [isVerified]);
-
-  if (!isVerified) return <FullScreenLoader show white id={'kyc'} />;
-
   return (
     <AppLayout
+      isForUnverified
       title='Get Started'
       hideSideNavigation
       headerClassname={'border-b-none'}
