@@ -73,7 +73,7 @@ export const ChangePinSteps = ({ closeModal }: Props) => {
             >
               <p>Enter Your Current PIN</p>
 
-              <div className={clsx('mx-auto mt-4 max-w-[300px]')}>
+              <div className={clsx('mx-auto mt-1 max-w-[300px]')}>
                 <CodeInput
                   charLimit={4}
                   autoComplete='off'

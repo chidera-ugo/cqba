@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { SettingsLayout } from 'components/layouts/SettingsLayout';
-import { ChangePassword } from 'components/modules/settings/security/ChangePassword';
 import { ChangePin } from 'components/modules/settings/security/ChangePin';
 import { ResetPin } from 'components/modules/settings/security/ResetPin';
 import { AppToast } from 'components/primary/AppToast';
@@ -68,7 +67,6 @@ export default function Security() {
 
       <ChangePin hasSetPin={!!user?.pinSet} />
       <ResetPin hasSetPin={!!user?.pinSet} />
-      <ChangePassword />
 
       {securitySettings.map(({ title, description, disabled, button }) => {
         if (disabled) return <Fragment key={title}></Fragment>;
