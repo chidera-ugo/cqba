@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { SettingsLayout } from 'components/layouts/SettingsLayout';
-import { ChangePassword } from 'components/modules/settings/security/ChangePassword';
 import { ChangePin } from 'components/modules/settings/security/ChangePin';
 import { ResetPin } from 'components/modules/settings/security/ResetPin';
 import { AppToast } from 'components/primary/AppToast';
@@ -41,7 +40,7 @@ export default function Security() {
       button: (
         <button
           onClick={() => replace({ pathname, query: { _m: 'pin' } })}
-          className='primary-button h-10 px-3 text-sm'
+          className='primary-button h-10 w-[120px] px-3 text-sm'
         >
           Change Pin
         </button>
@@ -68,7 +67,6 @@ export default function Security() {
 
       <ChangePin hasSetPin={!!user?.pinSet} />
       <ResetPin hasSetPin={!!user?.pinSet} />
-      <ChangePassword />
 
       {securitySettings.map(({ title, description, disabled, button }) => {
         if (disabled) return <Fragment key={title}></Fragment>;

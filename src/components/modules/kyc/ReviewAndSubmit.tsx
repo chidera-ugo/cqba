@@ -19,9 +19,9 @@ export const ReviewAndSubmit = () => {
     },
   });
 
-  const { isUnderReview } = useAccountVerificationStatus();
+  const { isUnderReviewOrApproved } = useAccountVerificationStatus();
 
-  if (submitted || isUnderReview) return <ApplicationUnderReview />;
+  if (submitted || isUnderReviewOrApproved) return <ApplicationUnderReview />;
 
   return (
     <>

@@ -42,6 +42,8 @@ export const AddressInputGroup = ({ country, state, setFieldValue }: Props) => {
 
   return (
     <>
+      <Input label='Address' placeholder={`Enter address`} name='address' />
+
       <div className='gap-5 480:flex'>
         <Select
           placeholder={'Select country'}
@@ -61,8 +63,6 @@ export const AddressInputGroup = ({ country, state, setFieldValue }: Props) => {
           name='postalCode'
         />
       </div>
-
-      <Input label='Address' placeholder={`Enter address`} name='address' />
 
       <div className='gap-5 480:flex'>
         <Select

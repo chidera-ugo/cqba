@@ -4,6 +4,7 @@ import {
   defaultStringifySearch,
   simpleParseSearch,
 } from 'hooks/client_api/search_params';
+import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getDateRange } from 'utils/getters/getDateRange';
@@ -17,6 +18,8 @@ export const useUrlManagedState = <T extends ZodRawShape>(
   defaultRangeAccessorKey?: string, // You can pass the location of a range value present in "filters" as an accessorKey
   pageSize?: number
 ) => {
+  const { isVerified } = useIsVerified();
+
   const searchParams = useSearchParams();
 
   const _pageSize = pageSize ?? defaultPageSize;
@@ -49,6 +52,8 @@ export const useUrlManagedState = <T extends ZodRawShape>(
   const pathname = usePathname();
 
   useEffect(() => {
+    if (!isVerified) return;
+
     const { pagination, ...search } = validateSearchParams();
 
     setFilters(search);
@@ -86,6 +91,8 @@ export const useUrlManagedState = <T extends ZodRawShape>(
   }, []);
 
   useEffect(() => {
+    if (!isVerified) return;
+
     replace(`${pathname}${defaultStringifySearch({ ...filters, pagination })}`);
   }, [filters, pagination]);
 

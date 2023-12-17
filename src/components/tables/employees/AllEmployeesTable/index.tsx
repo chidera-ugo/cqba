@@ -118,20 +118,6 @@ export const AllEmployeesTable = ({
     setShowActionConfirmation(false);
   }
 
-  if (data && !data?.docs?.length)
-    return (
-      <NoData
-        processing={isLoading || isRefetching}
-        imageSrc={clock}
-        title={status === 'active' ? 'Invite Employee' : 'No pending invites'}
-        subTitle={
-          status === 'active'
-            ? `Building a strong team is essential for business success. Invite new employees to collaborate and manage your finances effectively`
-            : `You do not have any pending invites yet, there is no data to be displayed.`
-        }
-      />
-    );
-
   const isActive = employeeToPerformActionOn?.status === 'active';
 
   const identifier = employeeToPerformActionOn?.firstName
@@ -173,56 +159,71 @@ export const AllEmployeesTable = ({
         }}
       />
 
-      {screenSize?.['mobile'] ? (
-        <MobileEmployeesList
-          {...{
-            isLoading,
-            isError,
-            isRefetching,
-            data,
-            setPagination,
-            pagination,
-            onRowClick,
-          }}
+      {data && !data.docs.length ? (
+        <NoData
+          processing={isLoading || isRefetching}
+          imageSrc={clock}
+          title={status === 'active' ? 'Invite People' : 'No pending invites'}
+          subTitle={
+            status === 'active'
+              ? `Building a strong team is essential for business success. Invite new people to collaborate and manage your finances effectively`
+              : `You do not have any pending invites yet, there is no data to be displayed.`
+          }
         />
       ) : (
-        <Table<IEmployee>
-          className={'mt-20 640:mt-4'}
-          title='users'
-          headerSlot={slot}
-          dontScrollToTopOnPageChange
-          onRowClick={(employee) => {
-            onRowClick(employee, 'view_employee');
-          }}
-          returnOriginalOnRowClick
-          accessor='_id'
-          mustHaveRange
-          {...{
-            isLoading,
-            data,
-            setColumnFilters,
-            columnFilters,
-            currentSearchColumn,
-            pagination,
-            columns,
-            setPagination,
-            setCurrentSearchColumn,
-            setSorting,
-            sorting,
-            isError,
-            isRefetching,
-          }}
-          reset={() => {
-            setFilters && setFilters({});
-            setPagination({
-              pageIndex: 0,
-              pageSize: 10,
-            });
-            setSorting([]);
-            reset && reset();
-          }}
-          noDataConfig={{ title: 'You have not added any users yet.' }}
-        />
+        <>
+          {screenSize?.['mobile'] ? (
+            <MobileEmployeesList
+              {...{
+                isLoading,
+                isError,
+                isRefetching,
+                data,
+                setPagination,
+                pagination,
+                onRowClick,
+              }}
+            />
+          ) : (
+            <Table<IEmployee>
+              className={'mt-20 640:mt-4'}
+              title='users'
+              headerSlot={slot}
+              dontScrollToTopOnPageChange
+              onRowClick={(employee) => {
+                onRowClick(employee, 'view_employee');
+              }}
+              returnOriginalOnRowClick
+              accessor='_id'
+              mustHaveRange
+              {...{
+                isLoading,
+                data,
+                setColumnFilters,
+                columnFilters,
+                currentSearchColumn,
+                pagination,
+                columns,
+                setPagination,
+                setCurrentSearchColumn,
+                setSorting,
+                sorting,
+                isError,
+                isRefetching,
+              }}
+              reset={() => {
+                setFilters && setFilters({});
+                setPagination({
+                  pageIndex: 0,
+                  pageSize: 10,
+                });
+                setSorting([]);
+                reset && reset();
+              }}
+              noDataConfig={{ title: 'You have not added any users yet.' }}
+            />
+          )}
+        </>
       )}
     </>
   );

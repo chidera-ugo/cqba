@@ -50,7 +50,7 @@ export function Cell({
       {!!code[char] && type === 'password' && (
         <div
           onClick={() => document.getElementById(id)?.focus()}
-          className='y-center absolute h-full w-full'
+          className='y-center absolute h-full w-full py-2'
         >
           <svg
             width='35'

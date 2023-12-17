@@ -105,7 +105,7 @@ export const useColumns = () => {
                         className={clsx('ring-2 ring-white')}
                         size={27}
                         key={email}
-                        char={email.charAt(0)}
+                        char={email?.charAt(0)}
                         getBackgroundColor={getColor}
                       />
                     </div>

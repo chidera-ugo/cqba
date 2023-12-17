@@ -204,7 +204,7 @@ export const FilterWithRangePreset = ({
               <div className={'w-full'}>
                 <div className='label'>Select Date Range</div>
 
-                <div className='flex w-full gap-2'>
+                <div className='flex w-full flex-wrap gap-2 640:flex-nowrap'>
                   {dateRangePresets.map(({ name, value }) => {
                     const isActive =
                       name === dropdownFilters?.rangePreset?.name;
@@ -214,7 +214,7 @@ export const FilterWithRangePreset = ({
                         key={name}
                         type={'button'}
                         className={clsx(
-                          'w-full min-w-fit rounded-md border py-1 px-2 text-sm',
+                          'min-w-fit rounded-md border py-1 px-2 text-sm 640:w-full',
                           isActive
                             ? 'border-primary-main text-primary-main'
                             : 'text-neutral-380 border-neutral-370'

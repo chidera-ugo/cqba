@@ -6,8 +6,10 @@ import { SearchInput } from 'components/form-elements/SearchInput';
 import { AppLayout } from 'components/layouts/AppLayout';
 import { ApprovedBudgetDetails } from 'components/modules/budgeting/ApprovedBudgetDetails';
 import { FilterWithRangePreset } from 'components/modules/commons/FilterWithRangePreset';
+import { budgetingFilterOptions } from 'constants/budgeting/filters';
 import { useGetBudgetById } from 'hooks/api/budgeting/useGetBudgetById';
 import { useUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
+import { defaultStringifySearch } from 'hooks/client_api/search_params';
 import { useDebouncer } from 'hooks/commons/useDebouncer';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -34,13 +36,17 @@ export default function SubBudgetDetails() {
     value: search,
   });
 
+  const backToBudgetingHref = `/budgeting${defaultStringifySearch({
+    status: budgetingFilterOptions[1]!,
+  })}`;
+
   return (
     <AppLayout
       title={'Budgeting'}
       breadCrumbs={[
         {
           title: 'Budgets',
-          url: '/budgeting',
+          url: backToBudgetingHref,
         },
         {
           title: 'Track Project',

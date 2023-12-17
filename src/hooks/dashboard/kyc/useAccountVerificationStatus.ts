@@ -16,7 +16,9 @@ export const useAccountVerificationStatus = () => {
     enabled: !isVerified,
   });
 
-  const isUnderReview = organizationInformation?.status === 'completed';
+  const isUnderReviewOrApproved =
+    organizationInformation?.status === 'completed' ||
+    organizationInformation?.status === 'approved';
 
   const hasProvidedCompanyInformation =
     !!organizationInformation?.businessType &&
@@ -38,7 +40,7 @@ export const useAccountVerificationStatus = () => {
 
   return {
     hasProvidedAllRequirements,
-    isUnderReview,
+    isUnderReviewOrApproved,
     hasProvidedDocuments,
     hasProvidedOwnerInformationRequirements: hasProvidedOwnerInformation,
     hasProvidedCompanyInformation,

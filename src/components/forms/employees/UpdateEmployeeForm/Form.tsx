@@ -101,7 +101,7 @@ export const Form = ({
         trueValueKey={'value'}
         displayValueKey={'name'}
         options={[
-          { name: 'CFO', value: 'cfo' },
+          { name: 'Owner', value: 'owner' },
           { name: 'Employee', value: 'employee' },
         ]}
       />

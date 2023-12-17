@@ -5,6 +5,7 @@ import { GreenCheck } from 'components/illustrations/Success';
 import { AuthLayout } from 'components/layouts/AuthLayout';
 import { SimpleInformation } from 'components/modules/commons/SimpleInformation';
 import { useVerifyEmail } from 'hooks/api/auth/useVerifyEmail';
+import { useMakeDummyHttpRequest } from 'hooks/commons/useMakeDummyHttpRequest';
 import { useQueryValidator } from 'hooks/commons/useQueryValidator';
 import { useRouter } from 'next/router';
 import NotFound from 'pages/404';
@@ -17,14 +18,20 @@ export default function VerifyEmail() {
   const email = getValidQuery('email');
   const code = getValidQuery('code');
 
+  const { isLoading: psuedoLoading } = useMakeDummyHttpRequest({
+    method: 'get',
+    duration: 1000,
+  });
+
   const { isLoading, isError } = useVerifyEmail(email, code, {
     enabled: !!email && !!code,
   });
 
-  if (!email || !code) return <NotFound />;
+  if (!psuedoLoading && (!email || !code)) return <NotFound />;
 
   const Content = () => {
-    if (isLoading) return <FullScreenLoader white message='Verifying Email' />;
+    if (isLoading || psuedoLoading)
+      return <FullScreenLoader white message={'Please wait'} />;
 
     if (isError)
       return (

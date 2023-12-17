@@ -92,16 +92,6 @@ export const WalletTransactionsTable = ({
     setTransactionId(null);
   }
 
-  if (res && !res?.docs?.length)
-    return (
-      <NoData
-        processing={isLoading || isRefetching}
-        title='Stay on top of your transactions'
-        imageSrc={card}
-        subTitle={`Creating a budget is the first step to financial success. Define your spending limits and allocate resources.`}
-      />
-    );
-
   return (
     <>
       <RightModalWrapper
@@ -114,50 +104,61 @@ export const WalletTransactionsTable = ({
         {transactionId && <TransactionReceipt transactionId={transactionId} />}
       </RightModalWrapper>
 
-      {screenSize?.mobile ? (
-        <MobileWalletTransactionsList
-          {...{
-            pagination,
-            setPagination,
-            data,
-            isLoading,
-            isError,
-            isRefetching,
-          }}
-          onRowClick={(transactionId) => setTransactionId(transactionId)}
+      {res && !res?.docs?.length ? (
+        <NoData
+          processing={isLoading || isRefetching}
+          title='Stay on top of your transactions'
+          imageSrc={card}
+          subTitle={`Creating a budget is the first step to financial success. Define your spending limits and allocate resources.`}
         />
       ) : (
-        <Table<IWalletTransaction>
-          title='wallet transactions'
-          headerSlot={slot}
-          dontScrollToTopOnPageChange
-          onRowClick={(transactionId) => {
-            setTransactionId(transactionId);
-          }}
-          onFilterClick={
-            !setFilters
-              ? undefined
-              : (filter) => setFilters(({ [filter]: _, ...rest }) => rest)
-          }
-          accessor='_id'
-          mustHaveRange
-          noDataConfig={{ title: 'No wallet transactions yet' }}
-          {...{
-            isLoading,
-            data,
-            canNotShowData,
-            setColumnFilters,
-            columnFilters,
-            currentSearchColumn,
-            pagination,
-            columns,
-            setPagination,
-            setCurrentSearchColumn,
-            setSorting,
-            sorting,
-            isError,
-          }}
-        />
+        <>
+          {screenSize?.mobile ? (
+            <MobileWalletTransactionsList
+              {...{
+                pagination,
+                setPagination,
+                data,
+                isLoading,
+                isError,
+                isRefetching,
+              }}
+              onRowClick={(transactionId) => setTransactionId(transactionId)}
+            />
+          ) : (
+            <Table<IWalletTransaction>
+              title='wallet transactions'
+              headerSlot={slot}
+              dontScrollToTopOnPageChange
+              onRowClick={(transactionId) => {
+                setTransactionId(transactionId);
+              }}
+              onFilterClick={
+                !setFilters
+                  ? undefined
+                  : (filter) => setFilters(({ [filter]: _, ...rest }) => rest)
+              }
+              accessor='_id'
+              mustHaveRange
+              noDataConfig={{ title: 'No wallet transactions yet' }}
+              {...{
+                isLoading,
+                data,
+                canNotShowData,
+                setColumnFilters,
+                columnFilters,
+                currentSearchColumn,
+                pagination,
+                columns,
+                setPagination,
+                setCurrentSearchColumn,
+                setSorting,
+                sorting,
+                isError,
+              }}
+            />
+          )}
+        </>
       )}
     </>
   );

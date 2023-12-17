@@ -53,7 +53,7 @@ export const Form = ({
       <MultiSelect
         id={'select_beneficiaries'}
         className='mt-0'
-        isLoading={isLoading || isRefetching}
+        isLoading={isLoading || (isRefetching && !data)}
         {...{
           isError,
           refetch,
@@ -82,7 +82,7 @@ export const Form = ({
         <SecondaryActionButton
           className={'x-between w-full p-3'}
           onClick={inviteEmployee}
-          text={'Invite Employee'}
+          text={'Invite People'}
         />
       </MultiSelect>
 

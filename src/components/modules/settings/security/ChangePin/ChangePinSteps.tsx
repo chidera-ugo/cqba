@@ -6,6 +6,7 @@ import { SimpleInformation } from 'components/modules/commons/SimpleInformation'
 import { AppToast } from 'components/primary/AppToast';
 import { AnimateLayout } from 'components/animations/AnimateLayout';
 import { useChangePin } from 'hooks/api/settings/useChangePin';
+import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -16,11 +17,11 @@ interface Props {
 export const ChangePinSteps = ({ closeModal }: Props) => {
   const [pins, setPins] = useState<{
     current?: string;
-    old?: string;
+    confirm?: string;
     new?: string;
   }>({
     current: '',
-    old: '',
+    confirm: '',
     new: '',
   });
 
@@ -29,16 +30,13 @@ export const ChangePinSteps = ({ closeModal }: Props) => {
   );
 
   const { mutate, isLoading } = useChangePin({
-    onSuccess(res) {
-      toast(<AppToast>{res.message}</AppToast>, {
-        type: 'success',
-      });
-
+    onSuccess() {
       setMode('success');
     },
   });
 
-  const canSubmit = pins?.current?.length === pins?.new?.length;
+  const canSubmit =
+    pins?.confirm?.length === 4 && pins?.confirm?.length === pins?.new?.length;
 
   return (
     <>
@@ -73,10 +71,9 @@ export const ChangePinSteps = ({ closeModal }: Props) => {
                 setMode('new');
               }}
             >
-              <h5>Change PIN</h5>
               <p>Enter Your Current PIN</p>
 
-              <div className={clsx('mx-auto mt-4 max-w-[300px]')}>
+              <div className={clsx('mx-auto mt-2 max-w-[300px]')}>
                 <CodeInput
                   charLimit={4}
                   autoComplete='off'
@@ -89,29 +86,29 @@ export const ChangePinSteps = ({ closeModal }: Props) => {
                   className='x-center h-[54px] 768:h-[68px]'
                 />
 
+                <div className='mt-5 text-center text-sm text-neutral-600'>
+                  <Link
+                    href='/settings/security?_m=reset-pin'
+                    className='text-button ml-1 text-left font-medium'
+                  >
+                    Forgot Transaction Pin?
+                  </Link>
+                </div>
+
                 <button
                   disabled={pins?.current?.length !== 4}
                   type='submit'
-                  className='dark-button mt-5 px-10'
+                  className='primary-button mt-8 px-10'
                 >
                   Continue
                 </button>
-
-                {/*<div className='mt-5 text-center text-sm text-neutral-600'>*/}
-                {/*  <Link*/}
-                {/*    href='/settings/security?_m=reset-pin'*/}
-                {/*    className='text-button ml-1 text-left font-medium'*/}
-                {/*  >*/}
-                {/*    Forgot Transaction Pin?*/}
-                {/*  </Link>*/}
-                {/*</div>*/}
               </div>
             </form>
           ) : mode === 'new' ? (
             <>
-              <h5>Change PIN</h5>
               <p>Enter your new PIN</p>
-              <div className={clsx('mx-auto mt-4 max-w-[300px]')}>
+
+              <div className={clsx('mx-auto mt-2 max-w-[300px]')}>
                 <CodeInput
                   charLimit={4}
                   autoComplete='off'
@@ -139,9 +136,9 @@ export const ChangePinSteps = ({ closeModal }: Props) => {
                 });
               }}
             >
-              <h5>Change PIN</h5>
               <p>Confirm your new PIN</p>
-              <div className={clsx('mx-auto mt-4 max-w-[300px]')}>
+
+              <div className={clsx('mx-auto mt-2 max-w-[300px]')}>
                 <CodeInput
                   charLimit={4}
                   autoComplete='off'
@@ -169,7 +166,7 @@ export const ChangePinSteps = ({ closeModal }: Props) => {
                 <SubmitButton
                   submitting={isLoading}
                   disabled={!canSubmit}
-                  className='dark-button mt-5 w-[140px]'
+                  className='primary-button mt-8 w-[140px]'
                 >
                   Proceed
                 </SubmitButton>

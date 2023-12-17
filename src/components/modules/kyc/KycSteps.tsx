@@ -5,19 +5,21 @@ import {
   NotProvidedUnchecked,
 } from 'components/svgs/kyc/StepsCompletion';
 import { useKycSteps } from 'hooks/kyc/useKycSteps';
-import Link from 'next/link';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
+import { useRouter } from 'next/router';
 import { Fragment } from 'react';
 import { convertToUrlString } from 'utils/converters/convertToUrlString';
 
 export const KycSteps = ({ isRecap }: { isRecap?: boolean }) => {
   const { currentTab, kycSteps } = useKycSteps();
 
+  const { push } = useRouter();
+
   const {
     hasProvidedDocuments,
     hasProvidedCompanyInformation,
     hasProvidedOwnerInformationRequirements,
-    isUnderReview,
+    isUnderReviewOrApproved,
     refetchingOrganization,
   } = useAccountVerificationStatus();
 
@@ -32,33 +34,43 @@ export const KycSteps = ({ isRecap }: { isRecap?: boolean }) => {
 
     if (url === 'business-documentation' && hasProvidedDocuments) return true;
 
-    return url === 'review-and-submit' && isUnderReview;
+    return url === 'review-and-submit' && isUnderReviewOrApproved;
   }
 
   return (
     <div className={'mt-10'}>
-      {kycSteps.map(({ label, title, description, hidden }) => {
+      {kycSteps.map(({ label, title, dependency, description, hidden }) => {
         const url = convertToUrlString(title);
         const isActive = currentTab === url;
         const isCompleted = checkIfStepCompleted(title);
 
         if (hidden) return <Fragment key={title}></Fragment>;
 
+        const isDisabled =
+          dependency === 'COMPANY_INFORMATION' &&
+          !hasProvidedCompanyInformation;
+
         return (
-          <Link
-            href={`/kyc?tab=${isUnderReview ? 'review-and-submit' : url}`}
+          <button
+            onClick={() => {
+              if (isDisabled || isUnderReviewOrApproved) return;
+
+              push(`/kyc?tab=${url}&showSteps=false`);
+            }}
+            disabled={isDisabled}
             key={title}
             className={clsx(
               'smooth x-between group mt-4 w-full border border-neutral-140 text-left font-medium transition-colors',
               isActive ? 'text-primary-main' : 'text-neutral-1000',
-              isRecap ? 'rounded-lg p-6' : 'rounded-xl px-4 py-3'
+              isRecap ? 'rounded-[10px] p-6' : 'rounded-xl px-4 py-3'
             )}
           >
             <div className={'my-auto'}>
               <div
                 className={clsx(
-                  'my-auto group-hover:text-primary-main',
-                  isRecap ? 'text-sm font-medium' : 'text-base font-semibold'
+                  'my-auto',
+                  !isDisabled && 'group-hover:text-primary-main',
+                  isRecap ? 'text-base font-medium' : 'text-base font-semibold'
                 )}
               >
                 {label}
@@ -79,7 +91,7 @@ export const KycSteps = ({ isRecap }: { isRecap?: boolean }) => {
                 )}
               </div>
             )}
-          </Link>
+          </button>
         );
       })}
     </div>

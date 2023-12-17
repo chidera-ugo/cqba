@@ -62,7 +62,7 @@ export const ActionDropdown = ({
             }
           }}
           className={clsx(
-            'relative my-auto block h-10 w-10 rounded-full text-neutral-500 hover:text-primary-main',
+            'relative my-auto block h-10 w-10 rounded-full bg-white text-neutral-500 hover:text-primary-main',
             !withoutBorders && 'border border-neutral-200'
           )}
         >

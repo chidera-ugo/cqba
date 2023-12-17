@@ -129,13 +129,13 @@ export const MultiSelect = ({
 
             <div
               className={clsx(
-                'smooth y-center absolute right-0 top-0 inline-block h-full w-11 rounded-r-xl text-neutral-500 hover:text-primary-700'
+                'smooth y-center absolute right-0 top-0 inline-block h-full w-10 w-11 rounded-r-xl text-neutral-500 hover:text-primary-700'
               )}
             >
               <div className='y-center my-auto h-full w-full'>
                 <span
                   className={clsx(
-                    'x-center y-center mx-auto my-auto h-7',
+                    'x-center y-center mx-auto my-auto h-7 w-full',
                     selection.length ? 'bg-white' : 'bg-neutral-100'
                   )}
                 >

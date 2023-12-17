@@ -12,12 +12,14 @@ export const BudgetsTable = ({
   isLoading,
   onRowClick,
   isRefetching,
+  isProjectPaused,
   data,
 }: {
   onRowClick: (budget: IBudget) => void;
+  isProjectPaused?: boolean;
 } & BudgetsListProps &
   Partial<TPagination>) => {
-  const { columns } = useColumns();
+  const { columns } = useColumns(isProjectPaused);
 
   return (
     <Table<IBudget>
@@ -28,7 +30,7 @@ export const BudgetsTable = ({
       accessor='_id'
       mustHaveRange
       getRowStyling={(row) => {
-        if (row?.original?.paused) return 'opacity-50';
+        if (row?.original?.paused || isProjectPaused) return 'opacity-50';
         return '';
       }}
       {...{

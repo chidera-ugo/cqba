@@ -29,6 +29,7 @@ type Props = IBudget & {
   showOnlyBreakdown?: boolean;
   isProject?: boolean;
   onClick?: () => void;
+  isProjectPaused?: boolean;
   actionsSlot?: ReactNode;
 };
 
@@ -37,6 +38,7 @@ export const ActiveBudgetCard = ({
   showActions,
   isProject,
   onClick,
+  isProjectPaused,
   showOnlyBreakdown,
   actionsSlot,
   ...budget
@@ -60,7 +62,7 @@ export const ActiveBudgetCard = ({
   const backToBudgetingHref = `/budgeting${
     !!projectId && !!subBudgetId ? `/projects/${projectId}` : ''
   }${defaultStringifySearch({
-    status: budgetingFilterOptions[isProject ? 0 : 1]!,
+    status: budgetingFilterOptions[isProject ? 1 : 0]!,
   })}`;
 
   const { isLoading: pausing, mutate: pause } = usePauseBudgetOrProject(
@@ -151,7 +153,11 @@ export const ActiveBudgetCard = ({
   const entity = isProject ? 'Project' : 'Budget';
 
   function onSuccess() {
-    defaultInvalidator(['budget', budget._id]);
+    if (action !== 'close') {
+      defaultInvalidator(['budget', budget._id]);
+      defaultInvalidator(['project']);
+    }
+
     invalidate('budgets');
   }
 
@@ -247,7 +253,7 @@ export const ActiveBudgetCard = ({
           showActions || showOnlyBreakdown
             ? 'cursor-default'
             : 'cursor-pointer hover:border-neutral-300',
-          paused && !showActions && 'opacity-50'
+          (paused || isProjectPaused) && !showActions && 'opacity-50'
         )}
         onClick={() => {
           if (showActions || showOnlyBreakdown) return;
@@ -277,11 +283,11 @@ export const ActiveBudgetCard = ({
                 </div>
               </div>
 
-              {paused && !showActions ? (
+              {(paused || isProjectPaused) && !showActions ? (
                 <Frozen />
               ) : (
                 <>
-                  {getColor && (
+                  {getColor && !!beneficiaries?.length && (
                     <div
                       className={clsx(
                         'relative flex',
@@ -413,23 +419,25 @@ export const ActiveBudgetCard = ({
         </div>
 
         {showActions && (
-          <div className='right-2 top-5 mt-5 flex w-full gap-3 375:w-auto 768:absolute 768:mt-0'>
-            {actionsSlot}
+          <div className='right-2 top-5 mt-5 flex w-full justify-between gap-3 375:w-auto 768:absolute 768:mt-0'>
+            <div className={'flex w-full gap-3'}>
+              {status === 'active' && !paused && actionsSlot}
 
-            {paused && (
-              <button
-                onClick={() => {
-                  setAction('unpause');
-                  setMode('authorize');
-                }}
-                className={'group my-auto'}
-              >
-                <Frozen
-                  className={'group-hover:text-primary-main'}
-                  size={'md'}
-                />
-              </button>
-            )}
+              {paused && (
+                <button
+                  onClick={() => {
+                    setAction('unpause');
+                    setMode('authorize');
+                  }}
+                  className={'group my-auto'}
+                >
+                  <Frozen
+                    className={'group-hover:text-primary-main'}
+                    size={'md'}
+                  />
+                </button>
+              )}
+            </div>
 
             {status === 'closed' ? (
               <div
@@ -443,6 +451,7 @@ export const ActiveBudgetCard = ({
               <MakeTransfer budget={budget} />
             ) : (
               <ActionDropdown
+                className={'absolute right-2 top-3 768:static'}
                 options={[
                   {
                     icon: <Freeze />,

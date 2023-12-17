@@ -8,7 +8,7 @@ import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { useMemo } from 'react';
 import { handleSort } from 'utils/handlers/handleSort';
 
-export const useColumns = () => {
+export const useColumns = (isProjectPaused?: boolean) => {
   const { getColor } = useGetColorByChar();
 
   const columns = useMemo<ColumnDef<IBudget>[]>(
@@ -80,7 +80,7 @@ export const useColumns = () => {
         cell: ({ row }) => {
           const { paused, beneficiaries } = row.original;
 
-          if (paused)
+          if (paused || isProjectPaused)
             return (
               <div className={'flex'}>
                 <Frozen className={'text-xs'} />

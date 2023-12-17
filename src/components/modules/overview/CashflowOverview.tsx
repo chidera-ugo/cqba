@@ -69,7 +69,7 @@ export const CashflowOverview = ({
           {!transactionType ? (
             <div></div>
           ) : transactionType === 'all' ? (
-            <h6 className={'text-lg font-medium'}>Cashflow Overview</h6>
+            <h6 className={'my-auto text-lg font-medium'}>Cashflow Overview</h6>
           ) : (
             <SummaryWithVariance
               name={`Total ${
@@ -81,23 +81,37 @@ export const CashflowOverview = ({
               value={amount}
             />
           )}
-
-          <div className='flex flex-col'>
-            <Filter
-              filterKey='transactionType'
-              withChevron
-              className={'mt-auto 768:mt-0 1280:mt-auto 1340:mt-0'}
-              buttonClassname={'h-9'}
-              id='cashflow_chart_duration_filter'
-              {...{ filters, setFilters }}
-              dropdownClassName='min-w-[170px] right-0'
-              options={transactionTypeFilterOptions}
-            />
-          </div>
         </div>
 
         <div className='mb-auto mt-2 flex flex-shrink-0 gap-3 768:mt-0 768:w-auto 1280:mt-2 1340:mt-0'>
-          <div className='flex h-9 w-full cursor-pointer overflow-hidden rounded-full border border-neutral-200 768:w-auto'>
+          <div className='flex w-full gap-2 640:w-auto'>
+            <Filter
+              filterKey='transactionType'
+              withChevron
+              className={'mt-0 1280:mt-auto 1340:mt-0'}
+              buttonClassname={'w-full h-9'}
+              id='cashflow_chart_duration_filter'
+              {...{ filters, setFilters }}
+              dropdownClassName='min-w-[170px] left-0'
+              options={transactionTypeFilterOptions}
+            />
+
+            <Filter
+              filterKey='rangePreset'
+              withChevron
+              className={'mt-0 block 1280:mt-auto 1340:mt-0 1400:hidden'}
+              buttonClassname={'h-9'}
+              id='range_preset_filter'
+              {...{ filters, setFilters }}
+              secondaryAction={({ value }) => {
+                setRange(getDateRange({ days: value }));
+              }}
+              dropdownClassName='min-w-[170px] right-0'
+              options={periodPresetOptions}
+            />
+          </div>
+
+          <div className='hidden h-9 w-full cursor-pointer overflow-hidden rounded-full border border-neutral-200 768:w-auto 1400:flex'>
             {periodPresetOptions.map(({ value, name }, i) => {
               const isActive = filters?.rangePreset?.value === value;
               const id = `range_preset_${name}`;

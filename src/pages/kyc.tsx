@@ -1,38 +1,35 @@
 import clsx from 'clsx';
 import { LogoutButton } from 'components/buttons/Logout';
-import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { SimpleToast } from 'components/commons/SimpleToast';
+import { IsLoading } from 'components/data-states/IsLoading';
 import { UpdateBusinessDocumentionForm } from 'components/forms/kyc/UpdateBusinessDocumentionForm';
 import { UpdateCompanyInformationForm } from 'components/forms/kyc/UpdateCompanyInformationForm';
 import { AppLayout } from 'components/layouts/AppLayout';
-import { SimpleInformation } from 'components/modules/commons/SimpleInformation';
+import { SupportCard } from 'components/modules/app/SupportCard';
 import { KycSteps } from 'components/modules/kyc/KycSteps';
 import { ManageBusinessOwnersAndDirectors } from 'components/modules/kyc/ManageBusinessOwnersAndDirectors';
 import { ReviewAndSubmit } from 'components/modules/kyc/ReviewAndSubmit';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import { useCurrentAccountSetupStepUrl } from 'hooks/dashboard/kyc/useCurrentAccountSetupStepUrl';
-import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useKycSteps } from 'hooks/kyc/useKycSteps';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 export default function Kyc() {
-  const { currentTab, isValidAccountSetupStep, goToNextAccountSetupStep } =
-    useKycSteps();
+  const { currentTab, isValidAccountSetupStep } = useKycSteps();
 
   const { replace, query } = useRouter();
 
-  const { isVerified } = useIsVerified();
-
   const { getCurrentAccountSetupStepUrl } = useCurrentAccountSetupStepUrl();
 
-  const { isUnderReview, hasProvidedCompanyInformation } =
+  const { isUnderReviewOrApproved, hasProvidedCompanyInformation } =
     useAccountVerificationStatus();
 
   const { isRefetching } = useGetOrganizationInformation();
 
-  const showSteps = query['showSteps'] === 'true';
+  const showSteps =
+    query['showSteps'] !== 'false' && query['tab'] !== 'review-and-submit';
 
   useEffect(() => {
     if (isValidAccountSetupStep) return;
@@ -41,20 +38,18 @@ export default function Kyc() {
   }, [isValidAccountSetupStep]);
 
   useEffect(() => {
-    if (isUnderReview && query['tab'] !== 'review-and-submit')
+    if (isUnderReviewOrApproved && query['tab'] !== 'review-and-submit')
       replace('/kyc?tab=review-and-submit');
+    else if (
+      query['tab'] === 'business-documentation' &&
+      !hasProvidedCompanyInformation
+    )
+      replace('/kyc?tab=company-information');
   }, [query['tab']]);
-
-  useEffect(() => {
-    if (!isVerified) return;
-
-    replace('/');
-  }, [isVerified]);
-
-  if (isVerified) return <FullScreenLoader show white id={'kyc'} />;
 
   return (
     <AppLayout
+      isForUnverified
       title='Get Started'
       hideSideNavigation
       headerClassname={'border-b-none'}
@@ -63,8 +58,13 @@ export default function Kyc() {
       <SimpleToast show={isRefetching && showSteps}>Updating...</SimpleToast>
 
       <div className='relative gap-5 768:flex'>
-        <div className='sticky top-[108px] h-full w-[360px]'>
-          <div className={clsx(showSteps ? 'block' : 'hidden 768:block')}>
+        <div
+          className={clsx(
+            'hidden-scrollbar 640:kyc_layout_height sticky top-[108px] h-full w-full flex-col justify-between overflow-y-auto 768:w-[360px]',
+            showSteps ? 'flex' : 'hidden 768:flex'
+          )}
+        >
+          <div>
             <h4 className={'text-2xl font-medium'}>Activate your account</h4>
             <p className='mt-2 text-[13px] font-normal leading-5 text-neutral-500 640:mt-1'>
               Welcome to Chequebase, your account is almost ready. We just need
@@ -76,64 +76,37 @@ export default function Kyc() {
             </div>
           </div>
 
-          {/*  Todo: Add support */}
+          <div className='mt-8'>
+            <SupportCard />
+          </div>
         </div>
 
         <div
           className={clsx(
             showSteps && 'hidden 768:block',
-            'w-full rounded-xl border-neutral-200 768:border'
+            '640:kyc_layout_height w-full overflow-y-auto rounded-xl border-neutral-200 768:border'
           )}
         >
           <div className={clsx('w-full overflow-y-auto 768:mt-0')}>
-            <div className='mx-auto h-full max-w-[540px] px-1 768:py-5 768:px-8'>
+            <div className='mx-auto h-full max-w-[540px] px-1 768:py-8 768:px-8'>
               {currentTab === 'review-and-submit' ? (
                 <ReviewAndSubmit />
               ) : currentTab === 'business-documentation' ? (
                 <>
-                  {hasProvidedCompanyInformation ? (
-                    <UpdateBusinessDocumentionForm />
+                  {!hasProvidedCompanyInformation ? (
+                    <IsLoading />
                   ) : (
-                    <div className={'py-10'}>
-                      <SimpleInformation
-                        title={'Missed a step'}
-                        description={
-                          <span className={'mt-2 block'}>
-                            You need to provide business information first
-                          </span>
-                        }
-                        actionButton={{
-                          action: () => goToNextAccountSetupStep(),
-                          text: 'Continue',
-                        }}
-                      />
-                    </div>
+                    <UpdateBusinessDocumentionForm />
                   )}
                 </>
               ) : currentTab === 'owners-information' ? (
                 <div>
                   <h5>{`Owners' Information`}</h5>
-
                   <ManageBusinessOwnersAndDirectors />
                 </div>
               ) : currentTab === 'company-information' ? (
                 <UpdateCompanyInformationForm />
-              ) : (
-                <div className='y-center h-full'>
-                  <SimpleInformation
-                    title={<span>Done</span>}
-                    description={
-                      <span className='mt-2 block'>
-                        {`You've completed this step already`}
-                      </span>
-                    }
-                    actionButton={{
-                      action: goToNextAccountSetupStep,
-                      text: 'Proceed',
-                    }}
-                  />
-                </div>
-              )}
+              ) : null}
             </div>
           </div>
         </div>

@@ -4,14 +4,16 @@ import { SearchInput } from 'components/form-elements/SearchInput';
 import { AppLayout } from 'components/layouts/AppLayout';
 import { ToggleLayout } from 'components/modules/app/ToggleLayout';
 import { ProjectDetails } from 'components/modules/budgeting/projects/ProjectDetails';
+import { budgetingFilterOptions } from 'constants/budgeting/filters';
 import { useGetProjectById } from 'hooks/api/budgeting/project/useGetProjectById';
 import { useToggleLayout } from 'hooks/app/useToggleLayout';
+import { defaultStringifySearch } from 'hooks/client_api/search_params';
 import { useDebouncer } from 'hooks/commons/useDebouncer';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 export default function ProjectDetailsPage() {
-  const { query, back } = useRouter();
+  const { query } = useRouter();
 
   const _q = query['projectId'];
   const projectId = typeof _q === 'string' ? _q : '';
@@ -31,13 +33,17 @@ export default function ProjectDetailsPage() {
 
   const { layout, setLayout } = useToggleLayout();
 
+  const backToBudgetingHref = `/budgeting${defaultStringifySearch({
+    status: budgetingFilterOptions[1]!,
+  })}`;
+
   return (
     <AppLayout
       title={'Budgeting'}
       breadCrumbs={[
         {
           title: 'Budgets',
-          action: back,
+          url: backToBudgetingHref,
         },
         {
           title: 'Track Project',

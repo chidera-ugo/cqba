@@ -38,7 +38,11 @@ export const SubBudgetsList = ({ subBudgets, currency }: Props) => {
             <div className='y-between h-full text-right'>
               <p className={'text-sm text-neutral-500'}>Budget Allocation</p>
 
-              <div className={'-mb-0.5 flex gap-2 text-[20px] font-medium'}>
+              <div
+                className={
+                  '-mb-0.5 ml-auto flex gap-2 text-right text-lg font-medium'
+                }
+              >
                 {currency}
                 {formatAmount({
                   value: amount / 100,

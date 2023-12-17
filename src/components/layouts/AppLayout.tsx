@@ -11,7 +11,7 @@ import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useNavigationItems } from 'hooks/dashboard/useNavigationItems';
 import { useRouter } from 'next/router';
 import NotFound from 'pages/404';
-import { PropsWithChildren, ReactNode } from 'react';
+import { PropsWithChildren, ReactNode, useEffect } from 'react';
 import { SideNavigation } from 'components/primary/SideNavigation';
 import { AppHeader } from 'components/primary/headers/AppHeader';
 import { useAppContext } from 'context/AppContext';
@@ -26,12 +26,14 @@ export interface Props {
   breadCrumbs?: { title: string; action?: () => void; url?: string }[];
   breadCrumbsSlot?: ReactNode;
   enabledFor?: UserRole;
+  isForUnverified?: boolean;
   headerClassname?: string;
 }
 
 export const AppLayout = ({
   children,
   headerSlot,
+  isForUnverified,
   title,
   headerClassname = 'border-b',
   back,
@@ -41,7 +43,7 @@ export const AppLayout = ({
   breadCrumbsSlot,
   ...props
 }: PropsWithChildren<Props>) => {
-  const { push } = useRouter();
+  const { push, replace } = useRouter();
 
   const { userExists } = useProtectedRoutesGuard();
 
@@ -61,13 +63,19 @@ export const AppLayout = ({
 
   const { isValidRoute } = useNavigationItems(role);
 
-  if (!userExists) return <FullScreenLoader asPage />;
+  useEffect(() => {
+    if (!isForUnverified) return;
+
+    if (isForUnverified && isVerified) replace('/');
+  }, [isVerified, isForUnverified]);
+
+  if (!userExists || (!isVerified && pathname !== '/kyc'))
+    return <FullScreenLoader asPage />;
 
   if (!enabledFor) {
   } else if (enabledFor !== role) return <NotFound />;
 
-  if ((!isVerified && pathname !== '/kyc') || !isValidRoute())
-    return <NotFound />;
+  if (!isValidRoute()) return <NotFound />;
 
   return (
     <div className={'min-w-screen min-h-screen'}>

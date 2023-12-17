@@ -1,32 +1,9 @@
+import { validatePassword } from 'utils/validators/validatePassword';
 import { object, string } from 'yup';
 
-export const passwordValidation: {
-  name: string;
-  check: (val: string) => boolean;
-}[] = [
-  {
-    name: 'Contain at least 8 characters',
-    check: (val) => val.length >= 8,
-  },
-  {
-    name: 'Must have at least one lowercase letter',
-    check: (val) => val.toUpperCase() !== val,
-  },
-  {
-    name: 'Must have at least one symbol (!@#$%^&*~-_+-)',
-    check: (val) => /[!@#$%^&*~_+\-]/.test(val),
-  },
-  {
-    name: 'Must have at least one uppercase letter',
-    check: (val) => val.toLowerCase() !== val,
-  },
-  {
-    name: 'Must have at least one number',
-    check: (val) => /[0-9]/.test(val),
-  },
-];
-
 export const validationSchema = object({
+  firstName: string().required('Please provide first name'),
+  lastName: string().required('Please provide last name'),
   email: string()
     .trim()
     .required('Please provide your email')
@@ -41,11 +18,3 @@ export const validationSchema = object({
       validatePassword
     ),
 });
-
-export function validatePassword(val: string) {
-  for (const { check } of passwordValidation) {
-    if (!check(val)) return false;
-  }
-
-  return true;
-}

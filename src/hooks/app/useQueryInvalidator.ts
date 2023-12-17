@@ -2,6 +2,7 @@ import { QueryKey, useQueryClient } from '@tanstack/react-query';
 
 type DataGroup =
   | 'budgets'
+  | 'projects'
   | 'balances'
   | 'organization'
   | 'subscription'
@@ -25,6 +26,8 @@ export const useQueryInvalidator = () => {
       case 'budgets':
         defaultInvalidator(['debitable_budgets']);
         defaultInvalidator(['budgets']);
+        return;
+      case 'projects':
         defaultInvalidator(['project']);
         return;
       case 'subscription':

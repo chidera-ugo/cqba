@@ -34,7 +34,7 @@ export const Input = ({
   return (
     <div className={clsx(className, 'mt-5 w-full')}>
       <div className='flex'>
-        <label htmlFor={id} className='text-left'>
+        <label htmlFor={id} className='text-left line-clamp-1'>
           {label}
         </label>
       </div>

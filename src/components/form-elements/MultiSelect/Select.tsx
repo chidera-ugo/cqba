@@ -62,7 +62,7 @@ export const Select = ({
   disableSorting,
   convertOptionsToObjectArray,
   minimalist,
-  noSearch,
+  noSearch = _options.length <= 5,
   dropdownInMobileView,
   renderer,
   isLoading,
@@ -239,7 +239,7 @@ export const Select = ({
                             <label
                               className={clsx(
                                 'x-between group my-auto h-full w-full cursor-pointer rounded-lg px-3',
-                                !withBorders && 'hover:bg-neutral-200'
+                                !withBorders && 'hover:bg-neutral-100'
                               )}
                               htmlFor={id}
                             >
@@ -262,7 +262,13 @@ export const Select = ({
                                           />
                                         </div>
                                       )}
-                                      <div className='my-auto text-left text-base font-medium line-clamp-1 group-hover:text-primary-main'>
+                                      <div
+                                        className={clsx(
+                                          'my-auto text-left text-base font-medium line-clamp-1',
+                                          withBorders &&
+                                            'group-hover:text-primary-main'
+                                        )}
+                                      >
                                         {val}
                                         {otherDisplayVal && (
                                           <span className='ml-2 text-neutral-400'>
