@@ -8,7 +8,6 @@ export const Overview = () => {
   const { user } = useAppContext().state;
   const [range, setRange] = useState(getDateRange({ days: 7 }));
   const [filters, setFilters] = useState<Record<string, any>>({});
-
   return (
     <>
       <div className='x-between'>
