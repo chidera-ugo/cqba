@@ -420,7 +420,7 @@ export const ActiveBudgetCard = ({
 
         {showActions && (
           <div className='right-2 top-5 mt-5 flex w-full justify-between gap-3 375:w-auto 768:absolute 768:mt-0'>
-            <div className={'flex gap-3'}>
+            <div className={'flex w-full gap-3'}>
               {status === 'active' && !paused && actionsSlot}
 
               {paused && (
