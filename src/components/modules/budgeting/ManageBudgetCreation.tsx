@@ -9,6 +9,7 @@ import {
 import { useAppContext } from 'context/AppContext';
 import { BudgetStatus } from 'enums/budget';
 import { useCreateBudget } from 'hooks/api/budgeting/useCreateBudget';
+import { useCreateSubBudget } from 'hooks/api/budgeting/useCreateSubBudget';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { useHandleError } from 'hooks/api/useHandleError';
 import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
@@ -47,13 +48,14 @@ export const ManageBudgetCreation = ({
   const { invalidate, defaultInvalidator } = useQueryInvalidator();
   const { handleError } = useHandleError();
 
-  const { isLoading: creatingBudget, mutate } = useCreateBudget(
-    budget?._id,
-    projectId,
-    {
+  const { isLoading: creatingBudget, mutate } = useCreateBudget(budget?._id, {
+    onError: () => null,
+  });
+
+  const { isLoading: creatingSubBudget, mutate: createSubBudget } =
+    useCreateSubBudget(projectId, {
       onError: () => null,
-    }
-  );
+    });
 
   const isAuthorizationMode = mode === Mode.approve || mode === Mode.success;
 
@@ -77,23 +79,44 @@ export const ManageBudgetCreation = ({
 
     if (!newBudget) return;
 
+    function handleSuccess(res: IBudget) {
+      setBudgetStatus(!!projectId ? 'active' : res?.status);
+
+      if (onSuccess) onSuccess(res?._id);
+      else setMode(Mode.success);
+
+      invalidate('budgets', 'balances', 'team');
+
+      if (!!projectId) invalidate('projects');
+
+      defaultInvalidator(['budget', budget?._id]);
+
+      resetFormRecoveryValues();
+    }
+
+    if (!!projectId)
+      // Then it's sub-budget creation process
+      return createSubBudget(
+        {
+          pin,
+          budgets: [newBudget],
+        },
+        {
+          onSuccess: handleSuccess,
+          onError(e) {
+            handleError(e);
+            errorCb();
+          },
+        }
+      );
+
     mutate(
       {
         ...newBudget,
         pin,
       },
       {
-        onSuccess(res) {
-          setBudgetStatus(!!projectId ? 'active' : res.status);
-
-          if (onSuccess) onSuccess(res._id);
-          else setMode(Mode.success);
-
-          invalidate('budgets', 'balances', 'team');
-          defaultInvalidator(['budget', budget?._id]);
-
-          resetFormRecoveryValues();
-        },
+        onSuccess: handleSuccess,
         onError(e) {
           handleError(e);
           errorCb();
@@ -107,8 +130,11 @@ export const ManageBudgetCreation = ({
       <AuthorizeActionWithPin
         hasResponse={mode === Mode.success}
         show={show && isAuthorizationMode}
-        close={closeModal}
-        processing={creatingBudget}
+        close={() => {
+          closeModal();
+          if (onFinish && mode === Mode.success) onFinish();
+        }}
+        processing={creatingBudget || creatingSubBudget}
         modalTitle={
           mode === Mode.approve
             ? user?.role === 'owner'
@@ -118,10 +144,7 @@ export const ManageBudgetCreation = ({
         }
         finish={() => {
           closeModal();
-
-          if (!onFinish) return;
-
-          onFinish();
+          if (onFinish) onFinish();
         }}
         responseTitle={
           budgetStatus === 'active'

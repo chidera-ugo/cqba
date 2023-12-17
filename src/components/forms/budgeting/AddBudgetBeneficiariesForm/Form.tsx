@@ -53,7 +53,7 @@ export const Form = ({
       <MultiSelect
         id={'select_beneficiaries'}
         className='mt-0'
-        isLoading={isLoading || isRefetching}
+        isLoading={isLoading || (isRefetching && !data)}
         {...{
           isError,
           refetch,

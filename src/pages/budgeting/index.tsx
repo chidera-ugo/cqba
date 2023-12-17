@@ -96,7 +96,7 @@ export default function Budgeting() {
                   <SimplePlus />
                 </span>
                 <span className={'my-auto'}>
-                  Add <span className={'hidden 640:block'}>Budget</span>
+                  Add <span className={'hidden 640:inline'}> Budget</span>
                 </span>
               </button>
             </div>

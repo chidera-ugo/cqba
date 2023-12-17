@@ -29,19 +29,28 @@ export const ManageBudgetAndProjectCreation = ({
   return (
     <>
       <ManageBudgetCreation
-        onFinish={onFinish}
+        onFinish={() => {
+          if (onFinish) onFinish();
+
+          if (setFilters)
+            setFilters((prev) => ({
+              ...prev,
+              status: budgetingFilterOptions[0], // Switching tabs to projects,
+            }));
+        }}
         show={modal === 'create_budget'}
         close={() => setModal(null)}
       />
 
       <ManageProjectCreation
         onFinish={() => {
-          if (!setFilters) return;
+          if (onFinish) onFinish();
 
-          setFilters((prev) => ({
-            ...prev,
-            status: budgetingFilterOptions[1], // Switching tabs to projects,
-          }));
+          if (setFilters)
+            setFilters((prev) => ({
+              ...prev,
+              status: budgetingFilterOptions[1], // Switching tabs to projects,
+            }));
         }}
         close={() => setModal(null)}
         show={query['modal'] === 'create_project'}
