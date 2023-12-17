@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import { CodeInput } from 'components/form-elements/CodeInput';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { ResetPinPasswordForm } from 'components/forms/settings/security/ResetPinPasswordForm';
@@ -71,7 +70,7 @@ export const ResetPinSteps = ({ closeModal }: Props) => {
               setMode('confirm_pin');
             }}
             name='newPin'
-            className='mt-4 h-[54px] 768:h-[68px]'
+            className='mt-2 h-[54px] 768:h-[68px]'
           />
         </div>
       ) : (
@@ -89,41 +88,38 @@ export const ResetPinSteps = ({ closeModal }: Props) => {
           className={'mx-auto'}
         >
           <p className={'text-center'}>Confirm your new PIN</p>
-          <div className={clsx('mt-2')}>
-            <CodeInput
-              charLimit={4}
-              autoComplete='off'
-              autoFocus
-              type={'password'}
-              submit={(pin) => {
-                if (pin !== pins.new) {
-                  setPins((prev) => ({
-                    new: prev.new,
-                    confirm: '',
-                  }));
 
-                  setMode('new_pin');
+          <CodeInput
+            charLimit={4}
+            autoComplete='off'
+            autoFocus
+            type={'password'}
+            submit={(pin) => {
+              if (pin !== pins.new) {
+                setPins((prev) => ({
+                  new: prev.new,
+                  confirm: '',
+                }));
 
-                  toast(<AppToast>PINs do not match</AppToast>, {
-                    type: 'info',
-                  });
-                } else {
-                  setPins((prev) => ({ ...prev, confirm: pin }));
-                }
-              }}
-              name='confirmPin'
-              className='x-center h-[54px] 768:h-[68px]'
-            />
+                setMode('new_pin');
 
-            <div className={'x-center'}>
-              <SubmitButton
-                submitting={isLoading}
-                className='primary-button mt-8 w-[140px]'
-              >
-                Proceed
-              </SubmitButton>
-            </div>
-          </div>
+                toast(<AppToast>PINs do not match</AppToast>, {
+                  type: 'info',
+                });
+              } else {
+                setPins((prev) => ({ ...prev, confirm: pin }));
+              }
+            }}
+            name='confirmPin'
+            className='x-center mt-2 h-[54px] 768:h-[68px]'
+          />
+
+          <SubmitButton
+            submitting={isLoading}
+            className='primary-button y-center mx-auto mt-8 w-[140px] text-center'
+          >
+            <span className='mx-auto'>Proceed</span>
+          </SubmitButton>
         </form>
       )}
     </AnimateLayout>

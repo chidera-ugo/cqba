@@ -40,7 +40,7 @@ export default function Security() {
       button: (
         <button
           onClick={() => replace({ pathname, query: { _m: 'pin' } })}
-          className='primary-button h-10 px-3 text-sm'
+          className='primary-button h-10 w-[120px] px-3 text-sm'
         >
           Change Pin
         </button>

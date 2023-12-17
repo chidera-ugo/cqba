@@ -73,7 +73,7 @@ export const ChangePinSteps = ({ closeModal }: Props) => {
             >
               <p>Enter Your Current PIN</p>
 
-              <div className={clsx('mx-auto mt-1 max-w-[300px]')}>
+              <div className={clsx('mx-auto mt-2 max-w-[300px]')}>
                 <CodeInput
                   charLimit={4}
                   autoComplete='off'
@@ -98,7 +98,7 @@ export const ChangePinSteps = ({ closeModal }: Props) => {
                 <button
                   disabled={pins?.current?.length !== 4}
                   type='submit'
-                  className='dark-button mt-5 px-10'
+                  className='primary-button mt-8 px-10'
                 >
                   Continue
                 </button>
@@ -107,7 +107,8 @@ export const ChangePinSteps = ({ closeModal }: Props) => {
           ) : mode === 'new' ? (
             <>
               <p>Enter your new PIN</p>
-              <div className={clsx('mx-auto mt-4 max-w-[300px]')}>
+
+              <div className={clsx('mx-auto mt-2 max-w-[300px]')}>
                 <CodeInput
                   charLimit={4}
                   autoComplete='off'
@@ -136,7 +137,8 @@ export const ChangePinSteps = ({ closeModal }: Props) => {
               }}
             >
               <p>Confirm your new PIN</p>
-              <div className={clsx('mx-auto mt-4 max-w-[300px]')}>
+
+              <div className={clsx('mx-auto mt-2 max-w-[300px]')}>
                 <CodeInput
                   charLimit={4}
                   autoComplete='off'
@@ -164,7 +166,7 @@ export const ChangePinSteps = ({ closeModal }: Props) => {
                 <SubmitButton
                   submitting={isLoading}
                   disabled={!canSubmit}
-                  className='primary-button mt-5 w-[140px]'
+                  className='primary-button mt-8 w-[140px]'
                 >
                   Proceed
                 </SubmitButton>
