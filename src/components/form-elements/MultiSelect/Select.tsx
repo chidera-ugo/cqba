@@ -62,7 +62,7 @@ export const Select = ({
   disableSorting,
   convertOptionsToObjectArray,
   minimalist,
-  noSearch,
+  noSearch = _options.length <= 5,
   dropdownInMobileView,
   renderer,
   isLoading,
