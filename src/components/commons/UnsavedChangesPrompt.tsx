@@ -18,8 +18,6 @@ const UnsavedChangesPrompt = ({
   const destinationRef = useRef('');
   const canProceed = useRef(false);
 
-  console.log({ hasUnsavedChanges });
-
   const promptMessage =
     'You have unsaved changes, are you sure you want to leave this page? Your changes will be lost';
 

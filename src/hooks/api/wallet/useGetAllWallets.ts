@@ -28,9 +28,9 @@ export function useGetAllWallets() {
     options: {
       staleTime: Infinity,
       refetchInterval: REFETCH_INTERVAL,
+      enabled: isVerified,
       meta: {
         silent: true,
-        enabled: isVerified,
       },
     },
   });
