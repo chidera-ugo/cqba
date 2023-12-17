@@ -164,7 +164,7 @@ export const ChangePinSteps = ({ closeModal }: Props) => {
                 <SubmitButton
                   submitting={isLoading}
                   disabled={!canSubmit}
-                  className='dark-button mt-5 w-[140px]'
+                  className='primary-button mt-5 w-[140px]'
                 >
                   Proceed
                 </SubmitButton>

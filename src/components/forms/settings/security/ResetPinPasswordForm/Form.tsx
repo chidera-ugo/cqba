@@ -23,7 +23,7 @@ export const Form = ({ formikProps, processing }: Props) => {
       <SubmitButton
         id='reset_password-submit-button'
         submitting={processing}
-        className='primary-button mt-8 w-full min-w-[120px] 640:w-auto'
+        className='primary-button mt-8 w-[140px]'
       >
         Proceed
       </SubmitButton>

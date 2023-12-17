@@ -1,16 +1,18 @@
 import { Formik } from 'formik';
-import { useInitiateResetPin } from 'hooks/api/settings/password_recovery/useInitiateResetPin';
+import { useInitiatePinReset } from 'hooks/api/settings/password_recovery/useInitiatePinReset';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
 
 interface Props {
-  onSuccess: (password: string) => void;
+  onSuccess: (hash: string) => void;
 }
 
 export const ResetPinPasswordForm = ({ onSuccess }: Props) => {
-  const { isLoading, mutate } = useInitiateResetPin({
-    onSuccess,
+  const { isLoading, mutate } = useInitiatePinReset({
+    onSuccess(res) {
+      onSuccess(res.hash);
+    },
   });
 
   return (
