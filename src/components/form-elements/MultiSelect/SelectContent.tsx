@@ -48,10 +48,8 @@ export const SelectContent = ({
         <CentredModalWrapper
           {...{
             show: showList,
-            close() {
-              setShowList(false);
-            },
           }}
+          closeModal={() => setShowList(false)}
           id='custom-select'
           closeOnClickOutside
           hideHeader

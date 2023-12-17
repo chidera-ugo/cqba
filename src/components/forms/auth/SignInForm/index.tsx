@@ -45,7 +45,6 @@ export const SignInForm = ({
           }
         );
       }}
-      validateOnBlur={false}
     >
       {(formikProps) => {
         return (

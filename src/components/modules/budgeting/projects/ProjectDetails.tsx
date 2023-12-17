@@ -65,10 +65,10 @@ export const ProjectDetails = ({
         isProject
         getColor={getColor}
         actionsSlot={
-          data?.unallocatedAmount > 0 && !data?.paused ? (
+          data?.unallocatedAmount > 0 ? (
             <button
               onClick={() => setModal('create_budget')}
-              className='primary-button x-center my-auto h-10 w-full gap-2 px-2 text-sm 640:px-4'
+              className='primary-button x-center my-auto h-10 w-full gap-2 px-4 text-sm'
             >
               <span className={'my-auto'}>
                 <SimplePlus />
@@ -98,17 +98,23 @@ export const ProjectDetails = ({
                 }}
               />
             ) : (
-              <BudgetsTable
-                onRowClick={(budget) => {
-                  push(`/budgeting/projects/${projectId}/${budget?._id}`);
-                }}
-                isProjectPaused={data?.paused}
-                data={paginatedBudgets}
-                {...{
-                  isError,
-                  isLoading,
-                }}
-              />
+              <>
+                {isLoading || isRefetching ? (
+                  <IsLoading />
+                ) : (
+                  <BudgetsTable
+                    onRowClick={(budget) => {
+                      push(`/budgeting/projects/${projectId}/${budget?._id}`);
+                    }}
+                    isProjectPaused={data?.paused}
+                    data={paginatedBudgets}
+                    {...{
+                      isError,
+                      isLoading,
+                    }}
+                  />
+                )}
+              </>
             )}
           </AppErrorBoundary>
         )}

@@ -419,23 +419,25 @@ export const ActiveBudgetCard = ({
         </div>
 
         {showActions && (
-          <div className='right-2 top-5 mt-5 flex w-full gap-3 375:w-auto 768:absolute 768:mt-0'>
-            {actionsSlot}
+          <div className='right-2 top-5 mt-5 flex w-full justify-between gap-3 375:w-auto 768:absolute 768:mt-0'>
+            <div className={'flex gap-3'}>
+              {status === 'active' && !paused && actionsSlot}
 
-            {paused && (
-              <button
-                onClick={() => {
-                  setAction('unpause');
-                  setMode('authorize');
-                }}
-                className={'group my-auto'}
-              >
-                <Frozen
-                  className={'group-hover:text-primary-main'}
-                  size={'md'}
-                />
-              </button>
-            )}
+              {paused && (
+                <button
+                  onClick={() => {
+                    setAction('unpause');
+                    setMode('authorize');
+                  }}
+                  className={'group my-auto'}
+                >
+                  <Frozen
+                    className={'group-hover:text-primary-main'}
+                    size={'md'}
+                  />
+                </button>
+              )}
+            </div>
 
             {status === 'closed' ? (
               <div
@@ -449,6 +451,7 @@ export const ActiveBudgetCard = ({
               <MakeTransfer budget={budget} />
             ) : (
               <ActionDropdown
+                className={'absolute right-2 top-3 768:static'}
                 options={[
                   {
                     icon: <Freeze />,
