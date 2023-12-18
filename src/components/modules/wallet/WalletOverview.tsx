@@ -1,19 +1,16 @@
 import clsx from 'clsx';
 import { SummaryWithVariance } from 'components/modules/overview/Overview/SummaryWithVariance';
 import { useGetWalletBalances } from 'hooks/api/wallet/useGetWalletBalances';
-import { useUserRole } from 'hooks/access_control/useUserRole';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import Link from 'next/link';
 
-export const WalletOverview = () => {
-  const { isOwner } = useUserRole();
-
+export const WalletOverview = ({ isOwner }: { isOwner: boolean }) => {
   const { isLoading, isError, primaryWallet } = useManageWallets();
 
   const { isLoading: _l, isError: _e, data } = useGetWalletBalances();
 
-  if (isLoading || _l) return <IsLoadingIsError isLoading />;
-  if (isError || _e) return <IsLoadingIsError />;
+  if (isLoading || _l) return <IsLoadingIsError isOwner={isOwner} isLoading />;
+  if (isError || _e) return <IsLoadingIsError isOwner={isOwner} />;
 
   return (
     <div className='grid-cols-2 gap-4 640:grid'>
@@ -59,7 +56,13 @@ export const WalletOverview = () => {
   );
 };
 
-const IsLoadingIsError = ({ isLoading }: { isLoading?: boolean }) => {
+const IsLoadingIsError = ({
+  isLoading,
+  isOwner,
+}: {
+  isLoading?: boolean;
+  isOwner: boolean;
+}) => {
   return (
     <div className='grid-cols-2 gap-4 640:grid'>
       <div className='card y-center h-[94px] 640:h-[114px]'>
@@ -77,20 +80,22 @@ const IsLoadingIsError = ({ isLoading }: { isLoading?: boolean }) => {
         ></div>
       </div>
 
-      <div className='card y-center mt-4 h-[94px] 640:mt-0 640:h-[114px]'>
-        <div
-          className={clsx(
-            'h-3 w-[60%] 640:h-5',
-            isLoading ? 'skeleton' : 'skeleton-error'
-          )}
-        ></div>
-        <div
-          className={clsx(
-            'mt-3 h-6 w-[80%] 640:h-8',
-            isLoading ? 'skeleton' : 'skeleton-error'
-          )}
-        ></div>
-      </div>
+      {isOwner && (
+        <div className='card y-center mt-4 h-[94px] 640:mt-0 640:h-[114px]'>
+          <div
+            className={clsx(
+              'h-3 w-[60%] 640:h-5',
+              isLoading ? 'skeleton' : 'skeleton-error'
+            )}
+          ></div>
+          <div
+            className={clsx(
+              'mt-3 h-6 w-[80%] 640:h-8',
+              isLoading ? 'skeleton' : 'skeleton-error'
+            )}
+          ></div>
+        </div>
+      )}
     </div>
   );
 };

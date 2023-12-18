@@ -7,6 +7,7 @@ import { ToggleLayout } from 'components/modules/app/ToggleLayout';
 import { Budgets } from 'components/modules/budgeting/Budgets';
 import { ManageBudgetAndProjectCreation } from 'components/modules/budgeting/ManageBudgetAndProjectCreation';
 import { SimplePlus } from 'components/svgs/others/Plus';
+import { approvalsFilterOptions } from 'constants/approvals/filters';
 import { budgetingFilterOptions } from 'constants/budgeting/filters';
 import { useUserRole } from 'hooks/access_control/useUserRole';
 import { useToggleLayout } from 'hooks/app/useToggleLayout';
@@ -15,6 +16,7 @@ import { useUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
 import { useDebouncer } from 'hooks/commons/useDebouncer';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useState } from 'react';
+import { approvalsFiltersSchema } from 'zod_schemas/approvals_schema';
 import { budgetingFiltersSchema } from 'zod_schemas/budgeting_schema';
 
 export default function Budgeting() {
@@ -29,7 +31,7 @@ export default function Budgeting() {
   const { isOwner } = useUserRole();
 
   const { filters, setFilters, pagination, setPagination } = useUrlManagedState(
-    budgetingFiltersSchema,
+    isOwner ? budgetingFiltersSchema : approvalsFiltersSchema,
     30,
     undefined,
     layout === 'grid' ? 9 : 10
@@ -45,20 +47,22 @@ export default function Budgeting() {
           isOwner ? 'border-b' : ''
         )}
       >
-        {isOwner && (
-          <div className='x-between my-auto mb-0 w-full gap-5 640:mb-auto'>
-            <WideTabs
-              className={clsx('block h-12 w-fit 640:h-14')}
-              layoutId={'budget_status'}
-              action={(tab) => {
-                setFilters((prev) => ({ ...prev, status: tab }));
-                setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-              }}
-              currentTab={filters?.status?.value}
-              tabs={budgetingFilterOptions}
-            />
-          </div>
-        )}
+        <div className='x-between my-auto mb-0 w-full gap-5 640:mb-auto'>
+          <WideTabs
+            className={clsx('block h-12 w-fit 640:h-14')}
+            layoutId={'budget_status'}
+            action={(tab) => {
+              setFilters((prev) => ({ ...prev, status: tab }));
+              setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+            }}
+            currentTab={filters?.status?.value}
+            tabs={
+              isOwner
+                ? budgetingFilterOptions
+                : approvalsFilterOptions('Active Budgets')
+            }
+          />
+        </div>
 
         <div
           className={clsx(
@@ -88,7 +92,7 @@ export default function Budgeting() {
                 onClick={() => {
                   if (!isVerified) return;
 
-                  setModal('choose_action');
+                  setModal(isOwner ? 'choose_action' : 'create_budget');
                 }}
                 className='primary-button x-center my-auto h-8 gap-1 px-3 text-sm 640:h-10 640:w-full 640:gap-2 640:px-4'
               >

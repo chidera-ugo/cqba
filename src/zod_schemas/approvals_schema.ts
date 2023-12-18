@@ -9,6 +9,6 @@ export const approvalsFiltersSchema = z
         title: z.string(),
         value: z.string().nullable(),
       })
-      .catch(approvalsFilterOptions[0]!),
+      .catch(approvalsFilterOptions()[0]!),
   })
   .merge(paginationAndRangeZodSchema);

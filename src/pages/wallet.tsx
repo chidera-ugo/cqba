@@ -10,7 +10,7 @@ export default function Wallet() {
 
   return (
     <AppLayout title='Wallet'>
-      <WalletOverview />
+      <WalletOverview isOwner={isOwner} />
 
       <WalletTransactions>
         <div className='mt-4 w-full 375:flex 1180:mt-0 1180:w-auto'>

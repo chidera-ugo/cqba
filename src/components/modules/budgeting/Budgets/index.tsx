@@ -85,6 +85,7 @@ export const Budgets = ({
           {layout == 'grid' || screenSize?.['mobile'] ? (
             <BudgetsGrid
               {...{
+                isApprovalsPage,
                 data,
                 isProjectsList,
                 pagination,
@@ -117,6 +118,9 @@ export const Budgets = ({
               ) : (
                 <BudgetsTable
                   onRowClick={(budget) => {
+                    if (budget.status === 'pending')
+                      return setCurrentBudget(budget);
+
                     push(
                       `${!isApprovalsPage ? 'budgeting' : 'approvals'}/${
                         budget?._id

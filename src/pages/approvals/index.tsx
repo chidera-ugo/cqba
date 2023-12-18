@@ -28,7 +28,7 @@ export default function Approvals() {
     approvalsFiltersSchema,
     30,
     undefined,
-    9
+    layout === 'grid' ? 9 : 10
   );
 
   const currentTab = filters?.status?.value;
@@ -49,7 +49,7 @@ export default function Approvals() {
               setPagination((prev) => ({ ...prev, pageIndex: 0 }));
             }}
             currentTab={filters?.status?.value}
-            tabs={approvalsFilterOptions}
+            tabs={approvalsFilterOptions()}
           />
         </div>
 
@@ -108,6 +108,7 @@ export default function Approvals() {
       <div className={clsx('mt-5 px-3 640:mt-0 640:px-8')}>
         <AppErrorBoundary>
           <Budgets
+            isApprovalsPage
             layout={layout}
             currentTab={currentTab}
             search={debouncedSearch}

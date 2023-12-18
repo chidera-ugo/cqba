@@ -20,6 +20,7 @@ export interface Props {
   currentTab?: string;
   isProjectsList?: boolean;
   isProjectPaused?: boolean;
+  isApprovalsPage?: boolean;
   onCardClick?: (budget: IBudget) => void;
 }
 
@@ -33,6 +34,7 @@ export const BudgetsGrid = ({
   pagination,
   setPagination,
   isProjectsList,
+  isApprovalsPage,
   onCardClick,
   isProjectPaused,
 }: Props & Partial<TPagination>) => {
@@ -83,7 +85,7 @@ export const BudgetsGrid = ({
                     }
                     isProject={isProjectsList}
                     className={'col-span-12 768:col-span-6 1340:col-span-4'}
-                    {...{ getColor, isProjectPaused }}
+                    {...{ getColor, isApprovalsPage, isProjectPaused }}
                     {...budget}
                     key={budget._id}
                   />

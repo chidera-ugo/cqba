@@ -22,6 +22,7 @@ interface Props {
   marginClassname?: string;
   wrapperClassname?: string;
   withoutBorders?: boolean;
+  buttonClassname?: string;
 }
 
 export const ActionDropdown = ({
@@ -31,6 +32,7 @@ export const ActionDropdown = ({
   index,
   options,
   className,
+  buttonClassname,
   icon,
   externalSetShowDropdown,
   externalShowDropdown,
@@ -62,8 +64,9 @@ export const ActionDropdown = ({
             }
           }}
           className={clsx(
-            'relative my-auto block h-10 w-10 rounded-full bg-white text-neutral-500 hover:text-primary-main',
-            !withoutBorders && 'border border-neutral-200'
+            'relative my-auto block h-10 w-10 rounded-full text-neutral-500 hover:text-primary-main',
+            !withoutBorders && 'border border-neutral-200',
+            buttonClassname
           )}
         >
           {icon ?? (

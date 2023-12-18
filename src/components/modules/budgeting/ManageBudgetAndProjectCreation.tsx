@@ -4,7 +4,9 @@ import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { CreateBudgetPrompt } from 'components/modules/budgeting/CreateBudgetPrompt';
 import { ManageBudgetCreation } from 'components/modules/budgeting/ManageBudgetCreation';
 import { ManageProjectCreation } from 'components/modules/budgeting/ManageProjectCreation';
+import { approvalsFilterOptions } from 'constants/approvals/filters';
 import { budgetingFilterOptions } from 'constants/budgeting/filters';
+import { useUserRole } from 'hooks/access_control/useUserRole';
 import { UseManageBudgetAndProjectCreation } from 'hooks/budgeting/useManageBudgetAndProjectCreation';
 import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction, useEffect } from 'react';
@@ -19,6 +21,9 @@ export const ManageBudgetAndProjectCreation = ({
   onFinish?: () => void;
 }) => {
   const { query, pathname, push } = useRouter();
+
+  const { isOwner } = useUserRole();
+
   const showCreateProject = query['modal'] === 'create_project';
 
   useEffect(() => {
@@ -35,7 +40,9 @@ export const ManageBudgetAndProjectCreation = ({
           if (setFilters)
             setFilters((prev) => ({
               ...prev,
-              status: budgetingFilterOptions[0], // Switching tabs to projects,
+              status: isOwner
+                ? budgetingFilterOptions[0]
+                : approvalsFilterOptions()[1], // Switching tabs to projects,
             }));
         }}
         show={modal === 'create_budget'}
@@ -58,7 +65,7 @@ export const ManageBudgetAndProjectCreation = ({
 
       <RightModalWrapper
         show={modal === 'choose_action' || modal === 'show_prompt'}
-        title={'Create New Budget'}
+        title={modal !== 'show_prompt' ? 'Create New Budget' : ''}
         closeOnClickOutside
         closeModal={() => setModal(null)}
         childrenClassname={'p-0'}
@@ -70,7 +77,9 @@ export const ManageBudgetAndProjectCreation = ({
           {modal === 'show_prompt' ? (
             <CreateBudgetPrompt
               close={close}
-              createBudget={() => setModal('choose_action')}
+              createBudget={() => {
+                setModal(isOwner ? 'choose_action' : 'create_budget');
+              }}
             />
           ) : (
             <SelectBudgetTypeForm

@@ -5,9 +5,11 @@ import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { ApproveBudgetForm } from 'components/forms/budgeting/ApproveBudgetForm';
 import { RejectionReasonForm } from 'components/forms/budgeting/RejectionReasonForm';
 import { Cancel } from 'components/illustrations/Cancel';
+import { GreenCheck } from 'components/illustrations/Success';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { Confirmation } from 'components/modals/Confirmation';
 import { PendingBudgetCard } from 'components/modules/budgeting/PendingBudgetCard';
+import { SimpleInformation } from 'components/modules/commons/SimpleInformation';
 import { AppToast } from 'components/primary/AppToast';
 import { useAppContext } from 'context/AppContext';
 import {
@@ -21,6 +23,7 @@ import { useHandleError } from 'hooks/api/useHandleError';
 import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
 import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -30,6 +33,8 @@ interface Props {
 }
 
 export const PendingBudgetDetails = ({ id, close }: Props) => {
+  const { push } = useRouter();
+
   const { user } = useAppContext().state;
 
   const [mode, setMode] = useState<'success' | 'authorize' | null>(null);
@@ -79,6 +84,24 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
   if (gettingBudget || _l) return <IsLoading />;
 
   if (isError || _e || !primaryWallet || !data) return <IsError />;
+
+  if (data.status === 'active')
+    return (
+      <SimpleInformation
+        className={'py-20'}
+        icon={<GreenCheck />}
+        title={'Budget Approved'}
+        description={
+          <span className={'mt-2 block'}>
+            This budget has already been approved by admin
+          </span>
+        }
+        actionButton={{
+          text: 'View Budget',
+          action: () => push(`/budgeting/${data?._id}`),
+        }}
+      />
+    );
 
   function onSuccess() {
     defaultInvalidator(['budget', data?._id]);
