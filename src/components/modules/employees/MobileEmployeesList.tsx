@@ -49,7 +49,11 @@ export const MobileEmployeesList = ({
       />
 
       {showData ? (
-        <div className={'card relative mt-5 rounded-xl p-0 640:mt-0'}>
+        <div
+          className={
+            'card relative mt-5 overflow-hidden rounded-xl p-0 640:mt-0'
+          }
+        >
           <SimpleToast
             show={!!fetching && !!data?.docs?.length}
             className='bottom-32 left-0 1180:left-[122px]'

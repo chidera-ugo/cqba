@@ -10,7 +10,6 @@ import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { Confirmation } from 'components/modals/Confirmation';
 import { PendingBudgetCard } from 'components/modules/budgeting/PendingBudgetCard';
 import { SimpleInformation } from 'components/modules/commons/SimpleInformation';
-import { AppToast } from 'components/primary/AppToast';
 import { useAppContext } from 'context/AppContext';
 import {
   ApproveBudgetDto,
@@ -25,7 +24,6 @@ import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 
 interface Props {
   id: string;
@@ -75,9 +73,6 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
     onSuccess() {
       onSuccess();
       close();
-      toast(<AppToast>Canceled budget successfully</AppToast>, {
-        type: 'success',
-      });
     },
   });
 
@@ -205,43 +200,39 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
         negative={() => setAction(null)}
       />
 
-      <PendingBudgetCard isDetails {...data} {...{ getColor }} />
+      {!mode ? (
+        <>
+          <PendingBudgetCard isDetails {...data} {...{ getColor }} />
 
-      {user?.role === 'owner' ? (
-        <ApproveBudgetForm
-          amount={data?.amount}
-          decline={() => setAction('decline')}
-          onSubmit={(values) => {
-            setApproveBudgetValues((prev) => ({
-              ...prev!,
-              ...values,
-            }));
+          {user?.role === 'owner' ? (
+            <ApproveBudgetForm
+              amount={data?.amount}
+              decline={() => setAction('decline')}
+              onSubmit={(values) => {
+                setApproveBudgetValues((prev) => ({
+                  ...prev!,
+                  ...values,
+                }));
 
-            setAction('approve');
-            setMode('authorize');
-          }}
-          currency={primaryWallet?.currency}
-        />
-      ) : (
-        <div className='mt-8 flex gap-3'>
-          <button
-            onClick={() => setAction('edit_budget')}
-            type={'button'}
-            className={'primary-button'}
-          >
-            Edit Budget
-          </button>
-
-          <SubmitButton
-            type={'button'}
-            submitting={cancelling}
-            onClick={() => setAction('confirm_cancel')}
-            className='secondary-button w-full min-w-[120px] 640:w-auto'
-          >
-            Cancel Budget
-          </SubmitButton>
-        </div>
-      )}
+                setAction('approve');
+                setMode('authorize');
+              }}
+              currency={primaryWallet?.currency}
+            />
+          ) : (
+            <div className='mt-8 flex gap-3'>
+              <SubmitButton
+                type={'button'}
+                submitting={cancelling}
+                onClick={() => setAction('confirm_cancel')}
+                className='secondary-button w-full min-w-[120px] 640:w-auto'
+              >
+                Cancel Budget
+              </SubmitButton>
+            </div>
+          )}
+        </>
+      ) : null}
     </>
   );
 };

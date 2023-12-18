@@ -7,6 +7,7 @@ import { Cancel } from 'components/illustrations/Cancel';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { MakeTransfer } from 'components/modules/wallet/MakeTransfer';
 import { Freeze, MiniLock } from 'components/svgs/budgeting/Budget_Icons';
+import { approvalsFilterOptions } from 'constants/approvals/filters';
 import { budgetingFilterOptions } from 'constants/budgeting/filters';
 import { useAppContext } from 'context/AppContext';
 import { UserRoles } from 'enums/employee_enum';
@@ -61,10 +62,12 @@ export const ActiveBudgetCard = ({
   const { replace, push } = useRouter();
   const { invalidate, defaultInvalidator } = useQueryInvalidator();
 
-  const backToBudgetingHref = `/budgeting${
+  const backToBudgetingHref = `/${isApprovalsPage ? 'approvals' : 'budgeting'}${
     !!projectId && !!subBudgetId ? `/projects/${projectId}` : ''
   }${defaultStringifySearch({
-    status: budgetingFilterOptions[isProject ? 1 : 0]!,
+    status: isApprovalsPage
+      ? approvalsFilterOptions()[0]
+      : budgetingFilterOptions[isProject ? 1 : 0],
   })}`;
 
   const { isLoading: pausing, mutate: pause } = usePauseBudgetOrProject(
@@ -365,7 +368,8 @@ export const ActiveBudgetCard = ({
             data: breakdown,
             sortBy: 'order',
           })?.map(({ title, className, disabled, value }, i) => {
-            if (disabled) return <Fragment key={title} />;
+            if (disabled || value === undefined || value === null)
+              return <Fragment key={title} />;
 
             return (
               <div
@@ -390,7 +394,8 @@ export const ActiveBudgetCard = ({
           )}
         >
           {breakdown?.map(({ title, disabled, value, className }) => {
-            if (disabled) return <Fragment key={title} />;
+            if (disabled || value === undefined || value === null)
+              return <Fragment key={title} />;
 
             return (
               <div key={title} className={clsx(!showActions && 'w-full')}>

@@ -45,7 +45,7 @@ export const MobileWalletTransactionsList = ({
       />
 
       {showData ? (
-        <div className={'card relative rounded-xl p-0'}>
+        <div className={'card relative overflow-hidden rounded-xl p-0'}>
           <SimpleToast
             show={!!fetching && !!data?.docs?.length}
             className='bottom-32 left-0 1180:left-[122px]'

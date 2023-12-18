@@ -94,6 +94,7 @@ export const BudgetDetailsModule = ({
         <AppErrorBoundary>
           <ApprovedBudgetDetails
             search={debouncedSearch}
+            isApprovalsPage={isApprovals}
             {...{
               filters,
               setFilters,

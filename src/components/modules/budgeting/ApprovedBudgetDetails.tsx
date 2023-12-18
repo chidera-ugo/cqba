@@ -11,14 +11,24 @@ export const ApprovedBudgetDetails = ({
   search,
   pagination,
   setPagination,
+  isApprovalsPage,
   setFilters,
   filters,
-}: { budget: IBudget; search: string } & UseUrlManagedState) => {
+}: {
+  budget: IBudget;
+  isApprovalsPage?: boolean;
+  search: string;
+} & UseUrlManagedState) => {
   const { getColor } = useGetColorByChar();
 
   return (
     <div>
-      <ActiveBudgetCard showActions getColor={getColor} {...budget} />
+      <ActiveBudgetCard
+        isApprovalsPage={isApprovalsPage}
+        showActions
+        getColor={getColor}
+        {...budget}
+      />
 
       {budget.status !== 'closed' && (
         <div className='mt-5'>

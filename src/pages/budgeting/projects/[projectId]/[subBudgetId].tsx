@@ -42,7 +42,7 @@ export default function SubBudgetDetails() {
 
   return (
     <AppLayout
-      title={'Budgeting'}
+      title={'Budgets'}
       breadCrumbs={[
         {
           title: 'Budgets',

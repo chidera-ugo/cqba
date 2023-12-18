@@ -19,8 +19,8 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
     enabled: isVerified && !!currency,
   });
 
-  if (isLoading) return <IsLoadingIsError type='loading' />;
-  if (isError) return <IsLoadingIsError type='error' />;
+  if (isLoading) return <IsLoadingIsError isOwner={isOwner} type='loading' />;
+  if (isError) return <IsLoadingIsError isOwner={isOwner} type='error' />;
 
   const payload: {
     name: string;
@@ -86,10 +86,16 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
   );
 };
 
-const IsLoadingIsError = ({ type }: { type: 'loading' | 'error' }) => {
+const IsLoadingIsError = ({
+  type,
+  isOwner,
+}: {
+  type: 'loading' | 'error';
+  isOwner: boolean;
+}) => {
   return (
     <div className='flex w-full gap-3 640:gap-5'>
-      {generatePlaceholderArray(3).map((id) => {
+      {generatePlaceholderArray(isOwner ? 3 : 2).map((id) => {
         return (
           <div
             className={clsx(

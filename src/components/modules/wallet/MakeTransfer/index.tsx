@@ -4,6 +4,10 @@ import { ManageBudgetAndProjectCreation } from 'components/modules/budgeting/Man
 import { PerformWalletToBank } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank';
 import { AppToast } from 'components/primary/AppToast';
 import { Outbound } from 'components/svgs/navigation/Arrows';
+import {
+  useGetDebitableProjects,
+  useGetDebitableProjectsByMutation,
+} from 'hooks/api/budgeting/project/useGetDebitableProjects';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import {
   useGetDebitableBudgets,
@@ -19,21 +23,46 @@ export const MakeTransfer = ({ budget }: { budget?: IBudget }) => {
 
   const { isLoading, isError, data } = useGetDebitableBudgets();
 
+  const {
+    isLoading: _l,
+    isError: _e,
+    data: projects,
+  } = useGetDebitableProjects();
+
   const { mutate, isLoading: gettingBudgets } =
     useGetDebitableBudgetsByMutation({
       onError: () => null,
     });
 
+  const { mutate: getProjects, isLoading: gettingProjects } =
+    useGetDebitableProjectsByMutation({
+      onError: () => null,
+    });
+
   return (
     <>
-      <FullScreenLoader show={gettingBudgets && !modal} id={'make_transfer'} />
+      <FullScreenLoader
+        show={(gettingBudgets || gettingProjects) && !modal}
+        id={'make_transfer'}
+      />
 
       <ManageBudgetAndProjectCreation
         {...{
           modal,
           setModal,
         }}
-        onFinish={() => {
+        isTransferFlow
+        onFinish={(type) => {
+          if (type === 'project')
+            return getProjects(null, {
+              onSuccess(res) {
+                console.log(res);
+
+                if (!!res?.length) setShowTransferModal(true);
+                else setModal('show_prompt');
+              },
+            });
+
           mutate(null, {
             onSuccess(res) {
               if (!!res?.length) setShowTransferModal(true);
@@ -45,22 +74,25 @@ export const MakeTransfer = ({ budget }: { budget?: IBudget }) => {
 
       <PerformWalletToBank
         budget={budget}
+        budgets={data}
+        projects={projects}
         show={showTransferModal}
         close={() => setShowTransferModal(false)}
       />
 
       <SubmitButton
         type={'button'}
-        submitting={isLoading}
+        submitting={isLoading || _l}
         onClick={() => {
-          if (isLoading) return;
+          if (isLoading || _l) return;
 
-          if (isError)
+          if (isError || _e)
             return toast(<AppToast>Failed to initiate transfer</AppToast>, {
               type: 'error',
             });
 
-          if (!data?.length) return setModal('show_prompt');
+          if (!data?.length && !projects?.length)
+            return setModal('show_prompt');
 
           setShowTransferModal(true);
         }}

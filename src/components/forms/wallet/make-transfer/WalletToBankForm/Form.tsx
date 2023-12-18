@@ -55,11 +55,12 @@ export const Form = ({
     if (!budget) return;
 
     setFieldValue('budget', budget._id);
+
     setFieldValue('budgetBalance', budget.amount / 100);
   }, [budget]);
 
   useEffect(() => {
-    if (!values.budget) return;
+    if (!values.budget || !!budget) return;
 
     const budgetBalance =
       Number(data?.find(({ _id }) => _id === values.budget)?.balance) / 100;
@@ -107,6 +108,7 @@ export const Form = ({
       <AmountInput
         label='Amount'
         name='amount'
+        lazyFocus={!!budget}
         currency={currency}
         setFieldValue={setFieldValue}
       />

@@ -15,10 +15,12 @@ export const ManageBudgetAndProjectCreation = ({
   modal,
   setModal,
   onFinish,
+  isTransferFlow,
   setFilters,
 }: UseManageBudgetAndProjectCreation & {
   setFilters?: Dispatch<SetStateAction<Record<string, any>>>;
-  onFinish?: () => void;
+  onFinish?: (type: string) => void;
+  isTransferFlow?: boolean;
 }) => {
   const { query, pathname, push } = useRouter();
 
@@ -35,7 +37,7 @@ export const ManageBudgetAndProjectCreation = ({
     <>
       <ManageBudgetCreation
         onFinish={() => {
-          if (onFinish) onFinish();
+          if (onFinish) onFinish('budget');
 
           if (setFilters)
             setFilters((prev) => ({
@@ -51,7 +53,7 @@ export const ManageBudgetAndProjectCreation = ({
 
       <ManageProjectCreation
         onFinish={() => {
-          if (onFinish) onFinish();
+          if (onFinish) onFinish('project');
 
           if (setFilters)
             setFilters((prev) => ({
@@ -59,6 +61,7 @@ export const ManageBudgetAndProjectCreation = ({
               status: budgetingFilterOptions[1], // Switching tabs to projects,
             }));
         }}
+        isTransferFlow={isTransferFlow}
         close={() => setModal(null)}
         show={query['modal'] === 'create_project'}
       />
