@@ -24,7 +24,9 @@ export const SummaryWithVariance = ({
     <div className='my-auto'>
       <div className={clsx('flex text-xs 640:text-sm', className)}>
         <div>{name}</div>
-        {moreInfo && <MoreInfo className={'my-auto'}>{moreInfo}</MoreInfo>}
+        {moreInfo && (
+          <MoreInfo className={'my-auto hidden 640:block'}>{moreInfo}</MoreInfo>
+        )}
       </div>
 
       <div

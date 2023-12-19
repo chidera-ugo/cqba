@@ -1,16 +1,33 @@
 import clsx from 'clsx';
 import { SummaryWithVariance } from 'components/modules/overview/Overview/SummaryWithVariance';
+import { useGetBudgetBalances } from 'hooks/api/wallet/useGetBudgetBalances';
 import { useGetWalletBalances } from 'hooks/api/wallet/useGetWalletBalances';
+import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import Link from 'next/link';
 
 export const WalletOverview = ({ isOwner }: { isOwner: boolean }) => {
-  const { isLoading, isError, primaryWallet } = useManageWallets();
+  const { isVerified } = useIsVerified();
+
+  const { isLoading: l, isError: e, primaryWallet } = useManageWallets();
 
   const { isLoading: _l, isError: _e, data } = useGetWalletBalances();
 
-  if (isLoading || _l) return <IsLoadingIsError isOwner={isOwner} isLoading />;
-  if (isError || _e) return <IsLoadingIsError isOwner={isOwner} />;
+  const {
+    isLoading: __l,
+    isError: __e,
+    data: budgetBalances,
+  } = useGetBudgetBalances({
+    enabled: !isOwner && isVerified,
+  });
+
+  const isLoading = isOwner ? l || _l : l || __l;
+  const isError = isOwner ? e || _e : e || __e;
+
+  console.log(budgetBalances);
+
+  if (isLoading) return <IsLoadingIsError isOwner={isOwner} isLoading />;
+  if (isError) return <IsLoadingIsError isOwner={isOwner} />;
 
   return (
     <div className='grid-cols-2 gap-4 640:grid'>
@@ -36,9 +53,13 @@ export const WalletOverview = ({ isOwner }: { isOwner: boolean }) => {
           value={
             !primaryWallet
               ? 0
-              : (data?.budget?.find(
-                  ({ currency }) => currency === primaryWallet?.currency
-                )?.balance ?? 0) / 100
+              : (isOwner
+                  ? data?.budget?.find(
+                      ({ currency }) => currency === primaryWallet?.currency
+                    )?.balance ?? 0
+                  : budgetBalances?.find(
+                      ({ currency }) => currency === primaryWallet?.currency
+                    )?.balance ?? 0) / 100
           }
           currency={primaryWallet?.currency}
           name='Budget Balance'

@@ -79,7 +79,7 @@ export function useGetAllBudgetsUnpaginated(
 
   return useTQuery<PaginatedResponse<IBudget>>({
     queryKey: ['budgets', 'unpaginated', _status],
-    url: `?paginated=false&status=${_status}&createdByUser=${createdByUser}`,
+    url: `?paginated=false&status=${_status}&createdByUser=${!!createdByUser}`,
     service: 'budgets',
     options: {
       ...options,

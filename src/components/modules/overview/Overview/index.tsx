@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { FilterWithRangePreset } from 'components/modules/commons/FilterWithRangePreset';
 import { SummaryCards } from 'components/modules/overview/Overview/SummaryCards';
 import { useAppContext } from 'context/AppContext';
@@ -11,7 +12,7 @@ export const Overview = () => {
 
   return (
     <>
-      <div className='x-between app-container'>
+      <div className='x-between app-container gap-4'>
         <h5
           className={
             'my-auto text-base leading-5 640:text-[20px] 640:leading-6'
@@ -32,7 +33,7 @@ export const Overview = () => {
       </div>
 
       <div className='hidden-scrollbar mt-5 w-full overflow-x-auto px-3 640:px-8'>
-        <div className='min-w-[900px] 640:min-w-[1200px] 1340:min-w-[900px]'>
+        <div className={clsx('min-w-fit')}>
           <SummaryCards range={range} />
         </div>
       </div>

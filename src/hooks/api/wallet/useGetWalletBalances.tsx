@@ -24,10 +24,10 @@ export function useGetWalletBalances() {
     url: `/balances`,
     service: 'wallet',
     options: {
+      enabled: isVerified,
       staleTime: Infinity,
       meta: {
         silent: true,
-        enabled: isVerified,
       },
     },
   });

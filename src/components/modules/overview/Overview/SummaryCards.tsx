@@ -59,10 +59,10 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
           return (
             <div
               className={clsx(
-                'card y-center h-[116px] max-w-[296px] 640:h-[132px]',
+                'card y-center h-[116px] 640:h-[132px]',
                 isOwner
-                  ? '480:max-w-none'
-                  : '640:max-w-[500px] 1340:max-w-none',
+                  ? 'min-w-[300px] max-w-[320px] 480:min-w-[360px] 480:max-w-none'
+                  : 'min-w-[300px] 640:max-w-[500px] 1340:max-w-none',
                 i === 0 && 'bg-primary-main text-white'
               )}
               key={name}
