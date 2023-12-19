@@ -19,7 +19,12 @@ export const PendingAndActiveBudgetsOverview = ({
   const [expandedBudget, setExpandedBudget] = useState('');
 
   const { isVerified } = useIsVerified();
-  const { isLoading, isError, data } = useGetAllBudgetsUnpaginated(status);
+
+  const { isLoading, isError, data } = useGetAllBudgetsUnpaginated(
+    status,
+    status === 'active'
+  );
+
   const { getColor } = useGetColorByChar();
 
   useEffect(() => {
