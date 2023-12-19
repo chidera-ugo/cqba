@@ -4,7 +4,6 @@ import { useGetDashboardSummary } from 'hooks/api/dashboard/useGetDashboardSumma
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useUserRole } from 'hooks/access_control/useUserRole';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
-import { Fragment } from 'react';
 import { generatePlaceholderArray } from 'utils/generators/generatePlaceholderArray';
 import { DateRange } from 'utils/getters/getDateRange';
 
@@ -34,6 +33,7 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
       name: 'Account Balance',
       value: data?.accountBalance?.value,
       moreInfo: 'Total amount in your wallet',
+      disabled: !isOwner,
       variance: data?.accountBalance?.percentageDiff,
     },
     {
@@ -45,17 +45,15 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
     {
       name: 'Total Spend',
       value: data?.totalSpend?.value,
-      disabled: !isOwner,
       variance: data?.totalSpend?.percentageDiff,
     },
   ];
 
   return (
     <div className='flex gap-3 640:gap-5'>
-      {payload.map(
-        ({ name, value, disabled, variance, moreInfo, isAmount }, i) => {
-          if (disabled) return <Fragment key={name} />;
-
+      {payload
+        .filter(({ disabled }) => !disabled)
+        .map(({ name, value, variance, moreInfo, isAmount }, i) => {
           const _val = Number(value ?? 0) / 100;
 
           return (
@@ -82,8 +80,7 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
               />
             </div>
           );
-        }
-      )}
+        })}
     </div>
   );
 };
