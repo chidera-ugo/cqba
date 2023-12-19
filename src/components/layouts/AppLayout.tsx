@@ -102,7 +102,7 @@ export const AppLayout = ({
 
           <main
             className={clsx(
-              'pb-40',
+              'pb-20',
               hideSideNavigation ? 'w-full' : '1024:app-layout-desktop-width'
             )}
           >
