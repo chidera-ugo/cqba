@@ -51,7 +51,7 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
   ];
 
   return (
-    <div className='grid grid-cols-12 gap-3 640:gap-5'>
+    <div className='flex gap-3 640:gap-5'>
       {payload.map(
         ({ name, value, disabled, variance, moreInfo, isAmount }, i) => {
           if (disabled) return <Fragment key={name} />;

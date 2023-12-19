@@ -4,6 +4,7 @@ import { ManageBudgetAndProjectCreation } from 'components/modules/budgeting/Man
 import { PerformWalletToBank } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank';
 import { AppToast } from 'components/primary/AppToast';
 import { Outbound } from 'components/svgs/navigation/Arrows';
+import { useUserRole } from 'hooks/access_control/useUserRole';
 import {
   useGetDebitableProjects,
   useGetDebitableProjectsByMutation,
@@ -14,12 +15,13 @@ import {
   useGetDebitableBudgetsByMutation,
 } from 'hooks/api/budgeting/useGetDebitableBudgets';
 import { useManageBudgetAndProjectCreation } from 'hooks/budgeting/useManageBudgetAndProjectCreation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 export const MakeTransfer = ({ budget }: { budget?: IBudget }) => {
   const [showTransferModal, setShowTransferModal] = useState(false);
-  const { modal, setModal } = useManageBudgetAndProjectCreation();
+  const { modal, setModal, createBudget } = useManageBudgetAndProjectCreation();
+  const { isOwner } = useUserRole();
 
   const { isLoading, isError, data } = useGetDebitableBudgets();
 
@@ -39,6 +41,13 @@ export const MakeTransfer = ({ budget }: { budget?: IBudget }) => {
       onError: () => null,
     });
 
+  useEffect(() => {
+    if (showTransferModal && !data?.length && !projects?.length) {
+      setShowTransferModal(false);
+      setModal('show_prompt');
+    }
+  }, []);
+
   return (
     <>
       <FullScreenLoader
@@ -50,23 +59,22 @@ export const MakeTransfer = ({ budget }: { budget?: IBudget }) => {
         {...{
           modal,
           setModal,
+          createBudget,
         }}
         isTransferFlow
         onFinish={(type) => {
           if (type === 'project')
             return getProjects(null, {
               onSuccess(res) {
-                console.log(res);
-
                 if (!!res?.length) setShowTransferModal(true);
-                else setModal('show_prompt');
+                else if (isOwner) setModal('show_prompt');
               },
             });
 
           mutate(null, {
             onSuccess(res) {
               if (!!res?.length) setShowTransferModal(true);
-              else setModal('show_prompt');
+              else if (isOwner) setModal('show_prompt');
             },
           });
         }}
@@ -77,6 +85,10 @@ export const MakeTransfer = ({ budget }: { budget?: IBudget }) => {
         budgets={data}
         projects={projects}
         show={showTransferModal}
+        createBudget={() => {
+          createBudget();
+          setShowTransferModal(false);
+        }}
         close={() => setShowTransferModal(false)}
       />
 

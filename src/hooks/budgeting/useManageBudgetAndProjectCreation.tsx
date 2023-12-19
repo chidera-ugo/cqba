@@ -1,3 +1,4 @@
+import { useUserRole } from 'hooks/access_control/useUserRole';
 import { useState } from 'react';
 
 export const useManageBudgetAndProjectCreation = () => {
@@ -5,9 +6,14 @@ export const useManageBudgetAndProjectCreation = () => {
     'create_budget' | 'create_project' | 'choose_action' | 'show_prompt' | null
   >(null);
 
+  const { isOwner } = useUserRole();
+
   return {
     modal,
     setModal,
+    createBudget() {
+      setModal(isOwner ? 'choose_action' : 'create_budget');
+    },
   };
 };
 

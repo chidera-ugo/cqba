@@ -25,7 +25,7 @@ export default function Budgeting() {
     value: search,
   });
 
-  const { modal, setModal } = useManageBudgetAndProjectCreation();
+  const { modal, setModal, createBudget } = useManageBudgetAndProjectCreation();
   const { layout, setLayout } = useToggleLayout();
   const { isVerified } = useIsVerified();
   const { isOwner } = useUserRole();
@@ -108,7 +108,9 @@ export default function Budgeting() {
         </div>
       </div>
 
-      <ManageBudgetAndProjectCreation {...{ setModal, setFilters, modal }} />
+      <ManageBudgetAndProjectCreation
+        {...{ setModal, createBudget, setFilters, modal }}
+      />
 
       <div
         className={clsx(

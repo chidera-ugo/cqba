@@ -142,7 +142,7 @@ export const ManageBudgetCreation = ({
         processing={creatingBudget || creatingSubBudget}
         modalTitle={
           mode === Mode.approve
-            ? user?.role === 'owner'
+            ? isOwner
               ? 'Approve Budget'
               : 'Submit Request'
             : ''
@@ -161,9 +161,9 @@ export const ManageBudgetCreation = ({
             ? `Congratulations! Your budget has been ${
                 isOwner ? 'created' : 'approved'
               } successfully`
-            : 'Your budget request has been sent successfully'
+            : "Your budget request has been sent successfully. You can spend from it when it's approved"
         }
-        authorizeButtonText={'Approve'}
+        authorizeButtonText={isOwner ? 'Approve' : 'Submit'}
         submit={(pin, errorCb) => {
           createBudget(pin, errorCb);
         }}

@@ -86,9 +86,10 @@ export const BudgetDetailsModule = ({
         )
       }
     >
-      {isLoading || (data?.status !== 'active' && data?.status !== 'closed') ? (
+      {isLoading ? (
         <IsLoading />
-      ) : isError ? (
+      ) : isError ||
+        (data?.status !== 'active' && data?.status !== 'closed') ? (
         <IsError description={'Failed to get budget details'} />
       ) : (
         <AppErrorBoundary>

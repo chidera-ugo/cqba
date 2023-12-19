@@ -16,6 +16,7 @@ export const ManageBudgetAndProjectCreation = ({
   setModal,
   onFinish,
   isTransferFlow,
+  createBudget,
   setFilters,
 }: UseManageBudgetAndProjectCreation & {
   setFilters?: Dispatch<SetStateAction<Record<string, any>>>;
@@ -30,8 +31,13 @@ export const ManageBudgetAndProjectCreation = ({
 
   useEffect(() => {
     if (!showCreateProject) return;
+
     setModal('create_project');
   }, [showCreateProject]);
+
+  function handleClose() {
+    setModal(null);
+  }
 
   return (
     <>
@@ -48,7 +54,7 @@ export const ManageBudgetAndProjectCreation = ({
             }));
         }}
         show={modal === 'create_budget'}
-        close={() => setModal(null)}
+        close={handleClose}
       />
 
       <ManageProjectCreation
@@ -62,7 +68,7 @@ export const ManageBudgetAndProjectCreation = ({
             }));
         }}
         isTransferFlow={isTransferFlow}
-        close={() => setModal(null)}
+        close={handleClose}
         show={query['modal'] === 'create_project'}
       />
 
@@ -70,7 +76,7 @@ export const ManageBudgetAndProjectCreation = ({
         show={modal === 'choose_action' || modal === 'show_prompt'}
         title={modal !== 'show_prompt' ? 'Create New Budget' : ''}
         closeOnClickOutside
-        closeModal={() => setModal(null)}
+        closeModal={handleClose}
         childrenClassname={'p-0'}
       >
         <AnimateLayout
@@ -79,10 +85,8 @@ export const ManageBudgetAndProjectCreation = ({
         >
           {modal === 'show_prompt' ? (
             <CreateBudgetPrompt
-              close={close}
-              createBudget={() => {
-                setModal(isOwner ? 'choose_action' : 'create_budget');
-              }}
+              close={handleClose}
+              createBudget={createBudget}
             />
           ) : (
             <SelectBudgetTypeForm
