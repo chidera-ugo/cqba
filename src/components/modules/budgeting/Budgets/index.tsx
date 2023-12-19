@@ -44,7 +44,7 @@ export const Budgets = ({
       page: search ? 1 : Number(pagination?.pageIndex ?? 0) + 1,
       limit: pagination?.pageSize,
       search,
-      status: isProjectsList ? undefined : currentTab,
+      status: isProjectsList ? 'active' : currentTab,
       createdByUser,
     },
     isProjectsList,
