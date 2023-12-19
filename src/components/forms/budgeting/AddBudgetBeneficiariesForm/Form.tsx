@@ -65,15 +65,21 @@ export const Form = ({
         label='Beneficiaries'
         placeholder={'Select beneficiaries'}
         name={'beneficiaries'}
+        itemSlot={({ isOwner }) => {
+          if (!isOwner) return null;
+
+          return <div className={'pill_gray'}>Owner</div>;
+        }}
         options={
           data
             ?.filter(({ firstName, lastName }) => {
               return !!firstName && !!lastName;
             })
-            ?.map(({ _id, firstName, lastName }) => {
+            ?.map(({ _id, role, firstName, lastName }) => {
               return {
                 name: `${firstName} ${lastName}`,
                 id: _id,
+                isOwner: role === 'owner',
               };
             }) ?? []
         }

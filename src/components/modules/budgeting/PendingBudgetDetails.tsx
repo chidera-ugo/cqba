@@ -5,10 +5,11 @@ import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { ApproveBudgetForm } from 'components/forms/budgeting/ApproveBudgetForm';
 import { RejectionReasonForm } from 'components/forms/budgeting/RejectionReasonForm';
 import { Cancel } from 'components/illustrations/Cancel';
+import { GreenCheck } from 'components/illustrations/Success';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { Confirmation } from 'components/modals/Confirmation';
 import { PendingBudgetCard } from 'components/modules/budgeting/PendingBudgetCard';
-import { AppToast } from 'components/primary/AppToast';
+import { SimpleInformation } from 'components/modules/commons/SimpleInformation';
 import { useAppContext } from 'context/AppContext';
 import {
   ApproveBudgetDto,
@@ -21,8 +22,8 @@ import { useHandleError } from 'hooks/api/useHandleError';
 import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
 import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 
 interface Props {
   id: string;
@@ -30,6 +31,8 @@ interface Props {
 }
 
 export const PendingBudgetDetails = ({ id, close }: Props) => {
+  const { push } = useRouter();
+
   const { user } = useAppContext().state;
 
   const [mode, setMode] = useState<'success' | 'authorize' | null>(null);
@@ -70,15 +73,30 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
     onSuccess() {
       onSuccess();
       close();
-      toast(<AppToast>Canceled budget successfully</AppToast>, {
-        type: 'success',
-      });
     },
   });
 
   if (gettingBudget || _l) return <IsLoading />;
 
   if (isError || _e || !primaryWallet || !data) return <IsError />;
+
+  if (data.status === 'active')
+    return (
+      <SimpleInformation
+        className={'py-20'}
+        icon={<GreenCheck />}
+        title={'Budget Approved'}
+        description={
+          <span className={'mt-2 block'}>
+            This budget has already been approved by admin
+          </span>
+        }
+        actionButton={{
+          text: 'View Budget',
+          action: () => push(`/budgeting/${data?._id}`),
+        }}
+      />
+    );
 
   function onSuccess() {
     defaultInvalidator(['budget', data?._id]);
@@ -182,43 +200,39 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
         negative={() => setAction(null)}
       />
 
-      <PendingBudgetCard isDetails {...data} {...{ getColor }} />
+      {!mode ? (
+        <>
+          <PendingBudgetCard isDetails {...data} {...{ getColor }} />
 
-      {user?.role === 'owner' ? (
-        <ApproveBudgetForm
-          amount={data?.amount}
-          decline={() => setAction('decline')}
-          onSubmit={(values) => {
-            setApproveBudgetValues((prev) => ({
-              ...prev!,
-              ...values,
-            }));
+          {user?.role === 'owner' ? (
+            <ApproveBudgetForm
+              amount={data?.amount}
+              decline={() => setAction('decline')}
+              onSubmit={(values) => {
+                setApproveBudgetValues((prev) => ({
+                  ...prev!,
+                  ...values,
+                }));
 
-            setAction('approve');
-            setMode('authorize');
-          }}
-          currency={primaryWallet?.currency}
-        />
-      ) : (
-        <div className='mt-8 flex gap-3'>
-          <button
-            onClick={() => setAction('edit_budget')}
-            type={'button'}
-            className={'primary-button'}
-          >
-            Edit Budget
-          </button>
-
-          <SubmitButton
-            type={'button'}
-            submitting={cancelling}
-            onClick={() => setAction('confirm_cancel')}
-            className='secondary-button w-full min-w-[120px] 640:w-auto'
-          >
-            Cancel Budget
-          </SubmitButton>
-        </div>
-      )}
+                setAction('approve');
+                setMode('authorize');
+              }}
+              currency={primaryWallet?.currency}
+            />
+          ) : (
+            <div className='mt-8 flex gap-3'>
+              <SubmitButton
+                type={'button'}
+                submitting={cancelling}
+                onClick={() => setAction('confirm_cancel')}
+                className='secondary-button w-full min-w-[120px] 640:w-auto'
+              >
+                Cancel Budget
+              </SubmitButton>
+            </div>
+          )}
+        </>
+      ) : null}
     </>
   );
 };

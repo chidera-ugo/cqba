@@ -91,7 +91,7 @@ export const AppLayout = ({
 
         <IdleTimer />
 
-        <div className='disable-scrolling 1024:flex'>
+        <div className='relative 1024:flex'>
           {!hideSideNavigation &&
           !shouldSelectFirstPlan &&
           (!screenSize || screenSize?.['desktop']) ? (
@@ -102,7 +102,7 @@ export const AppLayout = ({
 
           <main
             className={clsx(
-              'h-screen overflow-y-auto',
+              'pb-12',
               hideSideNavigation ? 'w-full' : '1024:app-layout-desktop-width'
             )}
           >

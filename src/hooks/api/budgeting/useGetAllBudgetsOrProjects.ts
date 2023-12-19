@@ -72,13 +72,14 @@ export function useGetAllBudgetsOrProjects(
 
 export function useGetAllBudgetsUnpaginated(
   status?: string,
+  createdByUser?: boolean,
   options?: UseQueryOptions<any, any, any, string[]>
 ) {
   const _status = !status ? 'active' : status;
 
   return useTQuery<PaginatedResponse<IBudget>>({
     queryKey: ['budgets', 'unpaginated', _status],
-    url: `?paginated=false&status=${_status}`,
+    url: `?paginated=false&status=${_status}&createdByUser=${!!createdByUser}`,
     service: 'budgets',
     options: {
       ...options,

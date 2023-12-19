@@ -82,8 +82,12 @@ export const ManageBudgetCreation = ({
     function handleSuccess(res: IBudget) {
       setBudgetStatus(!!projectId ? 'active' : res?.status);
 
-      if (onSuccess) onSuccess(res?._id);
-      else setMode(Mode.success);
+      if (onSuccess) {
+        onSuccess(res?._id);
+        close();
+        resetFormRecoveryValues();
+        setMode(Mode.create);
+      } else setMode(Mode.success);
 
       invalidate('budgets', 'balances', 'team');
 
@@ -130,6 +134,7 @@ export const ManageBudgetCreation = ({
       <AuthorizeActionWithPin
         hasResponse={mode === Mode.success}
         show={show && isAuthorizationMode}
+        showBackground
         close={() => {
           closeModal();
           if (onFinish && mode === Mode.success) onFinish();
@@ -137,7 +142,7 @@ export const ManageBudgetCreation = ({
         processing={creatingBudget || creatingSubBudget}
         modalTitle={
           mode === Mode.approve
-            ? user?.role === 'owner'
+            ? isOwner
               ? 'Approve Budget'
               : 'Submit Request'
             : ''
@@ -156,14 +161,16 @@ export const ManageBudgetCreation = ({
             ? `Congratulations! Your budget has been ${
                 isOwner ? 'created' : 'approved'
               } successfully`
-            : 'Your budget request has been sent successfully'
+            : "Your budget request has been sent successfully. You can spend from it when it's approved"
         }
-        authorizeButtonText={'Approve'}
-        submit={(pin, errorCb) => createBudget(pin, errorCb)}
+        authorizeButtonText={isOwner ? 'Approve' : 'Submit'}
+        submit={(pin, errorCb) => {
+          createBudget(pin, errorCb);
+        }}
       />
 
       <RightModalWrapper
-        show={show}
+        show={show && !isAuthorizationMode}
         title={
           mode === Mode.create
             ? 'Create Budget'

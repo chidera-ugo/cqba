@@ -6,25 +6,25 @@ import { SearchInput } from 'components/form-elements/SearchInput';
 import { AppLayout } from 'components/layouts/AppLayout';
 import { ApprovedBudgetDetails } from 'components/modules/budgeting/ApprovedBudgetDetails';
 import { FilterWithRangePreset } from 'components/modules/commons/FilterWithRangePreset';
-import { budgetingFilterOptions } from 'constants/budgeting/filters';
 import { useGetBudgetById } from 'hooks/api/budgeting/useGetBudgetById';
 import { useUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
-import { defaultStringifySearch } from 'hooks/client_api/search_params';
 import { useDebouncer } from 'hooks/commons/useDebouncer';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { walletFiltersSchema } from 'zod_schemas/wallet_schema';
 
-export default function SubBudgetDetails() {
-  const { query } = useRouter();
+export const BudgetDetailsModule = ({
+  isApprovals,
+}: {
+  isApprovals?: boolean;
+}) => {
+  const { query, back } = useRouter();
 
-  const _q = query['subBudgetId'];
-  const _p = query['projectId'];
-  const subBudgetId = typeof _q === 'string' ? _q : '';
-  const projectId = typeof _p === 'string' ? _p : '';
+  const _q = query['budgetId'];
+  const budgetId = typeof _q === 'string' ? _q : '';
 
-  const { isLoading, isError, data } = useGetBudgetById(subBudgetId, {
-    enabled: !!subBudgetId,
+  const { isLoading, isError, data } = useGetBudgetById(budgetId, {
+    enabled: !!budgetId,
   });
 
   const { filters, setFilters, pagination, setPagination, range, setRange } =
@@ -36,27 +36,18 @@ export default function SubBudgetDetails() {
     value: search,
   });
 
-  const backToBudgetingHref = `/budgeting${defaultStringifySearch({
-    status: budgetingFilterOptions[1]!,
-  })}`;
-
   return (
     <AppLayout
-      title={'Budgets'}
+      title={isApprovals ? 'Approvals' : 'Budgets'}
       breadCrumbs={[
         {
-          title: 'Budgets',
-          url: backToBudgetingHref,
+          title: isApprovals ? 'Approvals' : 'Budgets',
+          action: back,
         },
         {
-          title: 'Track Project',
-          url: `/budgeting/projects/${projectId}`,
-        },
-        {
-          title: 'Track Sub Budget',
+          title: 'Track Budget',
         },
       ]}
-      enabledFor={'owner'}
       breadCrumbsSlot={
         data?.status === 'closed' ? null : (
           <div className={clsx('my-auto hidden gap-2 1180:flex')}>
@@ -97,12 +88,14 @@ export default function SubBudgetDetails() {
     >
       {isLoading ? (
         <IsLoading />
-      ) : isError ? (
+      ) : isError ||
+        (data?.status !== 'active' && data?.status !== 'closed') ? (
         <IsError description={'Failed to get budget details'} />
       ) : (
         <AppErrorBoundary>
           <ApprovedBudgetDetails
             search={debouncedSearch}
+            isApprovalsPage={isApprovals}
             {...{
               filters,
               setFilters,
@@ -117,4 +110,4 @@ export default function SubBudgetDetails() {
       )}
     </AppLayout>
   );
-}
+};

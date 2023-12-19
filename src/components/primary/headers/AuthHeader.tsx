@@ -26,8 +26,7 @@ export const AuthHeader = () => {
               rel='noreferrer noopenner'
               className='text-button flex text-xs font-medium text-black 640:text-sm'
             >
-              <span className='my-auto block 640:hidden'>Learn More</span>
-              <span className='my-auto hidden 640:block'>Visit Website</span>
+              <span className='my-auto'>Learn More</span>
               <span className='my-auto ml-2 hidden 640:block'>
                 <Right className='h-5 w-5' />
               </span>

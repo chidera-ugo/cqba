@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { AlternateCheckInput } from 'components/form-elements/AlternateCheckInput';
 import { Select } from 'components/form-elements/Select';
 import { TextArea } from 'components/form-elements/Textarea';
@@ -110,31 +111,35 @@ export const Form = ({
         </>
       )}
 
-      <AlternateCheckInput
-        name={'expires'}
-        label={'Set Expiration Date'}
-        description={`Delete all funds allocated to beneficiaries and deactivate the budget.`}
-      />
-
-      {values.expires && (
-        <DatePicker
-          label='Due Date'
-          name='expiryDate'
-          {...{
-            setFieldValue,
-          }}
-          minDate={dayjs().toDate()}
+      {isOwner && (
+        <AlternateCheckInput
+          name={'expires'}
+          label={'Set Expiration Date'}
+          description={`Delete all funds allocated to beneficiaries and deactivate the budget.`}
         />
       )}
 
-      {!isOwner && (
-        <Select
-          placeholder={'Select priority'}
-          options={['Low', 'Medium', 'High']}
-          name={'priority'}
-          label={'Priority'}
-        />
-      )}
+      <div className={clsx(!isOwner && 'gap-4 880:flex')}>
+        {values.expires || !isOwner ? (
+          <DatePicker
+            label='Due Date'
+            name='expiryDate'
+            {...{
+              setFieldValue,
+            }}
+            minDate={dayjs().toDate()}
+          />
+        ) : null}
+
+        {!isOwner && (
+          <Select
+            placeholder={'Select priority'}
+            options={['Low', 'Medium', 'High']}
+            name={'priority'}
+            label={'Priority'}
+          />
+        )}
+      </div>
 
       <div className='mt-8 flex'>
         <SubmitButton

@@ -4,7 +4,6 @@ import { useGetDashboardSummary } from 'hooks/api/dashboard/useGetDashboardSumma
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useUserRole } from 'hooks/access_control/useUserRole';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
-import { Fragment } from 'react';
 import { generatePlaceholderArray } from 'utils/generators/generatePlaceholderArray';
 import { DateRange } from 'utils/getters/getDateRange';
 
@@ -19,8 +18,8 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
     enabled: isVerified && !!currency,
   });
 
-  if (isLoading) return <IsLoadingIsError type='loading' />;
-  if (isError) return <IsLoadingIsError type='error' />;
+  if (isLoading) return <IsLoadingIsError isOwner={isOwner} type='loading' />;
+  if (isError) return <IsLoadingIsError isOwner={isOwner} type='error' />;
 
   const payload: {
     name: string;
@@ -34,6 +33,7 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
       name: 'Account Balance',
       value: data?.accountBalance?.value,
       moreInfo: 'Total amount in your wallet',
+      disabled: !isOwner,
       variance: data?.accountBalance?.percentageDiff,
     },
     {
@@ -45,24 +45,24 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
     {
       name: 'Total Spend',
       value: data?.totalSpend?.value,
-      disabled: !isOwner,
       variance: data?.totalSpend?.percentageDiff,
     },
   ];
 
   return (
-    <div className='grid grid-cols-12 gap-3 640:gap-5'>
-      {payload.map(
-        ({ name, value, disabled, variance, moreInfo, isAmount }, i) => {
-          if (disabled) return <Fragment key={name} />;
-
+    <div className='flex gap-3 640:gap-5'>
+      {payload
+        .filter(({ disabled }) => !disabled)
+        .map(({ name, value, variance, moreInfo, isAmount }, i) => {
           const _val = Number(value ?? 0) / 100;
 
           return (
             <div
               className={clsx(
                 'card y-center h-[116px] 640:h-[132px]',
-                isOwner ? 'col-span-4' : 'col-span-6',
+                isOwner
+                  ? 'min-w-[300px] max-w-[320px] 480:min-w-[360px] 480:max-w-none'
+                  : 'min-w-[300px] 640:max-w-[500px] 1340:max-w-none',
                 i === 0 && 'bg-primary-main text-white'
               )}
               key={name}
@@ -80,16 +80,21 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
               />
             </div>
           );
-        }
-      )}
+        })}
     </div>
   );
 };
 
-const IsLoadingIsError = ({ type }: { type: 'loading' | 'error' }) => {
+const IsLoadingIsError = ({
+  type,
+  isOwner,
+}: {
+  type: 'loading' | 'error';
+  isOwner: boolean;
+}) => {
   return (
     <div className='flex w-full gap-3 640:gap-5'>
-      {generatePlaceholderArray(3).map((id) => {
+      {generatePlaceholderArray(isOwner ? 3 : 2).map((id) => {
         return (
           <div
             className={clsx(

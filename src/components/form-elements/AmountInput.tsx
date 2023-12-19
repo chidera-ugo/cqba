@@ -1,5 +1,6 @@
 import { useField, useFormikContext } from 'formik';
 import clsx from 'clsx';
+import { useLazyFocus } from 'hooks/forms/useLazyFocus';
 import { Field } from 'types/commons';
 import { formatAmount, sanitizeAmount } from 'utils/formatters/formatAmount';
 
@@ -21,12 +22,15 @@ export const AmountInput = ({
   currency = 'NGN',
   showRedBorders,
   setFieldValue,
+  lazyFocus,
   error,
   ...props
 }: Props) => {
   const [field, meta] = useField(props.name as string);
   const id = props.id ?? props.name;
   const { submitCount } = useFormikContext();
+
+  useLazyFocus(id, lazyFocus && !props.autoFocus);
 
   return (
     <div className={clsx(className, 'mt-5 w-full')}>

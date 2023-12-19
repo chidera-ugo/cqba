@@ -40,6 +40,7 @@ interface Props {
   show: boolean;
   budget?: IBudget;
   onFinish?: () => void;
+  isTransferFlow?: boolean;
   close: () => void;
 }
 
@@ -47,6 +48,7 @@ export const ManageProjectCreation = ({
   show,
   close,
   budget,
+  isTransferFlow,
   onFinish,
 }: Props) => {
   const { replace, query, pathname } = useRouter();
@@ -319,18 +321,20 @@ export const ManageProjectCreation = ({
                 </button>
               )}
 
-              <div className='mt-6 flex'>
-                <button
-                  onClick={() => {
-                    setMode(Mode.approve);
-                  }}
-                  className={
-                    !subBudgets.length ? 'secondary-button' : 'primary-button'
-                  }
-                >
-                  {!subBudgets.length ? 'Skip for now' : 'Approve Project'}
-                </button>
-              </div>
+              {isTransferFlow && !subBudgets.length ? null : (
+                <div className='mt-6 flex'>
+                  <button
+                    onClick={() => {
+                      setMode(Mode.approve);
+                    }}
+                    className={
+                      !subBudgets.length ? 'secondary-button' : 'primary-button'
+                    }
+                  >
+                    {!subBudgets.length ? 'Skip for now' : 'Approve Project'}
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <AppErrorBoundary>

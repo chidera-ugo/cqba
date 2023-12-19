@@ -6,7 +6,6 @@ import { useGetWalletTransactions } from 'hooks/api/wallet/useGetWalletTransacti
 import { UseUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
 import { useEffect, useState } from 'react';
 import { ColumnFiltersState, SortingState } from '@tanstack/react-table';
-import { PaginatedResponse } from 'types/Table';
 import card from '/public/mockups/transactions.jpg';
 import { IWalletTransaction } from 'types/transaction';
 import { getDateRange } from 'utils/getters/getDateRange';
@@ -53,7 +52,7 @@ export const WalletTransactionsTable = ({
   const {
     isLoading: _l,
     isError: _e,
-    data: res,
+    data,
     isRefetching,
   } = useGetWalletTransactions(
     !!search
@@ -78,14 +77,6 @@ export const WalletTransactionsTable = ({
   const isLoading = _l || _isLoading;
   const isError = _e || _isError;
 
-  useEffect(() => {
-    if (!!res) setData(res);
-  }, [res]);
-
-  const [data, setData] = useState<
-    PaginatedResponse<IWalletTransaction> | undefined
-  >(res);
-
   const { columns } = useColumns();
 
   function closeModal() {
@@ -104,7 +95,7 @@ export const WalletTransactionsTable = ({
         {transactionId && <TransactionReceipt transactionId={transactionId} />}
       </RightModalWrapper>
 
-      {res && !res?.docs?.length ? (
+      {data && !data?.docs?.length ? (
         <NoData
           processing={isLoading || isRefetching}
           title='Stay on top of your transactions'

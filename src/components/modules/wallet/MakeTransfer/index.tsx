@@ -4,40 +4,77 @@ import { ManageBudgetAndProjectCreation } from 'components/modules/budgeting/Man
 import { PerformWalletToBank } from 'components/modules/wallet/MakeTransfer/PerformWalletToBank';
 import { AppToast } from 'components/primary/AppToast';
 import { Outbound } from 'components/svgs/navigation/Arrows';
+import { useUserRole } from 'hooks/access_control/useUserRole';
+import {
+  useGetDebitableProjects,
+  useGetDebitableProjectsByMutation,
+} from 'hooks/api/budgeting/project/useGetDebitableProjects';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import {
   useGetDebitableBudgets,
   useGetDebitableBudgetsByMutation,
 } from 'hooks/api/budgeting/useGetDebitableBudgets';
 import { useManageBudgetAndProjectCreation } from 'hooks/budgeting/useManageBudgetAndProjectCreation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 export const MakeTransfer = ({ budget }: { budget?: IBudget }) => {
   const [showTransferModal, setShowTransferModal] = useState(false);
-  const { modal, setModal } = useManageBudgetAndProjectCreation();
+  const { modal, setModal, createBudget } = useManageBudgetAndProjectCreation();
+  const { isOwner } = useUserRole();
 
   const { isLoading, isError, data } = useGetDebitableBudgets();
+
+  const {
+    isLoading: _l,
+    isError: _e,
+    data: projects,
+  } = useGetDebitableProjects();
 
   const { mutate, isLoading: gettingBudgets } =
     useGetDebitableBudgetsByMutation({
       onError: () => null,
     });
 
+  const { mutate: getProjects, isLoading: gettingProjects } =
+    useGetDebitableProjectsByMutation({
+      onError: () => null,
+    });
+
+  useEffect(() => {
+    if (showTransferModal && !data?.length && !projects?.length) {
+      setShowTransferModal(false);
+      setModal('show_prompt');
+    }
+  }, []);
+
   return (
     <>
-      <FullScreenLoader show={gettingBudgets && !modal} id={'make_transfer'} />
+      <FullScreenLoader
+        show={(gettingBudgets || gettingProjects) && !modal}
+        id={'make_transfer'}
+      />
 
       <ManageBudgetAndProjectCreation
         {...{
           modal,
           setModal,
+          createBudget,
         }}
-        onFinish={() => {
+        isTransferFlow
+        onFinish={(type) => {
+          if (type === 'project')
+            return getProjects(null, {
+              onSuccess(res) {
+                if (!!res?.length) setShowTransferModal(true);
+                else if (isOwner) setModal('show_prompt');
+              },
+            });
+
           mutate(null, {
             onSuccess(res) {
               if (!!res?.length) setShowTransferModal(true);
-              else setModal('show_prompt');
+              else if (isOwner) setModal('show_prompt');
             },
           });
         }}
@@ -45,22 +82,29 @@ export const MakeTransfer = ({ budget }: { budget?: IBudget }) => {
 
       <PerformWalletToBank
         budget={budget}
+        budgets={data}
+        projects={projects}
         show={showTransferModal}
+        createBudget={() => {
+          createBudget();
+          setShowTransferModal(false);
+        }}
         close={() => setShowTransferModal(false)}
       />
 
       <SubmitButton
         type={'button'}
-        submitting={isLoading}
+        submitting={isLoading || _l}
         onClick={() => {
-          if (isLoading) return;
+          if (isLoading || _l) return;
 
-          if (isError)
+          if (isError || _e)
             return toast(<AppToast>Failed to initiate transfer</AppToast>, {
               type: 'error',
             });
 
-          if (!data?.length) return setModal('show_prompt');
+          if (!data?.length && !projects?.length)
+            return setModal('show_prompt');
 
           setShowTransferModal(true);
         }}

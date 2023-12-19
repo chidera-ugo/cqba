@@ -44,7 +44,7 @@ export const Budgets = ({
       page: search ? 1 : Number(pagination?.pageIndex ?? 0) + 1,
       limit: pagination?.pageSize,
       search,
-      status: isProjectsList ? undefined : currentTab,
+      status: isProjectsList ? 'active' : currentTab,
       createdByUser,
     },
     isProjectsList,
@@ -85,6 +85,7 @@ export const Budgets = ({
           {layout == 'grid' || screenSize?.['mobile'] ? (
             <BudgetsGrid
               {...{
+                isApprovalsPage,
                 data,
                 isProjectsList,
                 pagination,
@@ -117,6 +118,9 @@ export const Budgets = ({
               ) : (
                 <BudgetsTable
                   onRowClick={(budget) => {
+                    if (budget.status === 'pending')
+                      return setCurrentBudget(budget);
+
                     push(
                       `${!isApprovalsPage ? 'budgeting' : 'approvals'}/${
                         budget?._id

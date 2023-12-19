@@ -1,5 +1,11 @@
 import { clsx } from 'clsx';
-import { Fragment, PropsWithChildren, useEffect, useState } from 'react';
+import {
+  Fragment,
+  PropsWithChildren,
+  ReactNode,
+  useEffect,
+  useState,
+} from 'react';
 import { FixedSizeList as List } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { IdNavigator } from 'components/commons/IdNavigator';
@@ -27,6 +33,7 @@ export type TMultiSelect = {
   dropdownInMobileView?: boolean;
   itemCountAdjustment?: number;
   itemSize?: number;
+  itemSlot?: (option: any) => ReactNode;
 };
 
 export type TMultiOptions = {
@@ -36,17 +43,17 @@ export type TMultiOptions = {
   entity?: string;
 };
 
+export type MultiCheckHandleChanges = {
+  handleChange: (value: Props['selectedOptions']) => void;
+  selectedOptions: Record<string, boolean>;
+};
+
 type Props = TMultiSelect &
   TMultiOptions &
   MultiCheckHandleChanges & {
     isLoading?: boolean;
     close: () => void;
   };
-
-export type MultiCheckHandleChanges = {
-  handleChange: (value: Props['selectedOptions']) => void;
-  selectedOptions: Record<string, boolean>;
-};
 
 export const Select = ({
   options: _options,
@@ -70,6 +77,7 @@ export const Select = ({
   withBorders,
   itemSize = 48,
   itemCountAdjustment = 0,
+  itemSlot,
 }: PropsWithChildren<Props>) => {
   const options = !convertOptionsToObjectArray
     ? _options
@@ -247,9 +255,9 @@ export const Select = ({
                                 {renderer ? (
                                   <>{renderer(val, index)}</>
                                 ) : (
-                                  <div className='my-auto'>
+                                  <div className='my-auto w-full'>
                                     <div
-                                      className={'my-auto flex align-middle'}
+                                      className={'my-auto w-full align-middle'}
                                     >
                                       {imageKey && data[imageKey] && (
                                         <div className='mr-3'>
@@ -264,17 +272,26 @@ export const Select = ({
                                       )}
                                       <div
                                         className={clsx(
-                                          'my-auto text-left text-base font-medium line-clamp-1',
+                                          'my-auto flex gap-2 text-left text-base font-medium',
                                           withBorders &&
                                             'group-hover:text-primary-main'
                                         )}
                                       >
-                                        {val}
-                                        {otherDisplayVal && (
-                                          <span className='ml-2 text-neutral-400'>
-                                            {otherDisplayVal}
+                                        <span className={'line-clamp-1'}>
+                                          <span>{val}</span>
+
+                                          <span className={'block'}>
+                                            {otherDisplayVal && (
+                                              <span className='ml-2 text-neutral-400'>
+                                                {otherDisplayVal}
+                                              </span>
+                                            )}
                                           </span>
-                                        )}
+                                        </span>
+
+                                        <span className='my-auto flex'>
+                                          {itemSlot && itemSlot(data)}
+                                        </span>
                                       </div>
                                     </div>
                                     {descriptionValueKey && (

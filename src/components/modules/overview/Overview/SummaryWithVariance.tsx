@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const SummaryWithVariance = ({
-  variance,
+  variance = 0,
   name,
   moreInfo,
   currency,
@@ -24,7 +24,9 @@ export const SummaryWithVariance = ({
     <div className='my-auto'>
       <div className={clsx('flex text-xs 640:text-sm', className)}>
         <div>{name}</div>
-        {moreInfo && <MoreInfo className={'my-auto'}>{moreInfo}</MoreInfo>}
+        {moreInfo && (
+          <MoreInfo className={'my-auto hidden 640:block'}>{moreInfo}</MoreInfo>
+        )}
       </div>
 
       <div
@@ -48,22 +50,20 @@ export const SummaryWithVariance = ({
       </div>
 
       <div className={'mt-1'}>
-        {variance ? (
-          <div className={clsx('flex gap-1', className)}>
-            <span
-              className={clsx(
-                'my-auto',
-                variance > 0 ? 'rotate-180 text-green-500' : 'text-red-500'
-              )}
-            >
-              <Outbound />
-            </span>
-            <span className={'my-auto text-xs'}>
-              <span className={'font-medium'}>{Math.abs(variance)}% </span> in
-              selected period
-            </span>
-          </div>
-        ) : null}
+        <div className={clsx('flex gap-1', className)}>
+          <span
+            className={clsx(
+              'my-auto',
+              variance <= 0 ? 'text-green-500' : 'rotate-180 text-red-500'
+            )}
+          >
+            <Outbound />
+          </span>
+          <span className={'my-auto text-xs'}>
+            <span className={'font-medium'}>{Math.abs(variance)}% </span> in
+            selected period
+          </span>
+        </div>
       </div>
     </div>
   );

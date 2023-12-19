@@ -7,6 +7,7 @@ import { Cancel } from 'components/illustrations/Cancel';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { MakeTransfer } from 'components/modules/wallet/MakeTransfer';
 import { Freeze, MiniLock } from 'components/svgs/budgeting/Budget_Icons';
+import { approvalsFilterOptions } from 'constants/approvals/filters';
 import { budgetingFilterOptions } from 'constants/budgeting/filters';
 import { useAppContext } from 'context/AppContext';
 import { UserRoles } from 'enums/employee_enum';
@@ -29,6 +30,7 @@ type Props = IBudget & {
   showOnlyBreakdown?: boolean;
   isProject?: boolean;
   onClick?: () => void;
+  isApprovalsPage?: boolean;
   isProjectPaused?: boolean;
   actionsSlot?: ReactNode;
 };
@@ -38,6 +40,7 @@ export const ActiveBudgetCard = ({
   showActions,
   isProject,
   onClick,
+  isApprovalsPage,
   isProjectPaused,
   showOnlyBreakdown,
   actionsSlot,
@@ -59,10 +62,12 @@ export const ActiveBudgetCard = ({
   const { replace, push } = useRouter();
   const { invalidate, defaultInvalidator } = useQueryInvalidator();
 
-  const backToBudgetingHref = `/budgeting${
+  const backToBudgetingHref = `/${isApprovalsPage ? 'approvals' : 'budgeting'}${
     !!projectId && !!subBudgetId ? `/projects/${projectId}` : ''
   }${defaultStringifySearch({
-    status: budgetingFilterOptions[isProject ? 1 : 0]!,
+    status: isApprovalsPage
+      ? approvalsFilterOptions()[0]
+      : budgetingFilterOptions[isProject ? 1 : 0],
   })}`;
 
   const { isLoading: pausing, mutate: pause } = usePauseBudgetOrProject(
@@ -115,18 +120,19 @@ export const ActiveBudgetCard = ({
           title: 'Spent',
           className: 'bg-primary-main',
           value: totalSpent,
-        },
-        {
-          title: 'Unallocated',
-          className: 'bg-neutral-200',
-          order: 2,
-          value: unallocatedAmount,
+          order: 1,
         },
         {
           title: 'Allocated',
           className: 'bg-neutral-300',
-          order: 1,
+          order: 2,
           value: allocatedAmount,
+        },
+        {
+          title: 'Unallocated',
+          className: 'bg-neutral-200',
+          order: 3,
+          value: unallocatedAmount,
         },
       ]
     : [
@@ -134,19 +140,20 @@ export const ActiveBudgetCard = ({
           title: 'Spent',
           className: 'bg-primary-main',
           value: amountUsed,
-        },
-        {
-          title: 'Available',
-          className: 'bg-neutral-200',
-          order: 2,
-          value: balance,
+          order: 1,
         },
         {
           title: 'Threshold',
           className: 'bg-neutral-300',
           value: threshold,
-          order: 1,
+          order: 2,
           disabled: threshold === amount,
+        },
+        {
+          title: 'Available',
+          className: 'bg-neutral-200',
+          order: 3,
+          value: balance,
         },
       ];
 
@@ -262,7 +269,7 @@ export const ActiveBudgetCard = ({
 
           if (isProject) return push(`/budgeting/projects/${_id}`);
 
-          push(`/budgeting/${_id}`);
+          push(`/${isApprovalsPage ? 'approvals' : 'budgeting'}/${_id}`);
         }}
       >
         {!showOnlyBreakdown && (
@@ -357,8 +364,12 @@ export const ActiveBudgetCard = ({
             'relative mt-3 h-2 w-full overflow-hidden rounded-full bg-neutral-200'
           )}
         >
-          {breakdown.map(({ title, className, disabled, value }) => {
-            if (disabled) return <Fragment key={title} />;
+          {handleSort({
+            data: breakdown,
+            sortBy: 'order',
+          })?.map(({ title, className, disabled, value }, i) => {
+            if (disabled || value === undefined || value === null)
+              return <Fragment key={title} />;
 
             return (
               <div
@@ -369,6 +380,7 @@ export const ActiveBudgetCard = ({
                 )}
                 style={{
                   width: getWidth(value),
+                  zIndex: (i + 1) * 10,
                 }}
               ></div>
             );
@@ -381,12 +393,9 @@ export const ActiveBudgetCard = ({
             showActions ? 'gap-10' : 'gap-5'
           )}
         >
-          {handleSort({
-            data: breakdown,
-            sortBy: 'order',
-            direction: 'desc',
-          }).map(({ title, disabled, value, className }) => {
-            if (disabled) return <Fragment key={title} />;
+          {breakdown?.map(({ title, disabled, value, className }) => {
+            if (disabled || value === undefined || value === null)
+              return <Fragment key={title} />;
 
             return (
               <div key={title} className={clsx(!showActions && 'w-full')}>
@@ -420,56 +429,64 @@ export const ActiveBudgetCard = ({
 
         {showActions && (
           <div className='right-2 top-5 mt-5 flex w-full justify-between gap-3 375:w-auto 768:absolute 768:mt-0'>
-            <div className={'flex w-full gap-3'}>
+            <div className={'ws-full flex gap-3'}>
               {status === 'active' && !paused && actionsSlot}
 
               {paused && (
                 <button
                   onClick={() => {
+                    if (!isOwner) return;
+
                     setAction('unpause');
                     setMode('authorize');
                   }}
-                  className={'group my-auto'}
+                  className={'group my-auto disabled:opacity-80'}
+                  disabled={!isOwner}
                 >
                   <Frozen
-                    className={'group-hover:text-primary-main'}
+                    className={clsx(isOwner && 'group-hover:text-primary-main')}
                     size={'md'}
                   />
                 </button>
               )}
             </div>
 
-            {status === 'closed' ? (
-              <div
-                className={
-                  'primary-button y-center rounded-full bg-red-600 hover:bg-red-600'
-                }
-              >
-                {entity} Closed
-              </div>
-            ) : !isOwner ? (
-              <MakeTransfer budget={budget} />
-            ) : (
-              <ActionDropdown
-                className={'absolute right-2 top-3 768:static'}
-                options={[
-                  {
-                    icon: <Freeze />,
-                    onClick() {
-                      setAction(paused ? 'unpause' : 'pause');
-                      setMode('authorize');
+            <div className={'w-fulls'}>
+              {status === 'closed' ? (
+                <div
+                  className={
+                    'primary-button y-center rounded-full bg-red-600 hover:bg-red-600'
+                  }
+                >
+                  {entity} Closed
+                </div>
+              ) : isOwner ? (
+                <ActionDropdown
+                  buttonClassname={'bg-white'}
+                  className={'absolute right-2 top-3 768:static'}
+                  options={[
+                    {
+                      icon: <Freeze />,
+                      onClick() {
+                        setAction(paused ? 'unpause' : 'pause');
+                        setMode('authorize');
+                      },
+                      title: `${paused ? 'Unfreeze' : 'Freeze'} ${entity}`,
                     },
-                    title: `${paused ? 'Unfreeze' : 'Freeze'} ${entity}`,
-                  },
-                  {
-                    icon: <MiniLock />,
-                    onClick: () => setAction('close'),
-                    title: `Close ${entity}`,
-                  },
-                ]}
-                id={'budget_actions'}
-              />
-            )}
+                    {
+                      icon: <MiniLock />,
+                      onClick: () => setAction('close'),
+                      title: `Close ${entity}`,
+                    },
+                  ]}
+                  id={'budget_actions'}
+                />
+              ) : !isOwner && !paused ? (
+                <div className='mr-2'>
+                  <MakeTransfer budget={budget} />
+                </div>
+              ) : null}
+            </div>
           </div>
         )}
       </button>

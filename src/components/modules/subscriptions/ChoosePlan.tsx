@@ -7,7 +7,9 @@ import { ChoosePaymentMethod } from 'components/modules/subscriptions/ChoosePaym
 import { PlanCards } from 'components/modules/subscriptions/PlanCards';
 import { ComparePlans } from 'components/modules/subscriptions/ComparePlans';
 import { UserIconLg } from 'components/svgs/UserIcon';
+import { useAppContext } from 'context/AppContext';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
+import { useChooseSubscriptionPlan } from 'hooks/api/subscriptions/useChooseSubscriptionPlan';
 import {
   SubscriptionPlan,
   useGetAllSubscriptionPlans,
@@ -25,8 +27,15 @@ export const ChoosePlan = ({ minimal }: { minimal?: boolean }) => {
     null
   );
 
+  const { dispatch } = useAppContext();
   const { data: organization } = useGetOrganizationInformation();
   const { isLoading, isError, data } = useGetAllSubscriptionPlans();
+
+  const { mutate, isLoading: choosingPlan } = useChooseSubscriptionPlan({
+    onSuccess() {
+      dispatch({ type: 'update_has_choosen_plan', payload: true });
+    },
+  });
 
   if (isLoading) {
     if (minimal) return <IsLoading />;
@@ -46,6 +55,8 @@ export const ChoosePlan = ({ minimal }: { minimal?: boolean }) => {
 
   return (
     <div className={clsx(!minimal && 'app-container mx-auto max-w-[1168px]')}>
+      <FullScreenLoader show={choosingPlan} id={'choose_plan'} />
+
       <ChoosePaymentMethod
         show={!!selectedPlan}
         {...{ months, selectedPlan }}
@@ -129,7 +140,17 @@ export const ChoosePlan = ({ minimal }: { minimal?: boolean }) => {
               : 'col-span-12 640:col-span-6 1024:col-span-4'
           )}
           isEligibleForTrial={!minimal}
-          choosePlan={(plan) => setSelectedPlan(plan)}
+          choosePlan={(plan) => {
+            if (!minimal)
+              // i.e. is initial plan selection
+              return mutate({
+                plan: plan._id,
+                months,
+                paymentMethod: 'wallet',
+              });
+
+            setSelectedPlan(plan);
+          }}
           currentTab={currentTab.value}
         />
       </div>
