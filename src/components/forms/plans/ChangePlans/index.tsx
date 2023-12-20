@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const ChangePlanForm = ({ onSuccess }: Props) => {
-  const { isLoading, mutate } = useMakeDummyHttpRequest({
+  const { mutate } = useMakeDummyHttpRequest({
     onSuccess() {
       toast(<AppToast>Successfully changed plans</AppToast>, {
         type: 'success',
@@ -37,7 +37,7 @@ export const ChangePlanForm = ({ onSuccess }: Props) => {
           <Form
             {...{
               formikProps,
-              processing: isLoading,
+              close: onSuccess,
             }}
           />
         );

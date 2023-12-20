@@ -4,6 +4,7 @@ import {
 } from 'components/modal/ModalWrapper';
 import asset from '/public/assets/subscription/locked.jpg';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface Props {
   show: boolean;
@@ -17,7 +18,7 @@ export const SubscriptionExpired = ({
   show,
   title,
   hideBackdrop,
-  type = 'right',
+  type,
   close,
 }: Props) => {
   if (type === 'right')
@@ -41,12 +42,17 @@ export const SubscriptionExpired = ({
             Upgrade Your Plan to Expand User Capacity
           </h3>
           <p className='mx-auto mt-3 px-7 text-center text-sm font-normal text-neutral-500 640:text-lg'>
-            Your Organization has reached its maximum limit for A users. To
+            Your Organization has reached its maximum limit for a user. To
             continue adding users, consider upgrading your plan
           </p>
           <div className='mx-auto mt-5 mb-10 h-full w-fit flex-shrink-0'>
             <button className='primary-button x-center my-auto px-5 text-base 640:h-12 640:w-full 640:px-6'>
-              <span className={'my-auto font-medium'}>Change plan</span>
+              <Link
+                href={'/settings/license'}
+                className={'my-auto font-medium'}
+              >
+                Renew Subscription or change plan
+              </Link>
             </button>
           </div>
         </div>
@@ -79,7 +85,12 @@ export const SubscriptionExpired = ({
         <div className='mx-auto mt-11 h-full w-fit flex-shrink-0'>
           <button className='primary-button x-center my-auto px-5 text-base 640:h-12 640:w-full 640:px-6'>
             <span className={'my-auto font-medium'}>
-              Renew Subscription or change plan
+              <Link
+                href={'/settings/license'}
+                className={'my-auto font-medium'}
+              >
+                Renew Subscription or change plan
+              </Link>
             </span>
           </button>
         </div>
