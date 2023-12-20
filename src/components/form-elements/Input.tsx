@@ -32,7 +32,7 @@ export const Input = ({
   useLazyFocus(id, lazyFocus && !props.autoFocus);
 
   return (
-    <div className={clsx(className, 'mt-5 w-full')}>
+    <div className={clsx('mt-5 w-full', className)}>
       <div className='flex'>
         <label htmlFor={id} className='text-left line-clamp-1'>
           {label}
@@ -60,7 +60,7 @@ export const Input = ({
         }
         className={clsx(
           meta.touched && meta.error ? 'border-error-main' : '',
-          'input w-full',
+          'input w-full disabled:opacity-90',
           !!field.value ? 'bg-white' : 'bg-neutral-100'
         )}
       />

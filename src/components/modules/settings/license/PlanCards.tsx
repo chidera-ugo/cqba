@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { PlanCard } from 'components/modules/subscriptions/PlanCard';
+import { PlanCard } from 'components/modules/settings/license/PlanCard';
 import { useGetActiveSubscription } from 'hooks/api/subscriptions/useGetActiveSubscription';
 import { SubscriptionPlan } from 'hooks/api/subscriptions/useGetAllSubscriptionPlans';
 

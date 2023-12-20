@@ -12,6 +12,7 @@ type Props = {
   layoutId?: string; // To track the tab animation
   sliderClassname?: string;
   tabClassname?: string;
+  action?: (tab: TabOption) => void;
 };
 
 export const Tabs = ({
@@ -22,6 +23,7 @@ export const Tabs = ({
   setCurrentTab,
   sliderClassname,
   tabClassname,
+  action,
 }: Props) => {
   return (
     <div
@@ -38,7 +40,10 @@ export const Tabs = ({
 
           return (
             <button
-              onClick={() => setCurrentTab(tab)}
+              onClick={() => {
+                setCurrentTab(tab);
+                if (action) action(tab);
+              }}
               id={`tabs-${displayValue}`}
               key={displayValue}
               type='button'

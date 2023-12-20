@@ -1,6 +1,6 @@
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
-import { ComparePlansTable } from 'components/modules/subscriptions/ComparePlans/ComparePlansTable';
+import { ComparePlansTable } from 'components/modules/settings/license/ComparePlans/ComparePlansTable';
 import { useGetActiveSubscription } from 'hooks/api/subscriptions/useGetActiveSubscription';
 import { useGetAllSubscriptionPlans } from 'hooks/api/subscriptions/useGetAllSubscriptionPlans';
 

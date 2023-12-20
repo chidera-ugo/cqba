@@ -16,6 +16,7 @@ type Props = JSX.IntrinsicElements['select'] &
     isLoading?: boolean;
     isError?: boolean;
     listKeyModifieres?: string[];
+    refetch?: () => void;
     actionOnSelect?: (option: unknown) => void;
   };
 
@@ -24,6 +25,7 @@ export const Select = ({
   options,
   className,
   isLoading,
+  refetch,
   displayValueKey,
   listKeyModifieres,
   next,
@@ -77,7 +79,16 @@ export const Select = ({
         )}
 
         {isLoading || isError ? (
-          <div className={clsx('input w-full bg-neutral-100')}>
+          <div
+            onClick={() => {
+              if (!refetch) return;
+              refetch();
+            }}
+            className={clsx(
+              'input w-full bg-neutral-100',
+              refetch && 'cursor-pointer'
+            )}
+          >
             <div className='y-center absolute right-3 h-full'>
               {isLoading ? (
                 <Spinner className={'my-auto text-primary-main'} />
