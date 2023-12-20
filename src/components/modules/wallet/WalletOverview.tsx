@@ -24,8 +24,6 @@ export const WalletOverview = ({ isOwner }: { isOwner: boolean }) => {
   const isLoading = isOwner ? l || _l : l || __l;
   const isError = isOwner ? e || _e : e || __e;
 
-  console.log(budgetBalances);
-
   if (isLoading) return <IsLoadingIsError isOwner={isOwner} isLoading />;
   if (isError) return <IsLoadingIsError isOwner={isOwner} />;
 

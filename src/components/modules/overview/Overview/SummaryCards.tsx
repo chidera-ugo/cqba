@@ -91,12 +91,12 @@ const IsLoadingIsError = ({
   isOwner: boolean;
 }) => {
   return (
-    <div className='flex w-full gap-3 640:gap-5'>
+    <div className='flex flex-col gap-3 640:flex-row 640:gap-5'>
       {generatePlaceholderArray(isOwner ? 3 : 2).map((id) => {
         return (
           <div
             className={clsx(
-              'card y-center h-[116px] min-w-[320px] 640:h-[132px] 640:min-w-[360px]'
+              'card y-center h-[116px] min-w-[300px] 480:min-w-[360px] 640:h-[132px]'
             )}
             key={id}
           >
