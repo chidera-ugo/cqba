@@ -10,10 +10,12 @@ interface Props {
   value: number;
   variance?: number;
   className?: string;
+  hideVariance?: boolean;
 }
 
 export const SummaryWithVariance = ({
   variance = 0,
+  hideVariance,
   name,
   moreInfo,
   currency,
@@ -54,22 +56,24 @@ export const SummaryWithVariance = ({
         })}
       </div>
 
-      <div className={'mt-1'}>
-        <div className={clsx('flex gap-1', className)}>
-          <span
-            className={clsx(
-              'my-auto',
-              variance >= 0 ? 'text-green-500' : 'rotate-180 text-red-500'
-            )}
-          >
-            <Outbound />
-          </span>
-          <span className={'my-auto text-xs'}>
-            <span className={'font-medium'}>{Math.abs(variance)}% </span> in
-            selected period
-          </span>
+      {!hideVariance && (
+        <div className={'mt-1'}>
+          <div className={clsx('flex gap-1', className)}>
+            <span
+              className={clsx(
+                'my-auto',
+                variance >= 0 ? 'text-green-500' : 'rotate-180 text-red-500'
+              )}
+            >
+              <Outbound />
+            </span>
+            <span className={'my-auto text-xs'}>
+              <span className={'font-medium'}>{Math.abs(variance)}% </span> in
+              selected period
+            </span>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
