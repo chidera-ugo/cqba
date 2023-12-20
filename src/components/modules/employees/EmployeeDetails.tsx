@@ -16,16 +16,10 @@ import { formatDate } from 'utils/formatters/formatDate';
 interface Props {
   id?: string;
   close: () => void;
-  changeRole: (employee: IEmployee) => void;
   handleAction: (action: EmployeeAction, employee: IEmployee) => void;
 }
 
-export const EmployeeDetails = ({
-  id,
-  close,
-  handleAction,
-  changeRole,
-}: Props) => {
+export const EmployeeDetails = ({ id, close, handleAction }: Props) => {
   const { isLoading, isError, data } = useGetEmployeeById(id);
 
   const { isLoading: resending, mutate: resend } = useResendInvite(id, {
@@ -83,15 +77,15 @@ export const EmployeeDetails = ({
       </div>
 
       <div className='mt-5 flex gap-3'>
-        <button
-          className={'primary-button min-w-[120px]'}
-          onClick={() =>
-            isActive ? changeRole(data) : handleAction('delete_invite', data)
-          }
-          type={'button'}
-        >
-          {isActive ? 'Change Role' : 'Delete Invite'}
-        </button>
+        {!isActive && (
+          <button
+            className={'primary-button min-w-[120px]'}
+            onClick={() => handleAction('delete_invite', data)}
+            type={'button'}
+          >
+            Delete Invite
+          </button>
+        )}
 
         <SubmitButton
           className={'secondary-button min-w-[120px]'}

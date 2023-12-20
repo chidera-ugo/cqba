@@ -81,7 +81,7 @@ export const PermissionGroupCard = ({
                         size={detailed ? 32 : 40}
                         avatar={avatar}
                         key={email}
-                        char={email.charAt(0)}
+                        initials={email.charAt(0)}
                         getBackgroundColor={getColor}
                       />
 

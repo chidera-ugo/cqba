@@ -87,10 +87,6 @@ export const useColumns = ({ handleActionClick }: Args) => {
                             handleActionClick(employee, 'remove_user'),
                           title: 'Remove User',
                         },
-                        {
-                          onClick: () => handleActionClick(employee, 'edit'),
-                          title: 'Change Role',
-                        },
                       ]
                     : [
                         {

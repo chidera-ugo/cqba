@@ -76,7 +76,7 @@ export const PendingAndActiveBudgetsOverview = ({
                       getBackgroundColor={getColor}
                       size={32}
                       avatar={beneficiaries[0]?.avatar}
-                      char={beneficiaries[0]?.email?.charAt(0)}
+                      initials={beneficiaries[0]?.email?.charAt(0)}
                       className={'my-auto'}
                     />
                   )}

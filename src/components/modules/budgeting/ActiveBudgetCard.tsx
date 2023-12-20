@@ -329,7 +329,7 @@ export const ActiveBudgetCard = ({
                                   : 27
                               }
                               key={email}
-                              char={email?.charAt(0)}
+                              initials={email?.charAt(0)}
                               getBackgroundColor={getColor}
                             />
                           </div>

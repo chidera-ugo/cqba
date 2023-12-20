@@ -19,18 +19,10 @@ export const ManageEmployee = ({
   onSuccess,
   currentEmployee,
 }: Props) => {
-  const isActive = currentEmployee?.status === 'active';
-
   return (
     <RightModalWrapper
-      show={modal === 'add_employee' || modal === 'edit_employee'}
-      title={
-        currentEmployee
-          ? isActive
-            ? 'Change Role'
-            : 'Update User'
-          : 'Invite User'
-      }
+      show={modal === 'add_employee'}
+      title={currentEmployee ? 'Update User' : 'Invite User'}
       closeModal={closeModal}
       closeOnClickOutside
       childrenClassname='py-0 640:px-8 px-4'

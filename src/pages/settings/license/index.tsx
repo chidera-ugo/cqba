@@ -25,7 +25,7 @@ export default function License() {
 
             <div
               className={
-                'h-[320px] overflow-y-auto px-5 py-2 640:px-5 640:py-3'
+                'h-[480px] overflow-y-auto px-5 py-2 640:px-5 640:py-3'
               }
             >
               <SubscriptionHistory />

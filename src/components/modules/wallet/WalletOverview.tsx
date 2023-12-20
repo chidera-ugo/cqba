@@ -32,7 +32,7 @@ export const WalletOverview = ({ isOwner }: { isOwner: boolean }) => {
   return (
     <div className='grid-cols-2 gap-4 640:grid'>
       {isOwner && (
-        <div className='card y-center h-[94px] 640:h-[114px]'>
+        <div className='card y-center h-[114px] 640:h-[125px]'>
           <SummaryWithVariance
             value={
               !primaryWallet
@@ -48,7 +48,7 @@ export const WalletOverview = ({ isOwner }: { isOwner: boolean }) => {
         </div>
       )}
 
-      <div className='card y-center relative mt-4 h-[94px] 640:mt-0 640:h-[114px]'>
+      <div className='card y-center relative mt-4 h-[114px] 640:mt-0 640:h-[125px]'>
         <SummaryWithVariance
           value={
             !primaryWallet
@@ -86,7 +86,7 @@ const IsLoadingIsError = ({
 }) => {
   return (
     <div className='grid-cols-2 gap-4 640:grid'>
-      <div className='card y-center h-[94px] 640:h-[114px]'>
+      <div className='card y-center h-[114px] 640:h-[125px]'>
         <div
           className={clsx(
             'h-3 w-[60%] 640:h-5',

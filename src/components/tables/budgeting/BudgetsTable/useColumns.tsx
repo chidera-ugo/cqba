@@ -105,7 +105,7 @@ export const useColumns = (isProjectPaused?: boolean) => {
                         className={clsx('ring-2 ring-white')}
                         size={27}
                         key={email}
-                        char={email?.charAt(0)}
+                        initials={email?.charAt(0)}
                         getBackgroundColor={getColor}
                       />
                     </div>

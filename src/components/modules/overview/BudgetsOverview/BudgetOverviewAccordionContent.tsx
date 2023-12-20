@@ -75,7 +75,7 @@ export const BudgetOverviewAccordionContent = ({
                     className={clsx('my-auto ring-2 ring-white')}
                     size={28}
                     key={email}
-                    char={email.charAt(0)}
+                    initials={email.charAt(0)}
                   />
                 </div>
               );
