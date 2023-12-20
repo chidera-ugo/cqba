@@ -62,11 +62,7 @@ export const Form = ({ formikProps, currency, amount, decline }: Props) => {
       <div className='mt-8 flex gap-3'>
         <SubmitButton className={'primary-button'}>Approve Budget</SubmitButton>
 
-        <button
-          onClick={decline}
-          type={'button'}
-          className='secondary-button w-full min-w-[120px] 640:w-auto'
-        >
+        <button onClick={decline} type={'button'} className='secondary-button'>
           Decline Budget
         </button>
       </div>

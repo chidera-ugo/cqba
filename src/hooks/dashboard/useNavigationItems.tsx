@@ -3,7 +3,6 @@ import {
   BadgeCheck,
   BarChart,
   Card,
-  Code,
   Cog,
   Home,
   PieChart,
@@ -74,10 +73,6 @@ export const useNavigationItems = (role?: UserRole) => {
         icon: <Users />,
         id: 'employees',
         title: 'People',
-      },
-      {
-        icon: <Code />,
-        title: 'Integrations',
       },
       {
         icon: <Cog />,

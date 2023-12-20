@@ -18,7 +18,7 @@ export const MobileMenu = () => {
       <div className='y-center h-full'>
         <button
           onClick={() => setShow(!show)}
-          className='my-auto h-10 w-10 rounded-lg'
+          className='my-auto -mr-1 h-12 w-12 rounded-lg'
         >
           <div className='x-center my-auto'>
             <Hamburger />

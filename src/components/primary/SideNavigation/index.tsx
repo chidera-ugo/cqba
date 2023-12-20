@@ -16,7 +16,7 @@ export const SideNavigation = ({ closeModal }: { closeModal?: () => void }) => {
   return (
     <div
       className={clsx(
-        'thin-scrollbar fixed left-0 top-0 z-[1200] w-[324px] overflow-x-visible',
+        'thin-scrollbar fixed left-0 top-0 z-[1200] w-[300px] overflow-x-visible',
         isOwner ? 'bg-neutral-100' : 'bg-neutral-1000'
       )}
     >
@@ -52,7 +52,7 @@ export const SideNavigationContent = ({
           <Logo white={!isOwner} />
 
           <button onClick={closeModal} type={'button'} className='my-auto flex'>
-            <Cancel />
+            <Cancel className={'h-8 w-8'} />
           </button>
         </div>
 
@@ -68,7 +68,7 @@ export const SideNavigationContent = ({
             <SideNavigationItems />
           </div>
 
-          {!isPremiumUser && (
+          {isPremiumUser && (
             <div className='hidden p-5 pb-0 1024:block'>
               <Link
                 href={'/settings/license'}
@@ -96,7 +96,7 @@ export const SideNavigationContent = ({
                 <div className='flex'>
                   <button
                     className={
-                      'h-8 w-[100px] rounded-full bg-white text-sm text-primary-main shadow-lg'
+                      'h-8 w-[80px] rounded-full bg-white text-sm text-primary-main shadow-lg'
                     }
                   >
                     Upgrade
@@ -105,7 +105,7 @@ export const SideNavigationContent = ({
 
                 <Image
                   src={shield}
-                  className={'absolute -right-20 -bottom-28'}
+                  className={'absolute -right-24 -bottom-28'}
                   alt={'shield'}
                 />
               </Link>

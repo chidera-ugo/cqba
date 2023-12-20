@@ -9,6 +9,7 @@ export const Overview = () => {
   const { user } = useAppContext().state;
   const [range, setRange] = useState(getDateRange({ days: 7 }));
   const [filters, setFilters] = useState<Record<string, any>>({});
+
   return (
     <>
       <div className='x-between app-container gap-4'>
@@ -31,7 +32,7 @@ export const Overview = () => {
         />
       </div>
 
-      <div className='hidden-scrollbar mt-5 w-full overflow-x-auto px-3 640:px-8'>
+      <div className='hidden-scrollbar mt-5 w-full px-3 640:overflow-x-auto 640:px-8'>
         <div className={clsx('min-w-fit')}>
           <SummaryCards range={range} />
         </div>

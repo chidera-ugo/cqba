@@ -9,6 +9,7 @@ import { PointerLeft } from 'components/svgs/navigation/Arrows';
 import { Check } from 'components/svgs/others/Check';
 import { useAppContext } from 'context/AppContext';
 import { useGetActiveSubscription } from 'hooks/api/subscriptions/useGetActiveSubscription';
+import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -30,7 +31,10 @@ export const AppHeader = ({
 }: PropsWithChildren<Props>) => {
   const { user } = useAppContext().state;
   const { data } = useGetActiveSubscription();
+
   const currentPlan = !data ? '' : data?.plan?.name;
+
+  const { getColor } = useGetColorByChar();
 
   return (
     <header
@@ -53,7 +57,7 @@ export const AppHeader = ({
         ) : hideSideNavigation ? (
           <Logo />
         ) : (
-          <div className='my-auto text-base font-semibold text-neutral-1000 640:text-2xl'>
+          <div className='my-auto text-xl font-semibold text-neutral-1000 640:text-2xl'>
             {title}
           </div>
         )}
@@ -76,7 +80,13 @@ export const AppHeader = ({
 
               <AppErrorBoundary className={'my-auto'} type={'hidden'}>
                 <Link href={'/settings'}>
-                  <Avatar avatar={user?.avatar} />
+                  <Avatar
+                    getBackgroundColor={getColor}
+                    initials={`${user?.firstName?.charAt(
+                      0
+                    )}${user?.lastName?.charAt(0)}`}
+                    avatar={user?.avatar}
+                  />
                 </Link>
               </AppErrorBoundary>
             </div>

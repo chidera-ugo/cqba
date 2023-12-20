@@ -22,7 +22,12 @@ export const SummaryWithVariance = ({
 }: Props) => {
   return (
     <div className='my-auto'>
-      <div className={clsx('flex text-xs 640:text-sm', className)}>
+      <div
+        className={clsx(
+          'flex text-xs 640:text-sm',
+          className ?? 'text-neutral-500'
+        )}
+      >
         <div>{name}</div>
         {moreInfo && (
           <MoreInfo className={'my-auto hidden 640:block'}>{moreInfo}</MoreInfo>
@@ -54,7 +59,7 @@ export const SummaryWithVariance = ({
           <span
             className={clsx(
               'my-auto',
-              variance <= 0 ? 'text-green-500' : 'rotate-180 text-red-500'
+              variance >= 0 ? 'text-green-500' : 'rotate-180 text-red-500'
             )}
           >
             <Outbound />

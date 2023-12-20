@@ -3,6 +3,7 @@ import { Avatar } from 'components/commons/Avatar';
 import { PendingBudgetCard } from 'components/modules/budgeting/PendingBudgetCard';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { GetColorByChar } from 'hooks/commons/useGetColorByChar';
+import Link from 'next/link';
 import { Fragment } from 'react';
 import { formatAmount } from 'utils/formatters/formatAmount';
 import { formatDate } from 'utils/formatters/formatDate';
@@ -11,12 +12,24 @@ import { handleSort } from 'utils/handlers/handleSort';
 export const BudgetOverviewAccordionContent = ({
   getColor,
   currentTab,
+  showPendingBudgetDetails,
   ...budget
-}: IBudget & { currentTab?: string; getColor: GetColorByChar }) => {
-  const { amount, balance, beneficiaries, status, currency, expiry } = budget;
+}: IBudget & {
+  currentTab?: string;
+  getColor: GetColorByChar;
+  showPendingBudgetDetails: () => void;
+}) => {
+  const { amount, balance, beneficiaries, status, _id, currency, expiry } =
+    budget;
 
   if (currentTab === 'pending')
-    return <PendingBudgetCard {...budget} stripDown />;
+    return (
+      <PendingBudgetCard
+        onClick={() => showPendingBudgetDetails()}
+        {...budget}
+        stripDown
+      />
+    );
 
   const payload = [
     {
@@ -59,7 +72,7 @@ export const BudgetOverviewAccordionContent = ({
             {handleSort({
               data: beneficiaries.slice(0, 5),
               sortBy: 'email',
-            })?.map(({ email, avatar }, i) => {
+            })?.map(({ email, avatar, lastName, firstName }, i) => {
               return (
                 <div
                   key={email}
@@ -75,7 +88,11 @@ export const BudgetOverviewAccordionContent = ({
                     className={clsx('my-auto ring-2 ring-white')}
                     size={28}
                     key={email}
-                    initials={email.charAt(0)}
+                    initials={
+                      !!firstName
+                        ? `${firstName?.charAt(0)}${lastName?.charAt(0)}`
+                        : email?.charAt(0)
+                    }
                   />
                 </div>
               );
@@ -87,7 +104,7 @@ export const BudgetOverviewAccordionContent = ({
   ];
 
   return (
-    <>
+    <Link href={`/budgeting/${_id}`}>
       {payload?.map(({ label, value }) => {
         if (!value) return <Fragment key={label} />;
 
@@ -111,6 +128,6 @@ export const BudgetOverviewAccordionContent = ({
           </div>
         );
       })}
-    </>
+    </Link>
   );
 };

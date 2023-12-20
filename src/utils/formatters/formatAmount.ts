@@ -77,7 +77,7 @@ export const sanitizeAmount = ({
   let val = value ? value?.split(',').join('') : '';
   val = val.replace(/[^0-9]/g, '');
 
-  if (!val || (val?.length === 1 && val.charAt(0) === '0')) return '';
+  if (!val || (val?.length === 1 && val?.charAt(0) === '0')) return '';
   const _amount = isNaN(Number(val)) || !val ? '' : String(parseInt(val, 10));
   const amount = _amount.length === 1 ? `0${_amount}` : _amount;
 

@@ -61,7 +61,7 @@ export const Input = ({
         className={clsx(
           meta.touched && meta.error ? 'border-error-main' : '',
           'input w-full disabled:opacity-90',
-          !!field.value ? 'bg-white' : 'bg-neutral-100'
+          !!field.value && !props.disabled ? 'bg-white' : 'bg-neutral-100'
         )}
       />
 

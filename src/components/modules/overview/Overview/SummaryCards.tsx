@@ -38,7 +38,7 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
     },
     {
       name: 'Budget Balance',
-      value: data?.budgetBalance?.value,
+      value: data?.budgetBalance?.value * 100499,
       moreInfo: 'Total amount in your budget balance',
       variance: data?.budgetBalance?.percentageDiff,
     },
@@ -50,7 +50,7 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
   ];
 
   return (
-    <div className='flex gap-3 640:gap-5'>
+    <div className='flex flex-col gap-3 640:flex-row 640:gap-5'>
       {payload
         .filter(({ disabled }) => !disabled)
         .map(({ name, value, variance, moreInfo, isAmount }, i) => {
@@ -59,10 +59,8 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
           return (
             <div
               className={clsx(
-                'card y-center h-[116px] 640:h-[132px]',
-                isOwner
-                  ? 'min-w-[300px] max-w-[320px] 480:min-w-[360px] 480:max-w-none'
-                  : 'min-w-[300px] 640:max-w-[500px] 1340:max-w-none',
+                'card y-center h-[116px] min-w-[300px] 480:min-w-[360px] 640:h-[132px]',
+                !isOwner && '640:max-w-none',
                 i === 0 && 'bg-primary-main text-white'
               )}
               key={name}

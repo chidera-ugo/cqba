@@ -32,13 +32,14 @@ export const Avatar = ({
           ) : (
             <div
               className={clsx(
-                'y-center rounded-full text-center text-sm font-semibold text-white',
+                'y-center rounded-full text-center text-sm font-medium text-white',
                 className
               )}
               style={{
                 backgroundColor: color,
                 height: size,
                 width: size,
+                fontSize: size * 0.4,
               }}
             >
               {initials ? initials?.toUpperCase() : '-'}

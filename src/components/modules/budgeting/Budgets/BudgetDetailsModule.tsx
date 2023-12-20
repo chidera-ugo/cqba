@@ -18,7 +18,7 @@ export const BudgetDetailsModule = ({
 }: {
   isApprovals?: boolean;
 }) => {
-  const { query, back } = useRouter();
+  const { query } = useRouter();
 
   const _q = query['budgetId'];
   const budgetId = typeof _q === 'string' ? _q : '';
@@ -42,7 +42,7 @@ export const BudgetDetailsModule = ({
       breadCrumbs={[
         {
           title: isApprovals ? 'Approvals' : 'Budgets',
-          action: back,
+          url: isApprovals ? '/approvasls' : '/budgeting',
         },
         {
           title: 'Track Budget',

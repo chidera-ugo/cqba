@@ -131,7 +131,7 @@ export const Select = ({
             }}
             className={clsx(
               'w-full',
-              !!field.value ? 'bg-white' : 'bg-neutral-100',
+              !!field.value && !props.disabled ? 'bg-white' : 'bg-neutral-100',
               meta.touched && meta.error ? 'border-error-main' : ''
             )}
           >

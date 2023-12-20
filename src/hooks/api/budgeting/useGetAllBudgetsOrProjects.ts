@@ -18,6 +18,8 @@ export interface IBudget {
   threshold: number;
   paused: boolean;
   beneficiaries: {
+    firstName: string;
+    lastName: string;
     email: string;
     avatar?: string;
   }[];

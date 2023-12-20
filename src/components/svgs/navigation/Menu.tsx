@@ -5,6 +5,7 @@ export const Hamburger = () => {
       height='25'
       viewBox='0 0 24 25'
       fill='none'
+      className={'h-8 w-8'}
       xmlns='http://www.w3.org/2000/svg'
     >
       <path

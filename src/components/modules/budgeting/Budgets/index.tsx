@@ -66,7 +66,7 @@ export const Budgets = ({
   return (
     <>
       <RightModalWrapper
-        title={currentTab === 'pending' ? 'Pending Approval' : 'Pending Budget'}
+        title={'Pending Budget'}
         show={!!currentBudget && currentBudget.status !== 'approved'}
         closeModal={closeModal}
         closeOnClickOutside

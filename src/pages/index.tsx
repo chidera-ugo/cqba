@@ -17,7 +17,7 @@ export default function Home() {
       <Overview />
 
       <div className='app-container mt-5 grid-cols-12 gap-5 1280:grid'>
-        <div className='col-span-8'>
+        <div className='col-span-8 hidden 640:block'>
           <CashflowOverview {...{ setFilters, filters, setRange, range }} />
         </div>
 

@@ -58,8 +58,8 @@ export const Form = ({ submitting, formikProps }: Props) => {
         <div className='col-span-8'>
           <div className='mt-0 max-w-[600px] 640:-mt-5'>
             <div className='gap-4 880:flex'>
-              <Input label='First Name' name='firstName' />
-              <Input label='Last Name' name='lastName' />
+              <Input label='First Name' disabled name='firstName' />
+              <Input label='Last Name' disabled name='lastName' />
             </div>
 
             <PhoneNumberInput
@@ -73,6 +73,7 @@ export const Form = ({ submitting, formikProps }: Props) => {
             <Select
               name={'role'}
               label={'Role'}
+              disabled
               trueValueKey={'value'}
               displayValueKey={'name'}
               options={[

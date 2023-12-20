@@ -94,7 +94,7 @@ export const useColumns = (isProjectPaused?: boolean) => {
                   data: beneficiaries?.slice(0, 5),
                   sortBy: 'email',
                   direction: 'desc',
-                })?.map(({ email, avatar }, i) => {
+                })?.map(({ email, avatar, firstName, lastName }, i) => {
                   return (
                     <div
                       key={email}
@@ -105,7 +105,11 @@ export const useColumns = (isProjectPaused?: boolean) => {
                         className={clsx('ring-2 ring-white')}
                         size={27}
                         key={email}
-                        initials={email?.charAt(0)}
+                        initials={
+                          !!firstName
+                            ? `${firstName?.charAt(0)}${lastName?.charAt(0)}`
+                            : email?.charAt(0)
+                        }
                         getBackgroundColor={getColor}
                       />
                     </div>

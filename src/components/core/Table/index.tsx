@@ -203,16 +203,11 @@ export function Table<T>({
   return (
     <div
       className={clsx(
-        `rounded-[10px] border border-neutral-310 bg-white`,
+        `overflow-hidden rounded-[10px] border border-neutral-310 bg-white`,
         className
       )}
     >
-      <div
-        className={clsx(
-          'h-full overflow-x-auto',
-          !!res?.docs?.length && !isError && 'min-h-[400px]'
-        )}
-      >
+      <div className={clsx('h-full overflow-x-auto')}>
         <div className='thin-scrollbar min-w-[900px]'>
           <div className={clsx('w-full ')}>
             {filters &&

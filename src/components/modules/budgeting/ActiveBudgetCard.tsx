@@ -305,7 +305,7 @@ export const ActiveBudgetCard = ({
                         data: beneficiaries,
                         sortBy: 'email',
                         direction: showActions ? 'desc' : 'asc',
-                      })?.map(({ email, avatar }, i) => {
+                      })?.map(({ email, avatar, firstName, lastName }, i) => {
                         return (
                           <div
                             key={email}
@@ -329,7 +329,13 @@ export const ActiveBudgetCard = ({
                                   : 27
                               }
                               key={email}
-                              initials={email?.charAt(0)}
+                              initials={
+                                firstName
+                                  ? `${firstName?.charAt(0)}${lastName?.charAt(
+                                      0
+                                    )}`
+                                  : email?.charAt(0)
+                              }
                               getBackgroundColor={getColor}
                             />
                           </div>
@@ -340,12 +346,16 @@ export const ActiveBudgetCard = ({
                 </>
               )}
 
-              <div className={clsx(!showActions ? 'hidden' : 'block')}>
-                <div className={'text-sm font-medium 640:text-base'}>
-                  {name}
+              <div className='flex'>
+                <div className={clsx(!showActions ? 'hidden' : 'block')}>
+                  <div className={'text-sm font-medium 640:text-base'}>
+                    {name}
+                  </div>
+
+                  <SubTitle />
                 </div>
 
-                <SubTitle />
+                {showActions && <div className='block w-16 768:hidden'></div>}
               </div>
             </div>
           </div>

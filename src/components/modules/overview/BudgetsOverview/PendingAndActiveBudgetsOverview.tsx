@@ -1,15 +1,22 @@
 import clsx from 'clsx';
 import { Avatar } from 'components/commons/Avatar';
+import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { NoData } from 'components/core/Table/NoData';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
+import { RightModalWrapper } from 'components/modal/ModalWrapper';
+import { PendingBudgetDetails } from 'components/modules/budgeting/PendingBudgetDetails';
 import { BudgetOverviewAccordionContent } from 'components/modules/overview/BudgetsOverview/BudgetOverviewAccordionContent';
 import { EmptyReports } from 'components/svgs/overview/EmptyReports';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useGetAllBudgetsUnpaginated } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
+import {
+  IBudget,
+  useGetAllBudgetsUnpaginated,
+} from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useEffect, useState } from 'react';
+import { handleSort } from 'utils/handlers/handleSort';
 
 export const PendingAndActiveBudgetsOverview = ({
   status,
@@ -17,6 +24,7 @@ export const PendingAndActiveBudgetsOverview = ({
   status?: string;
 }) => {
   const [expandedBudget, setExpandedBudget] = useState('');
+  const [pendingBudget, setPendingBudget] = useState<IBudget | null>(null);
 
   const { isVerified } = useIsVerified();
 
@@ -39,8 +47,25 @@ export const PendingAndActiveBudgetsOverview = ({
 
   if (isError) return <IsError className={'py-16'} />;
 
+  function closeModal() {
+    setPendingBudget(null);
+  }
+
   return (
     <>
+      <RightModalWrapper
+        title={'Pending Budget'}
+        show={!!pendingBudget}
+        closeModal={closeModal}
+        closeOnClickOutside
+      >
+        {pendingBudget && (
+          <AppErrorBoundary>
+            <PendingBudgetDetails id={pendingBudget._id} close={closeModal} />
+          </AppErrorBoundary>
+        )}
+      </RightModalWrapper>
+
       {!data?.docs.length ? (
         <div>
           <NoData
@@ -52,8 +77,13 @@ export const PendingAndActiveBudgetsOverview = ({
         </div>
       ) : (
         data?.docs?.map((budget) => {
-          const { _id, name, beneficiaries } = budget;
+          const { _id, name, beneficiaries: _ } = budget;
+          const beneficiaries = handleSort({
+            data: _,
+            sortBy: 'firstName',
+          });
           const isActive = expandedBudget === _id;
+          const user = beneficiaries[0];
 
           return (
             <div
@@ -75,8 +105,14 @@ export const PendingAndActiveBudgetsOverview = ({
                     <Avatar
                       getBackgroundColor={getColor}
                       size={32}
-                      avatar={beneficiaries[0]?.avatar}
-                      initials={beneficiaries[0]?.email?.charAt(0)}
+                      avatar={user?.avatar}
+                      initials={
+                        !!user?.firstName
+                          ? `${user?.firstName?.charAt(
+                              0
+                            )}${user?.lastName?.charAt(0)}`
+                          : user?.email?.charAt(0)
+                      }
                       className={'my-auto'}
                     />
                   )}
@@ -128,7 +164,12 @@ export const PendingAndActiveBudgetsOverview = ({
                     <div className={'h-full px-4 pt-2 pb-2'}>
                       <BudgetOverviewAccordionContent
                         currentTab={status}
-                        getColor={getColor}
+                        {...{
+                          getColor,
+                        }}
+                        showPendingBudgetDetails={() =>
+                          setPendingBudget(budget)
+                        }
                         {...budget}
                       />
                     </div>

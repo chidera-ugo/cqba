@@ -28,7 +28,7 @@ export const UpdateProfileInformationForm = () => {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={({ role: _, avatar, phoneNumber, ...values }) => {
+      onSubmit={({ role: _, avatar, phoneNumber }) => {
         if (avatar.file) {
           const body = new FormData();
 
@@ -37,14 +37,12 @@ export const UpdateProfileInformationForm = () => {
           uploadAvatar(body, {
             onSuccess() {
               mutate({
-                ...values,
                 phone: phoneNumber,
               });
             },
           });
         } else {
           mutate({
-            ...values,
             phone: phoneNumber,
           });
         }

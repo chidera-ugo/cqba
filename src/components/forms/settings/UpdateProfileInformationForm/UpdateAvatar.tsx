@@ -1,7 +1,9 @@
 import clsx from 'clsx';
+import { Avatar } from 'components/commons/Avatar';
 import { ImageIcon } from 'components/svgs/forms/ImageIcon';
-import { UserIconMd } from 'components/svgs/UserIcon';
 import { imageExtensions } from 'constants/files/image_extensions';
+import { useAppContext } from 'context/AppContext';
+import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { useFileSelector } from 'hooks/forms/useFileSelector';
 import { SetFieldValue } from 'types/commons';
 import { constructAcceptedFileTypeList } from 'utils/constructors/constructAcceptedFileTypeList';
@@ -13,7 +15,11 @@ interface Props {
 
 export const UpdateAvatar = ({ avatar, setFieldValue }: Props) => {
   const { fileSelector, errorCb } = useFileSelector();
+  const { user } = useAppContext().state;
   const id = 'avatar';
+  const { getColor } = useGetColorByChar();
+
+  const initials = `${user?.firstName?.charAt(0)}${user?.lastName?.charAt(0)}`;
 
   return (
     <div className='mb-3 w-full grid-cols-12 gap-5 425:grid'>
@@ -73,7 +79,11 @@ export const UpdateAvatar = ({ avatar, setFieldValue }: Props) => {
               alt={'avatar'}
             />
           ) : (
-            <UserIconMd size={128} />
+            <Avatar
+              getBackgroundColor={getColor}
+              initials={initials}
+              size={128}
+            />
           )}
         </div>
       </div>

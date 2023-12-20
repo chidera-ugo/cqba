@@ -118,7 +118,7 @@ export const validateField = (
     }
 
     if (fieldType === 'name') {
-      if (val.charAt(0) !== '-')
+      if (val?.charAt(0) !== '-')
         if (name.test(val) || val === '')
           setFieldValue(fieldName, val.replace('--', '-'));
       return;
@@ -130,7 +130,7 @@ export const validateField = (
     }
 
     if (fieldType === 'fullName')
-      if (val.charAt(0) !== '-')
+      if (val?.charAt(0) !== '-')
         if (fullName.test(val) || val === '') {
           setFieldValue(fieldName, val.replace('--', '-').replace('  ', ' '));
         }

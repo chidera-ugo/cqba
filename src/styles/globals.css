@@ -131,7 +131,7 @@
   }
 
   .app-layout-desktop-width {
-    width: calc(100% - 324px);
+    width: calc(100% - 300px);
   }
 
   .auth-container {
@@ -191,7 +191,7 @@
   }
 
   .card {
-    @apply w-full rounded-2xl border border-neutral-310 p-3 640:p-4;
+    @apply w-full rounded-xl border border-neutral-310 p-3 640:rounded-2xl 640:p-4;
   }
 
   .dashed_card {

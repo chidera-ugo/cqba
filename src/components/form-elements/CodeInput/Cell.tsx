@@ -97,13 +97,13 @@ export function Cell({
         onChange={(e) => {
           const val = e.target.value;
 
-          if (!val) return setCode(val.charAt(val?.length - 1));
+          if (!val) return setCode(val?.charAt(val?.length - 1));
 
           const isValid =
             type === 'numeric' ? number.test(val) : alphaNumeric.test(val);
 
           if (isValid) {
-            setCode(val.charAt(val?.length - 1));
+            setCode(val?.charAt(val?.length - 1));
             document.getElementById(`${_id ?? ''}char${char + 1}`)?.focus();
           }
         }}
