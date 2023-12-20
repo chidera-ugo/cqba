@@ -111,9 +111,7 @@ export const Form = ({
           submitting={processing}
           className='primary-button min-w-[140px]'
         >
-          {isActive
-            ? 'Change Role'
-            : `${currentEmployee ? 'Update' : 'Add'} Employee`}
+          {`${currentEmployee ? 'Update' : 'Add'} Employee`}
         </SubmitButton>
       </div>
     </FormikForm>

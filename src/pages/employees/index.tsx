@@ -173,12 +173,6 @@ export default function Employees() {
               setShouldRestoreEmployeeDetailsModal(true);
               hideEmployeeDetailsModal();
             }}
-            changeRole={(employee) => {
-              setCurrentEmployee(employee); // There's no current employee at this point which the manage employee needs to show the form
-              setShouldRestoreEmployeeDetailsModal(false);
-              hideEmployeeDetailsModal();
-              setModal('edit_employee');
-            }}
             close={close}
             id={filters?.employeeId}
           />

@@ -87,7 +87,7 @@ export const Logo = ({ white }: { white?: boolean }) => {
           className='my-auto w-[100px] object-contain 640:w-[160px]'
         />
 
-        <div className='rounded-full border border-neutral-200 bg-neutral-100 py-0.5 px-1.5 text-[10px] text-black shadow-sm 640:px-2 640:py-1 640:text-sm'>
+        <div className='rounded-full border border-neutral-200 bg-white py-0.5 px-1.5 text-[10px] text-black shadow-sm 640:px-2 640:py-1 640:text-sm'>
           Beta
         </div>
       </Link>

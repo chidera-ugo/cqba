@@ -3,7 +3,7 @@ import { UserIconMd } from 'components/svgs/UserIcon';
 import Image from 'next/image';
 
 interface Props {
-  char?: string;
+  initials?: string;
   avatar?: string;
   getBackgroundColor?: (char: string) => string;
   clickable?: boolean;
@@ -14,13 +14,13 @@ interface Props {
 export const Avatar = ({
   avatar,
   clickable,
-  char,
+  initials,
   getBackgroundColor,
   size = 40,
   className,
 }: Props) => {
   const color = getBackgroundColor
-    ? getBackgroundColor(char ?? 'R')
+    ? getBackgroundColor(initials?.charAt(0) ?? 'R')
     : '#989898';
 
   return (
@@ -41,7 +41,7 @@ export const Avatar = ({
                 width: size,
               }}
             >
-              {char ? char?.toUpperCase() : '-'}
+              {initials ? initials?.toUpperCase() : '-'}
             </div>
           )}
         </>

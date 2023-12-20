@@ -2,13 +2,13 @@ import { alphabets } from 'constants/alphabets';
 
 export const useGetColorByChar = () => {
   const colors = [
-    '#2F9461',
-    '#A35C00',
+    '#0abdc4',
+    '#f1a543',
     '#F34141',
     '#2F5D94',
-    '#942F47',
-    '#8C2F94',
-    '#94722F',
+    '#1cb0ff',
+    '#a1bd33',
+    '#942f92',
   ];
 
   const charsArr: string[] = [];

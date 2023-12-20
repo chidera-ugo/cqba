@@ -95,7 +95,7 @@ export const AppLayout = ({
           {!hideSideNavigation &&
           !shouldSelectFirstPlan &&
           (!screenSize || screenSize?.['desktop']) ? (
-            <div className='hidden w-[324px] 1024:block'>
+            <div className='hidden w-[320px] 1024:block'>
               <SideNavigation />
             </div>
           ) : null}

@@ -35,7 +35,10 @@ export function reducer(state: State, action: Action): State {
         ...state,
         user: {
           ...action.payload,
-          avatar: !avatar ? '' : `${avatar}?${generateUUID()}`,
+          avatar:
+            !avatar || avatar === 'default'
+              ? ''
+              : `${avatar}?${generateUUID()}`,
         },
         isInitializing: false,
       };

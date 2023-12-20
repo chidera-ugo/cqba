@@ -24,10 +24,30 @@ export interface IUser {
 }
 
 interface Organization {
-  _id: '6571d4f0f769a3c8587d22e7';
+  _id: string;
   subscription: {
     months: number;
     gracePeriod: number;
-    object?: string;
+    object?: Subscription;
   };
+}
+
+interface Subscription {
+  _id: string;
+  organization: string;
+  plan: string;
+  status: 'expired' | 'renewal_failed' | 'active';
+  trial: boolean;
+  endingAt: string;
+  startedAt: string;
+  renewAt: string;
+  meta: Meta;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface Meta {
+  paymentMethod: string;
+  months: number;
 }

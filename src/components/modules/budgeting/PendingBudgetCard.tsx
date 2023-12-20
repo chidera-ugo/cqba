@@ -96,7 +96,7 @@ export const PendingBudgetCard = ({
                     size={27}
                     avatar={avatar}
                     key={email}
-                    char={email.charAt(0)}
+                    initials={email.charAt(0)}
                     getBackgroundColor={getColor}
                   />
                 </div>

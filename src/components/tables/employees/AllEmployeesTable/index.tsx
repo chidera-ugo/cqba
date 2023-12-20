@@ -65,13 +65,9 @@ export const AllEmployeesTable = ({
 
   const { columns } = useColumns({
     handleActionClick(employee, action) {
-      if (action === 'edit') {
-        onRowClick(employee, 'edit_employee');
-      } else {
-        setAction(action);
-        setShowActionConfirmation(true);
-        setEmployeeToPerformActionOn(employee);
-      }
+      setAction(action);
+      setShowActionConfirmation(true);
+      setEmployeeToPerformActionOn(employee);
     },
   });
 

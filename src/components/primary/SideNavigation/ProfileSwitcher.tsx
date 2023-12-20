@@ -32,7 +32,7 @@ export const ProfileSwitcher = ({
   return (
     <div
       className={clsx(
-        'sticky top-0 left-0 z-[100] mb-10 h-[73px] p-4 pb-0 640:p-4',
+        'sticky top-0 left-0 z-[100] mb-5 h-[73px] p-4 pb-0 640:mb-10 640:p-5',
         className,
         isOwner ? 'bg-neutral-100' : 'bg-neutral-1000'
       )}
@@ -40,7 +40,7 @@ export const ProfileSwitcher = ({
       <div
         id={id}
         className={clsx(
-          'relative min-h-[73px] overflow-hidden rounded-2xl',
+          'relative min-h-[73px] rounded-2xl 1024:overflow-hidden',
           isOwner
             ? 'border border-neutral-180 bg-neutral-200'
             : 'bg-neutral-900'
@@ -93,7 +93,7 @@ export const ProfileSwitcher = ({
           <div
             className={clsx(
               isOwner ? 'bg-neutral-200' : 'bg-neutral-900',
-              'mt-2'
+              !top && 'mt-2'
             )}
           >
             <button

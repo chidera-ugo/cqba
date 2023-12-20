@@ -15,7 +15,7 @@ export const SubscriptionHistory = () => {
   if (isError) return <IsError className={'py-20'} />;
 
   if (!data?.docs?.length)
-    return <IsEmpty text={'No payments have been made'} />;
+    return <IsEmpty text={'No subscriptions have been made'} />;
 
   return (
     <>
