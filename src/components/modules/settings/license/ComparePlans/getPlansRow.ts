@@ -2,6 +2,7 @@ import {
   SubscriptionPlan,
   PlanFeature,
 } from 'hooks/api/subscriptions/useGetAllSubscriptionPlans';
+import { handleGrouping } from 'utils/handlers/handleGrouping';
 
 export type RowPlan = {
   featureName?: string;
@@ -15,6 +16,7 @@ export type RowPlan = {
 
 type Row = {
   name: string;
+  group: string;
   featureCode?: string;
   description: string;
   plans?: Record<string, RowPlan>;
@@ -22,8 +24,10 @@ type Row = {
 
 function getFeatureCodes(data: SubscriptionPlan[]) {
   const features: (PlanFeature & { planCode: string })[] = [];
-  const featureCodes: Record<string, { name: string; description: string }> =
-    {};
+  const featureCodes: Record<
+    string,
+    { name: string; description: string; group: string }
+  > = {};
 
   if (!data)
     return {
@@ -44,6 +48,7 @@ function getFeatureCodes(data: SubscriptionPlan[]) {
     featureCodes[i.code] = {
       name: i.name,
       description: i.description,
+      group: i.group,
     };
   }
 
@@ -93,5 +98,5 @@ export function getPlansRows(data: SubscriptionPlan[]) {
     });
   }
 
-  return rows;
+  return handleGrouping(rows, 'group') as Record<string, Row[]>;
 }

@@ -6,6 +6,7 @@ import { useGetActiveSubscription } from 'hooks/api/subscriptions/useGetActiveSu
 import { useGetAllSubscriptionPlans } from 'hooks/api/subscriptions/useGetAllSubscriptionPlans';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
+import { Fragment } from 'react';
 import { generatePlaceholderArray } from 'utils/generators/generatePlaceholderArray';
 
 interface Props {
@@ -54,6 +55,8 @@ export const ComparePlansTable = ({
     return tableHeaderValues[index]!.code;
   }
 
+  const rows = getPlansRows(data);
+
   return (
     <div className={clsx('mx-auto w-full overflow-x-auto', className)}>
       <div className={'rounded-xl border border-neutral-200 640:rounded-2xl'}>
@@ -95,46 +98,80 @@ export const ComparePlansTable = ({
           )}
 
           <tbody>
-            {getPlansRows(data)?.map(({ name: title, description, plans }) => {
+            {Object.keys(rows)?.map((group) => {
               return (
-                <tr
-                  key={title}
-                  title={title}
-                  className={clsx(
-                    'border-b border-neutral-100 text-neutral-400'
+                <Fragment key={group}>
+                  {!!group && (
+                    <>
+                      {[
+                        group,
+                        ...generatePlaceholderArray(
+                          tableHeaderValues.length - 1,
+                          true
+                        ),
+                      ]?.map((title) => {
+                        return (
+                          <th
+                            key={title}
+                            className={clsx(
+                              'h-[71px] bg-neutral-100 px-5 text-left text-base font-medium capitalize text-neutral-1000'
+                            )}
+                          >
+                            {typeof title !== 'number'
+                              ? title.replace('_', ' ')
+                              : ''}
+                          </th>
+                        );
+                      })}
+                    </>
                   )}
-                >
-                  <td scope='row' className='max-w-[220px] bg-white py-4 px-5'>
-                    <div
-                      className={clsx(
-                        'text-base font-semibold leading-5',
-                        titleClassname ?? 'text-neutral-1000'
-                      )}
-                    >
-                      {title}
-                    </div>
-                    {description && (
-                      <p className={'mt-1 text-sm'}>{description}</p>
-                    )}
-                  </td>
 
-                  {generatePlaceholderArray(tableHeaderValues.length - 1).map(
-                    (key, i) => {
-                      return (
+                  {rows[group]?.map(({ name: title, description, plans }) => {
+                    return (
+                      <tr
+                        key={title}
+                        title={title}
+                        className={clsx(
+                          'border-b border-neutral-100 text-neutral-400'
+                        )}
+                      >
                         <td
-                          key={key}
-                          className='table_border bg-white px-5 text-center font-semibold text-neutral-800'
+                          scope='row'
+                          className='max-w-[220px] bg-white py-6 px-5'
                         >
-                          <div className='x-center'>
-                            <PlansTableCell
-                              plan={plans?.[getPlanCode(i + 1)]}
-                            />
+                          <div
+                            className={clsx(
+                              'text-base font-medium leading-5',
+                              titleClassname ?? 'text-neutral-1000'
+                            )}
+                          >
+                            {title}
                           </div>
+                          {description && (
+                            <p className={'mt-1 text-sm'}>{description}</p>
+                          )}
                         </td>
-                      );
-                    }
-                  )}
-                </tr>
+
+                        {generatePlaceholderArray(
+                          tableHeaderValues.length - 1
+                        ).map((key, i) => {
+                          return (
+                            <td
+                              key={key}
+                              className='table_border bg-white px-5 text-center text-base font-medium text-neutral-800'
+                            >
+                              <div className='x-center'>
+                                <PlansTableCell
+                                  plan={plans?.[getPlanCode(i + 1)]}
+                                />
+                              </div>
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    );
+                  })}
+                </Fragment>
               );
             })}
 

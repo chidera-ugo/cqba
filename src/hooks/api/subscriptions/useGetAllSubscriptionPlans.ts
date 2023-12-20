@@ -21,6 +21,7 @@ export interface PlanFeature {
   code: string;
   name: string;
   description: string;
+  group: string;
   freeUnits: number;
   available: boolean;
   maxUnits: number;
