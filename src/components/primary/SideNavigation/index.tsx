@@ -105,7 +105,7 @@ export const SideNavigationContent = ({
 
                 <Image
                   src={shield}
-                  className={'absolute -right-24 -bottom-28'}
+                  className={'absolute -right-24 -bottom-28 rotate-[20deg]'}
                   alt={'shield'}
                 />
               </Link>
