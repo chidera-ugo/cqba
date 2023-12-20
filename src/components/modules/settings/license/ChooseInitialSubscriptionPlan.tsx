@@ -3,29 +3,26 @@ import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { Tabs } from 'components/commons/Tabs';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
-import { ChoosePaymentMethod } from 'components/modules/subscriptions/ChoosePaymentMethod';
-import { PlanCards } from 'components/modules/subscriptions/PlanCards';
-import { ComparePlans } from 'components/modules/subscriptions/ComparePlans';
+import { PlanCards } from 'components/modules/settings/license/PlanCards';
+import { ComparePlans } from 'components/modules/settings/license/ComparePlans';
 import { UserIconLg } from 'components/svgs/UserIcon';
 import { useAppContext } from 'context/AppContext';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useChooseSubscriptionPlan } from 'hooks/api/subscriptions/useChooseSubscriptionPlan';
-import {
-  SubscriptionPlan,
-  useGetAllSubscriptionPlans,
-} from 'hooks/api/subscriptions/useGetAllSubscriptionPlans';
+import { useGetAllSubscriptionPlans } from 'hooks/api/subscriptions/useGetAllSubscriptionPlans';
 import { useState } from 'react';
 
-const tabs = [
+export const choosePlanTabs = [
   { name: 'Monthly', value: 'MONTHLY' },
   { name: 'Yearly (30% Off)', value: 'YEARLY' },
 ];
 
-export const ChoosePlan = ({ minimal }: { minimal?: boolean }) => {
-  const [currentTab, setCurrentTab] = useState(tabs[0]!);
-  const [selectedPlan, setSelectedPlan] = useState<SubscriptionPlan | null>(
-    null
-  );
+export const ChooseInitialSubscriptionPlan = ({
+  minimal,
+}: {
+  minimal?: boolean;
+}) => {
+  const [currentTab, setCurrentTab] = useState(choosePlanTabs[0]!);
 
   const { dispatch } = useAppContext();
   const { data: organization } = useGetOrganizationInformation();
@@ -56,12 +53,6 @@ export const ChoosePlan = ({ minimal }: { minimal?: boolean }) => {
   return (
     <div className={clsx(!minimal && 'app-container mx-auto max-w-[1168px]')}>
       <FullScreenLoader show={choosingPlan} id={'choose_plan'} />
-
-      <ChoosePaymentMethod
-        show={!!selectedPlan}
-        {...{ months, selectedPlan }}
-        close={() => setSelectedPlan(null)}
-      />
 
       <div>
         <div className={clsx(minimal ? 'mb-10' : 'py-10')}>
@@ -121,7 +112,7 @@ export const ChoosePlan = ({ minimal }: { minimal?: boolean }) => {
                 sliderClassname={'rounded-full'}
                 tabClassname={'w-fit'}
                 layoutId={'plan_type'}
-                tabs={tabs}
+                tabs={choosePlanTabs}
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
               />
@@ -141,15 +132,11 @@ export const ChoosePlan = ({ minimal }: { minimal?: boolean }) => {
           )}
           isEligibleForTrial={!minimal}
           choosePlan={(plan) => {
-            if (!minimal)
-              // i.e. is initial plan selection
-              return mutate({
-                plan: plan._id,
-                months,
-                paymentMethod: 'wallet',
-              });
-
-            setSelectedPlan(plan);
+            mutate({
+              plan: plan._id,
+              months,
+              paymentMethod: 'wallet',
+            });
           }}
           currentTab={currentTab.value}
         />
@@ -161,7 +148,11 @@ export const ChoosePlan = ({ minimal }: { minimal?: boolean }) => {
 
           if (!plan) return;
 
-          setSelectedPlan(plan);
+          mutate({
+            plan: plan?._id,
+            months,
+            paymentMethod: 'wallet',
+          });
         }}
         showOnlyPaidPlans={minimal}
         headerClassname={'mt-24'}

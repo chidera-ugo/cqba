@@ -1,4 +1,4 @@
-import { RowPlan } from 'components/modules/subscriptions/ComparePlans/getPlansRow';
+import { RowPlan } from 'components/modules/settings/license/ComparePlans/getPlansRow';
 
 export const PlansTableCell = ({ plan }: { plan?: RowPlan }) => {
   if (!plan) return <></>;

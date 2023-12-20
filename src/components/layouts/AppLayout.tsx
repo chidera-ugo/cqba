@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { LogoutButton } from 'components/buttons/Logout';
 import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { CreatePin } from 'components/modules/core/CreatePin';
-import { ChoosePlan } from 'components/modules/subscriptions/ChoosePlan';
+import { ChooseInitialSubscriptionPlan } from 'components/modules/settings/license/ChooseInitialSubscriptionPlan';
 import { IdleTimer } from 'components/modules/IdleTimer';
 import { PageHead } from 'components/primary/PageHead';
 import { ChevronRight } from 'components/svgs/navigation/Chevrons';
@@ -176,7 +176,11 @@ export const AppLayout = ({
                 'relative z-10'
               )}
             >
-              {shouldSelectFirstPlan ? <ChoosePlan /> : children}
+              {shouldSelectFirstPlan ? (
+                <ChooseInitialSubscriptionPlan />
+              ) : (
+                children
+              )}
             </div>
           </main>
         </div>

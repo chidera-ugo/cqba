@@ -6,7 +6,9 @@ import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { Notifications } from 'components/modules/app/Notifications';
 import { MobileMenu } from 'components/primary/MobileMenu';
 import { PointerLeft } from 'components/svgs/navigation/Arrows';
+import { Check } from 'components/svgs/others/Check';
 import { useAppContext } from 'context/AppContext';
+import { useGetActiveSubscription } from 'hooks/api/subscriptions/useGetActiveSubscription';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -27,6 +29,8 @@ export const AppHeader = ({
   className,
 }: PropsWithChildren<Props>) => {
   const { user } = useAppContext().state;
+  const { data } = useGetActiveSubscription();
+  const currentPlan = !data ? '' : data?.plan?.name;
 
   return (
     <header
@@ -57,6 +61,17 @@ export const AppHeader = ({
         <div className='flex'>
           {!hideSideNavigation && (
             <div className={'hidden gap-4 1024:flex'}>
+              {currentPlan && (
+                <Link href={'/settings/license'} className='pill_gray my-auto'>
+                  <div className='flex gap-1'>
+                    <div className='my-auto'>{currentPlan} Plan</div>
+                    <div className='my-auto'>
+                      <Check />
+                    </div>
+                  </div>
+                </Link>
+              )}
+
               <Notifications />
 
               <AppErrorBoundary className={'my-auto'} type={'hidden'}>

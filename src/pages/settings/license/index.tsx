@@ -1,7 +1,7 @@
 import { SettingsLayout } from 'components/layouts/SettingsLayout';
 import { PlanFeatures } from 'components/modules/settings/license/PlanFeatures';
-import { SubscriptionHistory } from 'components/modules/subscriptions/SubscriptionHistory';
-import { SubscriptionSummary } from 'components/modules/subscriptions/SubscriptionSummary';
+import { SubscriptionHistory } from 'components/modules/settings/license/SubscriptionHistory';
+import { SubscriptionSummary } from 'components/modules/settings/license/SubscriptionSummary';
 
 export default function License() {
   return (

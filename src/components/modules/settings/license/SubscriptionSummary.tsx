@@ -1,11 +1,7 @@
 import clsx from 'clsx';
-import { ChangePlanForm } from 'components/forms/plans/ChangePlans';
-import {
-  CentredModalWrapper,
-  RightModalWrapper,
-} from 'components/modal/ModalWrapper';
-import { ChoosePaymentMethod } from 'components/modules/subscriptions/ChoosePaymentMethod';
-import { ComparePlans } from 'components/modules/subscriptions/ComparePlans';
+import { CentredModalWrapper } from 'components/modal/ModalWrapper';
+import { ManageSubscription } from 'components/modules/settings/license/ManageSubscription';
+import { ComparePlans } from 'components/modules/settings/license/ComparePlans';
 import { Spinner } from 'components/svgs/dashboard/Spinner';
 import { CrossSubtract } from 'components/svgs/navigation/Exit';
 import dayjs from 'dayjs';
@@ -37,15 +33,15 @@ dayjs.updateLocale('en', {
   },
 });
 
-export const SubscriptionSummary = () => {
-  const [modal, setModal] = useState<'compare' | 'payment_methods' | null>(
-    null
-  );
-  const [showModal, setShowModal] = useState(false);
+export type TSubscriptionSummaryCurrentModalType =
+  | 'compare_plans'
+  | 'change_plan'
+  | 'renew_subscription'
+  | null;
 
-  function closeModal() {
-    setShowModal(false);
-  }
+export const SubscriptionSummary = () => {
+  const [currentModalType, setCurrentModalType] =
+    useState<TSubscriptionSummaryCurrentModalType>(null);
 
   const { isLoading, isError, data } = useGetActiveSubscription();
 
@@ -55,14 +51,16 @@ export const SubscriptionSummary = () => {
   const { endingAt, plan, trial, renewAt } = data;
 
   function close() {
-    setModal(null);
+    setCurrentModalType(null);
   }
+
+  const isPremiumUser = data?.plan?.name === 'Premium';
 
   return (
     <>
       <CentredModalWrapper
         closeOnClickOutside
-        show={modal === 'compare'}
+        show={currentModalType === 'compare_plans'}
         hideHeader
         type={'zoom'}
         closeModal={close}
@@ -79,21 +77,9 @@ export const SubscriptionSummary = () => {
           tableWrapperClassName={'1280:w-[900px] px-4 640:px-8'}
         />
       </CentredModalWrapper>
-      <RightModalWrapper
-        show={showModal}
-        title='Change Plan'
-        closeModal={closeModal}
-        closeOnClickOutside
-        childrenClassname='py-0 640:px-8 px-4'
-      >
-        <ChangePlanForm onSuccess={closeModal} />
-      </RightModalWrapper>
-      <ChoosePaymentMethod
-        months={data?.meta?.months ?? 1}
-        selectedPlan={data?.plan}
-        show={modal === 'payment_methods' && !!data?.plan}
-        close={() => setModal(null)}
-      />
+
+      <ManageSubscription {...{ currentModalType, setCurrentModalType }} />
+
       <div className='grid grid-cols-12 gap-5'>
         <div className='card y-between col-span-12 min-h-[156px] bg-primary-main 640:col-span-6 1180:col-span-4'>
           <div className='x-between'>
@@ -130,18 +116,20 @@ export const SubscriptionSummary = () => {
             <Spinner className={'h-6 w-6 text-primary-main'} />
           ) : (
             <div>
-              <div className='flex'>
-                <button
-                  onClick={() => setShowModal(true)}
-                  className='text_link'
-                >
-                  Change Plan
-                </button>
-              </div>
+              {!isPremiumUser && (
+                <div className='flex'>
+                  <button
+                    onClick={() => setCurrentModalType('change_plan')}
+                    className='text_link'
+                  >
+                    Change Plan
+                  </button>
+                </div>
+              )}
 
               <div className='flex'>
                 <button
-                  onClick={() => setModal('compare')}
+                  onClick={() => setCurrentModalType('compare_plans')}
                   className='text_link mt-1'
                 >
                   Compare Plans
@@ -150,7 +138,7 @@ export const SubscriptionSummary = () => {
 
               <div className='flex'>
                 <button
-                  onClick={() => setModal('payment_methods')}
+                  onClick={() => setCurrentModalType('renew_subscription')}
                   className='text_link mt-1'
                 >
                   Renew Current Plan

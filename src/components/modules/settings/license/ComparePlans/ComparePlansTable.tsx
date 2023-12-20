@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
-import { getPlansRows } from 'components/modules/subscriptions/ComparePlans/getPlansRow';
-import { PlansTableCell } from 'components/modules/subscriptions/ComparePlans/PlansTableCell';
+import { getPlansRows } from 'components/modules/settings/license/ComparePlans/getPlansRow';
+import { PlansTableCell } from 'components/modules/settings/license/ComparePlans/PlansTableCell';
 import { useGetActiveSubscription } from 'hooks/api/subscriptions/useGetActiveSubscription';
 import { useGetAllSubscriptionPlans } from 'hooks/api/subscriptions/useGetAllSubscriptionPlans';
 import { IsError } from 'components/data-states/IsError';

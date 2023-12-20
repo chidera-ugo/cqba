@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { ComparePlansTable } from 'components/modules/subscriptions/ComparePlans/ComparePlansTable';
+import { ComparePlansTable } from 'components/modules/settings/license/ComparePlans/ComparePlansTable';
 
 interface Props {
   centerText?: boolean;
