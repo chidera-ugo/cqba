@@ -5,11 +5,11 @@ import Image, { StaticImageData } from 'next/image';
 import { ReactNode } from 'react';
 
 interface Props {
-  processing: boolean;
+  processing?: boolean;
   title?: string;
   icon?: ReactNode;
   imageSrc?: StaticImageData;
-  subTitle?: string;
+  subTitle?: ReactNode;
   noToast?: boolean;
   toastClassname?: string;
 }
@@ -26,7 +26,7 @@ export const NoData = ({
   return (
     <div className='relative h-full py-20'>
       <SimpleToast
-        show={!noToast && processing}
+        show={!noToast && !!processing}
         className={clsx(
           'left-0 1180:left-[122px]',
           toastClassname ?? 'bottom-32'

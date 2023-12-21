@@ -68,7 +68,7 @@ export const SideNavigationContent = ({
             <SideNavigationItems />
           </div>
 
-          {isPremiumUser && (
+          {!isPremiumUser && isOwner && (
             <div className='hidden p-5 pb-0 1024:block'>
               <Link
                 href={'/settings/license'}

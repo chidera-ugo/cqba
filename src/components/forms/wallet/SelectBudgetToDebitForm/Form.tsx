@@ -1,7 +1,5 @@
-import clsx from 'clsx';
 import { SecondaryActionButton } from 'components/form-elements/CustomSelect/SecondaryActionButton';
 import { Select } from 'components/form-elements/Select';
-import { MiniPlus } from 'components/svgs/forms/Plus';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { initialValues } from 'components/forms/wallet/SelectBudgetToDebitForm/initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
@@ -28,36 +26,6 @@ export const Form = ({
       projectId: '',
     });
   }, [isProject]);
-
-  if ((isProject && !projects?.length) || (!isProject && !budgets?.length)) {
-    return (
-      <button
-        onClick={createBudget}
-        className={clsx('dashed_card mt-8 w-full', 'y-center bg-primary-50')}
-      >
-        <span className={'mx-auto'}>
-          <MiniPlus />
-        </span>
-
-        <h5
-          className={clsx(
-            'text-center text-base font-medium text-primary-main',
-            'mx-auto mt-2'
-          )}
-        >
-          Add Budget
-        </h5>
-
-        <p
-          className={
-            'mx-auto mt-1 max-w-[250px] text-xs leading-5 text-neutral-600'
-          }
-        >
-          No budgets have been added yet
-        </p>
-      </button>
-    );
-  }
 
   return (
     <FormikForm onSubmit={handleSubmit}>

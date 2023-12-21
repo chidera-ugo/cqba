@@ -346,8 +346,8 @@ export const ActiveBudgetCard = ({
                 </>
               )}
 
-              <div className='flex'>
-                <div className={clsx(!showActions ? 'hidden' : 'block')}>
+              <div className={clsx(!showActions ? 'hidden' : 'flex')}>
+                <div>
                   <div className={'text-sm font-medium 640:text-base'}>
                     {name}
                   </div>
@@ -361,9 +361,14 @@ export const ActiveBudgetCard = ({
           </div>
         )}
 
-        <div className={clsx('text-sm', !showOnlyBreakdown && 'mt-6')}>
-          <span className={'text-neutral-500'}>Total Budget:</span>{' '}
-          <span className='font-medium text-black'>
+        <div
+          className={clsx(
+            showActions ? 'text-base 640:text-xl' : 'text-sm',
+            !showOnlyBreakdown && 'mt-6'
+          )}
+        >
+          <span className={'font-medium text-neutral-500'}>Budget:</span>{' '}
+          <span className='font-semibold text-black'>
             {currency}
             {formatAmount({ value: amount / 100 })}
           </span>
@@ -397,108 +402,122 @@ export const ActiveBudgetCard = ({
           })}
         </div>
 
-        <div
-          className={clsx(
-            'hidden-scrollbar mt-4 flex overflow-y-auto',
-            showActions ? 'gap-10' : 'gap-5'
-          )}
-        >
-          {breakdown?.map(({ title, disabled, value, className }) => {
-            if (disabled || value === undefined || value === null)
-              return <Fragment key={title} />;
+        <div className='flex flex-col gap-5 768:gap-0'>
+          <div
+            className={clsx(
+              'hidden-scrollbar mt-4 flex overflow-y-auto',
+              showActions ? 'gap-10' : 'gap-5'
+            )}
+          >
+            {breakdown?.map(({ title, disabled, value, className }) => {
+              if (disabled || value === undefined || value === null)
+                return <Fragment key={title} />;
 
-            return (
-              <div key={title} className={clsx(!showActions && 'w-full')}>
-                <div className='flex w-full'>
-                  <div className={'flex-shrink-0 text-[10px] text-neutral-500'}>
-                    {title}
+              return (
+                <div key={title} className={clsx(!showActions && 'w-full')}>
+                  <div className='flex w-full'>
+                    <div
+                      className={clsx(
+                        'flex-shrink-0 text-neutral-500',
+                        showActions ? 'text-xs 640:text-base' : 'text-[10px]'
+                      )}
+                    >
+                      {title}
+                    </div>
+
+                    <div
+                      className={clsx(
+                        className,
+                        'my-auto ml-1 flex-shrink-0 rounded-full'
+                      )}
+                      style={{
+                        height: 7,
+                        width: 7,
+                      }}
+                    ></div>
                   </div>
 
                   <div
                     className={clsx(
-                      className,
-                      'my-auto ml-1 flex-shrink-0 rounded-full'
+                      'mt-0.5 w-full font-semibold',
+                      showActions ? 'text-sm 640:text-xl' : 'text-xs'
                     )}
-                    style={{
-                      height: 7,
-                      width: 7,
-                    }}
-                  ></div>
+                  >
+                    {currency}
+                    {formatAmount({
+                      value: value / 100,
+                    })}
+                  </div>
                 </div>
-
-                <div className='mt-0.5 w-full text-xs font-medium'>
-                  {currency}
-                  {formatAmount({
-                    value: value / 100,
-                  })}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {showActions && (
-          <div className='right-2 top-5 mt-5 flex w-full justify-between gap-3 375:w-auto 768:absolute 768:mt-0'>
-            <div className={'ws-full flex gap-3'}>
-              {status === 'active' && !paused && actionsSlot}
-
-              {paused && (
-                <button
-                  onClick={() => {
-                    if (!isOwner) return;
-
-                    setAction('unpause');
-                    setMode('authorize');
-                  }}
-                  className={'group my-auto disabled:opacity-80'}
-                  disabled={!isOwner}
-                >
-                  <Frozen
-                    className={clsx(isOwner && 'group-hover:text-primary-main')}
-                    size={'md'}
-                  />
-                </button>
-              )}
-            </div>
-
-            <div className={'w-fulls'}>
-              {status === 'closed' ? (
-                <div
-                  className={
-                    'primary-button y-center rounded-full bg-red-600 hover:bg-red-600'
-                  }
-                >
-                  {entity} Closed
-                </div>
-              ) : isOwner ? (
-                <ActionDropdown
-                  buttonClassname={'bg-white'}
-                  className={'absolute right-2 top-3 768:static'}
-                  options={[
-                    {
-                      icon: <Freeze />,
-                      onClick() {
-                        setAction(paused ? 'unpause' : 'pause');
-                        setMode('authorize');
-                      },
-                      title: `${paused ? 'Unfreeze' : 'Freeze'} ${entity}`,
-                    },
-                    {
-                      icon: <MiniLock />,
-                      onClick: () => setAction('close'),
-                      title: `Close ${entity}`,
-                    },
-                  ]}
-                  id={'budget_actions'}
-                />
-              ) : !isOwner && !paused ? (
-                <div className='mr-2'>
-                  <MakeTransfer budget={budget} />
-                </div>
-              ) : null}
-            </div>
+              );
+            })}
           </div>
-        )}
+
+          {showActions && (
+            <div className='right-2 top-5 flex w-full justify-between gap-3 375:w-auto 768:absolute'>
+              <div className={'flex gap-3'}>
+                {status === 'active' && !paused && actionsSlot}
+
+                {paused && (
+                  <button
+                    onClick={() => {
+                      if (!isOwner) return;
+
+                      setAction('unpause');
+                      setMode('authorize');
+                    }}
+                    className={'group my-auto disabled:opacity-80'}
+                    disabled={!isOwner}
+                  >
+                    <Frozen
+                      className={clsx(
+                        isOwner && 'group-hover:text-primary-main'
+                      )}
+                      size={'md'}
+                    />
+                  </button>
+                )}
+              </div>
+
+              <div>
+                {status === 'closed' ? (
+                  <div
+                    className={
+                      'primary-button y-center rounded-full bg-red-600 hover:bg-red-600'
+                    }
+                  >
+                    {entity} Closed
+                  </div>
+                ) : isOwner ? (
+                  <ActionDropdown
+                    buttonClassname={'bg-white'}
+                    className={'absolute right-2 top-3 768:static'}
+                    options={[
+                      {
+                        icon: <Freeze />,
+                        onClick() {
+                          setAction(paused ? 'unpause' : 'pause');
+                          setMode('authorize');
+                        },
+                        title: `${paused ? 'Unfreeze' : 'Freeze'} ${entity}`,
+                      },
+                      {
+                        icon: <MiniLock />,
+                        onClick: () => setAction('close'),
+                        title: `Close ${entity}`,
+                      },
+                    ]}
+                    id={'budget_actions'}
+                  />
+                ) : !isOwner && !paused ? (
+                  <div className='mr-2'>
+                    <MakeTransfer budget={budget} />
+                  </div>
+                ) : null}
+              </div>
+            </div>
+          )}
+        </div>
       </button>
     </>
   );
