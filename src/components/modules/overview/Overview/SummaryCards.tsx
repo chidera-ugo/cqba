@@ -38,7 +38,7 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
     },
     {
       name: 'Budget Balance',
-      value: data?.budgetBalance?.value * 100499,
+      value: data?.budgetBalance?.value,
       moreInfo: 'Total amount in your budget balance',
       variance: data?.budgetBalance?.percentageDiff,
     },
