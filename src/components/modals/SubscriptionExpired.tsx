@@ -10,7 +10,7 @@ interface Props {
   show: boolean;
   title: string;
   subText: string;
-  buttonText?: string;
+  errorType?: 'expired' | 'upgrade';
   hideBackdrop?: boolean;
   type?: 'right' | 'center';
   close?: () => void;
@@ -20,7 +20,7 @@ export const SubscriptionExpired = ({
   show,
   title,
   subText,
-  buttonText,
+  errorType,
   hideBackdrop,
   type,
   close,
@@ -36,7 +36,13 @@ export const SubscriptionExpired = ({
         closeOnClickOutside
         childrenClassname='py-0 640:px-8 px-4'
       >
-        <div className='mt-10 grid justify-items-center rounded-xl bg-neutral-160'>
+        <div
+          className={
+            errorType === 'expired'
+              ? 'mt-10 grid justify-items-center'
+              : 'mt-10 grid justify-items-center rounded-xl bg-neutral-160'
+          }
+        >
           <Image
             src={asset}
             alt={'subscription_expired'}
@@ -54,7 +60,9 @@ export const SubscriptionExpired = ({
                 href={'/settings/license'}
                 className={'my-auto font-medium'}
               >
-                {buttonText}
+                {errorType === 'expired'
+                  ? 'Renew Subscription or change plan'
+                  : 'Change plan'}
               </Link>
             </button>
           </div>
