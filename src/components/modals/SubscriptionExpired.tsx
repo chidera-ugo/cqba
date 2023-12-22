@@ -8,7 +8,9 @@ import Link from 'next/link';
 
 interface Props {
   show: boolean;
-  title?: string;
+  title: string;
+  subText: string;
+  buttonText?: string;
   hideBackdrop?: boolean;
   type?: 'right' | 'center';
   close?: () => void;
@@ -17,6 +19,8 @@ interface Props {
 export const SubscriptionExpired = ({
   show,
   title,
+  subText,
+  buttonText,
   hideBackdrop,
   type,
   close,
@@ -39,11 +43,10 @@ export const SubscriptionExpired = ({
             className={'mx-auto mt-4 pb-2 mix-blend-multiply'}
           />
           <h3 className='px-20 text-center text-2xl font-semibold text-black'>
-            Upgrade Your Plan to Expand User Capacity
+            {title}
           </h3>
           <p className='mx-auto mt-3 px-7 text-center text-sm font-normal text-neutral-500 640:text-lg'>
-            Your Organization has reached its maximum limit for a user. To
-            continue adding users, consider upgrading your plan
+            {subText}
           </p>
           <div className='mx-auto mt-5 mb-10 h-full w-fit flex-shrink-0'>
             <button className='primary-button x-center my-auto px-5 text-base 640:h-12 640:w-full 640:px-6'>
@@ -51,7 +54,7 @@ export const SubscriptionExpired = ({
                 href={'/settings/license'}
                 className={'my-auto font-medium'}
               >
-                Renew Subscription or change plan
+                {buttonText}
               </Link>
             </button>
           </div>
@@ -79,8 +82,7 @@ export const SubscriptionExpired = ({
           {title}
         </h2>
         <p className='mx-auto mt-5 px-7 text-center text-sm font-normal text-neutral-500 640:text-lg'>
-          Business present plan has expired. To renew or change plan, click on
-          the button below to Renew or Change Plan
+          {subText}
         </p>
         <div className='mx-auto mt-11 h-full w-fit flex-shrink-0'>
           <button className='primary-button x-center my-auto px-5 text-base 640:h-12 640:w-full 640:px-6'>
