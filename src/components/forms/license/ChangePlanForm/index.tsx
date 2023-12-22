@@ -14,7 +14,7 @@ export const ChangePlanForm = ({
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={({ plan, paymentMethod, monthlyPlan }) => {
-        proceed(plan, paymentMethod, monthlyPlan ? 1 : 12);
+        proceed(paymentMethod, plan, monthlyPlan ? 1 : 12);
       }}
       validateOnBlur={false}
     >
