@@ -11,6 +11,7 @@ import { DatePickerValue } from 'types/commons';
 import { constructIdTypes } from 'utils/constructors/constructIdTypes';
 import { formatPhoneNumber } from 'utils/formatters/formatPhoneNumber';
 import { sanitizeRecordToRemoveUndefinedAndNulls } from 'utils/sanitizers/sanitizeRecordToRemoveUndefinedAndNulls';
+import { MultiCheckValue } from 'utils/validators/validateMultiCheckValues';
 import { initialValues } from './initialValues';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { Select } from 'components/form-elements/Select';
@@ -64,6 +65,16 @@ export const Form = ({ processing, formikProps, currentOwner }: Props) => {
 
     const _dob = !!dob ? dayjs(dob) : '';
 
+    function getTitles() {
+      const titles: MultiCheckValue = {};
+
+      for (const i in title) {
+        titles[i] = true;
+      }
+
+      return titles;
+    }
+
     setValues(
       {
         ...values,
@@ -86,7 +97,7 @@ export const Form = ({ processing, formikProps, currentOwner }: Props) => {
         state,
         email,
         percentOwned,
-        title,
+        title: getTitles(),
         phoneNumber: formatPhoneNumber(phone ?? user?.phone) ?? '',
       },
       true

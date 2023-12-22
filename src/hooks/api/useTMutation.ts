@@ -5,7 +5,7 @@ import {
 } from '@tanstack/react-query';
 import { useHandleError } from 'hooks/api/useHandleError';
 import { AxiosRequestConfig } from 'axios';
-import useHttp from 'hooks/api/useHttp';
+import useHttp, { OnUploadProgress } from 'hooks/api/useHttp';
 import { urlModifier } from 'hooks/api/useHttp/methods';
 import { Method, Service } from 'hooks/api/useHttp/types';
 import { generateUrlParamsFromObject } from 'utils/generators/generateUrlParamsFromObject';
@@ -18,6 +18,7 @@ type Args<Res> = {
   pathParams?: string[];
   appendQueryParams?: boolean;
   config?: AxiosRequestConfig<any>;
+  onUploadProgress?: OnUploadProgress;
 };
 
 export function useTMutation<Dto, Res>({
@@ -28,8 +29,9 @@ export function useTMutation<Dto, Res>({
   pathParams,
   appendQueryParams = false,
   config,
+  onUploadProgress,
 }: Args<Res>): UseMutationResult<Res, unknown, Dto, unknown> {
-  const api = useHttp({ config });
+  const api = useHttp({ config, onUploadProgress });
 
   const modifier = urlModifier(service);
 

@@ -1,4 +1,8 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, {
+  AxiosInstance,
+  AxiosProgressEvent,
+  AxiosRequestConfig,
+} from 'axios';
 import { AppToast } from 'components/primary/AppToast';
 import { useAppContext } from 'context/AppContext';
 import { useDestroySession } from 'hooks/app/useDestroySession';
@@ -8,12 +12,16 @@ import { toast } from 'react-toastify';
 
 export const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
+export type OnUploadProgress = (event: AxiosProgressEvent) => void;
+
 export default function useHttp({
   config,
   headers,
+  onUploadProgress,
 }: {
   config?: AxiosRequestConfig<any>;
   headers?: OutgoingHttpHeaders;
+  onUploadProgress?: OnUploadProgress;
 }): AxiosInstance {
   const { dispatch, state } = useAppContext();
 
@@ -46,6 +54,7 @@ export default function useHttp({
       ...authHeader,
       ...headers,
     },
+    onUploadProgress,
     baseURL,
     withCredentials: process.env.WITH_CREDENTIALS === 'positive',
     timeout: 60 * 1000,

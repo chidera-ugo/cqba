@@ -100,10 +100,7 @@ export const Form = ({
         label={'Role'}
         trueValueKey={'value'}
         displayValueKey={'name'}
-        options={[
-          { name: 'Owner', value: 'owner' },
-          { name: 'Employee', value: 'employee' },
-        ]}
+        options={[{ name: 'Employee', value: 'employee' }]}
       />
 
       <div className='relative mt-10 flex pb-8'>

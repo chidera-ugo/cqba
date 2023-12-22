@@ -1,30 +1,37 @@
+import { Spinner } from 'components/svgs/dashboard/Spinner';
 import { SmallCheck } from 'components/svgs/others/Check';
 import { imageExtensions } from 'constants/files/image_extensions';
 import { useField, useFormikContext } from 'formik';
 import clsx from 'clsx';
 import { useDropFile } from 'hooks/forms/useDropFile';
 import { useFileSelector } from 'hooks/forms/useFileSelector';
-import { FileField } from 'types/commons';
+import { FileField, IFile } from 'types/commons';
 import { FileUpload } from 'components/svgs/forms/FileUpload';
 import { ViewUploadedImage } from 'components/modules/commons/ViewUploadedImage';
 import { constructAcceptedFileTypeList } from 'utils/constructors/constructAcceptedFileTypeList';
 
-type Props = JSX.IntrinsicElements['input'] &
+export type Props = JSX.IntrinsicElements['input'] &
   FileField & {
-    label: string;
+    label?: string;
     fileType?: 'image' | 'all';
     openImagePreviewModal?: (src: any) => void;
+    handleUpload?: (file: IFile) => void;
+    uploadProgress?: number;
+    uploading?: boolean;
   };
 
 export const FileInput = ({
   label,
   className,
+  uploading,
   maximumFileSizeInMB = 10,
   setFieldValue,
   getFile,
   fileType = 'image',
   extensions: _extensions,
   openImagePreviewModal,
+  handleUpload,
+  uploadProgress = 0,
   ...props
 }: Props) => {
   const { fileSelector, errorCb } = useFileSelector();
@@ -46,6 +53,7 @@ export const FileInput = ({
     file,
     extensions,
     id,
+    onSuccess: handleUpload,
   });
 
   function isImage() {
@@ -67,7 +75,7 @@ export const FileInput = ({
         </div>
       </div>
 
-      <label htmlFor={id} id={`drop-${id}`} className='group'>
+      <label htmlFor={id} id={`drop-${id}`} className='group relative'>
         <div
           className={clsx(
             'y-center input min-h-[100px] rounded-xl border px-4 py-3 hover:border-dashed hover:border-primary-main hover:bg-primary-50 640:px-8 640:py-5',
@@ -76,7 +84,10 @@ export const FileInput = ({
               ? 'hover:border-primary-500 cursor-pointer'
               : 'cursor-not-allowed',
             !!file?.file || !!file?.webUrl
-              ? 'border-solid border-blue-400 bg-white'
+              ? clsx(
+                  'border-solid bg-white',
+                  uploadProgress < 0 ? 'border-red-400' : 'border-blue-400'
+                )
               : 'border-white',
             meta.touched && meta.error ? 'border-error-main' : ''
           )}
@@ -86,20 +97,74 @@ export const FileInput = ({
               <FileUpload />
             </div>
             <div className='font-normal text-neutral-400'>
-              {file?.file || file?.webUrl ? (
-                <div className='mx-auto mt-1 flex'>
-                  <span className='my-auto rounded-lg border border-primary-main py-1 px-2 text-left text-xs font-medium text-primary-main line-clamp-1'>
-                    {file?.file?.name ?? (
+              <div className='mx-auto mt-1 flex'>
+                {!!file?.file ? (
+                  <span
+                    className={clsx(
+                      'relative my-auto overflow-hidden rounded-lg border py-1 px-2 text-left text-xs font-medium text-primary-main line-clamp-1',
+                      uploadProgress < 0
+                        ? 'border-red-500'
+                        : 'border-primary-main'
+                    )}
+                  >
+                    {uploadProgress > 0 && (
+                      <div
+                        className={
+                          'absolute left-0 bottom-0 h-full bg-blue-200'
+                        }
+                        style={{
+                          width: `${uploadProgress * 100}%`,
+                        }}
+                      ></div>
+                    )}
+
+                    <span className={'relative z-10 my-auto'}>
+                      {uploadProgress < 0 ? (
+                        <span className={'text-red-500 line-clamp-1'}>
+                          Failed to upload file
+                        </span>
+                      ) : (uploadProgress > 0 && uploadProgress < 100) ||
+                        uploading ? (
+                        <span className={'flex gap-1'}>
+                          <span className={'my-auto'}>
+                            <Spinner className={'h-3 w-3'} />
+                          </span>
+                          <span className={'my-auto line-clamp-1'}>
+                            Uploading {file?.file?.name ?? 'Document'}
+                          </span>
+                        </span>
+                      ) : (
+                        <span className={'flex gap-1'}>
+                          <span className={'my-auto'}>
+                            <SmallCheck />
+                          </span>
+                          <span className='my-auto line-clamp-1'>
+                            Uploaded {file?.file?.name ?? 'Document'}
+                          </span>
+                        </span>
+                      )}
+                    </span>
+                  </span>
+                ) : !!file?.webUrl ? (
+                  <span
+                    className={clsx(
+                      'relative my-auto overflow-hidden rounded-lg border py-1 px-2 text-left text-xs font-medium text-primary-main line-clamp-1',
+                      'border-primary-main'
+                    )}
+                  >
+                    <span className={'relative z-10 my-auto'}>
                       <span className={'flex gap-1'}>
                         <span className={'my-auto'}>
                           <SmallCheck />
                         </span>
-                        <span className='my-auto'>Uploaded Document</span>
+                        <span className='my-auto line-clamp-1'>
+                          Uploaded Document
+                        </span>
                       </span>
-                    )}
+                    </span>
                   </span>
-                </div>
-              ) : null}
+                ) : null}
+              </div>
 
               <div
                 className={clsx(
@@ -127,7 +192,10 @@ export const FileInput = ({
               id,
               existingFile: file,
               maximumFileSizeInMB,
-              successCb: (val) => setFieldValue(id, val),
+              successCb: (val) => {
+                setFieldValue(id, val);
+                if (handleUpload) handleUpload(val as IFile);
+              },
               errorCb,
               extensions,
             })

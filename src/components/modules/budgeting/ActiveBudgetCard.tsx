@@ -330,7 +330,7 @@ export const ActiveBudgetCard = ({
                               }
                               key={email}
                               initials={
-                                firstName
+                                !!firstName
                                   ? `${firstName?.charAt(0)}${lastName?.charAt(
                                       0
                                     )}`

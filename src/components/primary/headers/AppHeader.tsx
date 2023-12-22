@@ -82,9 +82,13 @@ export const AppHeader = ({
                 <Link href={'/settings'}>
                   <Avatar
                     getBackgroundColor={getColor}
-                    initials={`${user?.firstName?.charAt(
-                      0
-                    )}${user?.lastName?.charAt(0)}`}
+                    initials={
+                      !!user?.firstName
+                        ? `${user?.firstName?.charAt(
+                            0
+                          )}${user?.lastName?.charAt(0)}`
+                        : undefined
+                    }
                     avatar={user?.avatar}
                   />
                 </Link>

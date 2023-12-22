@@ -1,13 +1,17 @@
 import { useFileSelector } from 'hooks/forms/useFileSelector';
 import { useEffect } from 'react';
-import { FileField } from 'types/commons';
+import { FileField, IFile } from 'types/commons';
 
 export const useDropFile = ({
   id,
   setFieldValue,
   extensions,
   maximumFileSizeInMB,
-}: FileField & { id: string }) => {
+  onSuccess,
+}: FileField & {
+  id: string;
+  onSuccess?: (file: IFile) => void;
+}) => {
   const { handleFile, errorCb } = useFileSelector();
 
   useEffect(() => {
@@ -25,7 +29,10 @@ export const useDropFile = ({
         handleFile({
           id,
           maximumFileSizeInMB: maximumFileSizeInMB ?? 10,
-          successCb: (val) => setFieldValue(id, val),
+          successCb: (val) => {
+            setFieldValue(id, val);
+            if (onSuccess) onSuccess(val as IFile);
+          },
           errorCb,
           files,
           extensions,

@@ -1,7 +1,7 @@
 import { DatePicker } from 'components/form-elements/DatePicker';
-import { FileInput } from 'components/form-elements/FileInput';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { ImageViewer } from 'components/modals/ImageViewer';
+import { UploadBusinessDocument } from 'components/modules/kyc/business_documents/UploadBusinessDocument';
 import { companyInformationDocuments } from 'constants/kyc/company_information_documents';
 import { Business_typeEnum } from 'enums/business_type.enum';
 import { Form as FormikForm, FormikProps } from 'formik';
@@ -41,19 +41,6 @@ export const Form = ({
 
   const [previewImageUrl, setPreviewImageUrl] = useState('');
 
-  function prefillDocuments(documents: Record<string, string>): any {
-    const res: Record<string, IFile> = {};
-
-    for (const i in documents) {
-      res[i] = {
-        id: i,
-        webUrl: documents[i] ?? '',
-      } as IFile;
-    }
-
-    return res;
-  }
-
   useEffect(() => {
     if (!organization) return;
 
@@ -78,6 +65,19 @@ export const Form = ({
       false
     );
   }, [organization]);
+
+  function prefillDocuments(documents: Record<string, string>): any {
+    const res: Record<string, IFile> = {};
+
+    for (const i in documents) {
+      res[i] = {
+        id: i,
+        webUrl: documents[i] ?? '',
+      } as IFile;
+    }
+
+    return res;
+  }
 
   const businessType =
     organization?.businessType ?? Business_typeEnum.individual;
@@ -105,15 +105,13 @@ export const Form = ({
 
       {companyInformationDocuments[businessType].map(({ id, name }) => {
         return (
-          <FileInput
+          <UploadBusinessDocument
             key={name}
             label={name}
             name={id}
             fileType='all'
             maximumFileSizeInMB={2}
-            {...{
-              setFieldValue,
-            }}
+            setFieldValue={setFieldValue}
             openImagePreviewModal={(src) => setPreviewImageUrl(src)}
             getFile={(id) => v[id]}
           />

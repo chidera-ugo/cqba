@@ -3,14 +3,13 @@ import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { IsError } from 'components/data-states/IsError';
 import { IsLoading } from 'components/data-states/IsLoading';
 import { AppToast } from 'components/primary/AppToast';
-import FormData from 'form-data';
 import { Formik } from 'formik';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useUpdateOrganizationDocuments } from 'hooks/api/kyc/useUpdateOrganizationDocuments';
 import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import { toast } from 'react-toastify';
-import { DatePickerValue, IFile } from 'types/commons';
+import { DatePickerValue } from 'types/commons';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
@@ -57,22 +56,9 @@ export const UpdateBusinessDocumentionForm = () => {
       initialValues={initialValues(businessType)}
       validationSchema={validationSchema(businessType)}
       onSubmit={(values) => {
-        const body = new FormData();
-
-        for (const i in values) {
-          if (i === 'creationDate') {
-            body.append(
-              'regDate',
-              (values?.creationDate as DatePickerValue)?.value
-            );
-          } else {
-            const file = (values[i] as IFile)?.file;
-
-            if (file) body.append(i, file);
-          }
-        }
-
-        mutate(body);
+        mutate({
+          regDate: (values?.creationDate as DatePickerValue)?.value,
+        });
       }}
       validateOnBlur={false}
     >

@@ -26,7 +26,7 @@ export interface IOwner {
   city: string;
   percentOwned: number;
   postalCode: string;
-  title: string;
+  title: string[];
   idNumber: string;
   firstName: string;
   phone: string;

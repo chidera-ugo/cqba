@@ -78,112 +78,110 @@ export const AppLayout = ({
   if (!isValidRoute()) return <NotFound />;
 
   return (
-    <div className={'min-w-screen min-h-screen'}>
-      <div
-        id={'app_wrapper'}
-        style={{
-          backgroundColor: 'white',
-        }}
-      >
-        <PageHead title={title} />
+    <div
+      id={'app_wrapper'}
+      style={{
+        backgroundColor: 'white',
+      }}
+    >
+      <PageHead title={title} />
 
-        <CreatePin />
+      <CreatePin />
 
-        <IdleTimer />
+      <IdleTimer />
 
-        <div className='relative 1024:flex'>
-          {!hideSideNavigation &&
-          !shouldSelectFirstPlan &&
-          (!screenSize || screenSize?.['desktop']) ? (
-            <div className='hidden w-[300px] 1024:block'>
-              <SideNavigation />
+      <div className='relative h-full 1024:flex'>
+        {!hideSideNavigation &&
+        !shouldSelectFirstPlan &&
+        (!screenSize || screenSize?.['desktop']) ? (
+          <div className='hidden w-[300px] 1024:block'>
+            <SideNavigation />
+          </div>
+        ) : null}
+
+        <main
+          className={clsx(
+            'pb-12 640:pb-4',
+            hideSideNavigation ? 'w-full' : '1024:app-layout-desktop-width'
+          )}
+        >
+          <AppHeader
+            {...{
+              back,
+              title,
+              hideSideNavigation,
+            }}
+            className={headerClassname}
+          >
+            {shouldSelectFirstPlan ? <LogoutButton /> : headerSlot}
+          </AppHeader>
+
+          {breadCrumbs && !shouldSelectFirstPlan && (
+            <div className='app-container x-between nav_bar sticky left-0 top-14 z-[1000] -ml-2 overflow-x-auto 640:h-16 1024:top-20'>
+              <div className='flex gap-1'>
+                {breadCrumbs?.map(({ url, action, title }, i) => {
+                  return (
+                    <div key={title} className={'flex gap-1'}>
+                      {url || action ? (
+                        <button
+                          onClick={
+                            action ? action : () => (url ? push(url) : null)
+                          }
+                          className={clsx(
+                            'my-auto gap-3 px-2 py-2.5 text-center text-sm font-medium transition-colors',
+                            i === breadCrumbs.length - 1
+                              ? 'text-primary-main'
+                              : 'text-neutral-400 hover:text-black'
+                          )}
+                        >
+                          {title}
+                        </button>
+                      ) : (
+                        <div
+                          className={clsx(
+                            'my-auto gap-3 px-2 py-2.5 text-center text-sm font-medium transition-colors',
+                            i === breadCrumbs.length - 1
+                              ? 'text-primary-main'
+                              : 'text-neutral-400 hover:text-black'
+                          )}
+                        >
+                          {title}
+                        </div>
+                      )}
+
+                      {i < breadCrumbs.length - 1 && (
+                        <span className={'my-auto'}>
+                          <ChevronRight />
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {breadCrumbsSlot}
             </div>
-          ) : null}
+          )}
 
-          <main
+          <div
             className={clsx(
-              'pb-12',
-              hideSideNavigation ? 'w-full' : '1024:app-layout-desktop-width'
+              shouldSelectFirstPlan
+                ? 'my-5 640:my-7'
+                : !!childrenClassName
+                ? childrenClassName
+                : !!breadCrumbs
+                ? 'app-container mb-5 mt-3 640:mb-7'
+                : 'app-container my-5 640:my-0',
+              'relative z-10'
             )}
           >
-            <AppHeader
-              {...{
-                back,
-                title,
-                hideSideNavigation,
-              }}
-              className={headerClassname}
-            >
-              {shouldSelectFirstPlan ? <LogoutButton /> : headerSlot}
-            </AppHeader>
-
-            {breadCrumbs && !shouldSelectFirstPlan && (
-              <div className='app-container x-between nav_bar sticky left-0 top-14 z-[1000] -ml-2 overflow-x-auto 640:h-16 1024:top-20'>
-                <div className='flex gap-1'>
-                  {breadCrumbs?.map(({ url, action, title }, i) => {
-                    return (
-                      <div key={title} className={'flex gap-1'}>
-                        {url || action ? (
-                          <button
-                            onClick={
-                              action ? action : () => (url ? push(url) : null)
-                            }
-                            className={clsx(
-                              'my-auto gap-3 px-2 py-2.5 text-center text-sm font-medium transition-colors',
-                              i === breadCrumbs.length - 1
-                                ? 'text-primary-main'
-                                : 'text-neutral-400 hover:text-black'
-                            )}
-                          >
-                            {title}
-                          </button>
-                        ) : (
-                          <div
-                            className={clsx(
-                              'my-auto gap-3 px-2 py-2.5 text-center text-sm font-medium transition-colors',
-                              i === breadCrumbs.length - 1
-                                ? 'text-primary-main'
-                                : 'text-neutral-400 hover:text-black'
-                            )}
-                          >
-                            {title}
-                          </div>
-                        )}
-
-                        {i < breadCrumbs.length - 1 && (
-                          <span className={'my-auto'}>
-                            <ChevronRight />
-                          </span>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {breadCrumbsSlot}
-              </div>
+            {shouldSelectFirstPlan ? (
+              <ChooseInitialSubscriptionPlan />
+            ) : (
+              children
             )}
-
-            <div
-              className={clsx(
-                shouldSelectFirstPlan
-                  ? 'my-5 640:my-7'
-                  : !!childrenClassName
-                  ? childrenClassName
-                  : !!breadCrumbs
-                  ? 'app-container mb-5 mt-3 640:mb-7'
-                  : 'app-container my-5 640:my-7',
-                'relative z-10'
-              )}
-            >
-              {shouldSelectFirstPlan ? (
-                <ChooseInitialSubscriptionPlan />
-              ) : (
-                children
-              )}
-            </div>
-          </main>
-        </div>
+          </div>
+        </main>
       </div>
     </div>
   );

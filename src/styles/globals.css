@@ -134,6 +134,11 @@
     width: calc(100% - 300px);
   }
 
+  .kyc_layout_height {
+    height: calc(100vh - 100px);
+    min-height: calc(100vh - 100px);
+  }
+
   .auth-container {
     @apply mx-auto max-w-[540px] px-5 640:px-8;
   }
@@ -196,11 +201,6 @@
 
   .dashed_card {
     @apply rounded-[10px] border border-dashed border-neutral-200 py-[30px] px-5 text-center hover:border-primary-main;
-  }
-
-  .kyc_layout_height {
-    height: calc(100vh - 140px);
-    min-height: calc(100vh - 140px);
   }
 
   .x-between {

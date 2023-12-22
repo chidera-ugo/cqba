@@ -1,5 +1,5 @@
 export const initialValues = {
   email: '',
-  role: '',
+  role: 'employee',
   phoneNumber: '',
 };

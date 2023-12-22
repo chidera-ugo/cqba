@@ -19,8 +19,6 @@ export const UpdateAvatar = ({ avatar, setFieldValue }: Props) => {
   const id = 'avatar';
   const { getColor } = useGetColorByChar();
 
-  const initials = `${user?.firstName?.charAt(0)}${user?.lastName?.charAt(0)}`;
-
   return (
     <div className='mb-3 w-full grid-cols-12 gap-5 425:grid'>
       <div className={'y-between col-span-6 640:col-span-4'}>
@@ -81,7 +79,11 @@ export const UpdateAvatar = ({ avatar, setFieldValue }: Props) => {
           ) : (
             <Avatar
               getBackgroundColor={getColor}
-              initials={initials}
+              initials={
+                !!user?.firstName
+                  ? `${user?.firstName?.charAt(0)}${user?.lastName?.charAt(0)}`
+                  : undefined
+              }
               size={128}
             />
           )}

@@ -108,6 +108,7 @@ export const CreatePinSteps = ({ closeModal }: Props) => {
                 <SubmitButton
                   submitting={isLoading}
                   type='submit'
+                  disabled={pins?.confirm?.length !== 4}
                   className='primary-button w-[100px]'
                 >
                   Proceed
