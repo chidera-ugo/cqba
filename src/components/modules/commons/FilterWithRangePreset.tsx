@@ -198,7 +198,7 @@ export const FilterWithRangePreset = ({
         title={'Filter'}
         className={'p-0'}
       >
-        <div className={'h-full overflow-y-auto p-4'}>
+        <div className={'h-full overflow-y-auto p-4 pb-20 640:pb-4'}>
           <AppErrorBoundary>
             {!hideDateRange && (
               <div className={'w-full'}>

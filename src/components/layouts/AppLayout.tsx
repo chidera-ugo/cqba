@@ -171,7 +171,7 @@ export const AppLayout = ({
                 ? childrenClassName
                 : !!breadCrumbs
                 ? 'app-container mb-5 mt-3 640:mb-7'
-                : 'app-container my-5 640:my-0',
+                : 'app-container my-5 640:my-5',
               'relative z-10'
             )}
           >

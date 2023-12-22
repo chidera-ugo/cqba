@@ -42,7 +42,7 @@ export const BudgetDetailsModule = ({
       breadCrumbs={[
         {
           title: isApprovals ? 'Approvals' : 'Budgets',
-          url: isApprovals ? '/approvasls' : '/budgeting',
+          url: isApprovals ? '/approvals' : '/budgeting',
         },
         {
           title: 'Track Budget',
