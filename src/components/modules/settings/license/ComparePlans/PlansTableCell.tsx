@@ -3,7 +3,7 @@ import { RowPlan } from 'components/modules/settings/license/ComparePlans/getPla
 export const PlansTableCell = ({ plan }: { plan?: RowPlan }) => {
   if (!plan) return <></>;
 
-  const { available, freeUnits, featureName } = plan;
+  const { available, freeUnits } = plan;
 
   return (
     <>
@@ -12,7 +12,7 @@ export const PlansTableCell = ({ plan }: { plan?: RowPlan }) => {
       ) : freeUnits && freeUnits === -1 ? (
         'Unlimited'
       ) : freeUnits && freeUnits > 1 ? (
-        `Up to ${freeUnits} ${featureName}`
+        `Up to ${freeUnits}`
       ) : (
         <Check />
       )}

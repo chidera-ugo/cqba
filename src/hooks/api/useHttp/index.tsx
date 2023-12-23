@@ -14,13 +14,15 @@ export const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 export type OnUploadProgress = (event: AxiosProgressEvent) => void;
 
+export type HttpConfig = Omit<AxiosRequestConfig<any>, 'headers'>;
+
 export default function useHttp({
   config,
-  headers,
+  otherHeaders,
   onUploadProgress,
 }: {
-  config?: AxiosRequestConfig<any>;
-  headers?: OutgoingHttpHeaders;
+  config?: HttpConfig;
+  otherHeaders?: OutgoingHttpHeaders;
   onUploadProgress?: OnUploadProgress;
 }): AxiosInstance {
   const { dispatch, state } = useAppContext();
@@ -52,7 +54,7 @@ export default function useHttp({
     headers: {
       Accept: 'application/json',
       ...authHeader,
-      ...headers,
+      ...otherHeaders,
     },
     onUploadProgress,
     baseURL,

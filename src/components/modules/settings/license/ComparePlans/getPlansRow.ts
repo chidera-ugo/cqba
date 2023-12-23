@@ -22,7 +22,7 @@ type Row = {
   plans?: Record<string, RowPlan>;
 };
 
-function getFeatureCodes(data: SubscriptionPlan[]) {
+function getFeatureCodes(data?: SubscriptionPlan[]) {
   const features: (PlanFeature & { planCode: string })[] = [];
   const featureCodes: Record<
     string,
@@ -58,7 +58,7 @@ function getFeatureCodes(data: SubscriptionPlan[]) {
   };
 }
 
-export function getPlansRows(data: SubscriptionPlan[]) {
+export function getPlansRows(data?: SubscriptionPlan[]) {
   const { featureCodes, features } = getFeatureCodes(data);
 
   const codes: Record<string, Row> = { ...featureCodes };

@@ -13,10 +13,8 @@ export const useUploadFileWithProgress = (
     url,
     service,
     method,
-    config: {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+    otherHeaders: {
+      'Content-Type': 'multipart/form-data',
     },
     onUploadProgress: (ev) => {
       const { loaded, total } = ev;

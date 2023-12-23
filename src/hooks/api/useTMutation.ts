@@ -4,10 +4,10 @@ import {
   UseMutationResult,
 } from '@tanstack/react-query';
 import { useHandleError } from 'hooks/api/useHandleError';
-import { AxiosRequestConfig } from 'axios';
-import useHttp, { OnUploadProgress } from 'hooks/api/useHttp';
+import useHttp, { HttpConfig, OnUploadProgress } from 'hooks/api/useHttp';
 import { urlModifier } from 'hooks/api/useHttp/methods';
 import { Method, Service } from 'hooks/api/useHttp/types';
+import { OutgoingHttpHeaders } from 'http2';
 import { generateUrlParamsFromObject } from 'utils/generators/generateUrlParamsFromObject';
 
 type Args<Res> = {
@@ -17,8 +17,9 @@ type Args<Res> = {
   method?: Method;
   pathParams?: string[];
   appendQueryParams?: boolean;
-  config?: AxiosRequestConfig<any>;
+  config?: HttpConfig;
   onUploadProgress?: OnUploadProgress;
+  otherHeaders?: OutgoingHttpHeaders;
 };
 
 export function useTMutation<Dto, Res>({
@@ -30,8 +31,9 @@ export function useTMutation<Dto, Res>({
   appendQueryParams = false,
   config,
   onUploadProgress,
+  otherHeaders,
 }: Args<Res>): UseMutationResult<Res, unknown, Dto, unknown> {
-  const api = useHttp({ config, onUploadProgress });
+  const api = useHttp({ config, otherHeaders, onUploadProgress });
 
   const modifier = urlModifier(service);
 

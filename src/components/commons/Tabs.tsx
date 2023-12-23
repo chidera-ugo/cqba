@@ -13,11 +13,14 @@ type Props = {
   sliderClassname?: string;
   tabClassname?: string;
   action?: (tab: TabOption) => void;
+
+  displayValueClassname?: string;
 };
 
 export const Tabs = ({
   tabs,
   className,
+  displayValueClassname,
   layoutId,
   currentTab,
   setCurrentTab,
@@ -55,7 +58,9 @@ export const Tabs = ({
               <span
                 className={clsx(
                   `y-center smooth relative z-10 h-full flex-shrink-0 text-xs font-medium 340:text-sm`,
-                  isActive ? 'text-white' : 'text-neutral-500'
+                  isActive
+                    ? 'text-white'
+                    : displayValueClassname ?? 'text-neutral-500'
                 )}
               >
                 {displayValue}
