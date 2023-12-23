@@ -1,12 +1,16 @@
 import clsx from 'clsx';
 import { LogoutButton } from 'components/buttons/Logout';
 import { FullScreenLoader } from 'components/commons/FullScreenLoader';
+import { AuthLayout } from 'components/layouts/AuthLayout';
+import { IssueWithSubscription } from 'components/modules/app/IssueWithSubscription';
 import { CreatePin } from 'components/modules/core/CreatePin';
 import { ChooseInitialSubscriptionPlan } from 'components/modules/settings/license/ChooseInitialSubscriptionPlan';
 import { IdleTimer } from 'components/modules/IdleTimer';
 import { PageHead } from 'components/primary/PageHead';
 import { ChevronRight } from 'components/svgs/navigation/Chevrons';
 import { UserRole } from 'enums/employee_enum';
+import { useUserRole } from 'hooks/access_control/useUserRole';
+import { useDestroySession } from 'hooks/app/useDestroySession';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useNavigationItems } from 'hooks/dashboard/useNavigationItems';
 import { useRouter } from 'next/router';
@@ -15,7 +19,6 @@ import { PropsWithChildren, ReactNode, useEffect } from 'react';
 import { SideNavigation } from 'components/primary/SideNavigation';
 import { AppHeader } from 'components/primary/headers/AppHeader';
 import { useAppContext } from 'context/AppContext';
-import { useProtectedRoutesGuard } from 'hooks/app/useProtectedRoutesGuard';
 
 export interface Props {
   title?: string;
@@ -45,9 +48,10 @@ export const AppLayout = ({
 }: PropsWithChildren<Props>) => {
   const { push, replace, pathname } = useRouter();
 
-  const { userExists } = useProtectedRoutesGuard();
-
   const { screenSize, user, hasChoosenPlan } = useAppContext().state;
+
+  const { isOwner } = useUserRole();
+  const { destroySession } = useDestroySession();
 
   const role = user?.role;
 
@@ -69,8 +73,25 @@ export const AppLayout = ({
     if (isForUnverified && isVerified) replace('/');
   }, [isVerified, isForUnverified]);
 
-  if (!userExists || (!isVerified && !isKycFlow))
-    return <FullScreenLoader asPage />;
+  if (!user || (!isVerified && !isKycFlow)) return <FullScreenLoader asPage />;
+
+  if (
+    !shouldSelectFirstPlan &&
+    !isOwner &&
+    user?.organization?.subscription?.object?.status !== 'active'
+  )
+    return (
+      <AuthLayout noRedirect title={'Page Not Found'}>
+        <div className='y-center app-container py-10 640:py-20'>
+          <IssueWithSubscription
+            actionText={'Sign-in with a different account'}
+            action={() => destroySession()}
+            title={`Your organization’s ChequeBase Account has been suspended`}
+            subTitle='Please contact your Chequebase Workspace Organization Administrator to re-activate your organization.'
+          />
+        </div>
+      </AuthLayout>
+    );
 
   if (!enabledFor) {
   } else if (enabledFor !== role) return <NotFound />;

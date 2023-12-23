@@ -14,7 +14,7 @@ export const SideNavigationItems = () => {
 
   const { user } = useAppContext().state;
 
-  const counts = useAppCounts();
+  const appCounts = useAppCounts();
 
   const { navigationItems } = useNavigationItems(user?.role);
 
@@ -75,9 +75,9 @@ export const SideNavigationItems = () => {
                           <span className='text-base font-medium'>{title}</span>
                         </div>
 
-                        {countId && !!counts[countId] ? (
+                        {countId && !!appCounts[countId] ? (
                           <div className='y-center h-5 min-w-[20px] rounded-md bg-primary-main px-1 text-center text-sm font-medium text-white'>
-                            {counts[countId]}
+                            {appCounts[countId]}
                           </div>
                         ) : (
                           isActive && (
