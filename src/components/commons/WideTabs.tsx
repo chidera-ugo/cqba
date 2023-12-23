@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { motion } from 'framer-motion';
+import { UseAppCounts } from 'hooks/budgeting/useAppCounts';
 import { Dispatch, SetStateAction } from 'react';
 
 export type WideTab =
@@ -8,6 +9,7 @@ export type WideTab =
       icon?: JSX.Element;
       url?: string;
       value?: any;
+      countId?: string;
       textColor?: string;
     }
   | string;
@@ -20,6 +22,7 @@ export type Props = {
   layoutId?: string;
   tabClassname?: string;
   className?: string;
+  appCounts?: UseAppCounts;
 };
 
 export const WideTabs = ({
@@ -30,6 +33,7 @@ export const WideTabs = ({
   layoutId,
   action,
   tabClassname,
+  appCounts,
 }: Props) => {
   return (
     <div className={clsx('no-scrollbar', className)}>
@@ -44,6 +48,12 @@ export const WideTabs = ({
           const isActive = isObject
             ? currentTab === tab.value
             : currentTab === tab;
+
+          const count = !isObject
+            ? null
+            : !tab.countId || !appCounts
+            ? null
+            : ` (${appCounts[tab.countId]})`;
 
           return (
             <button
@@ -66,6 +76,7 @@ export const WideTabs = ({
                 )}
               >
                 {isObject ? tab?.title : tab}
+                {count}
               </span>
 
               {isActive ? (

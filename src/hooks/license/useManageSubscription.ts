@@ -5,7 +5,7 @@ import { useAppContext } from 'context/AppContext';
 import { useChooseSubscriptionPlan } from 'hooks/api/subscriptions/useChooseSubscriptionPlan';
 import { useGetActiveSubscription } from 'hooks/api/subscriptions/useGetActiveSubscription';
 import { useHandleError } from 'hooks/api/useHandleError';
-import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
+import { useQueryClientInvalidator } from 'hooks/app/useQueryClientInvalidator';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { useRouter } from 'next/router';
 import process from 'process';
@@ -45,7 +45,7 @@ export const useManageSubscription = ({
 
   const initializePayment = usePaystackPayment(paystackConfig);
 
-  const { invalidate } = useQueryInvalidator();
+  const { invalidate } = useQueryClientInvalidator();
 
   useEffect(() => {
     if (!paystackConfig?.reference || !paystackConfig.amount) return;

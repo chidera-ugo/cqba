@@ -11,7 +11,7 @@ import {
   useGetAllEmployees,
 } from 'hooks/api/employees/useGetAllEmployees';
 import { useUnblockEmployee } from 'hooks/api/employees/useUnblockEmployee';
-import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
+import { useQueryClientInvalidator } from 'hooks/app/useQueryClientInvalidator';
 import { TPagination } from 'hooks/client_api/hooks/useUrlManagedState';
 import { EmployeeModalType } from 'hooks/employees/useManageEmployee';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
@@ -55,7 +55,7 @@ export const AllEmployeesTable = ({
   setEmployeeToPerformActionOn,
   setPagination,
 }: Props & TPagination) => {
-  const { invalidate } = useQueryInvalidator();
+  const { invalidate } = useQueryClientInvalidator();
 
   const { screenSize } = useAppContext().state;
 

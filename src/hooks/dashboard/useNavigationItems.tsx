@@ -20,6 +20,7 @@ interface NavigationItem {
   id?: string;
   isRoot?: boolean;
   showWhenUnverified?: boolean;
+  countId?: string;
 }
 
 type NavigationItems = Record<string, NavigationItem[]>;
@@ -58,6 +59,7 @@ export const useNavigationItems = (role?: UserRole) => {
       {
         icon: <Approval />,
         title: 'Approvals',
+        countId: 'BUDGET_REQUESTS',
       },
       {
         icon: <PieChart />,

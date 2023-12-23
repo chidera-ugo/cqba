@@ -3,7 +3,7 @@ import {
   IOwner,
   useUpdateOwnerInformation,
 } from 'hooks/api/kyc/useUpdateOwnerInformation';
-import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
+import { useQueryClientInvalidator } from 'hooks/app/useQueryClientInvalidator';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
@@ -15,7 +15,7 @@ export const UpdateOwnerInformationForm = ({
   currentOwner: IOwner | null;
   closeModal: () => void;
 }) => {
-  const { invalidate } = useQueryInvalidator();
+  const { invalidate } = useQueryClientInvalidator();
 
   const { isLoading, mutate } = useUpdateOwnerInformation({
     onSuccess() {

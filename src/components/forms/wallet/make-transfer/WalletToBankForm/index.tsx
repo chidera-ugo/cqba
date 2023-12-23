@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { useHandleError } from 'hooks/api/useHandleError';
 import { useInititateWalletToBank } from 'hooks/api/wallet/useInititateWalletToBank';
-import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
+import { useQueryClientInvalidator } from 'hooks/app/useQueryClientInvalidator';
 import { useTransact } from 'hooks/dashboard/core/useTransact';
 import { useState } from 'react';
 import { FormRecoveryProps } from 'types/forms/form_recovery';
@@ -47,7 +47,7 @@ export const WalletToBankForm = ({
     transactionType: 'WALLET_TO_BANK',
   });
 
-  const { invalidate, defaultInvalidator } = useQueryInvalidator();
+  const { invalidate, defaultInvalidator } = useQueryClientInvalidator();
 
   const { handleError } = useHandleError();
 

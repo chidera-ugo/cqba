@@ -14,7 +14,7 @@ import { UserRoles } from 'enums/employee_enum';
 import { useCloseBudgetOrProject } from 'hooks/api/budgeting/useCloseBudgetOrProject';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { usePauseBudgetOrProject } from 'hooks/api/budgeting/usePauseBudgetOrProject';
-import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
+import { useQueryClientInvalidator } from 'hooks/app/useQueryClientInvalidator';
 import { defaultStringifySearch } from 'hooks/client_api/search_params';
 import { useRouter } from 'next/router';
 import { Fragment, ReactNode, useState } from 'react';
@@ -60,7 +60,7 @@ export const ActiveBudgetCard = ({
   const [reason, setReason] = useState('');
 
   const { replace, push } = useRouter();
-  const { invalidate, defaultInvalidator } = useQueryInvalidator();
+  const { invalidate, defaultInvalidator } = useQueryClientInvalidator();
 
   const backToBudgetingHref = `/${isApprovalsPage ? 'approvals' : 'budgeting'}${
     !!projectId && !!subBudgetId ? `/projects/${projectId}` : ''
@@ -174,13 +174,16 @@ export const ActiveBudgetCard = ({
 
   const SubTitle = () => {
     return (
-      <div className={'mt-px'}>
+      <div
+        className={clsx(
+          'font-normal text-neutral-500',
+          showActions ? 'text-sm 640:text-base' : 'text-xs 640:text-sm'
+        )}
+      >
         {expiry ? (
-          <div className={'text-sm font-light text-neutral-500'}>
-            Due Date: {formatDate(expiry, 'short')}
-          </div>
+          <div>Due Date: {formatDate(expiry, 'short')}</div>
         ) : showActions && approvedDate && approvedBy ? (
-          <div className={'text-sm font-light text-neutral-500'}>
+          <div>
             Approved by {UserRoles[approvedBy!.role]}:{' '}
             {formatDate(approvedDate, 'semi-full')}
           </div>
@@ -281,7 +284,7 @@ export const ActiveBudgetCard = ({
               )}
             >
               <div className={clsx(showActions ? 'hidden' : 'block')}>
-                <div className={'text-sm font-medium 640:text-base'}>
+                <div className={'text-base font-medium 640:text-xl'}>
                   {name}
                 </div>
 
@@ -325,8 +328,8 @@ export const ActiveBudgetCard = ({
                                 showActions
                                   ? screenSize?.['mobile']
                                     ? 33
-                                    : 44
-                                  : 27
+                                    : 56
+                                  : 33
                               }
                               key={email}
                               initials={
@@ -348,7 +351,7 @@ export const ActiveBudgetCard = ({
 
               <div className={clsx(!showActions ? 'hidden' : 'flex')}>
                 <div>
-                  <div className={'text-sm font-medium 640:text-base'}>
+                  <div className={'text-base font-medium 640:text-xl'}>
                     {name}
                   </div>
 
@@ -363,11 +366,13 @@ export const ActiveBudgetCard = ({
 
         <div
           className={clsx(
-            showActions ? 'text-base 640:text-xl' : 'text-sm',
+            showActions ? 'text-base 640:text-xl' : 'text-base',
             !showOnlyBreakdown && 'mt-6'
           )}
         >
-          <span className={'font-medium text-neutral-500'}>Budget:</span>{' '}
+          <span className={'font-medium text-neutral-500'}>
+            {!showActions && 'Total '}Budget:
+          </span>{' '}
           <span className='font-semibold text-black'>
             {currency}
             {formatAmount({ value: amount / 100 })}
@@ -419,7 +424,7 @@ export const ActiveBudgetCard = ({
                     <div
                       className={clsx(
                         'flex-shrink-0 text-neutral-500',
-                        showActions ? 'text-xs 640:text-base' : 'text-[10px]'
+                        showActions ? 'text-sm 640:text-base' : 'text-sm'
                       )}
                     >
                       {title}
@@ -440,7 +445,7 @@ export const ActiveBudgetCard = ({
                   <div
                     className={clsx(
                       'mt-0.5 w-full font-semibold',
-                      showActions ? 'text-sm 640:text-xl' : 'text-xs'
+                      showActions ? 'text-base 640:text-xl' : 'text-base'
                     )}
                   >
                     {currency}

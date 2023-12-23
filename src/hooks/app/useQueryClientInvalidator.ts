@@ -8,7 +8,7 @@ type DataGroup =
   | 'subscription'
   | 'team';
 
-export const useQueryInvalidator = () => {
+export const useQueryClientInvalidator = () => {
   const queryClient = useQueryClient();
 
   function invalidator(type: DataGroup) {
@@ -27,6 +27,7 @@ export const useQueryInvalidator = () => {
         defaultInvalidator(['debitable_budgets']);
         defaultInvalidator(['debitable_projects']);
         defaultInvalidator(['budgets']);
+        defaultInvalidator(['budgets_requests_count']);
         return;
       case 'projects':
         defaultInvalidator(['project']);

@@ -21,7 +21,7 @@ import { useAppContext } from 'context/AppContext';
 import { useCreateProject } from 'hooks/api/budgeting/project/useCreateProject';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { useHandleError } from 'hooks/api/useHandleError';
-import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
+import { useQueryClientInvalidator } from 'hooks/app/useQueryClientInvalidator';
 import { useManageSingleBudgetCreation } from 'hooks/budgeting/useManageSingleBudgetCreation';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -63,7 +63,7 @@ export const ManageProjectCreation = ({
     useState<CreateBudgetFormRecoveryValues>(null);
 
   const { handleError } = useHandleError();
-  const { invalidate } = useQueryInvalidator();
+  const { invalidate } = useQueryClientInvalidator();
 
   const {
     getBudget,

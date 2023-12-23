@@ -2,7 +2,7 @@ import { UserRole } from 'enums/employee_enum';
 import { Formik } from 'formik';
 import { useUpdateEmployee } from 'hooks/api/employees/useUpdateEmployee';
 import { IEmployee } from 'hooks/api/employees/useGetAllEmployees';
-import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
+import { useQueryClientInvalidator } from 'hooks/app/useQueryClientInvalidator';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
@@ -20,7 +20,7 @@ export const UpdateEmployeeForm = ({
   currentEmployee,
   formRecoveryValues,
 }: Props) => {
-  const { invalidate } = useQueryInvalidator();
+  const { invalidate } = useQueryClientInvalidator();
 
   const { isLoading, mutate } = useUpdateEmployee(currentEmployee?._id, {
     onSuccess() {

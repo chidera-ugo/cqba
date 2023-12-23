@@ -2,13 +2,13 @@ import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { ApplicationUnderReview } from 'components/modules/kyc/ApplicationUnderReview';
 import { KycSteps } from 'components/modules/kyc/KycSteps';
 import { useApplyForReview } from 'hooks/api/kyc/useApplyForReview';
-import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
+import { useQueryClientInvalidator } from 'hooks/app/useQueryClientInvalidator';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import Link from 'next/link';
 import { useState } from 'react';
 
 export const ReviewAndSubmit = () => {
-  const { invalidate } = useQueryInvalidator();
+  const { invalidate } = useQueryClientInvalidator();
 
   const [submitted, setSubmitted] = useState(false);
 

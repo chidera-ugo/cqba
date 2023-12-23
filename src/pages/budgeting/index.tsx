@@ -11,6 +11,7 @@ import { approvalsFilterOptions } from 'constants/approvals/filters';
 import { budgetingFilterOptions } from 'constants/budgeting/filters';
 import { useUserRole } from 'hooks/access_control/useUserRole';
 import { useToggleLayout } from 'hooks/app/useToggleLayout';
+import { useAppCounts } from 'hooks/budgeting/useAppCounts';
 import { useManageBudgetAndProjectCreation } from 'hooks/budgeting/useManageBudgetAndProjectCreation';
 import { useUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
 import { useDebouncer } from 'hooks/commons/useDebouncer';
@@ -29,6 +30,8 @@ export default function Budgeting() {
   const { layout, setLayout } = useToggleLayout();
   const { isVerified } = useIsVerified();
   const { isOwner } = useUserRole();
+
+  const appCounts = useAppCounts();
 
   const { filters, setFilters, pagination, setPagination } = useUrlManagedState(
     isOwner ? budgetingFiltersSchema : approvalsFiltersSchema,
@@ -56,6 +59,7 @@ export default function Budgeting() {
               setPagination((prev) => ({ ...prev, pageIndex: 0 }));
             }}
             currentTab={filters?.status?.value}
+            appCounts={appCounts}
             tabs={
               isOwner
                 ? budgetingFilterOptions

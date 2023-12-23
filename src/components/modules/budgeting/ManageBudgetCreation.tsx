@@ -12,7 +12,7 @@ import { useCreateBudget } from 'hooks/api/budgeting/useCreateBudget';
 import { useCreateSubBudget } from 'hooks/api/budgeting/useCreateSubBudget';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { useHandleError } from 'hooks/api/useHandleError';
-import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
+import { useQueryClientInvalidator } from 'hooks/app/useQueryClientInvalidator';
 import { useManageSingleBudgetCreation } from 'hooks/budgeting/useManageSingleBudgetCreation';
 import { useState } from 'react';
 
@@ -45,7 +45,7 @@ export const ManageBudgetCreation = ({
   const { getBudget, resetFormRecoveryValues, ...manageSingleBudgetCreation } =
     useManageSingleBudgetCreation();
 
-  const { invalidate, defaultInvalidator } = useQueryInvalidator();
+  const { invalidate, defaultInvalidator } = useQueryClientInvalidator();
   const { handleError } = useHandleError();
 
   const { isLoading: creatingBudget, mutate } = useCreateBudget(budget?._id, {

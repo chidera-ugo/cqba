@@ -188,7 +188,9 @@ export const Select = ({
             noSearch && 'pt-1'
           )}
           style={{
-            height: Number(itemsLength * itemSize) + 10,
+            height:
+              Number(itemsLength * itemSize) +
+              (screenSize?.mobile ? (children ? 10 : 100) : 10),
           }}
         >
           {!filteredOptions?.length ? (
@@ -333,7 +335,9 @@ export const Select = ({
         </div>
       </div>
 
-      <div className='sticky bottom-0 left-0'>{children}</div>
+      {children && (
+        <div className='sticky bottom-0 left-0 mb-14 640:mb-0'>{children}</div>
+      )}
     </div>
   );
 };

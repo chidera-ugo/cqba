@@ -19,7 +19,7 @@ import { useCancelBudget } from 'hooks/api/budgeting/useCancelBudget';
 import { useCloseBudgetOrProject } from 'hooks/api/budgeting/useCloseBudgetOrProject';
 import { useGetBudgetById } from 'hooks/api/budgeting/useGetBudgetById';
 import { useHandleError } from 'hooks/api/useHandleError';
-import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
+import { useQueryClientInvalidator } from 'hooks/app/useQueryClientInvalidator';
 import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { useRouter } from 'next/router';
@@ -41,11 +41,14 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
   >(null);
   const [reason, setReason] = useState('');
 
-  const { defaultInvalidator, invalidate } = useQueryInvalidator();
+  const { defaultInvalidator, invalidate } = useQueryClientInvalidator();
   const { getColor } = useGetColorByChar();
   const { handleError } = useHandleError();
 
   const { isLoading: gettingBudget, isError, data } = useGetBudgetById(id);
+
+  console.log(data);
+
   const { primaryWallet, isError: _e, isLoading: _l } = useManageWallets();
 
   const [approveBudgetValues, setApproveBudgetValues] =

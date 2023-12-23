@@ -16,7 +16,7 @@ function KycContextProvider({ children }: PropsWithChildren<any>) {
   const { user } = useAppContext().state;
 
   if (!!user?.organization && (isLoading || _l))
-    return <FullScreenLoader white show={isLoading} id={'kyc_context'} />;
+    return <FullScreenLoader white show id={'kyc_context'} />;
 
   if (isError || _e)
     return (

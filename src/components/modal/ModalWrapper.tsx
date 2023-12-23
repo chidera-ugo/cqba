@@ -188,7 +188,7 @@ export const CentredModalWrapper = ({
 
         <div
           className={clsx(
-            'overflow-y-auto 560:min-w-[400px]',
+            'overflow-y-auto 560:min-w-[400px] 640:pb-0',
             className ?? 'px-4 640:px-8'
           )}
         >

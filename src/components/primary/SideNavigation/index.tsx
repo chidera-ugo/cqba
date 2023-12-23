@@ -130,6 +130,8 @@ export const SideNavigationContent = ({
         }
         {...{ mobile }}
       />
+
+      <div className='block h-14 1024:hidden'></div>
     </div>
   );
 };

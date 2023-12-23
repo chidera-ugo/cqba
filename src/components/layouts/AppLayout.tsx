@@ -43,7 +43,7 @@ export const AppLayout = ({
   breadCrumbsSlot,
   ...props
 }: PropsWithChildren<Props>) => {
-  const { push, replace } = useRouter();
+  const { push, replace, pathname } = useRouter();
 
   const { userExists } = useProtectedRoutesGuard();
 
@@ -57,9 +57,9 @@ export const AppLayout = ({
     role === 'owner';
 
   const hideSideNavigation = props.hideSideNavigation || shouldSelectFirstPlan;
+  const isKycFlow = pathname === '/kyc';
 
   const { isVerified } = useIsVerified();
-  const { pathname } = useRouter();
 
   const { isValidRoute } = useNavigationItems(role);
 
@@ -69,7 +69,7 @@ export const AppLayout = ({
     if (isForUnverified && isVerified) replace('/');
   }, [isVerified, isForUnverified]);
 
-  if (!userExists || (!isVerified && pathname !== '/kyc'))
+  if (!userExists || (!isVerified && !isKycFlow))
     return <FullScreenLoader asPage />;
 
   if (!enabledFor) {
@@ -171,7 +171,10 @@ export const AppLayout = ({
                 ? childrenClassName
                 : !!breadCrumbs
                 ? 'app-container mb-5 mt-3 640:mb-7'
-                : 'app-container my-5 640:my-5',
+                : clsx(
+                    'app-container my-5',
+                    isKycFlow ? '640:my-0' : '640:my-7'
+                  ),
               'relative z-10'
             )}
           >

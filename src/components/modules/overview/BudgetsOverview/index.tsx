@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { PendingAndActiveBudgetsOverview } from 'components/modules/overview/BudgetsOverview/PendingAndActiveBudgetsOverview';
 import { motion } from 'framer-motion';
+import { useAppCounts } from 'hooks/budgeting/useAppCounts';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -10,11 +11,15 @@ const tabs = [
   {
     title: 'Requests',
     value: 'pending',
+    countId: 'BUDGET_REQUESTS',
   },
 ];
 
 export const BudgetsOverview = () => {
   const [currentTab, setCurrentTab] = useState(tabs[0]);
+  const appCounts = useAppCounts();
+
+  console.log(appCounts);
 
   return (
     <div className='card p-0'>
@@ -22,7 +27,7 @@ export const BudgetsOverview = () => {
         <h5 className={'text-base font-medium'}>Budgets</h5>
 
         <div className='mt-4 h-12 overflow-hidden rounded-xl bg-[#F9FAFB] p-1'>
-          {tabs.map(({ value, title }) => {
+          {tabs.map(({ value, countId, title }) => {
             const isActive = currentTab?.value === value;
             const id = `budget_overview_${title}`;
 
@@ -41,6 +46,7 @@ export const BudgetsOverview = () => {
                   )}
                 >
                   {title}
+                  {!!countId && ` (${appCounts[countId]})`}
                 </span>
 
                 {isActive && (

@@ -10,7 +10,7 @@ import { UserAdd } from 'components/svgs/kyc/StepsCompletion';
 import { useDeleteOwner } from 'hooks/api/kyc/useDeleteOwner';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { IOwner } from 'hooks/api/kyc/useUpdateOwnerInformation';
-import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
+import { useQueryClientInvalidator } from 'hooks/app/useQueryClientInvalidator';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -28,7 +28,7 @@ export const ManageBusinessOwnersAndDirectors = () => {
     id: string;
   }>(null);
 
-  const { invalidate } = useQueryInvalidator();
+  const { invalidate } = useQueryClientInvalidator();
 
   const { isUnderReviewOrApproved } = useAccountVerificationStatus();
 
@@ -98,7 +98,11 @@ export const ManageBusinessOwnersAndDirectors = () => {
           </AppErrorBoundary>
 
           {!isUnderReviewOrApproved ? (
-            <div className={clsx('mt-4 flex gap-4')}>
+            <div
+              className={clsx(
+                'mt-4 flex justify-center gap-4 640:justify-start'
+              )}
+            >
               <button
                 onClick={handleShowModal}
                 className={clsx('text-sm font-medium text-primary-main')}

@@ -6,7 +6,7 @@ import { AppToast } from 'components/primary/AppToast';
 import { Formik } from 'formik';
 import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 import { useUpdateOrganizationDocuments } from 'hooks/api/kyc/useUpdateOrganizationDocuments';
-import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
+import { useQueryClientInvalidator } from 'hooks/app/useQueryClientInvalidator';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import { toast } from 'react-toastify';
 import { DatePickerValue } from 'types/commons';
@@ -18,7 +18,7 @@ import { useRouter } from 'next/router';
 export const UpdateBusinessDocumentionForm = () => {
   const { replace } = useRouter();
 
-  const { invalidate } = useQueryInvalidator();
+  const { invalidate } = useQueryClientInvalidator();
 
   const {
     hasProvidedOwnerInformationRequirements,

@@ -1,4 +1,5 @@
 import { useAppContext } from 'context/AppContext';
+import { useAppCounts } from 'hooks/budgeting/useAppCounts';
 import { useCurrentAccountSetupStepUrl } from 'hooks/dashboard/kyc/useCurrentAccountSetupStepUrl';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useNavigationItems } from 'hooks/dashboard/useNavigationItems';
@@ -12,6 +13,8 @@ export const SideNavigationItems = () => {
   const { pathname } = useRouter();
 
   const { user } = useAppContext().state;
+
+  const counts = useAppCounts();
 
   const { navigationItems } = useNavigationItems(user?.role);
 
@@ -37,7 +40,7 @@ export const SideNavigationItems = () => {
 
             <div>
               {navigationItems[item]?.map(
-                ({ icon, title, id, showWhenUnverified, isRoot }) => {
+                ({ icon, title, countId, id, showWhenUnverified, isRoot }) => {
                   const route = `/${convertToUrlString(id ?? title)}`;
 
                   if (showWhenUnverified && isVerified)
@@ -72,15 +75,21 @@ export const SideNavigationItems = () => {
                           <span className='text-base font-medium'>{title}</span>
                         </div>
 
-                        {isActive && (
-                          <div className='y-center relative my-auto p-2'>
-                            <div
-                              className={clsx(
-                                'relative my-auto h-1.5 w-1.5 rounded-full',
-                                isOwner ? 'bg-primary-main' : 'bg-white'
-                              )}
-                            ></div>
+                        {countId && !!counts[countId] ? (
+                          <div className='y-center h-5 min-w-[20px] rounded-md bg-primary-main px-1 text-center text-sm font-medium text-white'>
+                            {counts[countId]}
                           </div>
+                        ) : (
+                          isActive && (
+                            <div className='y-center relative my-auto p-2'>
+                              <div
+                                className={clsx(
+                                  'relative my-auto h-1.5 w-1.5 rounded-full',
+                                  isOwner ? 'bg-primary-main' : 'bg-white'
+                                )}
+                              ></div>
+                            </div>
+                          )
                         )}
                       </Link>
                     </div>

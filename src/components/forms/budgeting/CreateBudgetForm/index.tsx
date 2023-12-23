@@ -1,7 +1,7 @@
 import { Formik } from 'formik';
 import { useCreatePersonalBudget } from 'hooks/api/budgeting/useCreatePersonalBudget';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
-import { useQueryInvalidator } from 'hooks/app/useQueryInvalidator';
+import { useQueryClientInvalidator } from 'hooks/app/useQueryClientInvalidator';
 import { FormRecoveryProps } from 'types/forms/form_recovery';
 import { formatAmount, sanitizeAmount } from 'utils/formatters/formatAmount';
 import { Form } from './Form';
@@ -33,7 +33,7 @@ export const CreateBudgetForm = ({
   isOwner,
   budget,
 }: Props) => {
-  const { invalidate } = useQueryInvalidator();
+  const { invalidate } = useQueryClientInvalidator();
 
   const { mutate: createPersonalBudget, isLoading: creatingPersonalBudget } =
     useCreatePersonalBudget({

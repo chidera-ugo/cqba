@@ -6,6 +6,7 @@ import { AppLayout } from 'components/layouts/AppLayout';
 import { Budgets } from 'components/modules/budgeting/Budgets';
 import { Grid, List } from 'components/svgs/GridAndList';
 import { approvalsFilterOptions } from 'constants/approvals/filters';
+import { useAppCounts } from 'hooks/budgeting/useAppCounts';
 import { useUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
 import { useDebouncer } from 'hooks/commons/useDebouncer';
 import { getFromLocalStore, saveToLocalStore } from 'lib/localStore';
@@ -31,6 +32,8 @@ export default function Approvals() {
     layout === 'grid' ? 9 : 10
   );
 
+  const appCounts = useAppCounts();
+
   const currentTab = filters?.status?.value;
 
   return (
@@ -49,6 +52,7 @@ export default function Approvals() {
               setPagination((prev) => ({ ...prev, pageIndex: 0 }));
             }}
             currentTab={filters?.status?.value}
+            appCounts={appCounts}
             tabs={approvalsFilterOptions()}
           />
         </div>
