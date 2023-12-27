@@ -11,6 +11,7 @@ import { ChevronRight } from 'components/svgs/navigation/Chevrons';
 import { UserRole } from 'enums/employee_enum';
 import { useUserRole } from 'hooks/access_control/useUserRole';
 import { useDestroySession } from 'hooks/app/useDestroySession';
+import { useProtectedRoutesGuard } from 'hooks/app/useProtectedRoutesGuard';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import { useNavigationItems } from 'hooks/dashboard/useNavigationItems';
 import { useRouter } from 'next/router';
@@ -50,6 +51,7 @@ export const AppLayout = ({
 
   const { screenSize, user, hasChoosenPlan } = useAppContext().state;
 
+  useProtectedRoutesGuard();
   const { isOwner } = useUserRole();
   const { destroySession } = useDestroySession();
 
@@ -73,7 +75,8 @@ export const AppLayout = ({
     if (isForUnverified && isVerified) replace('/');
   }, [isVerified, isForUnverified]);
 
-  if (!user || (!isVerified && !isKycFlow)) return <FullScreenLoader asPage />;
+  if (!user || (!isVerified && !isKycFlow))
+    return <FullScreenLoader id={'app_layout'} asPage />;
 
   if (
     !shouldSelectFirstPlan &&

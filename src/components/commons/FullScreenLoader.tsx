@@ -6,7 +6,7 @@ import { Spinner } from 'components/svgs/dashboard/Spinner';
 
 interface Props {
   white?: boolean;
-  id?: string;
+  id: string;
   message?: string;
   asPage?: boolean;
   show?: boolean;

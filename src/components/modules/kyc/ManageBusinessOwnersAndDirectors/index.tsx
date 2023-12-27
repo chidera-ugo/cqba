@@ -57,7 +57,7 @@ export const ManageBusinessOwnersAndDirectors = () => {
 
   return (
     <>
-      <FullScreenLoader show={deleting} />
+      <FullScreenLoader id={'deleting_director'} show={deleting} />
 
       {!data?.owners?.length ? (
         <button

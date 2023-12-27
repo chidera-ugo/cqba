@@ -23,7 +23,7 @@ export default function ForgotPassword() {
 
   return (
     <AuthLayout title='Forgot Password'>
-      <FullScreenLoader show={isLoading} />
+      <FullScreenLoader id={'forgot_password'} show={isLoading} />
 
       <div
         className={clsx(

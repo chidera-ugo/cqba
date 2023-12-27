@@ -31,7 +31,9 @@ export default function VerifyEmail() {
 
   const Content = () => {
     if (isLoading || psuedoLoading)
-      return <FullScreenLoader white message={'Please wait'} />;
+      return (
+        <FullScreenLoader id={'verify_email'} white message={'Please wait'} />
+      );
 
     if (isError)
       return (

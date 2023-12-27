@@ -24,7 +24,7 @@ export default function Signup() {
 
   return (
     <AuthLayout title='Signup'>
-      <FullScreenLoader show={isLoading} />
+      <FullScreenLoader id={'signup'} show={isLoading} />
 
       <div
         className={clsx(

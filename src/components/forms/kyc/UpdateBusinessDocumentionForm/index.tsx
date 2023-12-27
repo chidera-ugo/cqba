@@ -65,7 +65,11 @@ export const UpdateBusinessDocumentionForm = () => {
       {(formikProps) => {
         return (
           <>
-            <FullScreenLoader portalClassname={'z-[3200]'} show={isLoading} />
+            <FullScreenLoader
+              id={'update_business_document'}
+              portalClassname={'z-[3200]'}
+              show={isLoading}
+            />
 
             <h5>Provide your business documents</h5>
             <p className='mt-1 mb-3 max-w-[360px] text-neutral-500'>

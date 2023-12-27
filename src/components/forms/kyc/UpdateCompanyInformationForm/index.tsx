@@ -63,7 +63,10 @@ export const UpdateCompanyInformationForm = () => {
       {(formikProps) => {
         return (
           <>
-            <FullScreenLoader show={isLoading} />
+            <FullScreenLoader
+              id={'update_company_information'}
+              show={isLoading}
+            />
 
             <h5>Business Information</h5>
             <p className='mt-1 mb-7 text-neutral-500'>
