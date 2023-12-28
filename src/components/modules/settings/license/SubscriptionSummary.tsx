@@ -88,7 +88,9 @@ export const SubscriptionSummary = () => {
             </p>
 
             <div className={'pill_gray my-auto'}>
-              {dayjs(endingAt).fromNow()} Left
+              {dayjs(endingAt).isAfter(new Date())
+                ? 'Expired'
+                : `${dayjs(endingAt).fromNow()} Left`}
             </div>
           </div>
 
