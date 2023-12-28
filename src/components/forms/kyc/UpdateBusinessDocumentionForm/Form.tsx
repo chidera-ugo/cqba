@@ -1,7 +1,7 @@
 import { DatePicker } from 'components/form-elements/DatePicker';
+import { FileInput } from 'components/form-elements/FileInput';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { ImageViewer } from 'components/modals/ImageViewer';
-import { UploadBusinessDocument } from 'components/modules/kyc/business_documents/UploadBusinessDocument';
 import { companyInformationDocuments } from 'constants/kyc/company_information_documents';
 import { Business_typeEnum } from 'enums/business_type.enum';
 import { Form as FormikForm, FormikProps } from 'formik';
@@ -105,13 +105,15 @@ export const Form = ({
 
       {companyInformationDocuments[businessType].map(({ id, name }) => {
         return (
-          <UploadBusinessDocument
+          <FileInput
             key={name}
             label={name}
             name={id}
             fileType='all'
             maximumFileSizeInMB={2}
-            setFieldValue={setFieldValue}
+            {...{
+              setFieldValue,
+            }}
             openImagePreviewModal={(src) => setPreviewImageUrl(src)}
             getFile={(id) => v[id]}
           />

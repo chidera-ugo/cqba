@@ -9,7 +9,7 @@ import { useUpdateOrganizationDocuments } from 'hooks/api/kyc/useUpdateOrganizat
 import { useQueryClientInvalidator } from 'hooks/app/useQueryClientInvalidator';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import { toast } from 'react-toastify';
-import { DatePickerValue } from 'types/commons';
+import { DatePickerValue, IFile } from 'types/commons';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
@@ -56,9 +56,22 @@ export const UpdateBusinessDocumentionForm = () => {
       initialValues={initialValues(businessType)}
       validationSchema={validationSchema(businessType)}
       onSubmit={(values) => {
-        mutate({
-          regDate: (values?.creationDate as DatePickerValue)?.value,
-        });
+        const body = new FormData();
+
+        for (const i in values) {
+          if (i === 'creationDate') {
+            body.append(
+              'regDate',
+              (values?.creationDate as DatePickerValue)?.value
+            );
+          } else {
+            const file = (values[i] as IFile)?.file;
+
+            if (file) body.append(i, file);
+          }
+        }
+
+        mutate(body);
       }}
       validateOnBlur={false}
     >
