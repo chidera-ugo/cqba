@@ -4,6 +4,7 @@ import { TransactionReceipt } from 'components/modules/transactions/TransactionR
 import { useAppContext } from 'context/AppContext';
 import { useGetWalletTransactions } from 'hooks/api/wallet/useGetWalletTransactions';
 import { UseUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
+import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { useEffect, useState } from 'react';
 import { ColumnFiltersState, SortingState } from '@tanstack/react-table';
 import card from '/public/mockups/transactions.jpg';
@@ -45,6 +46,8 @@ export const WalletTransactionsTable = ({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [currentSearchColumn, setCurrentSearchColumn] = useState('');
 
+  const { primaryWallet } = useManageWallets();
+
   useEffect(() => {
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
   }, [filters, columnFilters, search]);
@@ -71,7 +74,10 @@ export const WalletTransactionsTable = ({
           pageSize: pagination.pageSize,
           walletId,
           budgetId: budgetId ?? filters.budgetId,
-        }
+        },
+    {
+      enabled: !!primaryWallet?._id,
+    }
   );
 
   const isLoading = _l || _isLoading;
@@ -95,7 +101,7 @@ export const WalletTransactionsTable = ({
         {transactionId && <TransactionReceipt transactionId={transactionId} />}
       </RightModalWrapper>
 
-      {data && !data?.docs?.length ? (
+      {(data && !data?.docs?.length) || !primaryWallet?._id ? (
         <NoData
           processing={isLoading || isRefetching}
           title='Stay on top of your transactions'

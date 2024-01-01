@@ -46,7 +46,7 @@ export const useManageSingleBudgetCreation = () => {
 
       const count = Object.values(beneficiaries)?.filter((val) => val)?.length;
 
-      const _budgetAmount = parseInt(
+      const _budgetAmount = Number(
         sanitizeAmount({ value: budgetAmount, returnTrueAmount: true })
       );
 
@@ -56,7 +56,7 @@ export const useManageSingleBudgetCreation = () => {
             ? _budgetAmount / count
             : count === 1
             ? _budgetAmount
-            : parseInt(
+            : Number(
                 sanitizeAmount({
                   value: allocations[i]!,
                   returnTrueAmount: true,
@@ -65,7 +65,7 @@ export const useManageSingleBudgetCreation = () => {
 
           arr.push({
             user: i,
-            allocation: parseInt((allocation * 100).toString()),
+            allocation: allocation * 100,
           });
         }
       }
@@ -80,10 +80,9 @@ export const useManageSingleBudgetCreation = () => {
       beneficiaries: getBeneficiaries(),
       currency,
       amount:
-        parseInt(sanitizeAmount({ value: amount, returnTrueAmount: true })) *
-        100,
+        Number(sanitizeAmount({ value: amount, returnTrueAmount: true })) * 100,
       threshold:
-        parseInt(
+        Number(
           sanitizeAmount({
             value: !threshold ? amount : allocation,
             returnTrueAmount: true,

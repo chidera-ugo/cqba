@@ -1,4 +1,5 @@
 import { AnimateLayout } from 'components/animations/AnimateLayout';
+import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { ChangePlanForm } from 'components/forms/license/ChangePlanForm';
 import { GreenCheck } from 'components/illustrations/Success';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
@@ -46,43 +47,50 @@ export const ManageSubscription = ({
       }
       closeModal={cancel}
     >
-      <AnimateLayout changeTracker={String(mode)}>
-        {mode === 'success' ? (
-          <SimpleInformation
-            className={'mt-20'}
-            icon={<GreenCheck />}
-            title={
-              <span className='mx-auto block max-w-[240px] text-xl'>
-                Subscription Successful
-              </span>
-            }
-            description={`You have successfully subscribed to ${plan?.name}`}
-            actionButton={{
-              text: 'Explore Plan',
-              action: explorePlan,
-            }}
-          />
-        ) : mode === 'confirming' ? (
-          <ConfirmPaymentIntentStatus
-            onError={dismiss}
-            onSuccess={onSuccess}
-            intentId={paystackConfig?.metadata?.intent}
-          />
-        ) : currentModalType === 'change_plan' ? (
-          <ChangePlanForm proceed={proceed} />
-        ) : (
-          <SelectPaymentMethod
-            {...{
-              setSelectedMethod,
-              selectedMethod,
-              paymentMethods,
-              choosingPlan,
-              proceed,
-              cancel,
-            }}
-          />
-        )}
-      </AnimateLayout>
+      <AppErrorBoundary>
+        <AnimateLayout changeTracker={String(mode)}>
+          {mode === 'success' ? (
+            <SimpleInformation
+              className={'mt-20'}
+              icon={<GreenCheck />}
+              title={
+                <span className='mx-auto block max-w-[240px] text-xl'>
+                  Subscription Successful
+                </span>
+              }
+              description={`You have successfully subscribed to ${plan?.name} plan`}
+              actionButton={{
+                text: 'Explore Plan',
+                action: explorePlan,
+              }}
+            />
+          ) : mode === 'confirming' ? (
+            <ConfirmPaymentIntentStatus
+              onError={dismiss}
+              onSuccess={onSuccess}
+              intentId={paystackConfig?.metadata?.intent}
+            />
+          ) : currentModalType === 'change_plan' ? (
+            <ChangePlanForm
+              {...{
+                proceed,
+                choosingPlan,
+              }}
+            />
+          ) : (
+            <SelectPaymentMethod
+              {...{
+                setSelectedMethod,
+                selectedMethod,
+                paymentMethods,
+                choosingPlan,
+                proceed,
+                cancel,
+              }}
+            />
+          )}
+        </AnimateLayout>
+      </AppErrorBoundary>
     </RightModalWrapper>
   );
 };

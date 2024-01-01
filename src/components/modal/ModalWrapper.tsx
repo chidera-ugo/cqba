@@ -130,8 +130,8 @@ export const CentredModalWrapper = ({
         'y-between 640:y-center relative z-[1000] mx-auto mb-0 mt-auto w-full p-0 640:my-auto 640:w-auto',
         withGutter && 'p-3'
       )}
-      {...{ duration, show }}
       {...props}
+      {...{ duration, show }}
       type={type}
     >
       <div className='block 640:hidden'></div>

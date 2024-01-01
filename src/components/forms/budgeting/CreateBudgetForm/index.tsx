@@ -68,11 +68,10 @@ export const CreateBudgetForm = ({
           description,
           currency,
           amount:
-            parseInt(
-              sanitizeAmount({ value: amount, returnTrueAmount: true })
-            ) * 100,
+            Number(sanitizeAmount({ value: amount, returnTrueAmount: true })) *
+            100,
           threshold:
-            parseInt(
+            Number(
               sanitizeAmount({
                 value: !threshold ? amount : allocation,
                 returnTrueAmount: true,

@@ -47,8 +47,6 @@ export const PendingBudgetDetails = ({ id, close }: Props) => {
 
   const { isLoading: gettingBudget, isError, data } = useGetBudgetById(id);
 
-  console.log(data);
-
   const { primaryWallet, isError: _e, isLoading: _l } = useManageWallets();
 
   const [approveBudgetValues, setApproveBudgetValues] =

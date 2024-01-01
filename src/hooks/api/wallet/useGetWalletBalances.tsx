@@ -1,5 +1,5 @@
 import { useTQuery } from 'hooks/api/useTQuery';
-import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
+import { useManageWallets } from 'hooks/wallet/useManageWallets';
 
 export interface WalletBalances {
   wallet: Wallet[];
@@ -17,14 +17,14 @@ interface Budget {
 }
 
 export function useGetWalletBalances() {
-  const { isVerified } = useIsVerified();
+  const { primaryWallet } = useManageWallets();
 
   return useTQuery<WalletBalances>({
     queryKey: ['wallet_balances'],
     url: `/balances`,
     service: 'wallet',
     options: {
-      enabled: isVerified,
+      enabled: !!primaryWallet?._id,
       staleTime: Infinity,
       meta: {
         silent: true,

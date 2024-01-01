@@ -101,8 +101,9 @@ export const useManageSubscription = ({
   function onSuccess() {
     dispatch({ type: 'update_has_choosen_plan', payload: true });
     getCurrentUser!(null);
-    invalidate('balances', 'subscription');
+    invalidate('balances', 'subscription', 'organization');
     setMode('success');
+    setPaystackConfig(defaultPaystackConfig);
   }
 
   function dismiss() {

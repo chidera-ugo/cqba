@@ -24,7 +24,9 @@ export const WalletOverview = ({ isOwner }: { isOwner: boolean }) => {
   const isLoading = isOwner ? l || _l : l || __l;
   const isError = isOwner ? e || _e : e || __e;
 
-  if (isLoading) return <IsLoadingIsError isOwner={isOwner} isLoading />;
+  if (isLoading && !!primaryWallet?._id)
+    return <IsLoadingIsError isOwner={isOwner} isLoading />;
+
   if (isError) return <IsLoadingIsError isOwner={isOwner} />;
 
   return (

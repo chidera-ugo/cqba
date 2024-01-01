@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getCookie, saveCookie } from 'utils/handlers/handleCookies';
 
 export const useDismiss = (key: string, durationInMinutes?: number) => {
@@ -9,6 +9,10 @@ export const useDismiss = (key: string, durationInMinutes?: number) => {
   function checkIsDismissed(id?: string) {
     return getCookie(_key)?.[id ?? 'dismissed'] === true;
   }
+
+  useEffect(() => {
+    setIsDismissed(checkIsDismissed());
+  }, [key]);
 
   function getExistingValue() {
     try {
@@ -34,6 +38,8 @@ export const useDismiss = (key: string, durationInMinutes?: number) => {
 
     setIsDismissed(checkIsDismissed(id));
   }
+
+  console.log({ isDismissed });
 
   return [dismiss, isDismissed, checkIsDismissed] as const;
 };

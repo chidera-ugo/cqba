@@ -15,6 +15,7 @@ import {
   useGetDebitableBudgetsByMutation,
 } from 'hooks/api/budgeting/useGetDebitableBudgets';
 import { useManageBudgetAndProjectCreation } from 'hooks/budgeting/useManageBudgetAndProjectCreation';
+import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -22,6 +23,7 @@ export const MakeTransfer = ({ budget }: { budget?: IBudget }) => {
   const [showTransferModal, setShowTransferModal] = useState(false);
   const { modal, setModal, createBudget } = useManageBudgetAndProjectCreation();
   const { isOwner } = useUserRole();
+  const { primaryWallet } = useManageWallets();
 
   const { isLoading, isError, data } = useGetDebitableBudgets();
 
@@ -95,8 +97,9 @@ export const MakeTransfer = ({ budget }: { budget?: IBudget }) => {
       <SubmitButton
         type={'button'}
         submitting={isLoading || _l}
+        disabled={!primaryWallet?._id}
         onClick={() => {
-          if (isLoading || _l) return;
+          if (isLoading || _l || !primaryWallet?._id) return;
 
           if (isError || _e)
             return toast(<AppToast>Failed to initiate transfer</AppToast>, {

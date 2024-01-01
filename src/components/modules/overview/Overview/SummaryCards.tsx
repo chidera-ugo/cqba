@@ -18,7 +18,9 @@ export const SummaryCards = ({ range }: { range: DateRange }) => {
     enabled: isVerified && !!currency,
   });
 
-  if (isLoading) return <IsLoadingIsError isOwner={isOwner} type='loading' />;
+  if (isLoading && !!primaryWallet?._id)
+    return <IsLoadingIsError isOwner={isOwner} type='loading' />;
+
   if (isError) return <IsLoadingIsError isOwner={isOwner} type='error' />;
 
   const payload: {

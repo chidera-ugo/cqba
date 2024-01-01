@@ -1,6 +1,5 @@
 import { UseQueryOptions } from '@tanstack/react-query';
 import { useTQuery } from 'hooks/api/useTQuery';
-import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { PaginatedResponse } from 'types/Table';
 import { IWalletTransaction } from 'types/transaction';
 import { generateUrlParamsFromObject } from 'utils/generators/generateUrlParamsFromObject';
@@ -25,8 +24,6 @@ export function useGetWalletTransactions(
     string[]
   >
 ) {
-  const { primaryWallet } = useManageWallets();
-
   const {
     range: { start, end },
     search,
@@ -56,7 +53,6 @@ export function useGetWalletTransactions(
     service: 'wallet',
     options: {
       ...options,
-      enabled: !!primaryWallet?._id,
       meta: {
         silent: true,
       },

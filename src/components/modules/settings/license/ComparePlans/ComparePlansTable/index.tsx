@@ -45,8 +45,6 @@ const TableWrapper = ({
 
   const { screenSize } = useAppContext().state;
 
-  console.log(selectedPlan, screenSize);
-
   return (
     <>
       <div className='mt-5 block 640:hidden'>

@@ -26,7 +26,7 @@ export const ApproveBudgetForm = ({
         onSubmit({
           threshold: !threshold
             ? amount
-            : parseInt(
+            : Number(
                 sanitizeAmount({
                   value: allocation,
                   returnTrueAmount: true,

@@ -17,11 +17,6 @@ export const useUploadFileWithProgress = (
       'Content-Type': 'multipart/form-data',
     },
     onUploadProgress: (ev) => {
-      const { loaded, total } = ev;
-      const percent = Math.floor((loaded * 100) / Number(total));
-
-      console.log({ percent });
-
       setProgress(Math.round((ev.loaded * 100) / Number(ev.total)));
     },
     options: {

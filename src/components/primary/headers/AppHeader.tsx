@@ -9,6 +9,7 @@ import { PointerLeft } from 'components/svgs/navigation/Arrows';
 import { Check } from 'components/svgs/others/Check';
 import { useAppContext } from 'context/AppContext';
 import { useGetActiveSubscription } from 'hooks/api/subscriptions/useGetActiveSubscription';
+import { SubscriptionStatus } from 'hooks/api/subscriptions/useGetSubscriptionHistory';
 import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
 import Image from 'next/image';
@@ -32,7 +33,8 @@ export const AppHeader = ({
   const { user } = useAppContext().state;
   const { data } = useGetActiveSubscription();
 
-  const currentPlan = !data ? '' : data?.plan?.name;
+  const currentPlan =
+    !data || data.status !== SubscriptionStatus.Active ? '' : data?.plan?.name;
 
   const { getColor } = useGetColorByChar();
 

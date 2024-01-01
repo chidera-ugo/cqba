@@ -127,10 +127,10 @@ export const ManageProjectCreation = ({
         }),
         currency: manageSingleBudgetCreation.currency,
         amount:
-          parseInt(sanitizeAmount({ value: amount, returnTrueAmount: true })) *
+          Number(sanitizeAmount({ value: amount, returnTrueAmount: true })) *
           100,
         threshold:
-          parseInt(
+          Number(
             sanitizeAmount({
               value: !threshold ? amount : allocation,
               returnTrueAmount: true,

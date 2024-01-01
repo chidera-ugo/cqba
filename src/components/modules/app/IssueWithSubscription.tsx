@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import Image from 'next/image';
 import shield from '/public/assets/commons/secure_shield.png';
 
@@ -6,18 +7,21 @@ export const IssueWithSubscription = ({
   subTitle,
   action,
   actionText,
+  className,
 }: {
   title: string;
   subTitle: string;
   actionText: string;
   action: () => void;
+  className?: string;
 }) => {
   return (
     <div className={'x-center'}>
       <div
-        className={
-          'rounded-xl border border-neutral-140 bg-neutral-160 px-8 pt-5 pb-10'
-        }
+        className={clsx(
+          'rounded-xl px-8 pt-5 pb-10',
+          className ?? 'border border-neutral-140 bg-neutral-160'
+        )}
       >
         <Image
           src={shield}

@@ -6,9 +6,8 @@ import { initialValues } from './initialValues';
 
 export const ChangePlanForm = ({
   proceed,
-}: {
-  proceed: UseManageSubscription['proceed'];
-}) => {
+  choosingPlan,
+}: Pick<UseManageSubscription, 'proceed' | 'choosingPlan'>) => {
   return (
     <Formik
       initialValues={initialValues}
@@ -19,13 +18,7 @@ export const ChangePlanForm = ({
       validateOnBlur={false}
     >
       {(formikProps) => {
-        return (
-          <Form
-            {...{
-              formikProps,
-            }}
-          />
-        );
+        return <Form processing={choosingPlan} formikProps={formikProps} />;
       }}
     </Formik>
   );

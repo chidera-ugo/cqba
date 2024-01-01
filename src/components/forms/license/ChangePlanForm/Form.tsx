@@ -13,9 +13,10 @@ import { Tabs } from 'components/commons/Tabs';
 
 interface Props {
   formikProps: FormikProps<typeof initialValues>;
+  processing?: boolean;
 }
 
-export const Form = ({ formikProps }: Props) => {
+export const Form = ({ formikProps, processing }: Props) => {
   const { setFieldValue } = formikProps;
 
   const [currentTab, setCurrentTab] = useState(choosePlanTabs[0]!);
@@ -68,8 +69,7 @@ export const Form = ({ formikProps }: Props) => {
           data
             ?.filter(({ amount }) => {
               if (!activePlan) return false;
-              return amount.NGN > 0;
-              // return amount.NGN >  activePlan?.plan?.amount;
+              return amount.NGN > activePlan?.plan?.amount?.NGN;
             })
             ?.map(({ name, _id, amount }) => {
               const _val = amount.NGN;
@@ -111,7 +111,8 @@ export const Form = ({ formikProps }: Props) => {
       <div className='mt-8 flex'>
         <SubmitButton
           type={'submit'}
-          className='primary-button w-full min-w-[120px] 640:w-auto'
+          submitting={processing}
+          className='primary-button w-full 640:w-[160px]'
         >
           Complete Payment
         </SubmitButton>

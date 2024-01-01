@@ -19,8 +19,6 @@ export const BudgetsOverview = () => {
   const [currentTab, setCurrentTab] = useState(tabs[0]);
   const appCounts = useAppCounts();
 
-  console.log(appCounts);
-
   return (
     <div className='card p-0'>
       <div className='h-[120px] p-5 pb-2'>

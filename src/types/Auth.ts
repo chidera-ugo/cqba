@@ -1,4 +1,5 @@
 import { UserRole } from 'enums/employee_enum';
+import { SubscriptionStatus } from 'hooks/api/subscriptions/useGetSubscriptionHistory';
 
 export interface IUser {
   KYBStatus?: string;
@@ -36,7 +37,7 @@ interface Subscription {
   _id: string;
   organization: string;
   plan: string;
-  status: 'expired' | 'renewal_failed' | 'active';
+  status: SubscriptionStatus;
   trial: boolean;
   endingAt: string;
   startedAt: string;

@@ -165,7 +165,7 @@ export const CashflowOverview = ({
       </div>
 
       <div className='y-centers h-[400px]'>
-        {isVerified && isLoading && !data ? (
+        {isVerified && isLoading && !!primaryWallet?._id && !data ? (
           <IsLoading />
         ) : isError ? (
           <IsError className={'py-20'} />

@@ -1,11 +1,12 @@
 import { useAppContext } from 'context/AppContext';
 import { SubscriptionPlan } from 'hooks/api/subscriptions/useGetAllSubscriptionPlans';
+import { SubscriptionStatus } from 'hooks/api/subscriptions/useGetSubscriptionHistory';
 import { useTQuery } from 'hooks/api/useTQuery';
 
 export interface ActiveSubscription {
   _id: string;
   plan: SubscriptionPlan;
-  status: string;
+  status: SubscriptionStatus;
   trial: boolean;
   endingAt: string;
   startedAt: string;

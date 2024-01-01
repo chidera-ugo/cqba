@@ -2,14 +2,20 @@ import clsx from 'clsx';
 import { LogoutButton } from 'components/buttons/Logout';
 import { FullScreenLoader } from 'components/commons/FullScreenLoader';
 import { AuthLayout } from 'components/layouts/AuthLayout';
+import { CentredModalWrapper } from 'components/modal/ModalWrapper';
 import { IssueWithSubscription } from 'components/modules/app/IssueWithSubscription';
 import { CreatePin } from 'components/modules/core/CreatePin';
-import { ChooseInitialSubscriptionPlan } from 'components/modules/settings/license/ChooseInitialSubscriptionPlan';
 import { IdleTimer } from 'components/modules/IdleTimer';
+import { ChooseInitialSubscriptionPlan } from 'components/modules/settings/license/ChooseInitialSubscriptionPlan';
+import { AppHeader } from 'components/primary/headers/AppHeader';
 import { PageHead } from 'components/primary/PageHead';
+import { SideNavigation } from 'components/primary/SideNavigation';
 import { ChevronRight } from 'components/svgs/navigation/Chevrons';
+import { useAppContext } from 'context/AppContext';
 import { UserRole } from 'enums/employee_enum';
 import { useUserRole } from 'hooks/access_control/useUserRole';
+import { useGetActiveSubscription } from 'hooks/api/subscriptions/useGetActiveSubscription';
+import { SubscriptionStatus } from 'hooks/api/subscriptions/useGetSubscriptionHistory';
 import { useDestroySession } from 'hooks/app/useDestroySession';
 import { useProtectedRoutesGuard } from 'hooks/app/useProtectedRoutesGuard';
 import { useIsVerified } from 'hooks/dashboard/kyc/useIsVerified';
@@ -17,9 +23,6 @@ import { useNavigationItems } from 'hooks/dashboard/useNavigationItems';
 import { useRouter } from 'next/router';
 import NotFound from 'pages/404';
 import { PropsWithChildren, ReactNode, useEffect } from 'react';
-import { SideNavigation } from 'components/primary/SideNavigation';
-import { AppHeader } from 'components/primary/headers/AppHeader';
-import { useAppContext } from 'context/AppContext';
 
 export interface Props {
   title?: string;
@@ -49,7 +52,7 @@ export const AppLayout = ({
 }: PropsWithChildren<Props>) => {
   const { push, replace, pathname } = useRouter();
 
-  const { screenSize, user, hasChoosenPlan } = useAppContext().state;
+  const { screenSize, user, hasChoosenPlan, hasSetPin } = useAppContext().state;
 
   useProtectedRoutesGuard();
   const { isOwner } = useUserRole();
@@ -64,10 +67,16 @@ export const AppLayout = ({
 
   const hideSideNavigation = props.hideSideNavigation || shouldSelectFirstPlan;
   const isKycFlow = pathname === '/kyc';
+  const isLicensePage = pathname === '/settings/license';
+  const isPlanExpired =
+    user?.organization?.subscription?.object?.status !==
+    SubscriptionStatus.Active;
 
   const { isVerified } = useIsVerified();
 
   const { isValidRoute } = useNavigationItems(role);
+
+  const { data } = useGetActiveSubscription();
 
   useEffect(() => {
     if (!isForUnverified) return;
@@ -78,11 +87,7 @@ export const AppLayout = ({
   if (!user || (!isVerified && !isKycFlow))
     return <FullScreenLoader id={'app_layout'} asPage />;
 
-  if (
-    !shouldSelectFirstPlan &&
-    !isOwner &&
-    user?.organization?.subscription?.object?.status !== 'active'
-  )
+  if (!shouldSelectFirstPlan && !isOwner && isPlanExpired)
     return (
       <AuthLayout noRedirect title={'Page Not Found'}>
         <div className='y-center app-container py-10 640:py-20'>
@@ -101,6 +106,16 @@ export const AppLayout = ({
 
   if (!isValidRoute()) return <NotFound />;
 
+  const showRenewPlanPrompt =
+    !isKycFlow &&
+    isPlanExpired &&
+    isOwner &&
+    !isLicensePage &&
+    !shouldSelectFirstPlan &&
+    isVerified &&
+    (user?.pinSet || !!hasSetPin) &&
+    !!data?._id;
+
   return (
     <div
       id={'app_wrapper'}
@@ -109,6 +124,21 @@ export const AppLayout = ({
       }}
     >
       <PageHead title={title} />
+
+      <CentredModalWrapper
+        id={'app_layout'}
+        show={showRenewPlanPrompt}
+        className={'px-0'}
+        hideHeader
+      >
+        <IssueWithSubscription
+          className={'bg-white'}
+          actionText={'Renew Subscription or change plan'}
+          action={() => push('/settings/license')}
+          title={`Your organization’s ${data?.plan?.name} Subscription Plan has Expired`}
+          subTitle='To renew or change plan, click on the button below to Renew or Change Plan to re-activate your organization.'
+        />
+      </CentredModalWrapper>
 
       <CreatePin />
 
