@@ -65,14 +65,6 @@ export const WalletToBankForm = ({
         function authorize(pin: string, onError: () => void) {
           const { bank, amount, accountNumber } = formikProps?.values;
 
-          console.log(
-            'hello',
-            sanitizeAmount({
-              value: amount,
-              returnTrueAmount: true,
-            })
-          );
-
           mutate(
             {
               bankCode: bank,

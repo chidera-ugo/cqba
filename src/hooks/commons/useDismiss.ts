@@ -39,7 +39,5 @@ export const useDismiss = (key: string, durationInMinutes?: number) => {
     setIsDismissed(checkIsDismissed(id));
   }
 
-  console.log({ isDismissed });
-
   return [dismiss, isDismissed, checkIsDismissed] as const;
 };
