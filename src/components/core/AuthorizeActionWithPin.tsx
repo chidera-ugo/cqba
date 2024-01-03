@@ -43,8 +43,6 @@ export const AuthorizeActionWithPin = ({
   const [pin, setPin] = useState('');
   const [clearCodeInput, setClearCodeInput] = useResetter();
 
-  console.log({ processing });
-
   return (
     <RightModalWrapper
       title={modalTitle}
