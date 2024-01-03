@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-
 const num2text = {
   ones: [
     '',
@@ -28,7 +26,7 @@ const num2text = {
     '',
     'TWENTY',
     'THIRTY',
-    'FOURTH',
+    'FOURTY',
     'FIFTY',
     'SIXTY',
     'SEVENTY',
@@ -48,8 +46,8 @@ const num2text = {
 };
 export const convertAmountToWords = function (
   amount: any,
-  currency: string,
-  smallestUnit: string
+  currency?: string,
+  smallestUnit?: string
 ) {
   if (!amount) return '';
 
@@ -58,6 +56,7 @@ export const convertAmountToWords = function (
   }
 
   amount = amount.replace(/,/g, '');
+
   if (isNaN(amount)) {
     return 'Invalid input.';
   }
@@ -68,8 +67,7 @@ export const convertAmountToWords = function (
   if (val2 != null && val2 != '') {
     //convert the decimals here
     const digits = (val2 + '0').slice(0, 2).split('');
-    // @ts-ignore
-    str2 = num2text.tens[+digits[0]] + ' ' + num2text.ones[+digits[1]];
+    str2 = convertAmountToWords(digits.join(''));
   }
   const arr = [];
   while (val1) {
@@ -88,7 +86,7 @@ export const convertAmountToWords = function (
           z = a % 10;
 
         return (
-          (x > 0 ? num2text.ones[x] + ' HUNDRED ' : '') +
+          (x > 0 ? num2text.ones[x] + ' HUNDRED AND ' : '') +
           (y >= 2
             ? num2text.tens[y] + ' ' + num2text.ones[z]
             : num2text.ones[10 * y + z])
@@ -98,10 +96,11 @@ export const convertAmountToWords = function (
       str;
   }
 
+  if (!currency) return str;
+
   return (
     str +
-    ` ${currency} ` +
-    (str2 ? ' AND ' + str2 + ` ${smallestUnit}` : '') +
-    ' ONLY'
+    ` ${currency}` +
+    (str2 ? ', ' + str2 + ` ${smallestUnit}` : '')
   ).toLowerCase();
 };
