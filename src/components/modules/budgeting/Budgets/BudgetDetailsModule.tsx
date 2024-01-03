@@ -23,9 +23,12 @@ export const BudgetDetailsModule = ({
   const _q = query['budgetId'];
   const budgetId = typeof _q === 'string' ? _q : '';
 
-  const { isLoading, isError, data } = useGetBudgetById(budgetId, {
-    enabled: !!budgetId,
-  });
+  const { isLoading, isRefetching, isError, data } = useGetBudgetById(
+    budgetId,
+    {
+      enabled: !!budgetId,
+    }
+  );
 
   const { filters, setFilters, pagination, setPagination, range, setRange } =
     useUrlManagedState(walletFiltersSchema, 7);
@@ -89,7 +92,9 @@ export const BudgetDetailsModule = ({
       {isLoading ? (
         <IsLoading />
       ) : isError ||
-        (data?.status !== 'active' && data?.status !== 'closed') ? (
+        (data?.status !== 'active' &&
+          data?.status !== 'closed' &&
+          !isRefetching) ? (
         <IsError description={'Failed to get budget details'} />
       ) : (
         <AppErrorBoundary>

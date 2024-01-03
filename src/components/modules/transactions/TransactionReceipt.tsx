@@ -92,7 +92,7 @@ export const TransactionReceipt = ({
         </h1>
 
         <p className={'mt-3 text-sm capitalize text-neutral-600'}>
-          {convertAmountToWords(amount / 100, currency)}
+          {convertAmountToWords((1312014 / 100).toFixed(2), 'NAIRA', 'KOBO')}
         </p>
 
         <Pill

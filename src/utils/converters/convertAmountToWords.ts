@@ -1,105 +1,107 @@
-export function convertAmountToWords(amount: any, currency: string) {
-  const units = [
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
+const num2text = {
+  ones: [
     '',
-    'one',
-    'two',
-    'three',
-    'four',
-    'five',
-    'six',
-    'seven',
-    'eight',
-    'nine',
-  ];
-  const teens = [
+    'ONE',
+    'TWO',
+    'THREE',
+    'FOUR',
+    'FIVE',
+    'SIX',
+    'SEVEN',
+    'EIGHT',
+    'NINE',
+    'TEN',
+    'ELEVEN',
+    'TWELVE',
+    'THIRTEEN',
+    'FOURTEEN',
+    'FIFTEEN',
+    'SIXTEEN',
+    'SEVENTEEN',
+    'EIGHTEEN',
+    'NINETEEN',
+  ],
+  tens: [
     '',
-    'eleven',
-    'twelve',
-    'thirteen',
-    'fourteen',
-    'fifteen',
-    'sixteen',
-    'seventeen',
-    'eighteen',
-    'nineteen',
-  ];
-  const tens = [
     '',
-    'ten',
-    'twenty',
-    'thirty',
-    'forty',
-    'fifty',
-    'sixty',
-    'seventy',
-    'eighty',
-    'ninety',
-  ];
+    'TWENTY',
+    'THIRTY',
+    'FOURTH',
+    'FIFTY',
+    'SIXTY',
+    'SEVENTY',
+    'EIGHTY',
+    'NINETY',
+  ],
+  sep: [
+    '',
+    ' THOUSAND ',
+    ' MILLION ',
+    ' BILLION ',
+    ' TRILLION ',
+    ' QUADRILLION ',
+    ' QUINTILLION ',
+    ' SEXTILLION ',
+  ],
+};
+export const convertAmountToWords = function (
+  amount: any,
+  currency: string,
+  smallestUnit: string
+) {
+  if (!amount) return '';
 
-  function convertChunk(number: any) {
-    let words = '';
-    const hundreds = Math.floor(number / 100);
-    const remainder = number % 100;
-
-    if (hundreds > 0) {
-      words += units[hundreds] + ' hundred';
-      if (remainder > 0) {
-        words += ' and ';
-      }
-    }
-
-    if (remainder > 0) {
-      if (remainder < 10) {
-        words += units[remainder];
-      } else if (remainder < 20) {
-        words += teens[remainder - 10];
-      } else {
-        const tensDigit = Math.floor(remainder / 10);
-        const unitsDigit = remainder % 10;
-        words += tens[tensDigit];
-        if (unitsDigit > 0) {
-          words += '-' + units[unitsDigit];
-        }
-      }
-    }
-
-    return words;
+  if (amount.length === 0) {
+    return '';
   }
 
-  if (amount === 0) {
-    return `Zero ${currency}`;
+  amount = amount.replace(/,/g, '');
+  if (isNaN(amount)) {
+    return 'Invalid input.';
   }
 
-  const billion = Math.floor(amount / 1000000000);
-  const million = Math.floor((amount % 1000000000) / 1000000);
-  const thousand = Math.floor((amount % 1000000) / 1000);
-  const remaining = amount % 1000;
+  // eslint-disable-next-line prefer-const
+  let [val1, val2] = amount.split('.');
+  let str2 = '';
+  if (val2 != null && val2 != '') {
+    //convert the decimals here
+    const digits = (val2 + '0').slice(0, 2).split('');
+    // @ts-ignore
+    str2 = num2text.tens[+digits[0]] + ' ' + num2text.ones[+digits[1]];
+  }
+  const arr = [];
+  while (val1) {
+    arr.push(val1 % 1000);
+    val1 = parseInt(String(val1 / 1000), 10);
+  }
+  let i = 0;
+  let str = '';
+  while (arr.length) {
+    str =
+      (function (a) {
+        if (!a) return '';
 
-  let words = '';
-  if (billion > 0) {
-    words += convertChunk(billion) + ' billion';
-    if (million > 0 || thousand > 0 || remaining > 0) {
-      words += ' ';
-    }
+        const x = Math.floor(a / 100),
+          y = Math.floor(a / 10) % 10,
+          z = a % 10;
+
+        return (
+          (x > 0 ? num2text.ones[x] + ' HUNDRED ' : '') +
+          (y >= 2
+            ? num2text.tens[y] + ' ' + num2text.ones[z]
+            : num2text.ones[10 * y + z])
+        );
+      })(arr.shift()) +
+      num2text.sep[i++] +
+      str;
   }
 
-  if (million > 0) {
-    words += convertChunk(million) + ' million';
-    if (thousand > 0 || remaining > 0) {
-      words += ' ';
-    }
-  }
-
-  if (thousand > 0) {
-    words += convertChunk(thousand) + ' thousand';
-    if (remaining > 0) {
-      words += ' ';
-    }
-  }
-
-  if (remaining > 0) {
-    words += convertChunk(remaining);
-  }
-
-  return words.trim() + ` ${currency}`;
-}
+  return (
+    str +
+    ` ${currency} ` +
+    (str2 ? ' AND ' + str2 + ` ${smallestUnit}` : '') +
+    ' ONLY'
+  ).toLowerCase();
+};

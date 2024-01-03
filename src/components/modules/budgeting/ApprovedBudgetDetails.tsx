@@ -7,6 +7,7 @@ import {
   ManageSingleBudgetCreation,
   Mode,
 } from 'components/modules/budgeting/ManageSingleBudgetCreation';
+import { AppToast } from 'components/primary/AppToast';
 import { WalletTransactionsTable } from 'components/tables/wallet/WalletTransactionsTable';
 import { useCreateBudget } from 'hooks/api/budgeting/useCreateBudget';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
@@ -16,6 +17,7 @@ import { useManageSingleBudgetCreation } from 'hooks/budgeting/useManageSingleBu
 import { UseUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
 import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 export const ApprovedBudgetDetails = ({
   budget,
@@ -71,6 +73,11 @@ export const ApprovedBudgetDetails = ({
         onSuccess() {
           invalidate('budgets', 'balances', 'team');
           defaultInvalidator(['budget', budget?._id]);
+          setMode(Mode.create);
+
+          toast(<AppToast>Updated beneficiaries</AppToast>, {
+            type: 'success',
+          });
         },
         onError(e) {
           handleError(e);
