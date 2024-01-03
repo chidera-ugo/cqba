@@ -25,7 +25,10 @@ import { useQueryClientInvalidator } from 'hooks/app/useQueryClientInvalidator';
 import { useManageSingleBudgetCreation } from 'hooks/budgeting/useManageSingleBudgetCreation';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { sanitizeAmount } from 'utils/formatters/formatAmount';
+import {
+  getAmountInLowestUnit,
+  sanitizeAmount,
+} from 'utils/formatters/formatAmount';
 import { generateUUID } from 'utils/generators/generateUUID';
 
 export enum Mode {
@@ -93,7 +96,7 @@ export const ManageProjectCreation = ({
       budgetCreationMode === BudgetCreationMode.approve ||
       budgetCreationMode === BudgetCreationMode.create_employee
     ) {
-      setBudgetCreationMode(BudgetCreationMode.add_beneficiaries);
+      return setBudgetCreationMode(BudgetCreationMode.add_beneficiaries);
     }
 
     if (budgetCreationMode === BudgetCreationMode.add_beneficiaries)
@@ -129,13 +132,7 @@ export const ManageProjectCreation = ({
         amount:
           Number(sanitizeAmount({ value: amount, returnTrueAmount: true })) *
           100,
-        threshold:
-          Number(
-            sanitizeAmount({
-              value: !threshold ? amount : allocation,
-              returnTrueAmount: true,
-            })
-          ) * 100,
+        threshold: getAmountInLowestUnit(!threshold ? amount : allocation),
         expiry: expires ? expiryDate.calendarValue : null,
       },
       {

@@ -8,7 +8,7 @@ import { useQueryClientInvalidator } from 'hooks/app/useQueryClientInvalidator';
 import { useTransact } from 'hooks/dashboard/core/useTransact';
 import { useState } from 'react';
 import { FormRecoveryProps } from 'types/forms/form_recovery';
-import { sanitizeAmount } from 'utils/formatters/formatAmount';
+import { getAmountInLowestUnit } from 'utils/formatters/formatAmount';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
@@ -68,13 +68,7 @@ export const WalletToBankForm = ({
           mutate(
             {
               bankCode: bank,
-              amount:
-                Number(
-                  sanitizeAmount({
-                    value: amount,
-                    returnTrueAmount: true,
-                  })
-                ) * 100,
+              amount: getAmountInLowestUnit(amount),
               accountNumber,
               pin,
             },

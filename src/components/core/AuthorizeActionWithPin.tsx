@@ -14,10 +14,10 @@ type Props = {
   processing: boolean;
   submit: (pin: string, errorCb: () => void) => void;
   modalTitle: string;
-  hasResponse: boolean;
+  hasResponse?: boolean;
   show: boolean;
-  responseMessage: string;
-  responseTitle: string;
+  responseMessage?: string;
+  responseTitle?: string;
   close: () => void;
   authorizeButtonText: string;
   finishButtonText?: string;
@@ -42,6 +42,8 @@ export const AuthorizeActionWithPin = ({
 }: Props) => {
   const [pin, setPin] = useState('');
   const [clearCodeInput, setClearCodeInput] = useResetter();
+
+  console.log({ processing });
 
   return (
     <RightModalWrapper
@@ -79,9 +81,8 @@ export const AuthorizeActionWithPin = ({
 
               submit(pin, () => {
                 setClearCodeInput(true);
+                setPin('');
               });
-
-              setPin('');
             }}
           >
             <CodeInput
@@ -89,7 +90,9 @@ export const AuthorizeActionWithPin = ({
               autoComplete='off'
               label='Transaction Pin'
               autoFocus
+              mustBeNumeric
               type={'password'}
+              inputMode={'numeric'}
               submit={(code) => setPin(code)}
               name='code'
               clear={clearCodeInput}

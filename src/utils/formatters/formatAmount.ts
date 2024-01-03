@@ -118,3 +118,16 @@ export const validateAmount = ({
 
   return false;
 };
+
+export function getAmountInLowestUnit(value: string) {
+  return parseInt(
+    (
+      Number(
+        sanitizeAmount({
+          value,
+          returnTrueAmount: true,
+        })
+      ) * 100
+    ).toFixed(2)
+  );
+}

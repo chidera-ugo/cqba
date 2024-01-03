@@ -3,7 +3,10 @@ import { useCreatePersonalBudget } from 'hooks/api/budgeting/useCreatePersonalBu
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { useQueryClientInvalidator } from 'hooks/app/useQueryClientInvalidator';
 import { FormRecoveryProps } from 'types/forms/form_recovery';
-import { formatAmount, sanitizeAmount } from 'utils/formatters/formatAmount';
+import {
+  formatAmount,
+  getAmountInLowestUnit,
+} from 'utils/formatters/formatAmount';
 import { Form } from './Form';
 import { validationSchema } from './validationSchema';
 import { initialValues } from './initialValues';
@@ -67,16 +70,8 @@ export const CreateBudgetForm = ({
           name: title,
           description,
           currency,
-          amount:
-            Number(sanitizeAmount({ value: amount, returnTrueAmount: true })) *
-            100,
-          threshold:
-            Number(
-              sanitizeAmount({
-                value: !threshold ? amount : allocation,
-                returnTrueAmount: true,
-              })
-            ) * 100,
+          amount: getAmountInLowestUnit(amount),
+          threshold: getAmountInLowestUnit(!threshold ? amount : allocation),
           expiry: expires ? expiryDate.calendarValue : null,
         });
       }}

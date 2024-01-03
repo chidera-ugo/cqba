@@ -6,7 +6,11 @@ import { RejectionReasonForm } from 'components/forms/budgeting/RejectionReasonF
 import { Cancel } from 'components/illustrations/Cancel';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { MakeTransfer } from 'components/modules/wallet/MakeTransfer';
-import { Freeze, MiniLock } from 'components/svgs/budgeting/Budget_Icons';
+import {
+  AddUser,
+  Freeze,
+  MiniLock,
+} from 'components/svgs/budgeting/Budget_Icons';
 import { approvalsFilterOptions } from 'constants/approvals/filters';
 import { budgetingFilterOptions } from 'constants/budgeting/filters';
 import { useAppContext } from 'context/AppContext';
@@ -33,6 +37,7 @@ type Props = IBudget & {
   isApprovalsPage?: boolean;
   isProjectPaused?: boolean;
   actionsSlot?: ReactNode;
+  editBeneficiaries?: () => void;
 };
 
 export const ActiveBudgetCard = ({
@@ -41,6 +46,7 @@ export const ActiveBudgetCard = ({
   isProject,
   onClick,
   isApprovalsPage,
+  editBeneficiaries,
   isProjectPaused,
   showOnlyBreakdown,
   actionsSlot,
@@ -510,6 +516,15 @@ export const ActiveBudgetCard = ({
                         icon: <MiniLock />,
                         onClick: () => setAction('close'),
                         title: `Close ${entity}`,
+                      },
+                      {
+                        disabled: isProject,
+                        icon: <AddUser />,
+                        title: 'Edit Beneficiaries',
+                        onClick: () => {
+                          if (!editBeneficiaries) return;
+                          editBeneficiaries();
+                        },
                       },
                     ]}
                     id={'budget_actions'}

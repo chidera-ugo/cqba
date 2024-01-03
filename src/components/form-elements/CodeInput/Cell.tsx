@@ -8,6 +8,7 @@ type Props = JSX.IntrinsicElements['input'] & {
   setCode: (val: string) => void;
   type: 'numeric' | 'password' | 'normal';
   charLimit?: number;
+  mustBeNumeric?: boolean;
 };
 
 export function Cell({
@@ -19,6 +20,7 @@ export function Cell({
   autoComplete,
   charLimit,
   className,
+  mustBeNumeric,
 }: Props) {
   const id = `${_id ?? ''}char${char}`;
 
@@ -100,7 +102,9 @@ export function Cell({
           if (!val) return setCode(val?.charAt(val?.length - 1));
 
           const isValid =
-            type === 'numeric' ? number.test(val) : alphaNumeric.test(val);
+            type === 'numeric' || mustBeNumeric
+              ? number.test(val)
+              : alphaNumeric.test(val);
 
           if (isValid) {
             setCode(val?.charAt(val?.length - 1));

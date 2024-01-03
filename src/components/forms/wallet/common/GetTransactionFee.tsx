@@ -3,7 +3,11 @@ import { Dollar } from 'components/svgs/wallet/Icons_MakeTransfer';
 import { useGetTransferFee } from 'hooks/api/wallet/useGetTransferFee';
 import { useDebouncer } from 'hooks/commons/useDebouncer';
 import { useEffect, useState } from 'react';
-import { formatAmount, sanitizeAmount } from 'utils/formatters/formatAmount';
+import {
+  formatAmount,
+  getAmountInLowestUnit,
+  sanitizeAmount,
+} from 'utils/formatters/formatAmount';
 
 interface Props {
   budgetId: string;
@@ -49,12 +53,7 @@ export const GetTransactionFee = ({
   });
 
   const { isLoading, mutate } = useGetTransferFee(
-    Number(
-      sanitizeAmount({
-        value: amount,
-        returnTrueAmount: true,
-      })
-    ) * 100,
+    getAmountInLowestUnit(amount),
     budgetId,
     {
       onSuccess(res) {

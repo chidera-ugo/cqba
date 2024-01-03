@@ -36,6 +36,7 @@ export function CodeInput({
   inputMode,
   reset,
   autoComplete,
+  mustBeNumeric,
   dotCode,
   clear,
   name,
@@ -122,6 +123,7 @@ export function CodeInput({
               char={i}
               id={id}
               {...{
+                mustBeNumeric,
                 code,
                 charLimit,
                 autoComplete,

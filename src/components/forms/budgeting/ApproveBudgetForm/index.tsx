@@ -1,6 +1,6 @@
 import { Formik } from 'formik';
 import { ApproveBudgetDto } from 'hooks/api/budgeting/useApproveBudget';
-import { sanitizeAmount } from 'utils/formatters/formatAmount';
+import { getAmountInLowestUnit } from 'utils/formatters/formatAmount';
 import { Form } from './Form';
 import { validationSchema } from './validationSchema';
 import { initialValues } from './initialValues';
@@ -24,14 +24,7 @@ export const ApproveBudgetForm = ({
       validationSchema={validationSchema}
       onSubmit={({ expiryDate, allocation, expires, threshold }) => {
         onSubmit({
-          threshold: !threshold
-            ? amount
-            : Number(
-                sanitizeAmount({
-                  value: allocation,
-                  returnTrueAmount: true,
-                })
-              ) * 100,
+          threshold: !threshold ? amount : getAmountInLowestUnit(allocation),
           expiry: expires ? expiryDate.calendarValue : null,
         });
       }}

@@ -33,16 +33,16 @@ export const ManageSingleBudgetCreation = ({
   mode,
   setMode,
   budget,
+  currency,
+  onSuccess,
+  isError,
+  isLoading,
+  unallocatedFunds,
+  onAddBudgetBeneficiariesSubmit,
   createBudgetFormRecoveryValues,
   setAddBudgetBeneficiariesRecoveryValues,
   setCreateBudgetFormRecoveryValues,
   addBudgetBeneficiariesFormRecoveryValues,
-  isError,
-  unallocatedFunds,
-  isLoading,
-  currency,
-  onSuccess,
-  onAddBudgetBeneficiariesSubmit,
 }: Props) => {
   const { user } = useAppContext().state;
 
@@ -86,8 +86,7 @@ export const ManageSingleBudgetCreation = ({
 
   if (isLoading) return <IsLoading />;
 
-  if (isError)
-    return <IsError description={'Failed to initiate budget creation'} />;
+  if (isError) return <IsError description={'Failed to initialize'} />;
 
   return (
     <CreateBudgetForm

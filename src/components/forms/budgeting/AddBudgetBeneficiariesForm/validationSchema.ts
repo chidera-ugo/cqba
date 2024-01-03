@@ -1,4 +1,7 @@
-import { sanitizeAmount } from 'utils/formatters/formatAmount';
+import {
+  getAmountInLowestUnit,
+  sanitizeAmount,
+} from 'utils/formatters/formatAmount';
 import { validateMultiCheckValues } from 'utils/validators/validateMultiCheckValues';
 import { object } from 'yup';
 
@@ -47,7 +50,9 @@ export const validationSchema = object({
             .reduce((a, b) => a + b)
         : 0;
 
-      const isInvalid = sumOfAllocations > budgetAmount;
+      const isInvalid =
+        getAmountInLowestUnit(sumOfAllocations?.toFixed(2)) >
+        getAmountInLowestUnit(budgetAmount.toFixed(2));
 
       return !isInvalid;
     }),

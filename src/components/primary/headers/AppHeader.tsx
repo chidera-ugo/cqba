@@ -8,6 +8,7 @@ import { MobileMenu } from 'components/primary/MobileMenu';
 import { PointerLeft } from 'components/svgs/navigation/Arrows';
 import { Check } from 'components/svgs/others/Check';
 import { useAppContext } from 'context/AppContext';
+import { useUserRole } from 'hooks/access_control/useUserRole';
 import { useGetActiveSubscription } from 'hooks/api/subscriptions/useGetActiveSubscription';
 import { SubscriptionStatus } from 'hooks/api/subscriptions/useGetSubscriptionHistory';
 import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
@@ -32,6 +33,7 @@ export const AppHeader = ({
 }: PropsWithChildren<Props>) => {
   const { user } = useAppContext().state;
   const { data } = useGetActiveSubscription();
+  const {isOwner} = useUserRole()
 
   const currentPlan =
     !data || data.status !== SubscriptionStatus.Active ? '' : data?.plan?.name;
@@ -67,7 +69,7 @@ export const AppHeader = ({
         <div className='flex'>
           {!hideSideNavigation && (
             <div className={'hidden gap-4 1024:flex'}>
-              {currentPlan && (
+              {currentPlan && isOwner && (
                 <Link href={'/settings/license'} className='pill_gray my-auto'>
                   <div className='flex gap-1'>
                     <div className='my-auto'>{currentPlan} Plan</div>

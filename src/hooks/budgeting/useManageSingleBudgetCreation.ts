@@ -1,15 +1,27 @@
 import { AddBudgetBeneficiariesFormRecoveryValues } from 'components/forms/budgeting/AddBudgetBeneficiariesForm';
 import { CreateBudgetFormRecoveryValues } from 'components/forms/budgeting/CreateBudgetForm';
-import { BudgetPriorities, BudgetPriority } from 'enums/budget';
+import {
+  BudgetPriorities,
+  BudgetPriority,
+  getPriorityAsText,
+} from 'enums/budget';
 import {
   Beneficiary,
   CreateBudgetDto,
 } from 'hooks/api/budgeting/useCreateBudget';
+import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
+import { useGetBudgetBeneficiaries } from 'hooks/api/employees/useGetBudgetBeneficiaries';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
-import { useState } from 'react';
-import { sanitizeAmount } from 'utils/formatters/formatAmount';
+import { useEffect, useState } from 'react';
+import { DatePickerValue } from 'types/commons';
+import {
+  formatAmount,
+  getAmountInLowestUnit,
+  sanitizeAmount,
+} from 'utils/formatters/formatAmount';
+import { MultiCheckValue } from 'utils/validators/validateMultiCheckValues';
 
-export const useManageSingleBudgetCreation = () => {
+export const useManageSingleBudgetCreation = (budget?: IBudget) => {
   const [createBudgetFormRecoveryValues, setCreateBudgetFormRecoveryValues] =
     useState<CreateBudgetFormRecoveryValues>(null);
 
@@ -18,9 +30,68 @@ export const useManageSingleBudgetCreation = () => {
     setAddBudgetBeneficiariesRecoveryValues,
   ] = useState<AddBudgetBeneficiariesFormRecoveryValues>(null);
 
+  const { data } = useGetBudgetBeneficiaries();
+
+  useEffect(() => {
+    populateRecoveryValuesForBeneficiariesEditingFlow();
+  }, [data, budget]);
+
   const { primaryWallet, isError, isLoading } = useManageWallets();
 
   const currency = primaryWallet?.currency;
+
+  function populateRecoveryValuesForBeneficiariesEditingFlow() {
+    if (!data || !budget) return;
+
+    const beneficiaryEmails: Record<string, boolean> = {};
+
+    for (const i of budget?.beneficiaries) {
+      beneficiaryEmails[i.email] = true;
+    }
+
+    const beneficiaries: MultiCheckValue = {};
+
+    for (const i of data) {
+      if (beneficiaryEmails[i.email]) beneficiaries[i._id] = true;
+    }
+
+    setAddBudgetBeneficiariesRecoveryValues((prev) => ({
+      ...prev!,
+      beneficiaries,
+      budgetAmount: formatAmount({
+        value: budget?.amount / 100 ?? 0,
+        decimalPlaces: 2,
+      }),
+    }));
+
+    const {
+      name,
+      amount,
+      description,
+      allocatedAmount,
+      expiry,
+      priority,
+      threshold,
+    } = budget;
+
+    const date = new Date(expiry);
+
+    setCreateBudgetFormRecoveryValues(() => ({
+      threshold: !!threshold,
+      title: name,
+      amount: formatAmount({ value: amount, decimalPlaces: 2 }),
+      priority: getPriorityAsText(priority),
+      allocation: formatAmount({ value: allocatedAmount, decimalPlaces: 2 }),
+      description,
+      expires: !!expiry,
+      expiryDate: (expiry
+        ? {
+            value: date.toISOString(),
+            calendarValue: date,
+          }
+        : {}) as DatePickerValue,
+    }));
+  }
 
   function getBudget(
     budgetBeneficiaries?: AddBudgetBeneficiariesFormRecoveryValues
@@ -65,7 +136,7 @@ export const useManageSingleBudgetCreation = () => {
 
           arr.push({
             user: i,
-            allocation: allocation * 100,
+            allocation: parseInt((allocation * 100).toString()),
           });
         }
       }
@@ -79,15 +150,8 @@ export const useManageSingleBudgetCreation = () => {
       priority: BudgetPriorities[priority as BudgetPriority],
       beneficiaries: getBeneficiaries(),
       currency,
-      amount:
-        Number(sanitizeAmount({ value: amount, returnTrueAmount: true })) * 100,
-      threshold:
-        Number(
-          sanitizeAmount({
-            value: !threshold ? amount : allocation,
-            returnTrueAmount: true,
-          })
-        ) * 100,
+      amount: getAmountInLowestUnit(amount),
+      threshold: getAmountInLowestUnit(!threshold ? amount : allocation),
       expiry: expires ? expiryDate.calendarValue : null,
     };
   }
