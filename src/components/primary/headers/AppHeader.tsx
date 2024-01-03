@@ -33,7 +33,7 @@ export const AppHeader = ({
 }: PropsWithChildren<Props>) => {
   const { user } = useAppContext().state;
   const { data } = useGetActiveSubscription();
-  const {isOwner} = useUserRole()
+  const { isOwner } = useUserRole();
 
   const currentPlan =
     !data || data.status !== SubscriptionStatus.Active ? '' : data?.plan?.name;

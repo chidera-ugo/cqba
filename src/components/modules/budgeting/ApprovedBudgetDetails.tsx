@@ -35,8 +35,11 @@ export const ApprovedBudgetDetails = ({
   const { getColor } = useGetColorByChar();
   const [mode, setMode] = useState<Mode>(Mode.create);
 
-  const { resetFormRecoveryValues, getBudget, ...manageSingleBudgetCreation } =
-    useManageSingleBudgetCreation(budget);
+  const {
+    resetFormRecoveryValues: _,
+    getBudget,
+    ...manageSingleBudgetCreation
+  } = useManageSingleBudgetCreation(budget);
 
   const { invalidate, defaultInvalidator } = useQueryClientInvalidator();
   const { handleError } = useHandleError();
@@ -49,9 +52,6 @@ export const ApprovedBudgetDetails = ({
     if (mode === Mode.approve || mode === Mode.create_employee)
       return setMode(Mode.add_beneficiaries);
 
-    if (mode === Mode.add_beneficiaries) return setMode(Mode.create);
-
-    resetFormRecoveryValues();
     setMode(Mode.create);
   }
 
