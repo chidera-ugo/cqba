@@ -12,7 +12,7 @@ export const PhoneNumberInput = ({
   label,
   className,
   setFieldValue,
-  fieldType = 'idNumber',
+  fieldType = 'phoneNumber',
   limit = 11,
   next,
   shouldValidate: _,

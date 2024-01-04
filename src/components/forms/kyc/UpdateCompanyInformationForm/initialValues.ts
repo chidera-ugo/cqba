@@ -1,3 +1,4 @@
+import { addressInitialValues } from 'constants/kyc/address_initial_values';
 import { Business_typeEnum } from 'enums/business_type.enum';
 
 export const initialValues = {
@@ -6,12 +7,9 @@ export const initialValues = {
   postalCode: '',
   companyType: '' as Business_typeEnum,
   businessIndustry: '',
-  address: '',
-  state: '',
-  city: '',
-  country: '',
   tin: '',
   businessNumber: '',
   rcNumber: '',
   cacItNumber: '',
+  ...addressInitialValues,
 };

@@ -1,3 +1,4 @@
+import { addressInitialValues } from 'constants/kyc/address_initial_values';
 import { DatePickerValue } from 'types/commons';
 import { MultiCheckValue } from 'utils/validators/validateMultiCheckValues';
 
@@ -9,12 +10,9 @@ export const initialValues = {
   idType: '',
   percentOwned: '',
   email: '',
-  country: '',
-  address: '',
-  state: '',
   postalCode: '',
   title: {} as MultiCheckValue,
-  city: '',
   idNumber: '',
   bvn: '',
+  ...addressInitialValues,
 };

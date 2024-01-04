@@ -33,6 +33,7 @@ export const UpdateOwnerInformationForm = ({
         dateOfBirth,
         title,
         percentOwned,
+        stateCode: _s,
         ...values
       }) => {
         mutate({

@@ -40,6 +40,15 @@ export const AddressInputGroup = ({ country, state, setFieldValue }: Props) => {
     );
   }, [countries]);
 
+  useEffect(() => {
+    if (!state) return;
+    setFieldValue('stateCode', '');
+  }, [country]);
+
+  useEffect(() => {
+    setFieldValue('city', '');
+  }, [state]);
+
   return (
     <>
       <Input label='Address' placeholder={`Enter address`} name='address' />
@@ -51,7 +60,7 @@ export const AddressInputGroup = ({ country, state, setFieldValue }: Props) => {
           name='country'
           trueValueKey={'isoCode'}
           displayValueKey={'name'}
-          listKeyModifieres={['name']}
+          listKeyModifiers={['name']}
           options={countries ?? []}
           isLoading={loadingCountries}
           isError={countriesError}
@@ -68,10 +77,12 @@ export const AddressInputGroup = ({ country, state, setFieldValue }: Props) => {
         <Select
           placeholder={'Select state'}
           label='State'
-          name='state'
+          name='stateCode'
+          secondaryName={'state'}
+          setFieldValue={setFieldValue}
           trueValueKey={'isoCode'}
           displayValueKey={'name'}
-          listKeyModifieres={['name']}
+          listKeyModifiers={['name']}
           options={states ?? []}
           isLoading={loadingStates && !!country}
           isError={statesError}
@@ -84,7 +95,7 @@ export const AddressInputGroup = ({ country, state, setFieldValue }: Props) => {
           trueValueKey={'name'}
           displayValueKey={'name'}
           options={cities ?? []}
-          listKeyModifieres={['latitude', 'longitude', 'name', 'stateCode']}
+          listKeyModifiers={['latitude', 'longitude', 'name', 'stateCode']}
           isLoading={loadingCities && !!country && !!state}
           isError={citiesError}
         />

@@ -200,7 +200,7 @@ export const Form = ({ processing, formikProps, currentOwner }: Props) => {
       <AddressInputGroup
         setFieldValue={setFieldValue}
         country={values.country}
-        state={values.state}
+        state={values.stateCode}
       />
 
       <div className='relative mt-8 flex pb-8'>

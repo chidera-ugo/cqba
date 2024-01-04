@@ -48,6 +48,7 @@ export const UpdateCompanyInformationForm = () => {
         businessName,
         businessIndustry,
         phoneNumber,
+        stateCode: _s,
         ...values
       }) => {
         mutate({

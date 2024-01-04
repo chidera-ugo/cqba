@@ -21,6 +21,7 @@ export interface Field {
   setFieldValue?: SetFieldValue;
   capitalizeLabel?: boolean;
   lazyFocus?: boolean;
+  secondaryName?: string;
   fieldType?:
     | 'idNumber'
     | 'phoneNumber'

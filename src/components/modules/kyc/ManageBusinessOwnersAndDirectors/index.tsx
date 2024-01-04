@@ -119,17 +119,19 @@ export const ManageBusinessOwnersAndDirectors = () => {
           ) : null}
 
           <div className={'mt-10 pb-8'}>
-            <Link
-              href={`/kyc?tab=${
-                hasProvidedAllRequirements
-                  ? 'review-and-submit'
-                  : 'business-documentation&showSteps=true'
-              }`}
-            >
-              <div className='primary-button w-full min-w-[170px] 640:w-min'>
-                <span className='y-center h-full'>Save and Continue</span>
-              </div>
-            </Link>
+            <div className='640:flex'>
+              <Link
+                href={`/kyc?tab=${
+                  hasProvidedAllRequirements
+                    ? 'review-and-submit'
+                    : 'business-documentation&showSteps=true'
+                }`}
+              >
+                <div className='primary-button w-full min-w-[170px] 640:w-min'>
+                  <span className='y-center h-full'>Save and Continue</span>
+                </div>
+              </Link>
+            </div>
 
             <Link
               href={'/kyc?tab=review-and-submit&showSteps=true'}

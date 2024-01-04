@@ -15,7 +15,7 @@ type Props = JSX.IntrinsicElements['select'] &
     trueValueKey?: string;
     isLoading?: boolean;
     isError?: boolean;
-    listKeyModifieres?: string[];
+    listKeyModifiers?: string[];
     refetch?: () => void;
     actionOnSelect?: (option: unknown) => void;
   };
@@ -27,12 +27,14 @@ export const Select = ({
   isLoading,
   refetch,
   displayValueKey,
-  listKeyModifieres,
+  listKeyModifiers,
   next,
   placeholder = 'Select',
   trueValueKey = 'id',
   isError,
   actionOnSelect,
+  setFieldValue,
+  secondaryName,
   ...props
 }: Props) => {
   const [field, meta] = useField(props.name as string);
@@ -48,11 +50,11 @@ export const Select = ({
   }, [field.value, isLoading]);
 
   function getKeySuffix(value: any) {
-    if (!listKeyModifieres?.length) return '';
+    if (!listKeyModifiers?.length) return '';
 
     const arr = [];
 
-    for (const i of listKeyModifieres) {
+    for (const i of listKeyModifiers) {
       arr.push(value[i]);
     }
 
@@ -119,6 +121,15 @@ export const Select = ({
                 props.onChange(e);
               } else {
                 field.onChange(e);
+              }
+
+              if (setFieldValue && !!secondaryName && displayValueKey) {
+                setFieldValue(
+                  secondaryName,
+                  options.find(
+                    (option) => option[trueValueKey] === e.target.value
+                  )?.[displayValueKey]
+                );
               }
 
               if (!actionOnSelect) return;

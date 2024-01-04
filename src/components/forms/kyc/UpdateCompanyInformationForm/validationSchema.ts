@@ -28,8 +28,7 @@ export const validationSchema = object({
   country: string().required('Select country'),
   businessIndustry: string().required('Select business industry'),
   address: string().required('Provide your address'),
-  state: string().required('Select your state'),
-  city: string().required('Select your city'),
+  stateCode: string().required('Select your state'),
   postalCode: string().required('Provide postal code'),
   phoneNumber: string()
     .required('Please provide phone number')

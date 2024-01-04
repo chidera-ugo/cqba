@@ -60,9 +60,9 @@ export const validateField = (
         const trimmedValue = val.trim().split(' ').join('');
 
         const _val = trimmedValue.startsWith('+234')
-          ? trimmedValue.replace('+234', '0')
+          ? trimmedValue.replace('+234', '')
           : trimmedValue.startsWith('234')
-          ? trimmedValue.replace('234', '0')
+          ? trimmedValue.replace('234', '')
           : trimmedValue;
 
         if (number.test(_val) || val === '') {
