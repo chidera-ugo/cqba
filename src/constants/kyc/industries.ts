@@ -77,9 +77,5 @@ export enum Industry {
   OTHER_EDUCATION_SERVICES = 'OtherEducationServices',
 }
 
-export const industries = Object.keys(Industry).map((key) => ({
-  name: Industry[key as TIndustry],
-  value: key,
-}));
+export const industries = Object.values(Industry)
 
-type TIndustry = keyof typeof Industry;
