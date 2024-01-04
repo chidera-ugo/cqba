@@ -106,6 +106,8 @@ export const MakeTransfer = ({ budget }: { budget?: IBudget }) => {
               type: 'error',
             });
 
+          if (budget) setShowTransferModal(true);
+
           if (!data?.length && !projects?.length)
             return setModal('show_prompt');
 

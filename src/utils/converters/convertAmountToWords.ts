@@ -85,11 +85,15 @@ export const convertAmountToWords = function (
           y = Math.floor(a / 10) % 10,
           z = a % 10;
 
-        return (
-          (x > 0 ? num2text.ones[x] + ' HUNDRED AND ' : '') +
-          (y >= 2
+        const nextItem =
+          y >= 2
             ? num2text.tens[y] + ' ' + num2text.ones[z]
-            : num2text.ones[10 * y + z])
+            : num2text.ones[10 * y + z];
+
+        return (
+          (x > 0
+            ? num2text.ones[x] + ` HUNDRED${!!nextItem ? ' AND' : ''} `
+            : '') + nextItem
         );
       })(arr.shift()) +
       num2text.sep[i++] +

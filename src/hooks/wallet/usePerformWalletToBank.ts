@@ -4,9 +4,7 @@ import { useState } from 'react';
 
 type Mode = 'transfer' | 'select_budget';
 
-export const usePerformWalletToBank = (budget?: IBudget) => {
-  const defaultMode: Mode = !!budget ? 'transfer' : 'select_budget';
-
+export const usePerformWalletToBank = (defaultMode: Mode) => {
   const [mode, setMode] = useState<Mode>(defaultMode);
 
   const [currentTab, setCurrentTab] = useState(selectBudgetTabs[0]);

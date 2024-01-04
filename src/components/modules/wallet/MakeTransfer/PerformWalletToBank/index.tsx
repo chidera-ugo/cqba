@@ -39,7 +39,7 @@ export const PerformWalletToBank = ({
     selectedBudget,
     setSelectedBudget,
     isProject,
-  } = usePerformWalletToBank();
+  } = usePerformWalletToBank(!!budget ? 'transfer' : 'select_budget');
 
   const [formRecoveryValues, setFormRecoveryValues] =
     useState<WalletToBankFormRecoveryValues>(null);
