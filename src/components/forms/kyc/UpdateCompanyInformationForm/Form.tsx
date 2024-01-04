@@ -115,8 +115,6 @@ export const Form = ({
           label='Business Industry'
           name='businessIndustry'
           options={industries}
-          trueValueKey={'value'}
-          displayValueKey={'name'}
         />
       </div>
 

@@ -79,8 +79,6 @@ export const AppLayout = ({
   const { data } = useGetActiveSubscription();
 
   useEffect(() => {
-    if (!isForUnverified) return;
-
     if (isForUnverified && isVerified) replace('/');
   }, [isVerified, isForUnverified]);
 
