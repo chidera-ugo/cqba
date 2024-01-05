@@ -4,7 +4,6 @@ import { KycSteps } from 'components/modules/kyc/KycSteps';
 import { useApplyForReview } from 'hooks/api/kyc/useApplyForReview';
 import { useQueryClientInvalidator } from 'hooks/app/useQueryClientInvalidator';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
-import Link from 'next/link';
 import { useState } from 'react';
 
 export const ReviewAndSubmit = () => {
@@ -46,13 +45,6 @@ export const ReviewAndSubmit = () => {
             Submit Application
           </SubmitButton>
         </div>
-
-        <Link
-          href={'/kyc?tab=review-and-submit&showSteps=true'}
-          className='x-center mx-auto mt-4 flex w-full py-2 text-center text-sm font-medium 640:hidden'
-        >
-          Make Changes
-        </Link>
       </div>
     </>
   );

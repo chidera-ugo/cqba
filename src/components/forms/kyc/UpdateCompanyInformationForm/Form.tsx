@@ -146,7 +146,9 @@ export const Form = ({
       <AddressInputGroup
         setFieldValue={setFieldValue}
         country={values.country}
-        state={values.stateCode}
+        stateCode={values.stateCode}
+        state={values.state}
+        city={values.city}
       />
 
       <div className={'mt-10 pb-8'}>

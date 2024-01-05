@@ -16,6 +16,8 @@ import 'react-tooltip/dist/react-tooltip.css';
 import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { KycContextProvider } from 'context/KycContext';
 import { useHandleError } from 'hooks/api/useHandleError';
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
 
 export default function App({ Component, pageProps }: AppProps) {
   const { handleError } = useHandleError();

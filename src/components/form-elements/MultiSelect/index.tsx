@@ -116,7 +116,6 @@ export const MultiSelect = ({
               {...field}
               {...{ value }}
               type='button'
-              placeholder='Button'
               className={clsx(
                 `input block w-full cursor-pointer text-left caret-transparent line-clamp-1`,
                 submitCount > 0 &&

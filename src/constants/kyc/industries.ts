@@ -77,5 +77,4 @@ export enum Industry {
   OTHER_EDUCATION_SERVICES = 'OtherEducationServices',
 }
 
-export const industries = Object.values(Industry)
-
+export const industries = Object.values(Industry);

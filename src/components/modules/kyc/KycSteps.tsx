@@ -61,7 +61,7 @@ export const KycSteps = ({ isRecap }: { isRecap?: boolean }) => {
             key={title}
             className={clsx(
               'smooth x-between group mt-4 w-full border border-neutral-140 text-left font-medium transition-colors',
-              isActive ? 'text-primary-main' : 'text-neutral-1000',
+              isActive ? '768:text-primary-main' : 'text-neutral-1000',
               isRecap ? 'rounded-[10px] p-6' : 'rounded-xl px-4 py-3'
             )}
           >

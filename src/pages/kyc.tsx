@@ -23,8 +23,11 @@ export default function Kyc() {
 
   const { getCurrentAccountSetupStepUrl } = useCurrentAccountSetupStepUrl();
 
-  const { isUnderReviewOrApproved, hasProvidedCompanyInformation } =
-    useAccountVerificationStatus();
+  const {
+    isUnderReviewOrApproved,
+    hasProvidedAllRequirements,
+    hasProvidedCompanyInformation,
+  } = useAccountVerificationStatus();
 
   const { isRefetching } = useGetOrganizationInformation();
 
@@ -38,7 +41,9 @@ export default function Kyc() {
   }, [isValidAccountSetupStep]);
 
   useEffect(() => {
-    if (isUnderReviewOrApproved && query['tab'] !== 'review-and-submit')
+    if (query['tab'] === 'review-and-submit' && !hasProvidedAllRequirements) {
+      replace(getCurrentAccountSetupStepUrl());
+    } else if (isUnderReviewOrApproved && query['tab'] !== 'review-and-submit')
       replace('/kyc?tab=review-and-submit');
     else if (
       query['tab'] === 'business-documentation' &&

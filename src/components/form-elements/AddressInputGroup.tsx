@@ -8,11 +8,19 @@ import { SetFieldValue } from 'types/commons';
 
 interface Props {
   country: string;
+  stateCode: string;
   state: string;
+  city: string;
   setFieldValue: SetFieldValue;
 }
 
-export const AddressInputGroup = ({ country, state, setFieldValue }: Props) => {
+export const AddressInputGroup = ({
+  country,
+  stateCode,
+  setFieldValue,
+  state,
+  city,
+}: Props) => {
   const {
     isLoading: loadingCountries,
     isError: countriesError,
@@ -29,7 +37,7 @@ export const AddressInputGroup = ({ country, state, setFieldValue }: Props) => {
     isLoading: loadingCities,
     isError: citiesError,
     data: cities,
-  } = useGetCities(country, state);
+  } = useGetCities(country, stateCode);
 
   useEffect(() => {
     if (country || !countries?.length) return;
@@ -41,13 +49,18 @@ export const AddressInputGroup = ({ country, state, setFieldValue }: Props) => {
   }, [countries]);
 
   useEffect(() => {
-    if (!state) return;
-    setFieldValue('stateCode', '');
-  }, [country]);
+    if (!states?.length) return;
+
+    setFieldValue(
+      'stateCode',
+      states?.find(({ name }) => name === state)?.isoCode
+    );
+  }, [states]);
 
   useEffect(() => {
-    setFieldValue('city', '');
-  }, [state]);
+    if (!cities?.length) return;
+    setFieldValue('city', cities?.find(({ name }) => name === city)?.name);
+  }, [cities]);
 
   return (
     <>
@@ -60,6 +73,10 @@ export const AddressInputGroup = ({ country, state, setFieldValue }: Props) => {
           name='country'
           trueValueKey={'isoCode'}
           displayValueKey={'name'}
+          actionOnSelect={() => {
+            setFieldValue('stateCode', '');
+            setFieldValue('city', '');
+          }}
           listKeyModifiers={['name']}
           options={countries ?? []}
           isLoading={loadingCountries}
@@ -81,6 +98,9 @@ export const AddressInputGroup = ({ country, state, setFieldValue }: Props) => {
           secondaryName={'state'}
           setFieldValue={setFieldValue}
           trueValueKey={'isoCode'}
+          actionOnSelect={() => {
+            setFieldValue('city', '');
+          }}
           displayValueKey={'name'}
           listKeyModifiers={['name']}
           options={states ?? []}
@@ -96,7 +116,7 @@ export const AddressInputGroup = ({ country, state, setFieldValue }: Props) => {
           displayValueKey={'name'}
           options={cities ?? []}
           listKeyModifiers={['latitude', 'longitude', 'name', 'stateCode']}
-          isLoading={loadingCities && !!country && !!state}
+          isLoading={loadingCities && !!country && !!stateCode}
           isError={citiesError}
         />
       </div>

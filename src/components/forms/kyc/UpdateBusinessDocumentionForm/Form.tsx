@@ -3,6 +3,7 @@ import { FileInput } from 'components/form-elements/FileInput';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { ImageViewer } from 'components/modals/ImageViewer';
 import { companyInformationDocuments } from 'constants/kyc/company_information_documents';
+import dayjs from 'dayjs';
 import { Business_typeEnum } from 'enums/business_type.enum';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { IOrganization } from 'hooks/api/kyc/useGetOrganizationInformation';
@@ -100,6 +101,7 @@ export const Form = ({
           shouldValidate
           fieldType='dateOfBirth'
           maxDate={new Date()}
+          minDate={dayjs(new Date()).subtract(80, 'years').toDate()}
         />
       </div>
 

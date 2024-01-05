@@ -130,6 +130,7 @@ export const Form = ({ processing, formikProps, currentOwner }: Props) => {
         fieldType='dateOfBirth'
         defaultCalendarValue={maxDob}
         maxDate={maxDob.toDate()}
+        minDate={dayjs(new Date()).subtract(80, 'years').toDate()}
       />
 
       <div className='gap-4 880:flex'>
@@ -200,7 +201,9 @@ export const Form = ({ processing, formikProps, currentOwner }: Props) => {
       <AddressInputGroup
         setFieldValue={setFieldValue}
         country={values.country}
-        state={values.stateCode}
+        stateCode={values.stateCode}
+        state={values.state}
+        city={values.city}
       />
 
       <div className='relative mt-8 flex pb-8'>
