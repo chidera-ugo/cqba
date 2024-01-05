@@ -103,6 +103,7 @@ export const WalletTransactionsTable = ({
 
       {(data && !data?.docs?.length) || !primaryWallet?._id ? (
         <NoData
+          type='transaction'
           processing={isLoading || isRefetching}
           title='Stay on top of your transactions'
           imageSrc={card}

@@ -173,6 +173,7 @@ export const CashflowOverview = ({
           <div>
             <NoData
               noToast
+              type=''
               processing={isLoading}
               icon={<EmptyChart />}
               subTitle={`Your expense report will be displayed here`}

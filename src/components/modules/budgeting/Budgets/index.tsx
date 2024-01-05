@@ -20,6 +20,7 @@ interface Props {
   isApprovalsPage?: boolean;
   layout: string;
   createdByUser?: boolean;
+  type: string;
 }
 
 export const Budgets = ({
@@ -28,6 +29,7 @@ export const Budgets = ({
   setPagination,
   search,
   currentTab,
+  type,
   layout,
   createdByUser,
 }: Props & Partial<TPagination>) => {
@@ -79,7 +81,7 @@ export const Budgets = ({
       </RightModalWrapper>
 
       {data && !data?.docs?.length ? (
-        <NoBudgets processing={isLoading || isRefetching} />
+        <NoBudgets processing={isLoading || isRefetching} type={type} />
       ) : (
         <AppErrorBoundary>
           {layout == 'grid' || screenSize?.['mobile'] ? (

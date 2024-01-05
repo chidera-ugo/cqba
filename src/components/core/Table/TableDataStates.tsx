@@ -36,6 +36,7 @@ export const TableDataStates = ({
     return (
       <NoData
         processing={!!isLoading}
+        type='budget'
         imageSrc={noDataConfig?.image}
         title={noDataConfig?.title}
         toastClassname={'bottom-24'}

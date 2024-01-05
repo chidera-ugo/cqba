@@ -82,7 +82,7 @@ export const ProjectDetails = ({
 
       <div className='mt-5'>
         {data && !budgets?.length ? (
-          <NoBudgets processing={isLoading || isRefetching} />
+          <NoBudgets processing={isLoading || isRefetching} type='projects' />
         ) : (
           <AppErrorBoundary>
             {layout == 'grid' || screenSize?.['mobile'] ? (

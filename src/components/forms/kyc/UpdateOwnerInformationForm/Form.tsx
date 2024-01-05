@@ -19,6 +19,7 @@ import { useEffect, useState } from 'react';
 import { PhoneNumberInput } from 'components/form-elements/PhoneNumberInput';
 import { DatePicker } from 'components/form-elements/DatePicker';
 import dayjs from 'dayjs';
+import { useGetOrganizationInformation } from 'hooks/api/kyc/useGetOrganizationInformation';
 
 interface Props {
   formikProps: FormikProps<typeof initialValues>;
@@ -37,12 +38,31 @@ export const Form = ({ processing, formikProps, currentOwner }: Props) => {
   } = formikProps;
 
   const [previewImageUrl, setPreviewImageUrl] = useState('');
+  const [isAddress, setIsAddress] = useState(true);
 
   const { user } = useAppContext().state;
 
   useScrollToFormError(errors, submitCount);
+  const { data } = useGetOrganizationInformation();
 
   useEffect(() => {
+    if (data && isAddress) {
+      const { postalCode, city, country, address, state } =
+        sanitizeRecordToRemoveUndefinedAndNulls(data!);
+
+      setValues(
+        {
+          ...values,
+          city: city ?? data?.city,
+          postalCode: postalCode ?? data?.postalCode,
+          country: country ?? data?.country,
+          address: address ?? data?.address,
+          state: state ?? data?.state,
+        },
+        true
+      );
+    }
+
     if (!currentOwner) return;
 
     const {
@@ -102,7 +122,7 @@ export const Form = ({ processing, formikProps, currentOwner }: Props) => {
       },
       true
     );
-  }, [currentOwner]);
+  }, [currentOwner, data]);
 
   const maxDob = dayjs().year(dayjs().year() - 18);
 
@@ -198,13 +218,42 @@ export const Form = ({ processing, formikProps, currentOwner }: Props) => {
         <Input label='ID Number' name='idNumber' />
       </div>
 
-      <AddressInputGroup
-        setFieldValue={setFieldValue}
-        country={values.country}
-        stateCode={values.stateCode}
-        state={values.state}
-        city={values.city}
-      />
+      {!isAddress && (
+        <AddressInputGroup
+          setFieldValue={setFieldValue}
+          country={values.country}
+          stateCode={values.stateCode}
+          state={values.state}
+          city={values.city}
+        />
+      )}
+
+      <h3 className='mt-5 text-base font-semibold text-black'>
+        Personal Address
+      </h3>
+      <p className='text-sm text-neutral-600'>
+        Is your business address same as personal address?
+      </p>
+      <div className='mt-2 flex gap-1'>
+        <input
+          checked={isAddress}
+          onChange={() => {
+            setIsAddress(true);
+          }}
+          type='checkbox'
+          className='mt-0.5 mr-1 flex-shrink-0'
+        />
+        <p className='mr-4 text-sm text-neutral-600'>Yes</p>
+        <input
+          checked={!isAddress}
+          onChange={() => {
+            setIsAddress(false);
+          }}
+          type='checkbox'
+          className='mt-0.5 mr-1 flex-shrink-0'
+        />
+        <p className='text-sm text-neutral-600'>No</p>
+      </div>
 
       <div className='relative mt-8 flex pb-8'>
         <SubmitButton

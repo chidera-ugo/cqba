@@ -50,10 +50,10 @@ export const useNavigationItems = (role?: UserRole) => {
         title: 'Transactions',
       },
     ],
-    'Spend Management': [
+    Organisation: [
       {
         icon: <PieChart />,
-        title: 'Budgets',
+        title: 'Budget',
         id: 'budgeting',
       },
       {

@@ -43,7 +43,7 @@ export default function Budgeting() {
   const currentTab = filters?.status?.value;
 
   return (
-    <AppLayout title='Budgets' childrenClassName={'mb-7'}>
+    <AppLayout title='Budget' childrenClassName={'mb-7'}>
       <div
         className={clsx(
           'sticky top-14 left-0 z-[800] flex gap-2 border-neutral-310 bg-white bg-opacity-80 px-3 backdrop-blur-md 640:block 640:border-b-0 640:px-8 640:pb-5 1024:top-20',
@@ -125,6 +125,7 @@ export default function Budgeting() {
         <AppErrorBoundary>
           <Budgets
             layout={layout}
+            type='budget'
             currentTab={currentTab}
             search={debouncedSearch}
             createdByUser

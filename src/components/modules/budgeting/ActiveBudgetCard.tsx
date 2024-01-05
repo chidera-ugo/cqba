@@ -113,7 +113,7 @@ export const ActiveBudgetCard = ({
     balance,
     threshold,
     allocatedAmount,
-    unallocatedAmount,
+    // unallocatedAmount,
     totalSpent,
     paused,
   } = budget;
@@ -134,12 +134,12 @@ export const ActiveBudgetCard = ({
           order: 2,
           value: allocatedAmount,
         },
-        {
-          title: 'Unallocated',
-          className: 'bg-neutral-200',
-          order: 3,
-          value: unallocatedAmount,
-        },
+        // {
+        //   title: 'Unallocated',
+        //   className: 'bg-neutral-200',
+        //   order: 3,
+        //   value: unallocatedAmount,
+        // },
       ]
     : [
         {
@@ -182,12 +182,12 @@ export const ActiveBudgetCard = ({
     return (
       <div
         className={clsx(
-          'font-normal text-neutral-500',
+          'min-h-[18px] font-normal text-neutral-500',
           showActions ? 'text-sm 640:text-base' : 'text-xs 640:text-sm'
         )}
       >
         {expiry ? (
-          <div>Due Date: {formatDate(expiry, 'short')}</div>
+          <div>Budget will expire on the {formatDate(expiry, 'short')}</div>
         ) : showActions && approvedDate && approvedBy ? (
           <div>
             Approved by {UserRoles[approvedBy!.role]}:{' '}
@@ -269,6 +269,7 @@ export const ActiveBudgetCard = ({
           showActions || showOnlyBreakdown
             ? 'cursor-default'
             : 'cursor-pointer hover:border-neutral-300',
+          (showActions || showOnlyBreakdown) && 'bg-neutral-100',
           (paused || isProjectPaused) && !showActions && 'opacity-50'
         )}
         onClick={() => {
@@ -285,7 +286,7 @@ export const ActiveBudgetCard = ({
           <div className={clsx(showActions && 'x-between')}>
             <div
               className={clsx(
-                'flex gap-2 align-middle 640:gap-3',
+                'align-left flex',
                 !showActions && 'justify-between'
               )}
             >
@@ -295,7 +296,20 @@ export const ActiveBudgetCard = ({
                 </div>
 
                 <div className='min-h-[15px]'>
-                  <SubTitle />
+                  <div
+                    className={clsx(
+                      showActions ? 'text-base 640:text-xl' : 'text-base',
+                      !showOnlyBreakdown && 'mt-0'
+                    )}
+                  >
+                    <span className={'font-medium text-neutral-500'}>
+                      {!showActions && 'Total '}Budget:
+                    </span>{' '}
+                    <span className='font-semibold text-black'>
+                      {currency}
+                      {formatAmount({ value: amount / 100 })}
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -307,7 +321,7 @@ export const ActiveBudgetCard = ({
                     <div
                       className={clsx(
                         'relative flex',
-                        showActions && !!beneficiaries?.length && 'ml-2'
+                        showActions && !!beneficiaries?.length && 'ml-0'
                       )}
                     >
                       {handleSort({
@@ -319,7 +333,7 @@ export const ActiveBudgetCard = ({
                           <div
                             key={email}
                             className={clsx(
-                              showActions ? 'block' : 'absolute',
+                              showActions ? 'hidden' : 'absolute',
                               'right-0 top-0 z-10'
                             )}
                             style={{
@@ -361,7 +375,22 @@ export const ActiveBudgetCard = ({
                     {name}
                   </div>
 
-                  <SubTitle />
+                  <div className='min-h-[15px]'>
+                    <div
+                      className={clsx(
+                        showActions ? 'text-base' : 'text-base',
+                        !showOnlyBreakdown && 'mt-0'
+                      )}
+                    >
+                      <span className={'font-medium text-neutral-500'}>
+                        {showActions && 'Total '}Budget:
+                      </span>{' '}
+                      <span className='font-semibold text-black'>
+                        {currency}
+                        {formatAmount({ value: amount / 100 })}
+                      </span>
+                    </div>
+                  </div>
                 </div>
 
                 {showActions && <div className='block w-16 768:hidden'></div>}
@@ -370,63 +399,28 @@ export const ActiveBudgetCard = ({
           </div>
         )}
 
-        <div
-          className={clsx(
-            showActions ? 'text-base 640:text-xl' : 'text-base',
-            !showOnlyBreakdown && 'mt-6'
-          )}
-        >
-          <span className={'font-medium text-neutral-500'}>
-            {!showActions && 'Total '}Budget:
-          </span>{' '}
-          <span className='font-semibold text-black'>
-            {currency}
-            {formatAmount({ value: amount / 100 })}
-          </span>
-        </div>
-
-        <div
-          className={clsx(
-            'relative mt-3 h-2 w-full overflow-hidden rounded-full bg-neutral-200'
-          )}
-        >
-          {handleSort({
-            data: breakdown,
-            sortBy: 'order',
-          })?.map(({ title, className, disabled, value }, i) => {
-            if (disabled || value === undefined || value === null)
-              return <Fragment key={title} />;
-
-            return (
-              <div
-                key={title}
-                className={clsx(
-                  'absolute left-0 top-0 h-full rounded-full',
-                  className
-                )}
-                style={{
-                  width: getWidth(value),
-                  zIndex: (i + 1) * 10,
-                }}
-              ></div>
-            );
-          })}
-        </div>
-
         <div className='flex flex-col gap-5 768:gap-0'>
           <div
             className={clsx(
-              'hidden-scrollbar mt-4 flex overflow-y-auto',
-              showActions ? 'gap-10' : 'gap-5'
+              'hidden-scrollbar flex overflow-y-auto',
+              showActions ? 'mt-4 justify-between gap-10' : 'mt-4 gap-5',
+              showOnlyBreakdown && '!mt-0'
             )}
           >
-            {breakdown?.map(({ title, disabled, value, className }) => {
+            {breakdown?.map(({ title, disabled, value }, index, array) => {
               if (disabled || value === undefined || value === null)
                 return <Fragment key={title} />;
 
+              const isLastElement = index === array.length - 1;
+
               return (
                 <div key={title} className={clsx(!showActions && 'w-full')}>
-                  <div className='flex w-full'>
+                  <div
+                    className={clsx(
+                      'flex w-full',
+                      isLastElement && 'justify-end'
+                    )}
+                  >
                     <div
                       className={clsx(
                         'flex-shrink-0 text-neutral-500',
@@ -436,22 +430,23 @@ export const ActiveBudgetCard = ({
                       {title}
                     </div>
 
-                    <div
-                      className={clsx(
-                        className,
-                        'my-auto ml-1 flex-shrink-0 rounded-full'
-                      )}
-                      style={{
-                        height: 7,
-                        width: 7,
-                      }}
-                    ></div>
+                    {/* <div
+                        className={clsx(
+                          className,
+                          'my-auto ml-1 flex-shrink-0 rounded-full'
+                        )}
+                        style={{
+                          height: 7,
+                          width: 7,
+                        }}
+                      ></div> */}
                   </div>
 
                   <div
                     className={clsx(
                       'mt-0.5 w-full font-semibold',
-                      showActions ? 'text-base 640:text-xl' : 'text-base'
+                      showActions ? 'text-base 640:text-xl' : 'text-base',
+                      isLastElement && 'text-right'
                     )}
                   >
                     {currency}
@@ -538,6 +533,52 @@ export const ActiveBudgetCard = ({
             </div>
           )}
         </div>
+
+        <div
+          className={clsx(
+            'relative mt-3 mb-2 h-2 w-full overflow-hidden rounded-full bg-neutral-200'
+          )}
+        >
+          {handleSort({
+            data: breakdown,
+            sortBy: 'order',
+          })?.map(({ title, className, disabled, value }, i) => {
+            if (disabled || value === undefined || value === null)
+              return <Fragment key={title} />;
+
+            return (
+              <div
+                key={title}
+                className={clsx(
+                  'absolute left-0 top-0 h-full rounded-full',
+                  className
+                )}
+                style={{
+                  width: getWidth(value),
+                  zIndex: (i + 1) * 10,
+                }}
+              ></div>
+            );
+          })}
+        </div>
+        {!showOnlyBreakdown ? (
+          <SubTitle />
+        ) : (
+          <div className='flex justify-between'>
+            <div className={'text-base font-semibold'}>{name}</div>
+            <div className='min-h-[15px]'>
+              <div className={clsx('text-base')}>
+                <span className={'font-medium text-neutral-500'}>
+                  {!showActions && 'Total '}Budget:
+                </span>{' '}
+                <span className='font-semibold text-black'>
+                  {currency}
+                  {formatAmount({ value: amount / 100 })}
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
       </button>
     </>
   );
