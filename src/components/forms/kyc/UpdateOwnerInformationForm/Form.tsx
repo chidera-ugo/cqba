@@ -228,7 +228,7 @@ export const Form = ({ processing, formikProps, currentOwner }: Props) => {
         />
       )}
 
-      <h3 className='mt-5 text-base font-semibold text-black'>
+      <h3 className='mt-6 text-base font-semibold text-black'>
         Personal Address
       </h3>
       <p className='text-sm text-neutral-600'>
