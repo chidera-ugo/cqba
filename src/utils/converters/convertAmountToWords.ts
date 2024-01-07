@@ -58,10 +58,12 @@ export const convertAmountToWords = function (
 
   if (!currency) return str;
 
-  const wholeNumber = !!str ? str + ` ${currency}, ` : '';
-  const decimal = !!str2 ? str2 + ` ${smallestUnit}` : '';
+  const wholeNumber = str ? `${str} ${currency}` : '';
+  const decimal = str2 ? `${str2} ${smallestUnit}` : '';
 
-  return (wholeNumber + decimal).toLowerCase();
+  return `${wholeNumber}${
+    wholeNumber && decimal ? ', ' : ''
+  }${decimal}`.toLowerCase();
 };
 
 const amountTextConverter = {

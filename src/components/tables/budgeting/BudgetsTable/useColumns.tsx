@@ -44,18 +44,6 @@ export const useColumns = (isProjectPaused?: boolean) => {
         ),
       },
       {
-        header: 'Threshold',
-        accessorKey: 'threshold',
-        enableColumnFilter: false,
-        cell: (props) => (
-          <TableCell
-            currency={props?.row?.original?.currency}
-            isAmount
-            {...props}
-          />
-        ),
-      },
-      {
         header: 'Available',
         accessorKey: 'balance',
         enableColumnFilter: false,

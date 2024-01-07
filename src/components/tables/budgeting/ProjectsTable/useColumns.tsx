@@ -56,18 +56,6 @@ export const useColumns = () => {
         ),
       },
       {
-        header: 'Unallocated',
-        accessorKey: 'unallocatedAmount',
-        enableColumnFilter: false,
-        cell: (props) => (
-          <TableCell
-            currency={props?.row?.original?.currency}
-            isAmount
-            {...props}
-          />
-        ),
-      },
-      {
         header: 'Due Date',
         accessorKey: 'expiry',
         enableColumnFilter: false,
