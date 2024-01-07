@@ -32,9 +32,11 @@ export const TransactionReceipt = ({
       />
     );
 
+  const amount = 33318154;
+
   const {
     reference,
-    amount,
+    // amount,
     status,
     type,
     meta,

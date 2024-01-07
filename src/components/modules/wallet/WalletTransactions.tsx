@@ -7,7 +7,6 @@ import { useUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
 import { useDebouncer } from 'hooks/commons/useDebouncer';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { PropsWithChildren, useState } from 'react';
-import { formatAmount } from 'utils/formatters/formatAmount';
 import { walletFiltersSchema } from 'zod_schemas/wallet_schema';
 
 export const WalletTransactions = ({
@@ -20,6 +19,7 @@ export const WalletTransactions = ({
     primaryWallet,
     isLoading: gettingWallet,
     isError: walletErrored,
+    getAmountWithCurrency,
   } = useManageWallets();
 
   const { filters, setFilters, pagination, setPagination, range, setRange } =
@@ -66,9 +66,7 @@ export const WalletTransactions = ({
                 label: 'Budget',
                 options:
                   data?.docs.map(({ name, balance, _id }) => ({
-                    label: `${name} - ${formatAmount({
-                      value: balance,
-                    })}`,
+                    label: `${name} - ${getAmountWithCurrency(balance)}`,
                     value: _id,
                   })) ?? [],
               },

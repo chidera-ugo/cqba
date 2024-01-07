@@ -40,8 +40,6 @@ export const DatePicker = ({
   const id = props.id ?? name;
   const calendarValue = field?.value?.calendarValue as Date;
 
-  console.log({ calendarValue });
-
   return (
     <div className={clsx(className, 'mt-5 w-full')}>
       <div className={'relative'}>
