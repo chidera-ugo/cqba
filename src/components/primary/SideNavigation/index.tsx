@@ -73,7 +73,7 @@ export const SideNavigationContent = ({
               <Link
                 href={'/settings/license'}
                 className={
-                  'y-between relative h-[241px] w-full overflow-hidden rounded-2xl p-6'
+                  'y-between relative h-[171px] w-full overflow-hidden rounded-2xl p-6'
                 }
                 style={{
                   background:
@@ -83,29 +83,28 @@ export const SideNavigationContent = ({
                 <div>
                   <h4
                     className={
-                      'max-w-[220px] text-xl font-semibold leading-6 text-white'
+                      'max-w-[220px] text-[17px] font-semibold leading-6 text-white'
                     }
                   >
-                    Ready to elevate your financial control?
-                  </h4>
-                  <p className='mt-2 max-w-[200px] text-sm text-white'>
                     Upgrade your plan now to unlock a host of amazing features.
-                  </p>
+                  </h4>
                 </div>
 
                 <div className='flex'>
                   <button
                     className={
-                      'h-8 w-[80px] rounded-full bg-white text-sm text-primary-main shadow-lg'
+                      'h-8 w-[110px] rounded-full border-[1px] border-neutral-410 text-sm text-white shadow-lg'
                     }
                   >
-                    Upgrade
+                    Upgrade Plan
                   </button>
                 </div>
 
                 <Image
                   src={shield}
-                  className={'absolute -right-24 -bottom-28 rotate-[20deg]'}
+                  className={
+                    'absolute -bottom-16 -right-8 w-7/12 rotate-[20deg]'
+                  }
                   alt={'shield'}
                 />
               </Link>

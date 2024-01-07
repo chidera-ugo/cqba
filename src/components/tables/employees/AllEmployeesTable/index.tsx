@@ -157,6 +157,7 @@ export const AllEmployeesTable = ({
 
       {data && !data.docs.length ? (
         <NoData
+          type=''
           processing={isLoading || isRefetching}
           imageSrc={clock}
           title={status === 'active' ? 'Invite People' : 'No pending invites'}

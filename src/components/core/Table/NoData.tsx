@@ -12,6 +12,7 @@ interface Props {
   subTitle?: ReactNode;
   noToast?: boolean;
   toastClassname?: string;
+  type: string;
 }
 
 export const NoData = ({
@@ -20,6 +21,7 @@ export const NoData = ({
   subTitle,
   imageSrc,
   icon,
+  type,
   noToast,
   toastClassname,
 }: Props) => {
@@ -53,7 +55,13 @@ export const NoData = ({
           <div className='mx-auto max-w-[500px] text-center'>
             {title && <h4 className='mt-5 text-xl 640:text-3xl'>{title}</h4>}
 
-            <p className='mt-4 text-sm font-light leading-5 text-neutral-600'>
+            <p
+              className={
+                type === 'approvals'
+                  ? 'mt-4 px-8 text-sm font-light leading-5 text-neutral-600 640:px-24'
+                  : 'mt-4 text-sm font-light leading-5 text-neutral-600'
+              }
+            >
               {subTitle ?? 'No data yet'}
             </p>
           </div>

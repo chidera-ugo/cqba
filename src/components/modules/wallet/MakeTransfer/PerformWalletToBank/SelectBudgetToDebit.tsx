@@ -87,6 +87,7 @@ export const SelectBudgetToDebit = ({
           {isProject && !isOwner ? (
             <NoData
               noToast
+              type='budget'
               icon={<EmptyChart />}
               subTitle={
                 <span className={'mx-auto block max-w-[273px]'}>

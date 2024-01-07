@@ -113,6 +113,7 @@ export default function Approvals() {
         <AppErrorBoundary>
           <Budgets
             isApprovalsPage
+            type='approvals'
             layout={layout}
             currentTab={currentTab}
             search={debouncedSearch}

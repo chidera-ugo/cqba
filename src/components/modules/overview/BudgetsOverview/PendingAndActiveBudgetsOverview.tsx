@@ -69,6 +69,7 @@ export const PendingAndActiveBudgetsOverview = ({
       {!data?.docs.length ? (
         <div>
           <NoData
+            type=''
             noToast
             processing={isLoading}
             icon={<EmptyReports />}

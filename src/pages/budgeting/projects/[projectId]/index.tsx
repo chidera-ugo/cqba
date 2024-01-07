@@ -39,7 +39,7 @@ export default function ProjectDetailsPage() {
 
   return (
     <AppLayout
-      title={'Budgets'}
+      title={'Budget'}
       breadCrumbs={[
         {
           title: 'Budgets',
