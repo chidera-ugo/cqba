@@ -571,7 +571,7 @@ export const ActiveBudgetCard = ({
                     ]}
                     id={'budget_actions'}
                   />
-                ) : !isOwner && !paused ? (
+                ) : !isOwner && !paused && !isProject ? (
                   <div className='mr-2'>
                     <MakeTransfer budget={budget} />
                   </div>
