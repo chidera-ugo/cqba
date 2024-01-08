@@ -18,7 +18,7 @@ export const CreatePinSteps = ({ closeModal }: Props) => {
 
   const [mode, setMode] = useState<'new' | 'confirm'>('new');
 
-  const { getCurrentUser, dispatch } = useAppContext();
+  const { refetchCurrentUser, dispatch } = useAppContext();
 
   const { handleError } = useHandleError();
 
@@ -28,7 +28,7 @@ export const CreatePinSteps = ({ closeModal }: Props) => {
 
       closeModal();
 
-      getCurrentUser!(null);
+      refetchCurrentUser!(null);
     },
     onError(e) {
       handleError(e);

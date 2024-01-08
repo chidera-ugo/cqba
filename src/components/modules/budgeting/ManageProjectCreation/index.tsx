@@ -8,6 +8,7 @@ import {
 } from 'components/forms/budgeting/CreateBudgetForm';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { AnimateLayout } from 'components/animations/AnimateLayout';
+import { IssueWithSubscription } from 'components/modules/app/IssueWithSubscription';
 import {
   SubBudgetListItem,
   SubBudgetsList,
@@ -23,6 +24,7 @@ import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { useHandleError } from 'hooks/api/useHandleError';
 import { useQueryClientInvalidator } from 'hooks/app/useQueryClientInvalidator';
 import { useManageSingleBudgetCreation } from 'hooks/budgeting/useManageSingleBudgetCreation';
+import { useSubscriptionFeatures } from 'hooks/dashboard/core/useSubscriptionFeatures';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import {
@@ -54,7 +56,7 @@ export const ManageProjectCreation = ({
   isTransferFlow,
   onFinish,
 }: Props) => {
-  const { replace, query, pathname } = useRouter();
+  const { replace, query, push, pathname } = useRouter();
 
   const { user } = useAppContext().state;
 
@@ -64,6 +66,8 @@ export const ManageProjectCreation = ({
   const [subBudgets, setSubBudgets] = useState<SubBudgetListItem[]>([]);
   const [createProjectFormRecoveryValues, setCreateProjectFormRecoveryValues] =
     useState<CreateBudgetFormRecoveryValues>(null);
+
+  const features = useSubscriptionFeatures();
 
   const { handleError } = useHandleError();
   const { invalidate } = useQueryClientInvalidator();
@@ -249,7 +253,9 @@ export const ManageProjectCreation = ({
         show={show}
         title={
           mode === Mode.create
-            ? 'Create Project'
+            ? features.canCreateProject
+              ? 'Create Project'
+              : ''
             : mode === Mode.sub_budgets_list
             ? 'Sub Budgets'
             : ''
@@ -335,20 +341,30 @@ export const ManageProjectCreation = ({
             </div>
           ) : (
             <AppErrorBoundary>
-              <CreateBudgetForm
-                {...{ budget }}
-                currency={manageSingleBudgetCreation.currency}
-                formRecoveryValues={createProjectFormRecoveryValues}
-                onSubmit={(values) => {
-                  setCreateProjectFormRecoveryValues((prev) => ({
-                    ...prev!,
-                    ...values,
-                  }));
+              {features.canCreateProject ? (
+                <CreateBudgetForm
+                  {...{ budget }}
+                  currency={manageSingleBudgetCreation.currency}
+                  formRecoveryValues={createProjectFormRecoveryValues}
+                  onSubmit={(values) => {
+                    setCreateProjectFormRecoveryValues((prev) => ({
+                      ...prev!,
+                      ...values,
+                    }));
 
-                  setMode(Mode.sub_budgets_list);
-                }}
-                isOwner={isOwner}
-              />
+                    setMode(Mode.sub_budgets_list);
+                  }}
+                  isOwner={isOwner}
+                />
+              ) : (
+                <IssueWithSubscription
+                  wrapperClassname={'mt-8'}
+                  actionText={'Change plan'}
+                  action={() => push('/settings/license?_t=change_plan')}
+                  title={`Upgrade Your Plan to Access Project Budget Feature`}
+                  subTitle='Create multiple budgets for a project for detailed financial tracking and management. Upgrade to Premium Plan to get started.'
+                />
+              )}
             </AppErrorBoundary>
           )}
         </AnimateLayout>

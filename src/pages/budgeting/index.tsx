@@ -63,7 +63,7 @@ export default function Budgeting() {
             tabs={
               isOwner
                 ? budgetingFilterOptions
-                : approvalsFilterOptions('Active Budgets')
+                : approvalsFilterOptions('Single Budgets')
             }
           />
         </div>

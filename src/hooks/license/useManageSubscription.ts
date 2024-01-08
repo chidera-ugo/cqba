@@ -9,14 +9,12 @@ import { useQueryClientInvalidator } from 'hooks/app/useQueryClientInvalidator';
 import { useManageWallets } from 'hooks/wallet/useManageWallets';
 import { useRouter } from 'next/router';
 import process from 'process';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { usePaystackPayment } from 'react-paystack';
 import { PaystackProps } from 'react-paystack/libs/types';
 
-export const useManageSubscription = ({
-  setCurrentModalType,
-}: ManageSubscriptionProps) => {
-  const { getCurrentUser, dispatch, state } = useAppContext();
+export const useManageSubscription = ({ close }: ManageSubscriptionProps) => {
+  const { refetchCurrentUser, dispatch, state } = useAppContext();
 
   const { handleError } = useHandleError();
 
@@ -100,7 +98,7 @@ export const useManageSubscription = ({
 
   function onSuccess() {
     dispatch({ type: 'update_has_choosen_plan', payload: true });
-    getCurrentUser!(null);
+    refetchCurrentUser!(null);
     invalidate('balances', 'subscription', 'organization');
     setMode('success');
     setPaystackConfig(defaultPaystackConfig);
@@ -114,7 +112,7 @@ export const useManageSubscription = ({
 
   function cancel() {
     dismiss();
-    setCurrentModalType(null);
+    close();
   }
 
   function explorePlan() {
@@ -143,9 +141,7 @@ export const useManageSubscription = ({
 
 export interface ManageSubscriptionProps {
   currentModalType: TSubscriptionSummaryCurrentModalType;
-  setCurrentModalType: Dispatch<
-    SetStateAction<TSubscriptionSummaryCurrentModalType>
-  >;
+  close: () => void;
 }
 
 export type UseManageSubscription = ReturnType<typeof useManageSubscription>;

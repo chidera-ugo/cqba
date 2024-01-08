@@ -2,18 +2,21 @@ import { AuthorizeActionWithPin } from 'components/core/AuthorizeActionWithPin';
 import { AppErrorBoundary } from 'components/core/ErrorBoundary';
 import { RightModalWrapper } from 'components/modal/ModalWrapper';
 import { AnimateLayout } from 'components/animations/AnimateLayout';
+import { IssueWithSubscription } from 'components/modules/app/IssueWithSubscription';
 import {
   ManageSingleBudgetCreation,
   Mode,
 } from 'components/modules/budgeting/ManageSingleBudgetCreation';
-import { useAppContext } from 'context/AppContext';
 import { BudgetStatus } from 'enums/budget';
+import { useUserRole } from 'hooks/access_control/useUserRole';
 import { useCreateBudget } from 'hooks/api/budgeting/useCreateBudget';
 import { useCreateSubBudget } from 'hooks/api/budgeting/useCreateSubBudget';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { useHandleError } from 'hooks/api/useHandleError';
 import { useQueryClientInvalidator } from 'hooks/app/useQueryClientInvalidator';
 import { useManageSingleBudgetCreation } from 'hooks/budgeting/useManageSingleBudgetCreation';
+import { useSubscriptionFeatures } from 'hooks/dashboard/core/useSubscriptionFeatures';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 interface Props {
@@ -35,12 +38,13 @@ export const ManageBudgetCreation = ({
   projectId,
   onSuccess,
 }: Props) => {
+  const { push } = useRouter();
+
   const [mode, setMode] = useState<Mode>(Mode.create);
-
-  const { user } = useAppContext().state;
-  const isOwner = user?.role === 'owner';
-
   const [budgetStatus, setBudgetStatus] = useState<BudgetStatus | null>(null);
+
+  const { isOwner } = useUserRole();
+  const features = useSubscriptionFeatures();
 
   const { getBudget, resetFormRecoveryValues, ...manageSingleBudgetCreation } =
     useManageSingleBudgetCreation();
@@ -173,7 +177,9 @@ export const ManageBudgetCreation = ({
         show={show && !isAuthorizationMode}
         title={
           mode === Mode.create
-            ? 'Create Budget'
+            ? features.canCreateBudget
+              ? 'Create Budget'
+              : ''
             : mode === Mode.add_beneficiaries
             ? 'Add Beneficiaries'
             : mode === Mode.create_employee
@@ -188,10 +194,20 @@ export const ManageBudgetCreation = ({
         <AnimateLayout changeTracker={mode} className={'px-4 640:px-8'}>
           {isAuthorizationMode ? null : (
             <AppErrorBoundary>
-              <ManageSingleBudgetCreation
-                {...{ mode, onSuccess, setMode, unallocatedFunds }}
-                {...manageSingleBudgetCreation}
-              />
+              {features.canCreateBudget ? (
+                <ManageSingleBudgetCreation
+                  {...{ mode, onSuccess, setMode, unallocatedFunds }}
+                  {...manageSingleBudgetCreation}
+                />
+              ) : (
+                <IssueWithSubscription
+                  wrapperClassname={'mt-8'}
+                  actionText={'Change plan'}
+                  action={() => push('/settings/license?_t=change_plan')}
+                  title={`Upgrade Your Plan to Increase Active Budgets`}
+                  subTitle='Organization has reached its maximum limit for active budgets. To continue adding active budgets, kindly upgrading your plan'
+                />
+              )}
             </AppErrorBoundary>
           )}
         </AnimateLayout>

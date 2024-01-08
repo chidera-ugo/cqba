@@ -30,6 +30,11 @@ interface Organization {
     months: number;
     gracePeriod: number;
     object?: Subscription;
+    features: {
+      CREATE_BUDGET: boolean;
+      CREATE_PROJECT: boolean;
+      INVITE_USER: boolean;
+    };
   };
 }
 

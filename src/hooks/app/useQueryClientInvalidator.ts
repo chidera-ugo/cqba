@@ -1,4 +1,5 @@
 import { QueryKey, useQueryClient } from '@tanstack/react-query';
+import { useAppContext } from 'context/AppContext';
 
 type DataGroup =
   | 'budgets'
@@ -10,6 +11,8 @@ type DataGroup =
 
 export const useQueryClientInvalidator = () => {
   const queryClient = useQueryClient();
+
+  const { refetchCurrentUser } = useAppContext();
 
   function invalidator(type: DataGroup) {
     switch (type) {
@@ -28,18 +31,22 @@ export const useQueryClientInvalidator = () => {
         defaultInvalidator(['debitable_projects']);
         defaultInvalidator(['budgets']);
         defaultInvalidator(['budgets_requests_count']);
+        refetchCurrentUser!(null);
         return;
       case 'projects':
         defaultInvalidator(['project']);
+        refetchCurrentUser!(null);
         return;
       case 'subscription':
         defaultInvalidator(['subscription_history']);
         defaultInvalidator(['current_subscription_plan']);
+        refetchCurrentUser!(null);
         return;
       case 'team':
         defaultInvalidator(['employee']);
         defaultInvalidator(['employees']);
         defaultInvalidator(['permission_group_users']);
+        refetchCurrentUser!(null);
         return;
     }
   }

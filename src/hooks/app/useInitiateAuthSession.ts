@@ -1,10 +1,10 @@
 import { useAppContext } from 'context/AppContext';
 
 export const useInitiateAuthSession = () => {
-  const { getCurrentUser, dispatch } = useAppContext();
+  const { refetchCurrentUser, dispatch } = useAppContext();
 
   function initiateAuthSession(accessToken: string, refreshToken: string) {
-    getCurrentUser!(accessToken);
+    refetchCurrentUser!(accessToken);
 
     dispatch({
       type: 'setIsInitializing',

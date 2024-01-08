@@ -45,7 +45,7 @@ export const ActionDropdown = ({
   const [showDropdown, setShowDropdown] = useState(false);
 
   const isLastRow =
-    !totalRows || !index ? false : index > 2 && index === totalRows - 1;
+    !totalRows || index === undefined ? false : index === totalRows - 1;
 
   return (
     <div className={clsx(className, 'mr-2 flex')}>

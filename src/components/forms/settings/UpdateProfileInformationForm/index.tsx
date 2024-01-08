@@ -12,14 +12,14 @@ import { validationSchema } from './validationSchema';
 import { Form } from './Form';
 
 export const UpdateProfileInformationForm = () => {
-  const { getCurrentUser } = useAppContext();
+  const { refetchCurrentUser } = useAppContext();
 
   const { isLoading: uploadingAvatar, mutate: uploadAvatar } =
     useUpdateAvatar();
 
   const { isLoading, mutate } = useUpdateProfile({
     onSuccess() {
-      getCurrentUser!(null);
+      refetchCurrentUser!(null);
       toast(<AppToast>Update successful</AppToast>, { type: 'success' });
     },
   });

@@ -13,7 +13,7 @@ import {
 
 export const ManageSubscription = ({
   currentModalType,
-  setCurrentModalType,
+  close,
 }: ManageSubscriptionProps) => {
   const {
     mode,
@@ -28,7 +28,7 @@ export const ManageSubscription = ({
     paystackConfig,
     proceed,
     plan,
-  } = useManageSubscription({ currentModalType, setCurrentModalType });
+  } = useManageSubscription({ currentModalType, close });
 
   const hideTitle = mode === 'success' || mode === 'confirming';
 

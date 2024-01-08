@@ -70,7 +70,7 @@ export const useColumns = ({ handleActionClick }: Args) => {
         id: 'actions',
         accessorKey: '_id',
         enableColumnFilter: false,
-        cell: ({ row }) => {
+        cell: ({ row, table }) => {
           const employee = row.original;
 
           const isEmployeeActive = employee.status === 'active';
@@ -78,6 +78,8 @@ export const useColumns = ({ handleActionClick }: Args) => {
           return (
             <div className={'mr-auto flex'}>
               <ActionDropdown
+                totalRows={table?.getRowModel()?.rows?.length}
+                index={row?.index}
                 withoutBorders
                 options={
                   isEmployeeActive

@@ -37,5 +37,5 @@ export interface Tokens {
 export type StoreApi = {
   state: State;
   dispatch: Dispatch<Action>;
-  getCurrentUser?: UseMutateFunction<IUser, unknown, any, unknown>;
+  refetchCurrentUser?: UseMutateFunction<IUser, unknown, any, unknown>;
 };

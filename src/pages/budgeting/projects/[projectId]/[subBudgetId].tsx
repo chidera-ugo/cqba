@@ -56,7 +56,6 @@ export default function SubBudgetDetails() {
           title: 'Track Sub Budget',
         },
       ]}
-      enabledFor={'owner'}
       breadCrumbsSlot={
         data?.status === 'closed' ? null : (
           <div className={clsx('my-auto hidden gap-2 1180:flex')}>

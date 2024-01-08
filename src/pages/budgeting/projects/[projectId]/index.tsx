@@ -49,7 +49,6 @@ export default function ProjectDetailsPage() {
           title: 'Track Project',
         },
       ]}
-      enabledFor={'owner'}
       breadCrumbsSlot={
         <div className={clsx('my-auto hidden gap-2 1180:flex')}>
           <SearchInput

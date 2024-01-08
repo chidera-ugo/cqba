@@ -196,7 +196,7 @@
   }
 
   .card {
-    @apply w-full rounded-xl border border-neutral-310 p-4 640:rounded-2xl 640:p-7;
+    @apply w-full rounded-xl border border-neutral-310 p-4 640:rounded-2xl 640:p-5;
   }
 
   .dashed_card {

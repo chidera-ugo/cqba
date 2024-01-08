@@ -8,7 +8,8 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import updateLocale from 'dayjs/plugin/updateLocale';
 import { useGetActiveSubscription } from 'hooks/api/subscriptions/useGetActiveSubscription';
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { formatDate } from 'utils/formatters/formatDate';
 import { generatePlaceholderArray } from 'utils/generators/generatePlaceholderArray';
 
@@ -40,8 +41,26 @@ export type TSubscriptionSummaryCurrentModalType =
   | null;
 
 export const SubscriptionSummary = () => {
+  const { query, replace, pathname } = useRouter();
+
   const [currentModalType, setCurrentModalType] =
     useState<TSubscriptionSummaryCurrentModalType>(null);
+
+  useEffect(() => {
+    if (!query['_t']) return;
+
+    const modal = query['_t'] as TSubscriptionSummaryCurrentModalType;
+
+    switch (modal) {
+      case 'change_plan':
+      case 'renew_subscription':
+      case 'compare_plans':
+        setCurrentModalType(modal);
+        break;
+      default:
+        break;
+    }
+  }, [query['_t']]);
 
   const { isLoading, isError, data } = useGetActiveSubscription();
 
@@ -51,7 +70,22 @@ export const SubscriptionSummary = () => {
   const { endingAt, plan, trial, renewAt } = data;
 
   function close() {
-    setCurrentModalType(null);
+    const { _t: _, ...q } = query;
+
+    replace(pathname, {
+      query: {
+        ...q,
+      },
+    }).then(() => setCurrentModalType(null));
+  }
+
+  function changeModal(modal: TSubscriptionSummaryCurrentModalType) {
+    replace(pathname, {
+      query: {
+        ...query,
+        _t: modal,
+      },
+    }).then(() => setCurrentModalType(modal));
   }
 
   const isPremiumUser = data?.plan?.name === 'Premium';
@@ -78,7 +112,7 @@ export const SubscriptionSummary = () => {
         />
       </CentredModalWrapper>
 
-      <ManageSubscription {...{ currentModalType, setCurrentModalType }} />
+      <ManageSubscription {...{ currentModalType, close }} />
 
       <div className='grid grid-cols-12 gap-5'>
         <div className='card y-between col-span-12 min-h-[156px] bg-primary-main 640:col-span-6 1180:col-span-4'>
@@ -121,7 +155,7 @@ export const SubscriptionSummary = () => {
               {!isPremiumUser && (
                 <div className='flex'>
                   <button
-                    onClick={() => setCurrentModalType('change_plan')}
+                    onClick={() => changeModal('change_plan')}
                     className='text_link'
                   >
                     Change Plan
@@ -131,7 +165,7 @@ export const SubscriptionSummary = () => {
 
               <div className='flex'>
                 <button
-                  onClick={() => setCurrentModalType('compare_plans')}
+                  onClick={() => changeModal('compare_plans')}
                   className='text_link mt-1'
                 >
                   Compare Plans
@@ -140,7 +174,7 @@ export const SubscriptionSummary = () => {
 
               <div className='flex'>
                 <button
-                  onClick={() => setCurrentModalType('renew_subscription')}
+                  onClick={() => changeModal('renew_subscription')}
                   className='text_link mt-1'
                 >
                   Renew Current Plan

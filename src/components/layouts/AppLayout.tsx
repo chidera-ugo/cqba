@@ -90,6 +90,7 @@ export const AppLayout = ({
       <AuthLayout noRedirect title={'Page Not Found'}>
         <div className='y-center app-container py-10 640:py-20'>
           <IssueWithSubscription
+            employeeCanPerformAction
             actionText={'Sign-in with a different account'}
             action={() => destroySession()}
             title={`Your organization’s ChequeBase Account has been suspended`}
@@ -133,7 +134,12 @@ export const AppLayout = ({
           className={'bg-white'}
           actionText={'Renew Subscription or change plan'}
           action={() => push('/settings/license')}
-          title={`Your organization’s ${data?.plan?.name} Subscription Plan has Expired`}
+          title={
+            <span className={'mx-auto block max-w-[400px]'}>
+              Your organization’s {data?.plan?.name} Subscription Plan has
+              Expired
+            </span>
+          }
           subTitle='To renew or change plan, click on the button below to Renew or Change Plan to re-activate your organization.'
         />
       </CentredModalWrapper>

@@ -88,7 +88,7 @@ export const Form = ({ processing, formikProps, currentOwner }: Props) => {
     function getTitles() {
       const titles: MultiCheckValue = {};
 
-      for (const i in title) {
+      for (const i of title) {
         titles[i] = true;
       }
 
