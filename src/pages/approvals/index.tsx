@@ -6,6 +6,7 @@ import { AppLayout } from 'components/layouts/AppLayout';
 import { Budgets } from 'components/modules/budgeting/Budgets';
 import { Grid, List } from 'components/svgs/GridAndList';
 import { approvalsFilterOptions } from 'constants/approvals/filters';
+import { useUserRole } from 'hooks/access_control/useUserRole';
 import { useAppCounts } from 'hooks/budgeting/useAppCounts';
 import { useUrlManagedState } from 'hooks/client_api/hooks/useUrlManagedState';
 import { useDebouncer } from 'hooks/commons/useDebouncer';
@@ -16,6 +17,8 @@ import { approvalsFiltersSchema } from 'zod_schemas/approvals_schema';
 type TLayout = 'grid' | 'list';
 
 export default function Approvals() {
+  const { isOwner } = useUserRole();
+
   const [layout, setLayout] = useState<TLayout>(
     getFromLocalStore('preferences')?.['budgeting_layout'] ?? 'grid'
   );
@@ -53,7 +56,10 @@ export default function Approvals() {
             }}
             currentTab={filters?.status?.value}
             appCounts={appCounts}
-            tabs={approvalsFilterOptions()}
+            tabs={approvalsFilterOptions()?.filter(({ disabledFor }) => {
+              if (disabledFor === 'owner' && isOwner) return false;
+              return true;
+            })}
           />
         </div>
 

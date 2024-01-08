@@ -8,6 +8,7 @@ import { ManageBudgetCreation } from 'components/modules/budgeting/ManageBudgetC
 import { SimplePlus } from 'components/svgs/others/Plus';
 import { BudgetsTable } from 'components/tables/budgeting/BudgetsTable';
 import { useAppContext } from 'context/AppContext';
+import { useUserRole } from 'hooks/access_control/useUserRole';
 import { IProject } from 'hooks/api/budgeting/project/useGetProjectById';
 import { IBudget } from 'hooks/api/budgeting/useGetAllBudgetsOrProjects';
 import { useGetColorByChar } from 'hooks/commons/useGetColorByChar';
@@ -33,6 +34,7 @@ export const ProjectDetails = ({
   data,
   projectId,
 }: Props) => {
+  const { push } = useRouter();
   const { screenSize } = useAppContext().state;
 
   const [modal, setModal] = useState<
@@ -40,7 +42,7 @@ export const ProjectDetails = ({
   >(null);
 
   const { getColor } = useGetColorByChar();
-  const { push } = useRouter();
+  const { isOwner } = useUserRole();
 
   if (isLoading) return <IsLoading />;
 
@@ -65,7 +67,7 @@ export const ProjectDetails = ({
         isProject
         getColor={getColor}
         actionsSlot={
-          data?.unallocatedAmount > 0 ? (
+          data?.unallocatedAmount > 0 && isOwner ? (
             <button
               onClick={() => setModal('create_budget')}
               className='primary-button x-center my-auto h-10 w-full gap-2 px-4 text-sm'

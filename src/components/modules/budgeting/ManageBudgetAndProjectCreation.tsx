@@ -50,7 +50,7 @@ export const ManageBudgetAndProjectCreation = ({
               ...prev,
               status: isOwner
                 ? budgetingFilterOptions[0]
-                : approvalsFilterOptions()[1], // Switching tabs to projects,
+                : approvalsFilterOptions()[2], // Switching tabs to projects,
             }));
         }}
         show={modal === 'create_budget'}

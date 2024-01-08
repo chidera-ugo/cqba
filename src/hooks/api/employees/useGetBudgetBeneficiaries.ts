@@ -9,6 +9,11 @@ export function useGetBudgetBeneficiaries(
     queryKey: ['employees', 'unpaginated'],
     url: '/all',
     service: 'employees',
-    options,
+    options: {
+      ...options,
+      meta: {
+        silient: true,
+      },
+    },
   });
 }
