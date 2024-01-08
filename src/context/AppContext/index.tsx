@@ -35,7 +35,7 @@ function AppContextProvider({ children, ...props }: PropsWithChildren<any>) {
     initialState
   );
 
-  const { mutate: getCurrentUser } = useGetCurrentUser(
+  const { mutate } = useGetCurrentUser(
     (tokens) => {
       dispatch({ type: 'saveTokens', payload: tokens });
     },
@@ -63,7 +63,7 @@ function AppContextProvider({ children, ...props }: PropsWithChildren<any>) {
     () => ({
       state,
       dispatch,
-      getCurrentUser,
+      refetchCurrentUser: mutate,
     }),
     [state, dispatch]
   );
@@ -94,7 +94,7 @@ function AppContextProvider({ children, ...props }: PropsWithChildren<any>) {
   async function initializeSession(token: string) {
     dispatch({ type: 'setIsInitializing', payload: true });
 
-    getCurrentUser(token);
+    mutate(token);
   }
 
   if (state.isInitializing) return <FullScreenLoader id='app_context' asPage />;
