@@ -3,6 +3,16 @@ import { toast } from 'react-toastify';
 
 export const useHandleError = () => {
   const handleError = (e: any, silent?: boolean, onClick?: () => void) => {
+    const message = getMessage(e);
+
+    if (!silent && message !== 'service_unavailable') {
+      toast(<AppToast action={onClick}>{message}</AppToast>, {
+        type: 'error',
+      });
+    }
+  };
+
+  function getMessage(e: any) {
     let message: string;
 
     const statusCode = e?.response?.data?.statusCode;
@@ -36,12 +46,8 @@ export const useHandleError = () => {
       message = _message[0];
     }
 
-    if (!silent && message !== 'service_unavailable') {
-      toast(<AppToast action={onClick}>{message}</AppToast>, {
-        type: 'error',
-      });
-    }
-  };
+    return message;
+  }
 
-  return { handleError };
+  return { handleError, getMessage };
 };

@@ -1,5 +1,6 @@
 import { Spinner } from 'components/svgs/dashboard/Spinner';
 import { Dollar } from 'components/svgs/wallet/Icons_MakeTransfer';
+import { useHandleError } from 'hooks/api/useHandleError';
 import { useGetTransferFee } from 'hooks/api/wallet/useGetTransferFee';
 import { useDebouncer } from 'hooks/commons/useDebouncer';
 import { useEffect, useState } from 'react';
@@ -37,20 +38,9 @@ export const GetTransactionFee = ({
     !!budgetId && !!amount && Number(sanitizedAmount) > minimumAmount;
 
   const [fee, setFee] = useState('');
+  const [error, setError] = useState('');
 
-  useDebouncer({
-    onChange() {
-      emitIsProcessing(true);
-      setIsProcessing(true);
-      if (!isValid) emitValue('');
-    },
-    performDebouncedAction() {
-      if (!isValid) return;
-
-      mutate(null);
-    },
-    dependencies: [amount, budgetId],
-  });
+  const { getMessage } = useHandleError();
 
   const { isLoading, mutate } = useGetTransferFee(
     getAmountInLowestUnit(amount),
@@ -61,9 +51,26 @@ export const GetTransactionFee = ({
         emitValue(fee);
         setFee(fee);
       },
-      onError: () => null,
+      onError: (err) => {
+        setError(getMessage(err) ?? 'An error occurred');
+      },
     }
   );
+
+  useDebouncer({
+    onChange() {
+      emitIsProcessing(true);
+      setIsProcessing(true);
+      if (!isValid) emitValue('');
+    },
+    performDebouncedAction() {
+      if (!isValid) return;
+
+      setError('');
+      mutate(null);
+    },
+    dependencies: [amount, budgetId],
+  });
 
   useEffect(() => {
     emitIsProcessing(isLoading);
@@ -77,14 +84,20 @@ export const GetTransactionFee = ({
       ) : isLoading || isProcessing ? (
         <Spinner className={'text-primary-main'} />
       ) : (
-        <div className='flex text-sm'>
-          <span className='my-auto mr-2'>
-            <Dollar />
-          </span>
-          <span className='my-auto font-medium'>
-            {currency}
-            {formatAmount({ value: fee, decimalPlaces: 2 })}
-          </span>
+        <div className='flex text-sm font-medium'>
+          {error ? (
+            <span className={'my-auto text-red-500'}>{error}</span>
+          ) : (
+            <>
+              <span className='my-auto mr-2'>
+                <Dollar />
+              </span>
+              <span className='my-auto'>
+                {currency}
+                {formatAmount({ value: fee, decimalPlaces: 2 })}
+              </span>
+            </>
+          )}
         </div>
       )}
     </div>
