@@ -143,7 +143,7 @@ export const ManageProjectCreation = ({
         onSuccess() {
           setMode(Mode.success);
 
-          invalidate('budgets', 'balances', 'team');
+          invalidate('budgets', 'projects', 'balances', 'team');
 
           resetFormRecoveryValues();
         },
