@@ -4,15 +4,7 @@ import { validateFile } from 'utils/validators/validateField';
 import { object } from 'yup';
 
 export function validationSchema(businessType?: Business_typeEnum) {
-  const spec: Record<string, any> = {
-    creationDate: object().test(
-      'required',
-      'Provide company creation date',
-      (val: any) => {
-        return !!val.value && !!val.calendarValue;
-      }
-    ),
-  };
+  const spec: Record<string, any> = {};
 
   for (const item of companyInformationDocuments?.[
     businessType ?? Business_typeEnum.individual

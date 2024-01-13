@@ -1,9 +1,7 @@
-import { DatePicker } from 'components/form-elements/DatePicker';
 import { FileInput } from 'components/form-elements/FileInput';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { ImageViewer } from 'components/modals/ImageViewer';
 import { companyInformationDocuments } from 'constants/kyc/company_information_documents';
-import dayjs from 'dayjs';
 import { Business_typeEnum } from 'enums/business_type.enum';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { IOrganization } from 'hooks/api/kyc/useGetOrganizationInformation';
@@ -90,20 +88,6 @@ export const Form = ({
         closeModal={() => setPreviewImageUrl('')}
         image={previewImageUrl}
       />
-
-      <div className='gap-5 480:flex'>
-        <DatePicker
-          label='Company Registration Date'
-          name='creationDate'
-          {...{
-            setFieldValue,
-          }}
-          shouldValidate
-          fieldType='dateOfBirth'
-          maxDate={new Date()}
-          minDate={dayjs(new Date()).subtract(80, 'years').toDate()}
-        />
-      </div>
 
       {companyInformationDocuments[businessType].map(({ id, name }) => {
         return (

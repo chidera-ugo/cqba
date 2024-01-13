@@ -27,6 +27,13 @@ export const validationSchema = object({
   companyType: string().required('Select business type'),
   country: string().required('Select country'),
   businessIndustry: string().required('Select business industry'),
+  creationDate: object().test(
+    'required',
+    'Provide company creation date',
+    (val: any) => {
+      return !!val.value && !!val.calendarValue;
+    }
+  ),
   address: string().required('Provide your address'),
   stateCode: string().required('Select your state'),
   postalCode: string().required('Provide postal code'),

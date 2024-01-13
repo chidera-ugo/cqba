@@ -1,11 +1,13 @@
 import clsx from 'clsx';
 import { IsLoading } from 'components/data-states/IsLoading';
 import { AddressInputGroup } from 'components/form-elements/AddressInputGroup';
+import { DatePicker } from 'components/form-elements/DatePicker';
 import { Input } from 'components/form-elements/Input';
 import { PhoneNumberInput } from 'components/form-elements/PhoneNumberInput';
 import { Select } from 'components/form-elements/Select';
 import { SubmitButton } from 'components/form-elements/SubmitButton';
 import { industries } from 'constants/kyc/industries';
+import dayjs from 'dayjs';
 import { Business_typeEnum } from 'enums/business_type.enum';
 import { Form as FormikForm, FormikProps } from 'formik';
 import { IOrganization } from 'hooks/api/kyc/useGetOrganizationInformation';
@@ -122,12 +124,23 @@ export const Form = ({
         <Input label='Tax Identification Number' name='tin' />
       ) : null}
 
-      {values.companyType === Business_typeEnum.businessName && (
-        <Input
-          label='Business Registration Number (BN)'
-          name='businessNumber'
+      <div className='gap-5 480:flex'>
+        {values.companyType === Business_typeEnum.businessName && (
+          <Input label='BN Number' name='businessNumber' />
+        )}
+
+        <DatePicker
+          label='Company Registration Date'
+          name='creationDate'
+          {...{
+            setFieldValue,
+          }}
+          shouldValidate
+          fieldType='dateOfBirth'
+          maxDate={new Date()}
+          minDate={dayjs(new Date()).subtract(80, 'years').toDate()}
         />
-      )}
+      </div>
 
       {isPrivateOrPublic ? <Input label='RC Number' name='rcNumber' /> : null}
 

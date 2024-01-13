@@ -6,6 +6,7 @@ import { useUpdateCompanyInformation } from 'hooks/api/kyc/useUpdateCompanyInfor
 import { useQueryClientInvalidator } from 'hooks/app/useQueryClientInvalidator';
 import { useAccountVerificationStatus } from 'hooks/dashboard/kyc/useAccountVerificationStatus';
 import { toast } from 'react-toastify';
+import { DatePickerValue } from 'types/commons';
 import { initialValues } from './initialValues';
 import { validationSchema } from './validationSchema';
 import { Form } from './Form';
@@ -48,6 +49,7 @@ export const UpdateCompanyInformationForm = () => {
         businessName,
         businessIndustry,
         phoneNumber,
+        creationDate,
         stateCode: _s,
         ...values
       }) => {
@@ -56,6 +58,7 @@ export const UpdateCompanyInformationForm = () => {
           businessIndustry,
           phone: phoneNumber,
           businessType: companyType,
+          regDate: (creationDate as DatePickerValue)?.value,
           ...values,
         });
       }}

@@ -11,6 +11,7 @@ export interface UpdateCompanyInformationDto {
   phone: string;
   postalCode: string;
   address: string;
+  regDate: string;
 }
 
 export function useUpdateCompanyInformation(
