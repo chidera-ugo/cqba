@@ -40,7 +40,6 @@ export function reducer(state: State, action: Action): State {
               ? ''
               : `${avatar}?${generateUUID()}`,
         },
-        isInitializing: false,
       };
     }
     case 'signout': {

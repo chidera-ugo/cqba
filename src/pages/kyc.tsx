@@ -21,7 +21,7 @@ export default function Kyc() {
 
   const { replace, query } = useRouter();
 
-  const { getCurrentAccountSetupStepUrl } = useCurrentAccountSetupStepUrl();
+  const { getCurrentAccountSetupStep } = useCurrentAccountSetupStepUrl();
 
   const {
     isUnderReviewOrApproved,
@@ -37,20 +37,31 @@ export default function Kyc() {
   useEffect(() => {
     if (isValidAccountSetupStep) return;
 
-    replace(getCurrentAccountSetupStepUrl());
+    redirectToStep();
   }, [isValidAccountSetupStep]);
 
   useEffect(() => {
     if (query['tab'] === 'review-and-submit' && !hasProvidedAllRequirements) {
-      replace(getCurrentAccountSetupStepUrl());
+      redirectToStep();
     } else if (isUnderReviewOrApproved && query['tab'] !== 'review-and-submit')
-      replace('/kyc?tab=review-and-submit');
+      redirectToStep('review-and-submit');
     else if (
       query['tab'] === 'business-documentation' &&
       !hasProvidedCompanyInformation
     )
-      replace('/kyc?tab=company-information');
+      redirectToStep('company-information');
   }, [query['tab']]);
+
+  function redirectToStep(step?: string) {
+    const { tab: _, ...q } = query;
+
+    replace('/kyc', {
+      query: {
+        ...q,
+        tab: step ?? getCurrentAccountSetupStep(),
+      },
+    });
+  }
 
   return (
     <AppLayout

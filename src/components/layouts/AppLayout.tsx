@@ -82,7 +82,7 @@ export const AppLayout = ({
     if (isForUnverified && isVerified) replace('/');
   }, [isVerified, isForUnverified]);
 
-  if (!user || (!isVerified && !isKycFlow))
+  if (!user || (!isVerified && !isKycFlow) || (isForUnverified && isVerified))
     return <FullScreenLoader id={'app_layout'} asPage />;
 
   if (!shouldSelectFirstPlan && !isOwner && isPlanExpired)

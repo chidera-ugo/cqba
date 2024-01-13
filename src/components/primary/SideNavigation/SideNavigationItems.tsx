@@ -22,7 +22,7 @@ export const SideNavigationItems = () => {
 
   const { isVerified } = useIsVerified();
 
-  const { getCurrentAccountSetupStepUrl } = useCurrentAccountSetupStepUrl();
+  const { getCurrentAccountSetupStep } = useCurrentAccountSetupStepUrl();
 
   return (
     <>
@@ -55,7 +55,7 @@ export const SideNavigationItems = () => {
                           isRoot
                             ? '/'
                             : id === 'kyc'
-                            ? getCurrentAccountSetupStepUrl()
+                            ? `/kyc?tab=${getCurrentAccountSetupStep()}`
                             : route
                         }
                         className={clsx(

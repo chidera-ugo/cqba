@@ -1,5 +1,6 @@
 import { FullScreenLoader } from 'components/commons/FullScreenLoader';
-import { Action, State, StoreApi } from 'context/AppContext/types';
+import { Action, State, StoreApi, Tokens } from 'context/AppContext/types';
+import { useRouter } from 'next/router';
 import {
   PropsWithChildren,
   Reducer,
@@ -30,6 +31,8 @@ const AppContext = createContext<StoreApi>({
 });
 
 function AppContextProvider({ children, ...props }: PropsWithChildren<any>) {
+  const { query, pathname } = useRouter();
+
   const [state, dispatch] = useReducer<Reducer<State, Action>>(
     reducer,
     initialState
@@ -42,12 +45,10 @@ function AppContextProvider({ children, ...props }: PropsWithChildren<any>) {
     state?.tokens?.accessToken,
     {
       onSuccess(data) {
-        if (!data) {
-          dispatch({ type: 'setIsInitializing', payload: false });
-          return;
-        }
+        if (!data) return;
 
         dispatch({ type: 'setCurrentUser', payload: data });
+        dispatch({ type: 'setIsInitializing', payload: false });
       },
       onError() {
         dispatch({ type: 'setIsInitializing', payload: false });
@@ -69,7 +70,21 @@ function AppContextProvider({ children, ...props }: PropsWithChildren<any>) {
   );
 
   useEffect(() => {
-    const tokens = getFromLocalStore('tokens', true);
+    const _token = query['auth_token'];
+
+    const tokenFromWebView =
+      !!_token && typeof _token === 'string' ? _token : null;
+
+    let tokens: Tokens;
+
+    if (!!tokenFromWebView && pathname === '/kyc') {
+      tokens = {
+        accessToken: tokenFromWebView,
+        refreshToken: tokenFromWebView,
+      };
+    } else {
+      tokens = getFromLocalStore('tokens', true);
+    }
 
     if (!tokens || !tokens.accessToken || !tokens.refreshToken)
       return dispatch({ type: 'setIsInitializing', payload: false });
@@ -77,7 +92,7 @@ function AppContextProvider({ children, ...props }: PropsWithChildren<any>) {
     dispatch({ type: 'saveTokens', payload: tokens });
 
     initializeSession(tokens?.accessToken);
-  }, []);
+  }, [query['auth_token']]);
 
   useEffect(() => {
     dispatch({

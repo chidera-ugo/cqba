@@ -7,18 +7,14 @@ export const useCurrentAccountSetupStepUrl = () => {
     hasProvidedOwnerInformationRequirements,
   } = useAccountVerificationStatus();
 
-  function getCurrentAccountSetupStepUrl() {
-    if (hasProvidedAllRequirements) return '/kyc?tab=review-and-submit';
-
-    if (!hasProvidedCompanyInformation) return '/kyc?tab=company-information';
-
-    if (!hasProvidedOwnerInformationRequirements)
-      return '/kyc?tab=owners-information';
-
-    return '/kyc?tab=business-documentation';
+  function getCurrentAccountSetupStep() {
+    if (hasProvidedAllRequirements) return 'review-and-submit';
+    if (!hasProvidedCompanyInformation) return 'company-information';
+    if (!hasProvidedOwnerInformationRequirements) return 'owners-information';
+    return 'business-documentation';
   }
 
   return {
-    getCurrentAccountSetupStepUrl,
+    getCurrentAccountSetupStep,
   };
 };
